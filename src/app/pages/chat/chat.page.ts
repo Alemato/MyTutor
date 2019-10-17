@@ -4,7 +4,7 @@ import {NavController} from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 @Component({
-  selector: 'app-chat',
+  selector: 'page-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })

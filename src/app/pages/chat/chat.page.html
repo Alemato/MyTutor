@@ -8,8 +8,11 @@
 
 <ion-content>
     <div class="message-wrap">
-
-        <div class="message left">
+        <div *ngFor="let msg of msgList"
+             class="message"
+             [class.left]=" msg.userId === toUser.id "
+             [class.right]=" msg.userId === user.id ">
+             <!-- <div class="message left">-->
             <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
             <div class="msg-detail">
                 <div class="msg-info">
@@ -18,12 +21,12 @@
                 </div>
                 <div class="msg-content">
                     <span class="triangle"></span>
-                    <p class="line-breaker ">Prova 1</p>
+                    <p class="line-breaker ">{{msg.message}}</p>
                 </div>
             </div>
         </div>
 
-        <div class="message right">
+        <!--<div class="message right">
             <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
             <div class="msg-detail">
                 <div class="msg-info">
@@ -77,7 +80,7 @@
                     <p class="line-breaker ">Prova 5 adlkfnsdnlfndslfl sdfsdbfs sdjfnbjsdf jsdhfjbsdf hsjdfb</p>
                 </div>
             </div>
-        </div>
+        </div>-->
 
     </div>
 </ion-content>
@@ -87,8 +90,8 @@
     <textarea #chat_input
               placeholder="Text Input">
     </textarea>
-        <button ion-button clear icon-only item-right>
+        <ion-button fill="clear" slot="icon-only" item-right>
             <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
-        </button>
+        </ion-button>
     </div>
 </ion-footer>
