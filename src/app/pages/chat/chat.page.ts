@@ -23,7 +23,7 @@ export class ChatPage implements OnInit {
   public  mex1() {
     console.log(this.messaggio1);
     this.messaggio2 = this.messaggio1;
-    this.messaggio1="";
+    this.messaggio1 = '';
     this.storage.set('messaggio2', 'this.messaggio2');
   }
   ngOnInit() {
