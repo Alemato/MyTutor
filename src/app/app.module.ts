@@ -13,6 +13,8 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {IonicStorageModule} from '@ionic/storage';
+import {ChatMessage} from './services/chat.service';
+import {ChatService} from './services/chat.service';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -36,12 +38,17 @@ export function createTranslateLoader(http: HttpClient) {
             }
         }),
         AppRoutingModule],
+    // qui si aggiungonoi componenti e le direttive da usate nel modulo/typescript (nel componente)
     providers: [
+        // Array,
+        ChatMessage,
+        ChatService,
+        Map,
         StatusBar,
         SplashScreen,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {
 }

@@ -26,20 +26,20 @@
             </div>
         </div>-->
 
-        <div class="message right">
+        <div *ngFor="let mex of messages" class="message right">
             <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
             <div class="msg-detail">
                 <div class="msg-info">
                     <p>
-                        Mario&nbsp;Rossi&nbsp;&nbsp;3ore&nbsp;fa</p>
+                        </p>
                 </div>
                 <div class="msg-content">
                     <span class="triangle"></span>
-                    <p class="line-breaker ">Prova 2 {{messaggio2}}</p>
+                    <p class="line-breaker ">{{mex.getMessage()}}</p>
                 </div>
             </div>
         </div>
-
+<!--
         <div class="message left">
             <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
             <div class="msg-detail">
@@ -81,16 +81,16 @@
                 </div>
             </div>
         </div>
-
+-->
     </div>
 </ion-content>
 
 <ion-footer no-border [style.height]="'55px'">
     <div class="input-wrap">
-    <textarea #chat_input [(ngModel)]="messaggio1"
+    <textarea #chat_input [(ngModel)]="testoMessaggio"
               placeholder="Text Input">
     </textarea>
-        <ion-button fill="clear" (click)="mex1()" slot="icon-only" item-right>
+        <ion-button fill="clear" (click)="mexFuncion()" slot="icon-only" item-right>
             <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
         </ion-button>
     </div>
