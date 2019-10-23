@@ -13,8 +13,8 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {IonicStorageModule} from '@ionic/storage';
-import {ChatMessage} from './services/chat.service';
 import {ChatService} from './services/chat.service';
+import {ChatMessage} from './model/chat.model';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');

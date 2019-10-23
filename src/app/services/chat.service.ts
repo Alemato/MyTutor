@@ -3,17 +3,9 @@ import {Storage} from '@ionic/storage';
 import {Observable} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {LINGUA} from '../constants';
+import {ChatMessage} from "../model/chat.model";
 
-export class ChatMessage {
-    messageId: number;
-    userId: string;
-    userName: string;
-    userAvatar: string;
-    toUserId: string;
-    time: number | string;
-    message: string;
-    status: string;
-}
+
 
 export class UserInfo {
     id: string;
@@ -41,8 +33,8 @@ export class ChatService {
         return this.messaggio.messageId;
     }
 
-    setMessageId(messageId: number) {
-        this.messaggio.messageId = messageId;
+    setMessageId(Id: number) {
+        this.messaggio.messageId = Id;
     }
 
     getUserId(): string {
