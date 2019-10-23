@@ -3,7 +3,7 @@ import {Storage} from '@ionic/storage';
 import {Observable} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {LINGUA} from '../constants';
-import {ChatMessage} from "../model/chat.model";
+import {ChatMessage} from '../model/chat.model';
 
 
 
@@ -87,3 +87,4 @@ export class ChatService {
     //   return fromPromise(this.storage.get('ll').get)
     // }
 }
+    // fuonzione che si prende in input l'oggetto messaggio, lo salva e lo caccia

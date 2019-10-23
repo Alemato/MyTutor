@@ -100,6 +100,7 @@ export class ChatPage implements OnInit {
         console.log('dopo il settaggio');
         console.log('setMessage ' + this.testoMessaggio);
         this.mex.message = this.testoMessaggio;
+        this.testoMessaggio = '';
         console.log('setUserName Mario');
         this.mex.userName = 'Mario';
         console.log('setuserID 1');
@@ -119,3 +120,6 @@ export class ChatPage implements OnInit {
     initTranslate() {
     }
 }
+    // qua deve tedere solo: prendere messaggio, resettare il messaggio alla fine,
+    // utilizzare la funzione che salva L'OGGETTO MESSAGIO (crearlo prima)
+    // le altre vanno su chatservice
