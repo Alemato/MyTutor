@@ -1,9 +1,9 @@
 export class ChatMessage {
     messageId: number;
-    userId: string;
+    userId: number;
     userName: string;
     userAvatar: string;
-    toUserId: string;
+    toUserId: number;
     time: number | string;
     message: string;
     status: string;
