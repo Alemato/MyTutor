@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {Observable} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import {LINGUA} from '../constants';
+import {URL, LINGUA} from '../constants';
 import {ChatMessage} from '../model/chat.model';
+import {HttpClient} from '@angular/common/http';
 
 
 
@@ -22,9 +23,12 @@ export const userAvatar = 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9
 export class ChatService {
     messaggio: ChatMessage;
 
-    constructor(private storage: Storage) {
+    constructor(
+        private storage: Storage,
+        private http: HttpClient
+    ) {
     }
-
+    // interoggazioni con il server devo utilizzare l'Oservable
     // inserire metodi per prendere i messaggi dallo storage;
     // getMessageId(): Observable<string> {
     // return fromPromise(this.storage.get());
@@ -66,9 +70,14 @@ export class ChatService {
     getTime(): number | string {
         return this.messaggio.time;
     }
+    // PRENDE DAL SERVER
+    getMessages(): Observable<ChatMessage[]> {
+       return this.http.get<ChatMessage[]>(URL.CHATMESSAGE); // CHATMESSAGE
+    }
 
-    getMessage(): string {
-        return this.messaggio.message;
+    // INVIO AL SERVER UNA COSA APPENA CREATA
+    postMessage(unmessaggio: ChatMessage) {
+        this.http.post<ChatMessage>(URL.CHATMESSAGE, unmessaggio);
     }
 
     setMessage(message: string) {
@@ -86,11 +95,15 @@ export class ChatService {
     // getMessaggio(): Observable<ChatMessage> {
     //   return fromPromise(this.storage.get('ll').get)
     // }
-    getFromStorageId(chiave: string): Observable<number> {
+    getFromStorageId(chiave: string): Observable<ChatMessage> {
         return fromPromise(this.storage.get(chiave));
     }
     getFromStorageMex(chiave: string): Observable<Map<string, ChatMessage[]>> {
         return fromPromise(this.storage.get(chiave));
+    }
+    // metto nello storage
+    setStoreMap(chiave: string, chatmap: Map<string, ChatMessage[]>) {
+        this.storage.set(chiave, chatmap);
     }
 }
     // fuonzione che si prende in input l'oggetto messaggio, lo salva e lo caccia

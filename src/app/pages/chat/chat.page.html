@@ -26,7 +26,7 @@
             </div>
         </div>-->
 
-        <div *ngFor="let mex of messages" class="message"
+        <div *ngFor="let mex of listaMessaggi" class="message"
              [class.left]=" mex.userId == 1"
              [class.right]=" mex.userId == 2">
             <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
@@ -92,7 +92,7 @@
     <textarea #chat_input [(ngModel)]="testoMessaggio"
               placeholder="Text Input">
     </textarea>
-        <ion-button fill="clear" (click)="maxFunction()" slot="icon-only" item-right>
+        <ion-button fill="clear" (click)="messageUpdate()" slot="icon-only" item-right>
             <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
         </ion-button>
     </div>

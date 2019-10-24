@@ -18,7 +18,7 @@ export class AppComponent {
         private translate: TranslateService,
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
-        private linguaService: LinguaService
+        private linguaService: LinguaService,
     ) {
         this.initializeApp();
     }
