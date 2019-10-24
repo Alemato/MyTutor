@@ -38,7 +38,7 @@ export class ChatPage implements OnInit {
                     // aggiorniamo idMex prendendo la lunghezza della lista di messaggi salvati nello storage che sono in messages
                     this.idMex = this.messages.length;
                     this.storage.set('idMex', this.idMex);
-                    console.log('idMex X = ' + this.idMex);
+                    // console.log('idMex X = ' + this.idMex);
                 }
             } else {
                 // se non ci sono messaggi precedenti inviati nella chat impostiamo ldMex a 0 nello storage
@@ -51,6 +51,16 @@ export class ChatPage implements OnInit {
     async messageUpdate() {
         this.createMessage();
         // aggiorno la lista di messages
+        // this.getFromStorageMex('mex').subscribe((value) => {
+        //     if (value) {
+        //         for (const v of value.values()) {
+        //             console.log('v =');
+        //             console.log(v);
+        //             this.messages = v;
+        //         }
+        //     }
+        // });
+        // await this.mario();
         await this.storage.get('mex').then((value) => {
             if (value) {
                 for (const v of value.values()) {
@@ -62,6 +72,17 @@ export class ChatPage implements OnInit {
         this.chatMap.set(this.idChat.toString(), this.messages);
         await this.storage.set('mex', this.chatMap);
     }
+    // mario() {
+    //     this.getFromStorageMex('mex').subscribe((value) => {
+    //         if (value) {
+    //             for (const v of value.values()) {
+    //                 console.log('v =');
+    //                 console.log(v);
+    //                 this.messages = v;
+    //             }
+    //         }
+    //     });
+    // }
 
     // funzione iniziale che parte all'invio del messaggio
     async maxFunction() {
@@ -90,7 +111,7 @@ export class ChatPage implements OnInit {
     getFromStorageId(chiave: string): Observable<number> {
         return fromPromise(this.storage.get(chiave));
     }
-    getFromStorageMex(chiave: string): Observable<ChatMessage[]> {
+    getFromStorageMex(chiave: string): Observable<Map<string, ChatMessage[]>> {
         return fromPromise(this.storage.get(chiave));
     }
 

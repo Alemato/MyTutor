@@ -37,10 +37,10 @@ export class ChatService {
         this.messaggio.messageId = Id;
     }
 
-    getUserId(): string {
+    getUserId(): number {
         return this.messaggio.userId;
     }
-    setuserId(userId: string) {
+    setuserId(userId: number) {
         this.messaggio.userId = userId;
     }
 
@@ -56,10 +56,10 @@ export class ChatService {
         return this.messaggio.userAvatar;
     }
 
-    getToUserId(): string {
+    getToUserId(): number {
         return this.messaggio.toUserId;
     }
-    setUserId(toUserId: string) {
+    setUserId(toUserId: number) {
         this.messaggio.toUserId = toUserId;
     }
 
@@ -86,5 +86,11 @@ export class ChatService {
     // getMessaggio(): Observable<ChatMessage> {
     //   return fromPromise(this.storage.get('ll').get)
     // }
+    getFromStorageId(chiave: string): Observable<number> {
+        return fromPromise(this.storage.get(chiave));
+    }
+    getFromStorageMex(chiave: string): Observable<Map<string, ChatMessage[]>> {
+        return fromPromise(this.storage.get(chiave));
+    }
 }
     // fuonzione che si prende in input l'oggetto messaggio, lo salva e lo caccia
