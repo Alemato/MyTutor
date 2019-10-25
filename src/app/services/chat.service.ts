@@ -33,65 +33,19 @@ export class ChatService {
     // getMessageId(): Observable<string> {
     // return fromPromise(this.storage.get());
     // }
+    // NON SERVE LO TENGO
     getMessageId(): number {
         return this.messaggio.messageId;
-    }
-
-    setMessageId(Id: number) {
-        this.messaggio.messageId = Id;
-    }
-
-    getUserId(): number {
-        return this.messaggio.userId;
-    }
-    setuserId(userId: number) {
-        this.messaggio.userId = userId;
-    }
-
-    getUserName(): string {
-        return this.messaggio.userName;
-    }
-
-    setUserName(userName: string) {
-        this.messaggio.userName = userName;
-    }
-
-    getUserAvatar(): string {
-        return this.messaggio.userAvatar;
-    }
-
-    getToUserId(): number {
-        return this.messaggio.toUserId;
-    }
-    setUserId(toUserId: number) {
-        this.messaggio.toUserId = toUserId;
-    }
-
-    getTime(): number | string {
-        return this.messaggio.time;
     }
     // PRENDE DAL SERVER
     getMessages(): Observable<ChatMessage[]> {
        return this.http.get<ChatMessage[]>(URL.CHATMESSAGE); // CHATMESSAGE
     }
-
+    // QUA VANNO SOLO LE CHIAMATE ALLO STORAGE ed OBSERVABLE
     // INVIO AL SERVER UNA COSA APPENA CREATA
     postMessage(unmessaggio: ChatMessage) {
         this.http.post<ChatMessage>(URL.CHATMESSAGE, unmessaggio);
     }
-
-    setMessage(message: string) {
-        this.messaggio.message = message;
-    }
-
-    getStatus(): string {
-        return this.messaggio.status;
-    }
-
-    getMessaggio(): ChatMessage {
-        return this.messaggio;
-    }
-
     // getMessaggio(): Observable<ChatMessage> {
     //   return fromPromise(this.storage.get('ll').get)
     // }
