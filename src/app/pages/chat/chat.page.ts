@@ -93,8 +93,8 @@ export class ChatPage implements OnInit {
         // this.mex.messageId = this.idMex;
         this.mex.message = this.testoMessaggio;
         this.testoMessaggio = '';
-        this.mex.userName = this.b.getUserName(); // ma va preso dal token
-        this.mex.userId = this.b.getUserId();  // ma va preso dal token
+        this.mex.userName = ''; // ma va preso dal token
+        this.mex.userId = 0;  // ma va preso dal token
         this.mex.userAvatar = 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y';
         this.mex.toUserId = 1;
         this.mex.time = 10;
