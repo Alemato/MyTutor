@@ -33,19 +33,11 @@ export class ChatService {
     // getMessageId(): Observable<string> {
     // return fromPromise(this.storage.get());
     // }
-    // NON SERVE LO TENGO
+    // NON SERVE PERO' LO TENGO
     getMessageId(): number {
         return this.messaggio.messageId;
     }
-    // PRENDE DAL SERVER
-    getMessages(): Observable<ChatMessage[]> {
-       return this.http.get<ChatMessage[]>(URL.CHATMESSAGE); // CHATMESSAGE
-    }
     // QUA VANNO SOLO LE CHIAMATE ALLO STORAGE ed OBSERVABLE
-    // INVIO AL SERVER UNA COSA APPENA CREATA
-    postMessage(unmessaggio: ChatMessage) {
-        this.http.post<ChatMessage>(URL.CHATMESSAGE, unmessaggio);
-    }
     // getMessaggio(): Observable<ChatMessage> {
     //   return fromPromise(this.storage.get('ll').get)
     // }

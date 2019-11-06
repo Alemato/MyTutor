@@ -18,7 +18,7 @@ export class ChatPage implements OnInit {
     public messages: ChatMessage[];                    // lista dei messaggi della chat
     public idChat = 1;                        // id provvisorio della chat per prova
     public a: ChatMessage;
-    public listaMessaggi: ChatMessage[];
+    // public listaMessaggi: ChatMessage[];
 
     constructor(
         public b: ChatService,
@@ -37,53 +37,53 @@ export class ChatPage implements OnInit {
         // this.storage.clear();                              // decommentare per pulire lo storage
         // al primo avvio controlla se ci sono messaggi nello storage ed in tal caso li preleva per aggiungerlo a messages
         // e quindi metterli nella lista di messaggi della presentazione
-        // await this.storage.get('mex').then((value) => {
-        //     if (value) {
-        //         for (const v of value.values()) {
-        //             this.messages = v;
-        //             // aggiorniamo idMex prendendo la lunghezza della lista di messaggi salvati nello storage che sono in messages
-        //             this.idMex = this.messages.length;
-        //             this.storage.set('idMex', this.idMex);
-        //             // console.log('idMex X = ' + this.idMex);
-        //         }
-        //     } else {
-        //         // se non ci sono messaggi precedenti inviati nella chat impostiamo ldMex a 0 nello storage
-        //         this.storage.set('idMex', 0);
-        //     }
-        // });
-        this.b.getMessages().subscribe((prendeMessaggi) => {
-            if (prendeMessaggi) {
-                this.listaMessaggi = prendeMessaggi;
+        await this.storage.get('mex').then((value) => {
+            if (value) {
+                for (const v of value.values()) {
+                    this.messages = v;
+                    // aggiorniamo idMex prendendo la lunghezza della lista di messaggi salvati nello storage che sono in messages
+                    this.idMex = this.messages.length;
+                    this.storage.set('idMex', this.idMex);
+                    // console.log('idMex X = ' + this.idMex);
+                }
+            } else {
+                // se non ci sono messaggi precedenti inviati nella chat impostiamo ldMex a 0 nello storage
+                this.storage.set('idMex', 0);
             }
         });
+        // this.b.getMessages().subscribe((prendeMessaggi) => {
+        //     if (prendeMessaggi) {
+        //         this.listaMessaggi = prendeMessaggi;
+        //     }
+        // });
         this.initTranslate();
     }
 
     async messageUpdate() {
         this.createMessage();
-        this.b.postMessage(this.mex);
+        // this.b.postMessage(this.mex);
         // aggiorno la lista di messages
-        // this.getFromStorageMex('mex').subscribe((value) => {
-        //     if (value) {
-        //         for (const v of value.values()) {
-        //             console.log('v =');
-        //             console.log(v);
-        //             this.messages = v;
-        //         }
-        //     }
-        // });
-        // await this.storage.get('mex').then((value) => {
-        //     if (value) {
-        //         for (const v of value.values()) {
-        //             this.messages = v;
-        //         }
-        //     }
-        // });
+        this.b.getFromStorageMex('mex').subscribe((value) => {
+            if (value) {
+                for (const v of value.values()) {
+                    console.log('v =');
+                    console.log(v);
+                    this.messages = v;
+                }
+            }
+        });
+        await this.storage.get('mex').then((value) => {
+            if (value) {
+                for (const v of value.values()) {
+                    this.messages = v;
+                }
+            }
+        });
         // this.b.getMessage().subscribe((prendeMessaggi) => {
         //     this.listaMessaggi = prendeMessaggi;
         // });
-        this.listaMessaggi.push(this.mex);                   // alla lista dei messaggi della aggiungo chat il messaggio corrente creato
-        this.chatMap.set(this.idChat.toString(), this.listaMessaggi);
+        this.messages.push(this.mex);                   // alla lista dei messaggi della aggiungo chat il messaggio corrente creato
+        this.chatMap.set(this.idChat.toString(), this.messages);
         this.b.setStoreMap('mex', this.chatMap);
     }
 
@@ -93,8 +93,8 @@ export class ChatPage implements OnInit {
         // this.mex.messageId = this.idMex;
         this.mex.message = this.testoMessaggio;
         this.testoMessaggio = '';
-        this.mex.userName = this.b.getUserName(); // ma va preso dal token
-        this.mex.userId = this.b.getUserId();  // ma va preso dal token
+        this.mex.userName = 'Zlatan'; // ma va preso dal token
+        this.mex.userId = 2;  // ma va preso dal token
         this.mex.userAvatar = 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y';
         this.mex.toUserId = 1;
         this.mex.time = 10;
