@@ -6,6 +6,10 @@ const routes: Routes = [
   { path: 'home', loadChildren: './pages/home/home.module#HomePageModule' },
   { path: 'chat', loadChildren: './pages/chat/chat.module#ChatPageModule' },
   { path: 'chatrest', loadChildren: './pages/chatrest/chatrest.module#ChatrestPageModule' },
+  { path: 'registrazione', loadChildren: './pages/registrazione/registrazione.module#RegistrazionePageModule' },
+  // { path: 'prova', loadChildren: './pages/prova/prova.module#ProvaPageModule' },
+
+
 
 ];
 

@@ -1,0 +1,29 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>registrazione</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="registrazioneFormModel" class="list-form">
+        <ion-input formControlName="nome" placeholder="Enter Input">NOME</ion-input>
+        <ion-input formControlName="cognome" placeholder="Enter Input">COGNOME</ion-input>
+        <ion-input formControlName="email" placeholder="Enter Input">EMAIL</ion-input>
+        <ion-input formControlName="password" placeholder="Enter Input">PASSWORD</ion-input>
+        <ion-item>
+            <ion-label>DD MM YY</ion-label>
+            <ion-datetime displayFormat="DD MM YY" formControlName="datanascita" placeholder="Select Date">DATA NASCITA</ion-datetime>
+        </ion-item>
+        <ion-input formControlName="regione" placeholder="Enter Input">REGIONE</ion-input>
+        <ion-input formControlName="citta" placeholder="Enter Input">CITTA'</ion-input>
+        <ion-input formControlName="cap" type="number" value="123">CAP</ion-input>
+        <ion-input formControlName="via" placeholder="Enter Input">VIA</ion-input>
+        <ion-input formControlName="civico" type="number" value="456">CIVICO</ion-input>
+        <ion-input formControlName="biografia" placeholder="Enter Input">BIOGRAFIA</ion-input>
+<!--        <ion-item>-->
+<!--            <ion-label>DOCENTE/STUDENTE</ion-label>-->
+<!--            <ion-toggle formControlName=""></ion-toggle>-->
+<!--        </ion-item>-->
+        <ion-button (click)="prendiRegistrazione()" expand="block">REGISTRATI</ion-button>
+    </form>
+</ion-content>

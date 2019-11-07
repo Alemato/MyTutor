@@ -20,22 +20,22 @@ export class HomePage implements OnInit, OnDestroy {
         private httpClient: HttpClient) {
     }
 
-    ionViewWillEnter() {
-        this.marioVaAlCinema();
-    }
+    // ionViewWillEnter() {
+        // this.marioVaAlCinema();
+    // }
 
-    public marioVaAlCinema() {
-        this.films = this.httpClient.get(URL.TESTTODOS);
-        this.bob = interval(1000).subscribe(x => {
-            this.films.subscribe(data => {
-                console.log('my data: ', data);
-            });
-        });
-    }
-    ionViewDidLeave() {
-        console.log('prova brutta');
-        this.bob.unsubscribe();
-    }
+    // public marioVaAlCinema() {
+    //     this.films = this.httpClient.get(URL.TESTTODOS);
+    //     this.bob = interval(1000).subscribe(x => {
+    //         this.films.subscribe(data => {
+    //             console.log('my data: ', data);
+    //         });
+    //     });
+    // }
+    // ionViewDidLeave() {
+    //     console.log('prova brutta');
+    //     this.bob.unsubscribe();
+    // }
     public mex() {
         this.risposta = 'ricevuto ' + this.messaggio;
         this.storage.set('messaggio' , this.risposta);
