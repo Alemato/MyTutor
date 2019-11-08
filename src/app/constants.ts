@@ -10,11 +10,14 @@ export const URL = {
     TEST: URL_BASE + '/test/aut',
     CHATMESSAGE: URL_BASE + '/chatmessage',
     TESTTODOS: URL_BASE2 + '/1',
+    MESSAGE: URL_BASE + '/chats/1/messaggi',
     REGISTRAZIONE: URL_BASE3
 };
 
 export const X_AUTH = 'X-Auth';
 
 export const AUTH_TOKEN = 'auth-token';
-
 export const LINGUA = 'lingua';
+
+export const UTENTE_STORAGE = 'utente';
+export const MARIO = 'pluto';
