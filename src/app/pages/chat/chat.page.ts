@@ -37,19 +37,19 @@ export class ChatPage implements OnInit {
         // this.storage.clear();                              // decommentare per pulire lo storage
         // al primo avvio controlla se ci sono messaggi nello storage ed in tal caso li preleva per aggiungerlo a messages
         // e quindi metterli nella lista di messaggi della presentazione
-        await this.storage.get('mex').then((value) => {
+        await this.b.getFromStorageMex('mex').subscribe((value) => {
             if (value) {
                 for (const v of value.values()) {
                     this.messages = v;
                     // aggiorniamo idMex prendendo la lunghezza della lista di messaggi salvati nello storage che sono in messages
-                    this.idMex = this.messages.length;
-                    this.storage.set('idMex', this.idMex);
+                    // this.idMex = this.messages.length;
+                    // this.storage.set('idMex', this.idMex);
                     // console.log('idMex X = ' + this.idMex);
                 }
-            } else {
-                // se non ci sono messaggi precedenti inviati nella chat impostiamo ldMex a 0 nello storage
-                this.storage.set('idMex', 0);
-            }
+            } // else {
+            //     // se non ci sono messaggi precedenti inviati nella chat impostiamo ldMex a 0 nello storage
+            //     this.storage.set('idMex', 0);
+            // }
         });
         // this.b.getMessages().subscribe((prendeMessaggi) => {
         //     if (prendeMessaggi) {
@@ -63,22 +63,23 @@ export class ChatPage implements OnInit {
         this.createMessage();
         // this.b.postMessage(this.mex);
         // aggiorno la lista di messages
-        this.b.getFromStorageMex('mex').subscribe((value) => {
-            if (value) {
-                for (const v of value.values()) {
-                    console.log('v =');
-                    console.log(v);
-                    this.messages = v;
-                }
-            }
-        });
-        await this.storage.get('mex').then((value) => {
-            if (value) {
-                for (const v of value.values()) {
-                    this.messages = v;
-                }
-            }
-        });
+        // this.b.getFromStorageMex('mex').subscribe((value) => {
+        //         //     if (value) {
+        //         //         for (const v of value.values()) {
+        //         //             console.log('v =');
+        //         //             console.log(v);
+        //         //             this.messages = v;
+        //         //             console.log(this.messages);
+        //         //         }
+        //         //     }
+        //         // });
+        //         // await this.b.getFromStorageMex('mex').subscribe((value) => {
+        //         //     if (value) {
+        //         //         for (const v of value.values()) {
+        //         //             this.messages = v;
+        //         //         }
+        //         //     }
+        //         // });
         // this.b.getMessage().subscribe((prendeMessaggi) => {
         //     this.listaMessaggi = prendeMessaggi;
         // });
@@ -100,8 +101,8 @@ export class ChatPage implements OnInit {
         this.mex.time = 10;
         this.mex.status = 'prova';
         this.idMex = this.idMex + 1;     // incremento variabile di appoggio per l'id del messaggio in attesa del prossimo messaggio
-        this.storage.set('idMex', this.idMex);
-        console.log('idmex = ' + this.idMex);
+        // this.storage.set('idMex', this.idMex);
+        // console.log('idmex = ' + this.idMex);
     }
 
     initTranslate() {
