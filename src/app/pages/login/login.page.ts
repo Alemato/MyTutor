@@ -5,6 +5,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {User} from '../../model/user.model';
 import {Account, UserService} from '../../services/user.service';
+import {BehaviorSubject} from 'rxjs';
+import {Student} from '../../model/student.model';
+import {Teacher} from '../../model/teacher.model';
 
 @Component({
     selector: 'page-login',
@@ -18,6 +21,9 @@ export class LoginPage implements OnInit {
     private loginSubTitle: string;
     passwordType = 'password';
     passwordShow = false;
+    private student$: BehaviorSubject<Student>;
+    private teacher$: BehaviorSubject<Teacher>;
+    private typeUser$: BehaviorSubject<string>;
 
     constructor(private formBuilder: FormBuilder,
                 private alertController: AlertController,
@@ -47,7 +53,23 @@ export class LoginPage implements OnInit {
     onLogin() {
         console.log('ciaociao');
         const account: Account = this.loginFormModel.value;
-        this.userService.login(account);
+        this.userService.login(account).subscribe((prova) => {
+            console.log('il body è:');
+            console.log(prova);
+            console.log('Il bieviorSabject è:');
+            // if (this.typeUser$.) {}
+            if (prova.idTeacher) {
+                console.log('prof');
+                this.teacher$ = this.userService.getTeacher();
+                console.log(this.teacher$.value.user.email);
+            } else if (prova.idStudent) {
+                console.log('stud');
+                this.student$ = this.userService.getStudent();
+                console.log(this.student$.value.user.email);
+            } else {
+                console.log('sono admin');
+            }
+        });
     }
 
     async showLoginError() {
