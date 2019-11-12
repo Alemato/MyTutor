@@ -23,7 +23,9 @@ export class LoginPage implements OnInit {
     passwordShow = false;
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
-    private typeUser$: BehaviorSubject<string>;
+    private teacher: Teacher;
+    private student: Student;
+
 
     constructor(private formBuilder: FormBuilder,
                 private alertController: AlertController,
@@ -44,8 +46,8 @@ export class LoginPage implements OnInit {
 
     ngOnInit() {
         this.loginFormModel = this.formBuilder.group({
-            username: [],
-            password: []
+            username: ['', Validators.compose([Validators.required])],
+            password: ['', Validators.compose([Validators.required])]
         });
         this.initTranslate();
     }
@@ -54,21 +56,32 @@ export class LoginPage implements OnInit {
         console.log('ciaociao');
         const account: Account = this.loginFormModel.value;
         this.userService.login(account).subscribe((utente) => {
-            console.log('il body è:');
-            console.log(utente);
-            console.log('Il bieviorSabject è:');
             if (this.userService.whichUserType() === 'teacher') {
-            // if (utente.idTeacher) {
                 console.log('prof');
+                this.teacher = new Teacher(utente);
+                console.log('oggetto teacher');
+                console.log(this.teacher);
                 this.teacher$ = this.userService.getTeacher();
-                console.log(this.teacher$.value.user.email);
+                console.log('Il bieviorSabject di teacher è:');
+                console.log(this.teacher$.value);
+                this.teacher = new Teacher(this.teacher$.value);
+                console.log('teacher da beav');
+                console.log(this.teacher);
             } else if (this.userService.whichUserType() === 'student') {
                 console.log('stud');
+                this.student = new Student(utente);
+                console.log('oggetto student');
+                console.log(this.student);
                 this.student$ = this.userService.getStudent();
-                console.log(this.student$.value.user.email);
+                console.log('Il bieviorSabject di student è:');
+                console.log(this.student$.value);
+                this.student = new Student(this.student$.value);
+                console.log('student da beav');
+                console.log(this.student);
             } else if (this.userService.whichUserType() === 'admin') {
                 console.log('sono admin');
             }
+            this.navController.navigateRoot('home');
         });
     }
 

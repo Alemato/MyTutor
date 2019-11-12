@@ -18,7 +18,7 @@
             </ion-item>
 
                 <div margin-top="20px">
-                    <ion-button class="submit-btn" (click)="onLogin()"  type="submit">Login</ion-button>
+                    <ion-button class="submit-btn" (click)="onLogin()"  type="submit" [disabled]="!loginFormModel.valid">Login</ion-button>
                     <ion-button class="register-btn" >Registrati</ion-button>
                 </div>
         </form>
