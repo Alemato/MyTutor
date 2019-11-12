@@ -22,8 +22,8 @@ export class UserService {
     private loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private typeUser$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     private utente$: BehaviorSubject<User> = new BehaviorSubject<User>({} as User);
-    private student$: BehaviorSubject<Student> = new BehaviorSubject<Student>(new Student());
-    private teacher$: BehaviorSubject<Teacher> = new BehaviorSubject<Teacher>(new Teacher());
+    private student$: BehaviorSubject<Student> = new BehaviorSubject<Student>({} as Student);
+    private teacher$: BehaviorSubject<Teacher> = new BehaviorSubject<Teacher>({} as Teacher);
     constructor(private http: HttpClient, private storage: Storage) {
 
         this.storage.get(AUTH_TOKEN).then((token) => {
@@ -56,39 +56,10 @@ export class UserService {
                     console.log('I\'m Admin');
                     this.typeUser$.next('admin');
                 }
-                console.log(resp.headers.get('User-Type'));
-                console.log(resp.body);
-                // update dell'observable dell'utente
-                // const obj = JSON.parse(JSON.stringify(resp.body));
-                // this.utente$.next(resp.body);
-                // this.loggedIn$.next(true);
-                // @ts-ignore
+                this.loggedIn$.next(true);
                 return resp.body;
             }));
     }
-    // login(account: Account) {
-    //     const dato = '{"username": "mario", ' +
-    //         '"password": "1223456783456789"}';
-    //     console.log(JSON.parse(dato));
-    //     this.http.post(URL.LOGIN, JSON.parse(dato), {observe: 'response'}).subscribe((mario) => {
-    //         // @ts-ignore
-    //         console.log(mario.body.token);
-    //     });
-        // return this.http.post<User>(URL.LOGIN, JSON.parse(dato), {observe: 'response'}).pipe(
-        //     map((resp: HttpResponse<User>) => {
-        //         const token = resp.headers.get(X_AUTH);
-        //         console.log(token);
-        //         this.storage.set(AUTH_TOKEN, token);
-        //         this.authToken = token;
-        //         // Utente memorizzato nello storage in modo tale che se si vuole cambiare il
-        //         // profilo dell'utente stesso non si fa una chiamata REST.
-        //         this.storage.set(UTENTE_STORAGE, resp.body);
-        //         // update dell'observable dell'utente
-        //         this.utente$.next(resp.body);
-        //         this.loggedIn$.next(true);
-        //         return resp.body;
-        //     }));
-    // }
 
     logout() {
         this.authToken = null;
