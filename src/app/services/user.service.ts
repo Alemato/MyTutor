@@ -114,10 +114,7 @@ export class UserService {
     isLogged(): Observable<boolean> {
         return this.loggedIn$.asObservable();
     }
-    whichUserType(): Observable<string> {
-        return this.typeUser$;
-    }
-    whichUserType1(): string {
+    whichUserType(): string {
         let type: string;
         this.typeUser$.asObservable().subscribe((tipo) => {
             type = tipo;

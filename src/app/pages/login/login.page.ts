@@ -53,20 +53,20 @@ export class LoginPage implements OnInit {
     onLogin() {
         console.log('ciaociao');
         const account: Account = this.loginFormModel.value;
-        this.userService.login(account).subscribe((prova) => {
+        this.userService.login(account).subscribe((utente) => {
             console.log('il body è:');
-            console.log(prova);
+            console.log(utente);
             console.log('Il bieviorSabject è:');
-            // if (this.typeUser$.) {}
-            if (prova.idTeacher) {
+            if (this.userService.whichUserType() === 'teacher') {
+            // if (utente.idTeacher) {
                 console.log('prof');
                 this.teacher$ = this.userService.getTeacher();
                 console.log(this.teacher$.value.user.email);
-            } else if (prova.idStudent) {
+            } else if (this.userService.whichUserType() === 'student') {
                 console.log('stud');
                 this.student$ = this.userService.getStudent();
                 console.log(this.student$.value.user.email);
-            } else {
+            } else if (this.userService.whichUserType() === 'admin') {
                 console.log('sono admin');
             }
         });
