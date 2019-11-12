@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import {Platform} from '@ionic/angular';
+import {Events, Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {TranslateService} from '@ngx-translate/core';
@@ -11,8 +11,9 @@ import {LinguaService} from './services/lingua.service';
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
     constructor(
+        public events: Events,
         private translateService: TranslateService,
         private platform: Platform,
         private translate: TranslateService,
@@ -21,6 +22,9 @@ export class AppComponent {
         private linguaService: LinguaService,
     ) {
         this.initializeApp();
+        this.events.subscribe('stats', statsData => {
+            console.log(statsData);
+        });
     }
 
     public appPages = [
@@ -42,6 +46,8 @@ export class AppComponent {
             this.statusBar.styleDefault();
             this.splashScreen.hide();
         });
+    }
+    ngOnInit() {
     }
 
     initTranslate() {

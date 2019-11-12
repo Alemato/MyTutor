@@ -15,6 +15,7 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {IonicStorageModule} from '@ionic/storage';
 import {ChatService} from './services/chat.service';
 import {ChatMessage} from './model/chat.model';
+import {httpInterceptorProviders} from './interceptors';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -46,7 +47,8 @@ export function createTranslateLoader(http: HttpClient) {
         Map,
         StatusBar,
         SplashScreen,
-        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+        httpInterceptorProviders
     ],
     bootstrap: [AppComponent],
 })
