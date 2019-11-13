@@ -21,7 +21,6 @@ export class UserService {
     private authToken: string;
     private loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     private typeUser$: BehaviorSubject<string> = new BehaviorSubject<string>('');
-    private utente$: BehaviorSubject<User> = new BehaviorSubject<User>({} as User);
     private student$: BehaviorSubject<Student> = new BehaviorSubject<Student>({} as Student);
     private teacher$: BehaviorSubject<Teacher> = new BehaviorSubject<Teacher>({} as Teacher);
     constructor(private http: HttpClient, private storage: Storage) {
@@ -34,7 +33,15 @@ export class UserService {
             }
         });
         this.storage.get(UTENTE_STORAGE).then((utente) => {
-            this.utente$.next(utente);
+            if (utente) {
+                if (this.whichUserType() === 'teacher') {
+                    this.teacher$.next(utente);
+                } else if (this.whichUserType() === 'student') {
+                    this.student$.next(utente);
+                } else if (this.whichUserType() === 'admin') {
+                    console.log('io sono admin');
+                }
+            }
         });
 
     }
@@ -44,6 +51,7 @@ export class UserService {
                 const token = resp.headers.get(X_AUTH);
                 this.storage.set(AUTH_TOKEN, token);
                 this.authToken = token;
+                this.storage.set(UTENTE_STORAGE, resp.body);
                 if (resp.headers.get('User-Type') === 'student') {
                     console.log('studenteeee');
                     this.student$.next(resp.body);
@@ -63,12 +71,9 @@ export class UserService {
 
     logout() {
         this.authToken = null;
-        this.loggedIn$.next(true);
+        this.loggedIn$.next(false);
         this.storage.remove(AUTH_TOKEN);
         this.storage.remove(UTENTE_STORAGE);
-
-        // Nessuna chiamata al server perche' JWT e' stateless quindi non prevede alcun logout.
-        // Per gestirlo si dovrebbe fare lato server una blacklist.
     }
 
     getStudent(): BehaviorSubject<Student> {
