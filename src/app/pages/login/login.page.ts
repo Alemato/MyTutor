@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AlertController, NavController} from '@ionic/angular';
+import {AlertController, Events, MenuController, NavController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
-import {User} from '../../model/user.model';
 import {Account, UserService} from '../../services/user.service';
 import {BehaviorSubject} from 'rxjs';
 import {Student} from '../../model/student.model';
@@ -31,7 +30,9 @@ export class LoginPage implements OnInit {
                 private alertController: AlertController,
                 private translateService: TranslateService,
                 private navController: NavController,
-                private userService: UserService) {
+                private userService: UserService,
+                public events: Events,
+                public menuCtrl: MenuController) {
     }
 
     public togglePassword() {
@@ -52,37 +53,40 @@ export class LoginPage implements OnInit {
         this.initTranslate();
     }
 
+    ionViewWillEnter() {
+        this.menuCtrl.enable(false);
+    }
+    ionViewDidLeave() {
+        this.menuCtrl.enable(true);
+        this.events.publish('leaveLogin', true);
+    }
     onLogin() {
         console.log('ciaociao');
         const account: Account = this.loginFormModel.value;
         this.userService.login(account).subscribe((utente) => {
             if (this.userService.whichUserType() === 'teacher') {
-                console.log('prof');
                 this.teacher = new Teacher(utente);
-                console.log('oggetto teacher');
-                console.log(this.teacher);
                 this.teacher$ = this.userService.getTeacher();
-                console.log('Il bieviorSabject di teacher è:');
-                console.log(this.teacher$.value);
-                this.teacher = new Teacher(this.teacher$.value);
-                console.log('teacher da beav');
-                console.log(this.teacher);
             } else if (this.userService.whichUserType() === 'student') {
                 console.log('stud');
                 this.student = new Student(utente);
-                console.log('oggetto student');
-                console.log(this.student);
                 this.student$ = this.userService.getStudent();
-                console.log('Il bieviorSabject di student è:');
-                console.log(this.student$.value);
-                this.student = new Student(this.student$.value);
-                console.log('student da beav');
-                console.log(this.student);
             } else if (this.userService.whichUserType() === 'admin') {
                 console.log('sono admin');
             }
+            this.loginFormModel.reset();
             this.navController.navigateRoot('home');
-        });
+        },
+            (err: HttpErrorResponse) => {
+                if (err.status === 401) {
+                    console.error('login request error: ' + err.status);
+                    this.showLoginError();
+                }
+                if (err.status === 500) {
+                    console.error('login request error: ' + err.status);
+                    this.showLoginError();
+                }
+            });
     }
 
     async showLoginError() {
@@ -96,6 +100,12 @@ export class LoginPage implements OnInit {
     }
 
     private initTranslate() {
+        this.translateService.get('LOGIN_ERROR_SUB_TITLE').subscribe((data) => {
+            this.loginSubTitle = data;
+        });
+        this.translateService.get('LOGIN_ERROR_TITLE').subscribe((data) => {
+            this.loginTitle = data;
+        });
     }
 }
 

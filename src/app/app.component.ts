@@ -1,10 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 
-import {Events, Platform} from '@ionic/angular';
+import {Events, NavController, Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {TranslateService} from '@ngx-translate/core';
 import {LinguaService} from './services/lingua.service';
+import {UserService} from './services/user.service';
+import {BehaviorSubject} from 'rxjs';
+import {Student} from './model/student.model';
+import {Teacher} from './model/teacher.model';
 
 @Component({
     selector: 'app-root',
@@ -12,6 +16,10 @@ import {LinguaService} from './services/lingua.service';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
+
+    private student$: BehaviorSubject<Student>;
+    private teacher$: BehaviorSubject<Teacher>;
+
     constructor(
         public events: Events,
         private translateService: TranslateService,
@@ -20,10 +28,21 @@ export class AppComponent implements OnInit {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private linguaService: LinguaService,
+        private userService: UserService,
+        private navController: NavController
     ) {
         this.initializeApp();
-        this.events.subscribe('stats', statsData => {
-            console.log(statsData);
+        this.events.subscribe('leaveLogin', assert => {
+            if (assert) {
+                if (this.userService.whichUserType() === 'student') {
+                    this.student$ = this.userService.getStudent();
+                } else if (this.userService.whichUserType() === 'teacher') {
+                    this.teacher$ = this.userService.getTeacher();
+                } else if (this.userService.whichUserType() === 'admin') {
+                    this.teacher$ = this.userService.getTeacher();
+                    console.log('sono l\'admin');
+                }
+            }
         });
     }
 
@@ -47,7 +66,12 @@ export class AppComponent implements OnInit {
             this.splashScreen.hide();
         });
     }
+
     ngOnInit() {
+    }
+    logout() {
+        this.userService.logout();
+        this.navController.navigateRoot('login');
     }
 
     initTranslate() {
