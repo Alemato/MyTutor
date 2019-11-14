@@ -5,24 +5,23 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LoginPage } from './login.page';
-import {TranslateModule} from '@ngx-translate/core';
+import { RegistrazionePage } from './registrazione.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: LoginPage
+    component: RegistrazionePage
   }
 ];
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
-    TranslateModule.forChild(),
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [LoginPage]
+  declarations: [RegistrazionePage]
 })
-export class LoginPageModule {}
+export class RegistrazionePageModule {}
