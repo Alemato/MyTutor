@@ -33,3 +33,15 @@ html.ios {
 html.md {
   --ion-default-font: "Roboto", "Helvetica Neue", sans-serif;
 }
+
+$colors: (
+        primary:    #488aff,
+        secondary:  #32db64,
+        danger:     #f53d3d,
+        light:      #f4f4f4,
+        dark:       #222,
+        appprimary: #029db4,
+        apptesto: #808080,
+        appbotton: #01BD74,
+        appetichetta: #6ACA25
+);

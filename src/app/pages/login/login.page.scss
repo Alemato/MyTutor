@@ -35,13 +35,25 @@
     box-shadow: none !important;
   }
 
+  .md .emailpwd{
+    padding-left: 15px;
+  }
   .submit-btn {
-    background: #54a723;
-    border: 1px solid #ffffff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-color: #ffff;
+    --background-hover: #5bb526;
+    --color: #ffffff;
+    --background: #54a723;
+    font-size: 0.8em;
+
   }
 
   .register-btn {
-    color: #ffffff;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-color: #ffff;
+    --color: #ffffff;
     font-size: 0.8em;
   }
 }
