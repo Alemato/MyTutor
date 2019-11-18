@@ -11,12 +11,12 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: './pages/home/home.module#HomePageModule',
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'chat',
     loadChildren: './pages/chat/chat.module#ChatPageModule',
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'chatrest',
@@ -30,9 +30,9 @@ const routes: Routes = [
   {
     path: 'registrazione',
     loadChildren: './pages/registrazione/registrazione.module#RegistrazionePageModule',
-    canActivate: [AuthGuard]
-  },
-  // { path: 'prova', loadChildren: './pages/prova/prova.module#ProvaPageModule' },
+    //  canActivate: [AuthGuard]
+  }
+ // { path: 'prova', loadChildren: './pages/prova/prova.module#ProvaPageModule' },
 
 
 

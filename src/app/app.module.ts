@@ -16,6 +16,7 @@ import {IonicStorageModule} from '@ionic/storage';
 import {ChatService} from './services/chat.service';
 import {ChatMessage} from './model/chat.model';
 import {httpInterceptorProviders} from './interceptors';
+import {RegistrazioneDocenteModalPageModule} from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,7 +39,8 @@ export function createTranslateLoader(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        AppRoutingModule],
+        AppRoutingModule,
+        RegistrazioneDocenteModalPageModule],
     // qui si aggiungonoi componenti e le direttive da usate nel modulo/typescript (nel componente)
     providers: [
         // Array,
