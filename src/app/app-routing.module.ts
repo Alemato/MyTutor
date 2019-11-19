@@ -31,7 +31,8 @@ const routes: Routes = [
     path: 'registrazione',
     loadChildren: './pages/registrazione/registrazione.module#RegistrazionePageModule',
     //  canActivate: [AuthGuard]
-  }
+  },
+  { path: 'registrazione-docente-modal', loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule' }
  // { path: 'prova', loadChildren: './pages/prova/prova.module#ProvaPageModule' },
 
 

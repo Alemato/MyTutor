@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {NavController} from '@ionic/angular';
+import {ModalController, NavController} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
 import {Utente} from '../../model/utente.model';
 import {RegistrazioneService} from '../../services/registrazione.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
+import {RegistrazioneDocenteModalPage} from "../registrazione-docente-modal/registrazione-docente-modal.page";
 
 @Component({
     selector: 'app-registrazione',
@@ -19,7 +20,8 @@ export class RegistrazionePage implements OnInit {
         public formBuilder: FormBuilder,
         // public utente: Utente,
         private storage: Storage,
-        public registrazioneService: RegistrazioneService
+        public registrazioneService: RegistrazioneService,
+        public modalController: ModalController
     ) {
     }
 
@@ -51,5 +53,20 @@ export class RegistrazionePage implements OnInit {
         // console.log(JSON.stringify(utente));
         // console.log(this.registrazioneFormModel.value);
         // console.log(utente1);
+    }
+    async openModal() {
+        const modal = await this.modalController.create({
+            component: RegistrazioneDocenteModalPage
+        });
+
+        modal.onDidDismiss().then((dataReturned) => {
+            /*if (dataReturned !== null) {
+                this.dataReturned = dataReturned.data;
+                //alert('Modal Sent Data :'+ dataReturned);
+            }*/
+            console.log('i dati sono: ' + dataReturned.data);
+        });
+
+        await modal.present();
     }
 }
