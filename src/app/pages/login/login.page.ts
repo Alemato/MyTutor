@@ -61,8 +61,10 @@ export class LoginPage implements OnInit {
         this.events.publish('leaveLogin', true);
     }
     onLogin() {
-        console.log('ciaociao');
+        console.log('sto su on login');
         const account: Account = this.loginFormModel.value;
+        console.log(account);
+        console.log('eseguo la chiamata');
         this.userService.login(account).subscribe((utente) => {
             if (this.userService.whichUserType() === 'teacher') {
                 this.teacher = new Teacher(utente);

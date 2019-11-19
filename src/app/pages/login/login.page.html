@@ -7,31 +7,33 @@
 <ion-content class="login-content ion-padding ion-text-center">
     <img class="logo-row" src="../../../assets/imgs/logo1.png" width="200"/>
     <div class="login-box">
-    <form [formGroup]="loginFormModel" class="list-form">
-        <ion-row>
-            <ion-col>
-                <ion-list class="ion-no-padding" inset="">
-                    <ion-item class="emailpwd">
-                        <ion-input type="email" formControlName="username" placeholder="Email"></ion-input>
-                    </ion-item>
+        <form [formGroup]="loginFormModel" class="list-form">
+            <ion-row>
+                <ion-col>
+                    <ion-list class="ion-no-padding" inset="">
+                        <ion-item class="emailpwd">
+                            <ion-input type="email" formControlName="username" placeholder="Email"></ion-input>
+                        </ion-item>
 
-                    <ion-item class="emailpwd">
+                        <ion-item class="emailpwd">
 
-                        <ion-input [type]="passwordType" placeholder="password" formControlName="password"></ion-input>
-                        <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'" color="gray"
-                                  style="z-index: 1"></ion-icon>
-                    </ion-item>
-                </ion-list>
-            </ion-col>
-        </ion-row>
-
-
-            <ion-row align-self-end>
-                <ion-col class="signup-col" style="margin-left: 0; padding-left: 0;">
-                    <ion-button class="submit-btn" (click)="onLogin()"  type="submit" >Login</ion-button>
+                            <ion-input [type]="passwordType" placeholder="password"
+                                       formControlName="password"></ion-input>
+                            <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                                      color="gray"
+                                      style="z-index: 1"></ion-icon>
+                        </ion-item>
+                    </ion-list>
                 </ion-col>
-                <ion-col class="signup-col" style="margin-right: 13px">
-                    <ion-button class="register-btn" >Registrati</ion-button>
+            </ion-row>
+
+
+            <ion-row class="ion-align-self-end">
+                <ion-col class="signup-col login-button">
+                    <ion-button class="submit-btn" (click)="onLogin()" type="submit">Login</ion-button>
+                </ion-col>
+                <ion-col class="signup-col registration-button">
+                    <ion-button class="register-btn">Registrati</ion-button>
                 </ion-col>
             </ion-row>
 
