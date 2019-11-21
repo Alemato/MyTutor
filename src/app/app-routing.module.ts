@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import {AuthGuard} from './guard/auth.guard';
+import {SuperTabsModule} from '@ionic-super-tabs/angular';
 
 const routes: Routes = [
   {
@@ -32,8 +33,8 @@ const routes: Routes = [
     loadChildren: './pages/registrazione/registrazione.module#RegistrazionePageModule',
     //  canActivate: [AuthGuard]
   },
-  { path: 'registrazione-docente-modal', loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule' }
- // { path: 'prova', loadChildren: './pages/prova/prova.module#ProvaPageModule' },
+  // tslint:disable-next-line:max-line-length
+  { path: 'registrazione-docente-modal', loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule' },
 
 
 
@@ -41,7 +42,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
+    SuperTabsModule.forRoot()
   ],
   exports: [RouterModule]
 })
