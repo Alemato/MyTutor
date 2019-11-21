@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Profilo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <super-tabs>
+    <super-tabs-toolbar slot="top">
+      <super-tab-button>
+        <ion-label>Profilo</ion-label>
+      </super-tab-button>
+      <super-tab-button>
+        <ion-label>Modifica</ion-label>
+      </super-tab-button>
+    </super-tabs-toolbar>
+    <super-tabs-container>
+      <super-tab>
+        <ion-nav [root]="profilo"></ion-nav>
+      </super-tab>
+      <super-tab>
+        <ion-nav [root]="modificaProfilo"></ion-nav>
+      </super-tab>
+
+    </super-tabs-container>
+  </super-tabs>
+</ion-content>

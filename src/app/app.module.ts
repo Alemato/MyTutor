@@ -16,7 +16,9 @@ import {IonicStorageModule} from '@ionic/storage';
 import {ChatService} from './services/chat.service';
 import {ChatMessage} from './model/chat.model';
 import {httpInterceptorProviders} from './interceptors';
-import { RegistrazioneDocenteModalPageModule } from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
+import {RegistrazioneDocenteModalPageModule} from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
+import {ProfiloPageModule} from './pages/profilo/profilo.module';
+import {ModificaProfiloPageModule} from './pages/modifica-profilo/modifica-profilo.module';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -30,7 +32,7 @@ export function createTranslateLoader(http: HttpClient) {
         IonicModule.forRoot(),
         IonicStorageModule.forRoot({
             name: '__mydb',
-          driverOrder: ['indexeddb', 'sqlite', 'websql']
+            driverOrder: ['indexeddb', 'sqlite', 'websql']
         }),
         TranslateModule.forRoot({
             loader: {
@@ -40,7 +42,10 @@ export function createTranslateLoader(http: HttpClient) {
             }
         }),
         AppRoutingModule,
-        RegistrazioneDocenteModalPageModule],
+        RegistrazioneDocenteModalPageModule,
+        ProfiloPageModule,
+        ModificaProfiloPageModule
+    ],
     // qui si aggiungonoi componenti e le direttive da usate nel modulo/typescript (nel componente)
     providers: [
         // Array,
