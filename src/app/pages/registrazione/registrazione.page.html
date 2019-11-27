@@ -5,18 +5,20 @@
 </ion-header>
 
 <ion-content class="login-content ion-padding">
-    <div *ngIf="!img" style="margin: auto; width: fit-content;" (click)="stampa()">
-    <ion-icon name="contact" style="font-size: 200px; color: #029db4"></ion-icon>
-    <!--<ion-row>
+    <div  style="margin: auto; width: fit-content;" (click)="selectImage()">
+        <div style="margin: auto !important;" *ngIf="isLoading && img">Loading ... <ion-spinner></ion-spinner></div>
+    <ion-icon *ngIf="!img" name="contact" style="font-size: 200px; color: #029db4"></ion-icon>
+        <ion-avatar *ngIf="img" class="ion-text-center" style="margin: auto !important; padding-bottom: 15px; height: 200px; width: 200px;">
+            <img [src]="croppedImagepath" alt="img">
+        </ion-avatar>
+    <ion-row class="ion-text-center">
         <ion-col class="foto-profilo">
             <div>Scegli foto</div>
         </ion-col>
-    </ion-row>-->
+    </ion-row>
+
     </div>
-    <ion-avatar *ngIf="img">
-        <img [src]="croppedImagepath" alt="img">
-    </ion-avatar>
-    <div class="registrati-box ion-text-center">
+    <div class="registrati-box">
         <form [formGroup]="registrazioneFormModel" class="list-form">
             <ion-row>
                 <ion-col>

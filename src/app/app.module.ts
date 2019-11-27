@@ -13,6 +13,9 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {IonicStorageModule} from '@ionic/storage';
+import { File } from '@ionic-native/file/ngx';
+import { Camera } from '@ionic-native/Camera/ngx';
+import { Crop } from '@ionic-native/crop/ngx';
 import {ChatService} from './services/chat.service';
 import {ChatMessage} from './model/chat.model';
 import {httpInterceptorProviders} from './interceptors';
@@ -55,7 +58,10 @@ export function createTranslateLoader(http: HttpClient) {
         StatusBar,
         SplashScreen,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-        httpInterceptorProviders
+        httpInterceptorProviders,
+        Crop,
+        Camera,
+        File
     ],
     bootstrap: [AppComponent],
 })
