@@ -6,7 +6,7 @@ import {Utente} from '../../model/utente.model';
 import {RegistrazioneService} from '../../services/registrazione.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {RegistrazioneDocenteModalPage} from "../registrazione-docente-modal/registrazione-docente-modal.page";
+import {RegistrazioneDocenteModalPage} from '../registrazione-docente-modal/registrazione-docente-modal.page';
 
 @Component({
     selector: 'app-registrazione',
@@ -15,6 +15,11 @@ import {RegistrazioneDocenteModalPage} from "../registrazione-docente-modal/regi
 })
 export class RegistrazionePage implements OnInit {
     private registrazioneFormModel: FormGroup;
+    passwordType = 'password';
+    passwordShow = false;
+    public toogle = false;
+    croppedImagepath = '';
+    img = false;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -29,18 +34,32 @@ export class RegistrazionePage implements OnInit {
     ngOnInit() {
         this.registrazioneFormModel = this.formBuilder.group({
             // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
-            nome: ['vvv'],
-            cognome: ['vvv'],
-            email: ['vvv'],
-            password: ['vvv'],
+            nome: [''],
+            cognome: [''],
+            email: [''],
+            password: [''],
             datanascita: [],
-            regione: ['vvv'],
-            citta: ['vvv'],
+            regione: [''],
+            citta: [''],
             cap: [],
-            via: ['vvv'],
+            via: [''],
             civico: [],
-            biografia: ['vvv']
+            biografia: ['']
         });
+    }
+
+    public stampa() {
+        console.log('stampa');
+    }
+
+    public togglePassword() {
+        if (this.passwordShow) {
+            this.passwordShow = false;
+            this.passwordType = 'password';
+        } else {
+            this.passwordShow = true;
+            this.passwordType = 'text';
+        }
     }
 
     prendiRegistrazione() {
@@ -68,5 +87,23 @@ export class RegistrazionePage implements OnInit {
         });
 
         await modal.present();
+    }
+
+    notify() {
+        if (this.toogle) {
+            this.toogle = false;
+            console.log(this.toogle);
+        } else {
+            this.toogle = true;
+            console.log(this.toogle);
+            this.openModal();
+        }
+    }
+
+    notifyCondition() {
+        console.log(this.toogle);
+        if (this.toogle) {
+            this.openModal();
+        }
     }
 }

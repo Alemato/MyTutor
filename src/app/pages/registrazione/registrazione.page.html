@@ -4,27 +4,81 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <form [formGroup]="registrazioneFormModel" class="list-form">
-        <ion-input formControlName="nome" placeholder="Enter Input">NOME</ion-input>
-        <ion-input formControlName="cognome" placeholder="Enter Input">COGNOME</ion-input>
-        <ion-input formControlName="email" placeholder="Enter Input">EMAIL</ion-input>
-        <ion-input formControlName="password" placeholder="Enter Input">PASSWORD</ion-input>
-        <ion-item>
-            <ion-label>DD MM YY</ion-label>
-            <ion-datetime displayFormat="DD MM YY" formControlName="datanascita" placeholder="Select Date">DATA NASCITA</ion-datetime>
-        </ion-item>
-        <ion-input formControlName="regione" placeholder="Enter Input">REGIONE</ion-input>
-        <ion-input formControlName="citta" placeholder="Enter Input">CITTA'</ion-input>
-        <ion-input formControlName="cap" type="number" value="123">CAP</ion-input>
-        <ion-input formControlName="via" placeholder="Enter Input">VIA</ion-input>
-        <ion-input formControlName="civico" type="number" value="456">CIVICO</ion-input>
-        <ion-input formControlName="biografia" placeholder="Enter Input">BIOGRAFIA</ion-input>
-<!--        <ion-item>-->
-<!--            <ion-label>DOCENTE/STUDENTE</ion-label>-->
-<!--            <ion-toggle formControlName=""></ion-toggle>-->
-<!--        </ion-item>-->
-        <ion-button style="margin-top: 150px; margin-bottom: 150px" (click)="openModal()">Open Modal</ion-button>
-        <ion-button (click)="prendiRegistrazione()" expand="block">REGISTRATI</ion-button>
-    </form>
+<ion-content class="login-content ion-padding">
+    <div *ngIf="!img" style="margin: auto; width: fit-content;" (click)="stampa()">
+    <ion-icon name="contact" style="font-size: 200px; color: #029db4"></ion-icon>
+    <!--<ion-row>
+        <ion-col class="foto-profilo">
+            <div>Scegli foto</div>
+        </ion-col>
+    </ion-row>-->
+    </div>
+    <ion-avatar *ngIf="img">
+        <img [src]="croppedImagepath" alt="img">
+    </ion-avatar>
+    <div class="registrati-box ion-text-center">
+        <form [formGroup]="registrazioneFormModel" class="list-form">
+            <ion-row>
+                <ion-col>
+                    <ion-list inset="true" class="ion-no-padding">
+                        <ion-row>
+                            <ion-col size="6" class="ion-no-padding">
+                                <ion-item lines="inset">
+                                    <ion-input class="pa16" type="text" formControlName="nome" placeholder="Nome"></ion-input>
+                                </ion-item>
+                            </ion-col>
+
+                            <ion-col class="ion-no-padding">
+                            <ion-item lines="inset">
+                                <ion-input type="text" formControlName="cognome" placeholder="Cognome"></ion-input>
+                            </ion-item>
+                        </ion-col>
+                        </ion-row>
+
+                        <ion-item lines="inset">
+                            <ion-input class="pa16" type="email" formControlName="email"  placeholder="Email"></ion-input>
+                        </ion-item>
+
+                        <ion-item lines="inset">
+                            <ion-input class="pa16" [type]="passwordType" placeholder="password"
+                                       formControlName="password"></ion-input>
+                            <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                                      color="gray"
+                                      style="z-index: 1"></ion-icon>
+                        </ion-item>
+
+                        <ion-item lines="none">
+                            <ion-datetime style="margin: auto;" class="pa16" displayFormat="DD MMMM YYYY" placeholder="Data di nascita"
+                                          monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
+                                          max="2000" formControlName="datanascita"></ion-datetime>
+                        </ion-item>
+                    </ion-list>
+
+                    <ion-item style="padding-right: 15px; padding-left: 15px; --border-radius: 2px;">
+                        <ion-label (click)="notifyCondition()">Docente</ion-label>
+                        <ion-toggle (ionChange)="notify()" color="secondary" [checked]="toogle"></ion-toggle>
+                    </ion-item>
+
+                </ion-col>
+            </ion-row>
+
+            <!-- <ion-input formControlName="regione" placeholder="Enter Input">REGIONE</ion-input>
+            <ion-input formControlName="citta" placeholder="Enter Input">CITTA'</ion-input>
+            <ion-input formControlName="cap" type="number" value="123">CAP</ion-input>
+            <ion-input formControlName="via" placeholder="Enter Input">VIA</ion-input>
+            <ion-input formControlName="civico" type="number" value="456">CIVICO</ion-input>
+            <ion-input formControlName="biografia" placeholder="Enter Input">BIOGRAFIA</ion-input> -->
+            <!--        <ion-item>-->
+            <!--            <ion-label>DOCENTE/STUDENTE</ion-label>-->
+            <!--            <ion-toggle formControlName=""></ion-toggle>-->
+            <!--        </ion-item>-->
+            <!-- <ion-button style="margin-top: 150px; margin-bottom: 150px" (click)="openModal()">Open Modal</ion-button>
+            <ion-button (click)="prendiRegistrazione()" expand="block">REGISTRATI</ion-button>  -->
+
+        </form>
+        <ion-col class="signup-col">
+            <ion-button class="submit-btn" type="submit" expand="block">Registrati</ion-button>
+        </ion-col>
+    </div>
+
 </ion-content>

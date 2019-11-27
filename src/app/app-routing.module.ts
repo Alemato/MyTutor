@@ -36,7 +36,7 @@ const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   { path: 'registrazione-docente-modal', loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule' },
   // tslint:disable-next-line:max-line-length
-  { path: 'profilo-modifica', loadChildren: './pages/profilo-modifica-profilo/profilo-modifica-profilo.module#ProfiloModificaProfiloPageModule' },
+  { path: 'profilo-modifica', loadChildren: () => import('./pages/profilo-modifica-profilo/profilo-modifica-profilo.module').then(m => m.ProfiloModificaProfiloPageModule) },
 
 
 

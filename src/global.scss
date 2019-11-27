@@ -45,3 +45,23 @@ $colors: (
         appbotton: #01BD74,
         appetichetta: #6ACA25
 );
+
+ion-toolbar{
+  --background: #029db4;
+  --color: #f4f4f4;
+}
+ion-toolbar ion-title{
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.submit-btn {
+  --border-width: 1px;
+  --border-style: solid;
+  --border-color: #ffff;
+  --background-hover: #5bb526;
+  --color: #ffffff;
+  --background: #54a723;
+  font-size: 0.8em;
+
+}
