@@ -17,7 +17,7 @@
 
                         <ion-item class="emailpwd">
 
-                            <ion-input [type]="passwordType" placeholder="password"
+                            <ion-input [type]="passwordType" placeholder="Password"
                                        formControlName="password"></ion-input>
                             <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                                       color="gray"
@@ -28,12 +28,14 @@
             </ion-row>
 
 
-            <ion-row class="ion-align-self-end">
-                <ion-col class="signup-col login-button">
-                    <ion-button class="submit-btn" (click)="onLogin()" type="submit">Login</ion-button>
+            <ion-row class="ion-align-self-center">
+                <ion-col class="signup-col">
+                    <ion-button class="submit-btn" (click)="onLogin()"  expand="block" type="submit">Login</ion-button>
                 </ion-col>
-                <ion-col class="signup-col registration-button">
-                    <ion-button class="register-btn">Registrati</ion-button>
+            </ion-row>
+            <ion-row class="ion-align-self-center">
+                <ion-col class="registration-content">
+                    <a class="register-a" [routerLink]="['/registrazione']">Non hai un Account? Creane uno!!!</a>
                 </ion-col>
             </ion-row>
 
