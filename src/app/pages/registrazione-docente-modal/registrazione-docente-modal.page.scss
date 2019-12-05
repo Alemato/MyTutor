@@ -1,0 +1,18 @@
+.pa16{
+  padding-left: 16px !important;
+}
+
+ion-select{
+  max-width: 100% !important;
+}
+
+.bio{
+  opacity: .5;
+  font-size: 16px !important;
+  transform: translate3d(0,50%,0) !important;
+  -webkit-transform: translate3d(0,50%,0) !important;
+}
+
+.item-has-focus.label-floating.sc-ion-label-md-h, .item-has-focus .label-floating.sc-ion-label-md-h, .item-has-focus.label-stacked.sc-ion-label-md-h, .item-has-focus .label-stacked.sc-ion-label-md-h{
+  opacity: 1;
+}

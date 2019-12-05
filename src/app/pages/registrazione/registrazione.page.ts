@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {ActionSheetController, ModalController, NavController} from '@ionic/angular';
+import {ActionSheetController, ModalController} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
-import {Utente} from '../../model/utente.model';
 import {RegistrazioneService} from '../../services/registrazione.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
 import {RegistrazioneDocenteModalPage} from '../registrazione-docente-modal/registrazione-docente-modal.page';
-import { Crop } from '@ionic-native/crop/ngx';
-import { Camera, CameraOptions } from '@ionic-native/Camera/ngx';
-import { File } from '@ionic-native/file/ngx';
+import {Crop} from '@ionic-native/crop/ngx';
+import {Camera, CameraOptions} from '@ionic-native/Camera/ngx';
+import {File} from '@ionic-native/file/ngx';
+import {Teacher} from '../../model/teacher.model';
+import {User} from '../../model/user.model';
+import {RegisterEmailValidator} from '../../validators/registerEmail.validator';
+import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
 
 @Component({
     selector: 'app-registrazione',
@@ -17,7 +18,23 @@ import { File } from '@ionic-native/file/ngx';
     styleUrls: ['./registrazione.page.scss'],
 })
 export class RegistrazionePage implements OnInit {
+
+    constructor(
+        public formBuilder: FormBuilder,
+        private storage: Storage,
+        public registrazioneService: RegistrazioneService,
+        public modalController: ModalController,
+        private camera: Camera,
+        private crop: Crop,
+        public actionSheetController: ActionSheetController,
+        private file: File
+    ) {
+    }
+
     private registrazioneFormModel: FormGroup;
+    registra = true;
+    utente: User;
+    teacher: Teacher;
     passwordType = 'password';
     passwordShow = false;
     public toogle = false;
@@ -30,34 +47,55 @@ export class RegistrazionePage implements OnInit {
         quality: 50
     };
 
-    constructor(
-        public formBuilder: FormBuilder,
-        // public utente: Utente,
-        private storage: Storage,
-        public registrazioneService: RegistrazioneService,
-        public modalController: ModalController,
-        private camera: Camera,
-        private crop: Crop,
-        public actionSheetController: ActionSheetController,
-        private file: File
-    ) {
-    }
+    validationMessages = {
+        email: [
+            {type: 'required', message: 'Username is required.'},
+            {type: 'minlength', message: 'Username must be at least 5 characters long.'},
+            {type: 'pattern', message: 'Your username must contain only numbers and letters.'},
+            {type: 'validEmail', message: 'Your username has already been taken.'}
+        ],
+        password: [
+            {type: 'required', message: 'Username is required.'}
+        ],
+        name: [
+            {type: 'required', message: 'Username is required.'}
+        ],
+        surname: [
+            {type: 'required', message: 'Username is required.'}
+        ],
+        birthday: [
+            {type: 'required', message: 'Username is required.'},
+            {type: 'validAge', message: 'validAge is required.'}
+        ]
+    };
 
 // vuole tutti i campi perchè si deve aspettare qualcosa
     ngOnInit() {
         this.registrazioneFormModel = this.formBuilder.group({
             // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
-            nome: [''],
-            cognome: [''],
-            email: [''],
-            password: [''],
-            datanascita: [],
-            regione: [''],
-            citta: [''],
-            cap: [],
-            via: [''],
-            civico: [],
-            biografia: ['']
+            email: ['', Validators.compose(
+                [RegisterEmailValidator.emailIsValid,
+                    Validators.required
+                ])
+            ],
+            // roles: [''],
+            password: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(5),
+                Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')
+            ])],
+            name: ['', Validators.compose([
+                Validators.required
+            ])],
+            surname: ['', Validators.compose([
+                Validators.required
+            ])],
+            birthday: ['', Validators.compose([
+                Validators.required,
+                RegisterBirthdayValidator.isAdult
+            ])],     // da verificare tipo
+            // language: [''],
+            // image: [''],
         });
     }
 
@@ -109,7 +147,7 @@ export class RegistrazionePage implements OnInit {
     }
 
     cropImage(fileUrl) {
-        this.crop.crop(fileUrl, { quality: 100, targetWidth: -1, targetHeight: -1 })
+        this.crop.crop(fileUrl, {quality: 100, targetWidth: -1, targetHeight: -1})
             .then(
                 newPath => {
                     this.showCroppedImage(newPath.split('?')[0]);
@@ -149,47 +187,99 @@ export class RegistrazionePage implements OnInit {
     }
 
     prendiRegistrazione() {
-        const utente: Utente = this.registrazioneFormModel.value;
-        this.registrazioneService.setStoreRegistrazione('ute', utente);
-        this.registrazioneService.postRegistrazione(utente).subscribe((prendeMessaggi) => {
-            console.log(prendeMessaggi);
-        });
+        console.log('registro utenza:');
+        if (this.teacher == null || typeof this.teacher === 'undefined') {
+            this.utente = this.registrazioneFormModel.value;
+            this.utente.roles = 'Student';
+            this.utente.language = false;
+            this.utente.image = this.croppedImagepath;
+            console.log(this.utente);
+        } else {
+            this.teacher.user.roles = 'Teacher';
+            this.teacher.user.language = false;
+            this.teacher.user.image = this.croppedImagepath;
+            console.log(this.teacher);
+        }
+        // this.registrazioneService.setStoreRegistrazione('ute', this.utente);
+        // this.registrazioneService.postRegistrazione(utente).subscribe((prendeMessaggi) => {
+        //    console.log(prendeMessaggi);
+        // });
         // this.registrazioneService.getRegistrazione()
         // console.log(JSON.stringify(utente));
         // console.log(this.registrazioneFormModel.value);
         // console.log(utente1);
     }
+
     async openModal() {
-        const modal = await this.modalController.create({
-            component: RegistrazioneDocenteModalPage
-        });
+        this.utente = this.registrazioneFormModel.value;
+        this.registra = false;
+        const teacher1: Teacher = this.teacher;
+        const utente1: User = this.utente;
+        if (this.teacher == null || typeof this.teacher === 'undefined') {
+            const modal = await this.modalController.create({
+                component: RegistrazioneDocenteModalPage,
+                componentProps: {
+                    utente1
+                }
+            });
+            modal.onDidDismiss().then((dataReturned) => {
+                console.log('teache null o indeficnito i dati sono: ');
+                console.log(dataReturned.data);
+                this.teacher = dataReturned.data[0];
+                this.registra = dataReturned.data[1];
+            });
 
-        modal.onDidDismiss().then((dataReturned) => {
-            /*if (dataReturned !== null) {
-                this.dataReturned = dataReturned.data;
-                //alert('Modal Sent Data :'+ dataReturned);
-            }*/
-            console.log('i dati sono: ' + dataReturned.data);
-        });
+            await modal.present();
 
-        await modal.present();
+        } else {
+            this.registra = false;
+            const modal = await this.modalController.create({
+                component: RegistrazioneDocenteModalPage,
+                componentProps: {
+                    utente1,
+                    teacher1
+                }
+            });
+            modal.onDidDismiss().then((dataReturned) => {
+                console.log('i dati sono: ');
+                console.log(dataReturned.data);
+                this.teacher = dataReturned.data[0];
+                this.registra = dataReturned.data[1];
+            });
+
+            await modal.present();
+        }
     }
 
     notify() {
         if (this.toogle) {
             this.toogle = false;
+            this.teacher = null;
+            this.utente.roles = 'Student';
             console.log(this.toogle);
         } else {
             this.toogle = true;
-            console.log(this.toogle);
+            this.utente = this.registrazioneFormModel.value;
+            console.log('sto con il true, teacher');
+            console.log(this.utente);
+            this.utente.roles = 'Teacher';
             this.openModal();
+            console.log(this.toogle);
         }
+    }
+
+    onSubmit(bob: any) {
+        console.log(bob);
     }
 
     notifyCondition() {
         console.log(this.toogle);
         if (this.toogle) {
             this.openModal();
+        } else {
+            // caso in cui l'utente non ha mai aperto il model e non esiste l'utenza
+            this.utente = this.registrazioneFormModel.value;
+            this.utente.roles = 'Student';
         }
     }
 }

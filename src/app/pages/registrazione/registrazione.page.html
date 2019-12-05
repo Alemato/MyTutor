@@ -5,82 +5,119 @@
 </ion-header>
 
 <ion-content class="login-content ion-padding">
-    <div  style="margin: auto; width: fit-content;" (click)="selectImage()">
-        <div style="margin: auto !important;" *ngIf="isLoading && img">Loading ... <ion-spinner></ion-spinner></div>
-    <ion-icon *ngIf="!img" name="contact" style="font-size: 200px; color: #029db4"></ion-icon>
-        <ion-avatar *ngIf="img" class="ion-text-center" style="margin: auto !important; padding-bottom: 15px; height: 200px; width: 200px;">
+    <div style="margin: auto; width: fit-content;" (click)="selectImage()">
+        <div style="margin: auto !important;" *ngIf="isLoading && img">Loading ...
+            <ion-spinner></ion-spinner>
+        </div>
+        <ion-icon *ngIf="!img" name="contact" style="font-size: 200px; color: #029db4"></ion-icon>
+        <ion-avatar *ngIf="img" class="ion-text-center"
+                    style="margin: auto !important; padding-bottom: 15px; height: 200px; width: 200px;">
             <img [src]="croppedImagepath" alt="img">
         </ion-avatar>
-    <ion-row class="ion-text-center">
-        <ion-col class="foto-profilo">
-            <div>Scegli foto</div>
-        </ion-col>
-    </ion-row>
+        <ion-row class="ion-text-center">
+            <ion-col class="foto-profilo">
+                <div>Scegli foto</div>
+            </ion-col>
+        </ion-row>
 
     </div>
     <div class="registrati-box">
-        <form [formGroup]="registrazioneFormModel" class="list-form">
+        <form [formGroup]="registrazioneFormModel" class="list-form" (ngSubmit)="prendiRegistrazione()">
             <ion-row>
                 <ion-col>
                     <ion-list inset="true" class="ion-no-padding">
                         <ion-row>
                             <ion-col size="6" class="ion-no-padding">
                                 <ion-item lines="inset">
-                                    <ion-input class="pa16" type="text" formControlName="nome" placeholder="Nome"></ion-input>
+                                    <ion-input class="pa16" type="text" formControlName="name" placeholder="Nome"
+                                               required="true"></ion-input>
                                 </ion-item>
+                                <ng-container *ngFor="let validation of validationMessages.name">
+                                    <div ion-text class="text08 pl-15"
+                                         *ngIf="registrazioneFormModel.get('name').hasError(validation.type) && (registrazioneFormModel.get('name').dirty || registrazioneFormModel.get('name').touched)">
+                                        <ion-icon color="danger" name="information-circle-outline"
+                                                  class="vertical-middle"></ion-icon>
+                                        <ion-text color="danger"
+                                                  class="vertical-middle"> {{ validation.message }}</ion-text>
+                                    </div>
+                                </ng-container>
                             </ion-col>
 
                             <ion-col class="ion-no-padding">
-                            <ion-item lines="inset">
-                                <ion-input type="text" formControlName="cognome" placeholder="Cognome"></ion-input>
-                            </ion-item>
-                        </ion-col>
+                                <ion-item lines="inset">
+                                    <ion-input type="text" formControlName="surname" placeholder="Cognome"
+                                               required="true"></ion-input>
+                                </ion-item>
+                                <ng-container *ngFor="let validation of validationMessages.surname">
+                                    <div ion-text class="text08 pl-15"
+                                         *ngIf="registrazioneFormModel.get('surname').hasError(validation.type) && (registrazioneFormModel.get('surname').dirty || registrazioneFormModel.get('surname').touched)">
+                                        <ion-icon color="danger" name="information-circle-outline"
+                                                  class="vertical-middle"></ion-icon>
+                                        <ion-text color="danger"
+                                                  class="vertical-middle"> {{ validation.message }}</ion-text>
+                                    </div>
+                                </ng-container>
+                            </ion-col>
                         </ion-row>
 
                         <ion-item lines="inset">
-                            <ion-input class="pa16" type="email" formControlName="email"  placeholder="Email"></ion-input>
+                            <ion-input class="pa16" type="email" formControlName="email"
+                                       placeholder="Email"></ion-input>
                         </ion-item>
-
+                        <ng-container *ngFor="let validation of validationMessages.email">
+                            <div ion-text class="text08 pl-15"
+                                 *ngIf="registrazioneFormModel.get('email').hasError(validation.type) && (registrazioneFormModel.get('email').dirty || registrazioneFormModel.get('email').touched)">
+                                <ion-icon color="danger" name="information-circle-outline"
+                                          class="vertical-middle"></ion-icon>
+                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                            </div>
+                        </ng-container>
                         <ion-item lines="inset">
                             <ion-input class="pa16" [type]="passwordType" placeholder="password"
-                                       formControlName="password"></ion-input>
+                                       formControlName="password" required="true"></ion-input>
                             <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                                       color="gray"
                                       style="z-index: 1"></ion-icon>
                         </ion-item>
+                        <ng-container *ngFor="let validation of validationMessages.password">
+                            <div ion-text class="text08 pl-15"
+                                 *ngIf="registrazioneFormModel.get('password').hasError(validation.type) && (registrazioneFormModel.get('password').dirty || registrazioneFormModel.get('password').touched)">
+                                <ion-icon color="danger" name="information-circle-outline"
+                                          class="vertical-middle"></ion-icon>
+                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                            </div>
+                        </ng-container>
 
-                        <ion-item lines="none">
-                            <ion-datetime style="margin: auto;" class="pa16" displayFormat="DD MMMM YYYY" placeholder="Data di nascita"
+                        <ion-item>
+                            <ion-datetime style="margin: auto;" class="pa16" displayFormat="DD MMMM YYYY"
+                                          placeholder="Data di nascita"
                                           monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
-                                          max="2000" formControlName="datanascita"></ion-datetime>
+                                          max="2001" formControlName="birthday" required="true"></ion-datetime>
                         </ion-item>
+                        <ng-container *ngFor="let validation of validationMessages.birthday">
+                            <div ion-text class="text08 pl-15" style="margin-bottom: 10px;"
+                                 *ngIf="registrazioneFormModel.get('birthday').hasError(validation.type) && (registrazioneFormModel.get('birthday').dirty || registrazioneFormModel.get('birthday').touched)">
+                                <ion-icon color="danger" name="information-circle-outline"
+                                          class="vertical-middle"></ion-icon>
+                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                            </div>
+                        </ng-container>
                     </ion-list>
 
                     <ion-item style="padding-right: 15px; padding-left: 15px; --border-radius: 2px;">
                         <ion-label (click)="notifyCondition()">Docente</ion-label>
-                        <ion-toggle (ionChange)="notify()" color="secondary" [checked]="toogle"></ion-toggle>
+                        <ion-toggle (ionChange)="notify()" color="secondary" [checked]="this.toogle"
+                                    [disabled]="!registrazioneFormModel.valid"></ion-toggle>
                     </ion-item>
 
                 </ion-col>
             </ion-row>
-
-            <!-- <ion-input formControlName="regione" placeholder="Enter Input">REGIONE</ion-input>
-            <ion-input formControlName="citta" placeholder="Enter Input">CITTA'</ion-input>
-            <ion-input formControlName="cap" type="number" value="123">CAP</ion-input>
-            <ion-input formControlName="via" placeholder="Enter Input">VIA</ion-input>
-            <ion-input formControlName="civico" type="number" value="456">CIVICO</ion-input>
-            <ion-input formControlName="biografia" placeholder="Enter Input">BIOGRAFIA</ion-input> -->
-            <!--        <ion-item>-->
-            <!--            <ion-label>DOCENTE/STUDENTE</ion-label>-->
-            <!--            <ion-toggle formControlName=""></ion-toggle>-->
-            <!--        </ion-item>-->
-            <!-- <ion-button style="margin-top: 150px; margin-bottom: 150px" (click)="openModal()">Open Modal</ion-button>
-            <ion-button (click)="prendiRegistrazione()" expand="block">REGISTRATI</ion-button>  -->
-
+            <ion-col class="signup-col">
+                <ion-button class="submit-btn" type="submit" expand="block"
+                            [disabled]="!registrazioneFormModel.valid || !registra">Registrati
+                </ion-button>
+            </ion-col>
         </form>
-        <ion-col class="signup-col">
-            <ion-button class="submit-btn" type="submit" expand="block">Registrati</ion-button>
-        </ion-col>
     </div>
 
 </ion-content>

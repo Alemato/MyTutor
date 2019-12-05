@@ -1,21 +1,82 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>RegistrazioneDocenteModal</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Registrazione</ion-title>
+    </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-grid>
-    <ion-row>
-      <ion-col text-center>
-        ID : PROVA
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col text-center>
-        <ion-button (click)="closeModal()">Close Modal</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+<ion-content class="ion-padding">
+    <div class="registrati-box">
+        <form [formGroup]="registrazioneModelDocente" class="list-form">
+            <ion-row>
+                <ion-col size="12">
+                    <ion-list inset="true" class="ion-no-padding">
+                        <ion-item class="item-lines-inset">
+                            <ion-select formControlName="region" ok-text="Seleziona" cancel-text="Cancella"
+                                        placeholder="Seleziona una Regione" required="true">
+                                <ion-select-option value="Abruzzo">Abruzzo</ion-select-option>
+                                <ion-select-option value="Basilicata">Basilicata</ion-select-option>
+                                <ion-select-option value="Calabria">Calabria</ion-select-option>
+                                <ion-select-option value="Campania">Campania</ion-select-option>
+                                <ion-select-option value="Emilia Romagna">Emilia Romagna</ion-select-option>
+                                <ion-select-option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia
+                                </ion-select-option>
+                                <ion-select-option value="Lazio">Lazio</ion-select-option>
+                                <ion-select-option value="Liguria">Liguria</ion-select-option>
+                                <ion-select-option value="Lombardia">Lombardia</ion-select-option>
+                                <ion-select-option value="Marche">Marche</ion-select-option>
+                                <ion-select-option value="Molise">Molise</ion-select-option>
+                                <ion-select-option value="Piemonte">Piemonte</ion-select-option>
+                                <ion-select-option value="Puglia">Puglia</ion-select-option>
+                                <ion-select-option value="Sardegna">Sardegna</ion-select-option>
+                                <ion-select-option value="Sicilia">Sicilia</ion-select-option>
+                                <ion-select-option value="Toscana">Toscana</ion-select-option>
+                                <ion-select-option value="Trentino-Alto Adige">Trentino-Alto Adige</ion-select-option>
+                                <ion-select-option value="Umbria">Umbria</ion-select-option>
+                                <ion-select-option value="Val d'Aosta">Val d'Aosta</ion-select-option>
+                                <ion-select-option value="Veneto">Veneto</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                        <ion-item lines="inset">
+                            <ion-input class="pa16" type="text" formControlName="city" placeholder="Città" required="true"></ion-input>
+                        </ion-item>
+                        <ion-row>
+                            <ion-col class="ion-no-padding" size="8">
+                                <ion-item lines="inset">
+                                    <ion-input class="pa16" type="text" formControlName="street"
+                                               placeholder="indirizzo" required="true"></ion-input>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col class="ion-no-padding" size="4">
+                                <ion-item lines="inset">
+                                    <ion-input class="pa16" type="text" formControlName="streetNumber"
+                                               placeholder="Civico" required="true"></ion-input>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-item lines="inset">
+                            <ion-input class="pa16" type="text" pattern="[0-9]*" formControlName="postCode"
+                                       placeholder="CAP" required="true"></ion-input>
+                        </ion-item>
+                    </ion-list>
+                </ion-col>
+              <ion-col size="12" class="ion-margin-top">
+                <ion-list inset="true" class="ion-no-padding">
+                <ion-item class="pa16">
+                  <ion-label class="bio" position="stacked">Biografia</ion-label>
+                  <ion-textarea rows="3" formControlName="byography"
+                                placeholder="Inserisci una breve descrizione di te..."></ion-textarea>
+                </ion-item>
+                </ion-list>
+              </ion-col>
+            </ion-row>
+        </form>
+    </div>
+    <ion-grid>
+        <ion-row>
+            <ion-col class="ion-text-center">
+                <ion-button (click)="closeModal()" [disabled]="!registrazioneModelDocente.valid">Close Modal</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
 
