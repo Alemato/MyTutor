@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AlertController, Events, MenuController, NavController} from '@ionic/angular';
+import {AlertController, Events, LoadingController, MenuController, NavController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Account, UserService} from '../../services/user.service';
@@ -24,6 +24,7 @@ export class LoginPage implements OnInit {
     private teacher$: BehaviorSubject<Teacher>;
     private teacher: Teacher;
     private student: Student;
+    private loading;
 
 
     constructor(private formBuilder: FormBuilder,
@@ -32,7 +33,8 @@ export class LoginPage implements OnInit {
                 private navController: NavController,
                 private userService: UserService,
                 public events: Events,
-                public menuCtrl: MenuController) {
+                public menuCtrl: MenuController,
+                public loadingController: LoadingController) {
     }
 
     public togglePassword() {
@@ -56,15 +58,30 @@ export class LoginPage implements OnInit {
     ionViewWillEnter() {
         this.menuCtrl.enable(false);
     }
+
     ionViewDidLeave() {
         this.menuCtrl.enable(true);
         this.events.publish('leaveLogin', true);
     }
-    onLogin() {
+
+    async Loading() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async Diss() {
+        await this.loading.dismiss();
+    }
+
+     onLogin() {
         console.log('sto su on login');
         const account: Account = this.loginFormModel.value;
         console.log(account);
         console.log('eseguo la chiamata');
+        this.Loading();
         this.userService.login(account).subscribe((utente) => {
             if (this.userService.whichUserType() === 'teacher') {
                 this.teacher = new Teacher(utente);
@@ -76,15 +93,17 @@ export class LoginPage implements OnInit {
             } else if (this.userService.whichUserType() === 'admin') {
                 console.log('sono admin');
             }
+            this.Diss();
             this.loginFormModel.reset();
             this.navController.navigateRoot('home');
         },
             (err: HttpErrorResponse) => {
-                if (err.status === 401) {
+            if (err.status === 401) {
                     console.error('login request error: ' + err.status);
                     this.showLoginError();
+                    this.loginFormModel.controls.password.reset();
                 }
-                if (err.status === 500) {
+            if (err.status === 500) {
                     console.error('login request error: ' + err.status);
                     this.showLoginError();
                 }
@@ -92,6 +111,7 @@ export class LoginPage implements OnInit {
     }
 
     async showLoginError() {
+        this.Diss();
         const alert = await this.alertController.create({
             header: this.loginTitle,
             message: this.loginSubTitle,
