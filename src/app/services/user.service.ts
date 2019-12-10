@@ -24,15 +24,24 @@ export class UserService {
     private student$: BehaviorSubject<Student> = new BehaviorSubject<Student>({} as Student);
     private teacher$: BehaviorSubject<Teacher> = new BehaviorSubject<Teacher>({} as Teacher);
     constructor(private http: HttpClient, private storage: Storage) {
-
-        this.storage.get(AUTH_TOKEN).then((token) => {
-            console.log(token);
+         this.storage.get('loggedIn').then((loggedIn) => {
+            if (loggedIn) {
+                console.log('dallo storage di loggedIn ho preso true');
+                this.loggedIn$.next(true);
+            } else {
+                console.log('dallo storage di loggedIn ho preso false');
+                this.loggedIn$.next(false);
+            }
+        });
+         this.storage.get(AUTH_TOKEN).then((token) => {
             this.authToken = token;
             if (token !== null && token !== undefined && token !== '') {
+                console.log('token dallo storage');
+                console.log(token);
                 this.loggedIn$.next(true);
             }
         });
-        this.storage.get(UTENTE_STORAGE).then((utente) => {
+         this.storage.get(UTENTE_STORAGE).then((utente) => {
             if (utente) {
                 if (this.whichUserType() === 'teacher') {
                     this.teacher$.next(utente);
@@ -49,6 +58,8 @@ export class UserService {
         return this.http.post<any>(URL.LOGIN, account, {observe: 'response'}).pipe(
             map((resp: HttpResponse<any>) => {
                 const token = resp.headers.get(X_AUTH);
+                console.log('token dal server');
+                console.log(token);
                 this.storage.set(AUTH_TOKEN, token);
                 this.authToken = token;
                 this.storage.set(UTENTE_STORAGE, resp.body);
@@ -64,7 +75,10 @@ export class UserService {
                     console.log('I\'m Admin');
                     this.typeUser$.next('admin');
                 }
+                this.storage.set('typeUser', resp.headers.get('User-Type'));
                 this.loggedIn$.next(true);
+                this.storage.set('loggedIn', true);
+                console.log('setto loggedIn nello storage e in loggedIn$');
                 return resp.body;
             }));
     }
@@ -74,6 +88,7 @@ export class UserService {
         this.loggedIn$.next(false);
         this.storage.remove(AUTH_TOKEN);
         this.storage.remove(UTENTE_STORAGE);
+        this.storage.remove('loggedIn');
     }
 
     getStudent(): BehaviorSubject<Student> {
@@ -92,9 +107,12 @@ export class UserService {
     }
     whichUserType(): string {
         let type: string;
-        this.typeUser$.asObservable().subscribe((tipo) => {
+        this.storage.get('typeUser').then((tipo) => {
             type = tipo;
         });
+        // this.typeUser$.asObservable().subscribe((tipo) => {
+        //     type = tipo;
+        // });
         return type;
     }
 }
