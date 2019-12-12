@@ -1,12 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AlertController, Events, LoadingController, MenuController, NavController} from '@ionic/angular';
+import {AlertController, LoadingController, MenuController, NavController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Account, UserService} from '../../services/user.service';
 import {BehaviorSubject} from 'rxjs';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
+import {MenuRefresh} from '../../services/menuRefresh';
+import {Storage} from '@ionic/storage';
 
 @Component({
     selector: 'page-login',
@@ -32,9 +34,10 @@ export class LoginPage implements OnInit {
                 private translateService: TranslateService,
                 private navController: NavController,
                 private userService: UserService,
-                public events: Events,
                 public menuCtrl: MenuController,
-                public loadingController: LoadingController) {
+                public loadingController: LoadingController,
+                private menuSource: MenuRefresh,
+                private storage: Storage) {
     }
 
     public togglePassword() {
@@ -57,11 +60,17 @@ export class LoginPage implements OnInit {
 
     ionViewWillEnter() {
         this.menuCtrl.enable(false);
+        this.bob();
+    }
+
+    async bob() {
+        await this.storage.set('loggedIn', false);
     }
 
     ionViewDidLeave() {
         this.menuCtrl.enable(true);
-        this.events.publish('leaveLogin', true);
+        // this.events.publish('leaveLogin', true);
+        this.menuSource.publishMenuRefresh();
     }
 
     async Loading() {
@@ -76,34 +85,36 @@ export class LoginPage implements OnInit {
         await this.loading.dismiss();
     }
 
-     onLogin() {
+    onLogin() {
         console.log('sto su on login');
         const account: Account = this.loginFormModel.value;
         console.log(account);
         console.log('eseguo la chiamata');
         this.Loading();
         this.userService.login(account).subscribe((utente) => {
-            if (this.userService.whichUserType() === 'teacher') {
-                this.teacher = new Teacher(utente);
-                this.teacher$ = this.userService.getTeacher();
-            } else if (this.userService.whichUserType() === 'student') {
-                console.log('stud');
-                this.student = new Student(utente);
-                this.student$ = this.userService.getStudent();
-            } else if (this.userService.whichUserType() === 'admin') {
-                console.log('sono admin');
-            }
-            this.Diss();
-            this.loginFormModel.reset();
-            this.navController.navigateRoot('home');
-        },
+                this.userService.whichUserType().then((tipo) => {
+                    if (tipo === 'teacher') {
+                        this.teacher = new Teacher(utente);
+                        this.teacher$ = this.userService.getTeacher();
+                    } else if (tipo === 'student') {
+                        console.log('stud');
+                        this.student = new Student(utente);
+                        this.student$ = this.userService.getStudent();
+                    } else if (tipo === 'admin') {
+                        console.log('sono admin');
+                    }
+                });
+                this.Diss();
+                this.loginFormModel.reset();
+                this.navController.navigateRoot('home');
+            },
             (err: HttpErrorResponse) => {
-            if (err.status === 401) {
+                if (err.status === 401) {
                     console.error('login request error: ' + err.status);
                     this.showLoginError();
                     this.loginFormModel.controls.password.reset();
                 }
-            if (err.status === 500) {
+                if (err.status === 500) {
                     console.error('login request error: ' + err.status);
                     this.showLoginError();
                 }
