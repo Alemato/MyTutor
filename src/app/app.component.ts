@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 
-import {Events, NavController, Platform} from '@ionic/angular';
+import {MenuController, NavController, Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {TranslateService} from '@ngx-translate/core';
@@ -9,6 +9,8 @@ import {UserService} from './services/user.service';
 import {BehaviorSubject} from 'rxjs';
 import {Student} from './model/student.model';
 import {Teacher} from './model/teacher.model';
+import {MenuRefresh} from './services/menuRefresh';
+import {Storage} from '@ionic/storage';
 
 @Component({
     selector: 'app-root',
@@ -19,9 +21,9 @@ export class AppComponent implements OnInit {
 
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
+    private loggedIn: boolean;
 
     constructor(
-        public events: Events,
         private translateService: TranslateService,
         private platform: Platform,
         private translate: TranslateService,
@@ -29,33 +31,93 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private linguaService: LinguaService,
         private userService: UserService,
-        private navController: NavController
+        private navController: NavController,
+        private menuSource: MenuRefresh,
+        private menu: MenuController,
+        private storage: Storage
     ) {
         this.initializeApp();
-        this.events.subscribe('leaveLogin', assert => {
-            if (assert) {
-                if (this.userService.whichUserType() === 'student') {
+        this.menuSource.menuRefreshSource$.subscribe(assert => {
+            console.log('which');
+            this.userService.whichUserType().then((tipo) => {
+                console.log(tipo);
+                if (tipo === 'student') {
                     this.student$ = this.userService.getStudent();
-                } else if (this.userService.whichUserType() === 'teacher') {
+                    this.appPagesStudent.find(x => x.click === true).click = false;
+                    this.appPagesStudent.find(x => x.title === 'Home' ).click = true;
+                } else if (tipo === 'teacher') {
                     this.teacher$ = this.userService.getTeacher();
-                } else if (this.userService.whichUserType() === 'admin') {
-                    this.teacher$ = this.userService.getTeacher();
-                    console.log('sono l\'admin');
+                    this.appPagesTeacher.find(x => x.click === true).click = false;
+                    this.appPagesTeacher.find(x => x.title === 'Home' ).click = true;
                 }
-            }
+                this.storage.get('loggedIn').then((loggato) => {
+                    if (loggato) {
+                        this.loggedIn = loggato;
+                    } else {
+                        this.loggedIn = false;
+                    }
+                });
+            });
         });
     }
 
-    public appPages = [
+    public appPagesStudent = [
         {
             title: 'Home',
             url: '/home',
-            icon: 'home'
+            icon: 'home',
+            click: true
         },
         {
             title: 'Chat',
             url: '/chat',
-            icon: 'logo-android'
+            icon: 'chatboxes',
+            click: false
+        },
+        {
+            title: 'Storico',
+            url: '/',
+            icon: 'time',
+            click: false
+        },
+        {
+            title: 'Cerca Lezioni Disponibili',
+            url: '/',
+            icon: 'search',
+            click: false
+        }
+    ];
+
+    public appPagesTeacher = [
+        {
+            title: 'Home',
+            url: '/home',
+            icon: 'home',
+            click: true
+        },
+        {
+            title: 'Chat',
+            url: '/chat',
+            icon: 'chatboxes',
+            click: false
+        },
+        {
+            title: 'Storico',
+            url: '/',
+            icon: 'time',
+            click: false
+        },
+        {
+            title: 'Inserisci Annuncio',
+            url: '/',
+            icon: 'create',
+            click: false
+        },
+        {
+            title: 'Annunci Publicati',
+            url: '/',
+            icon: 'filing',
+            click: false
         }
     ];
 
@@ -68,10 +130,27 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.storage.get('loggedIn').then((loggato) => {
+            if (loggato) {
+                console.log('loggato su initial');
+                this.loggedIn = loggato;
+            } else {
+                console.log('loggato false su initial');
+                this.loggedIn = false;
+            }
+        });
     }
-    logout() {
-        this.userService.logout();
-        this.navController.navigateRoot('login');
+
+    async closeMenu(event: any) {
+        await this.menu.close();
+        this.appPagesStudent.find(x => x.click === true).click = false;
+        this.appPagesStudent.find(x => x.title === event.path[0].innerText).click = true;
+    }
+
+    async logout() {
+        await this.menu.close();
+        await this.userService.logout();
+        await this.navController.navigateRoot('login');
     }
 
     initTranslate() {

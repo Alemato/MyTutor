@@ -1,60 +1,57 @@
 <ion-app>
   <ion-split-pane>
-    <ion-menu>
-      <ion-header>
-        <ion-toolbar color="secondary" class="user-profile">
-          <ion-item>
-            <ion-label *ngIf="(this.student$ | async) as uto; else stdudentBlock">
-              <ion-text>
-                <h1><strong> {{uto.user.surname + ' ' + uto.user.name}}</strong></h1>
-              </ion-text>
-              <ion-menu-toggle auto-hide="false">
-                <ion-button fill="solid" size="small" color="light" (click)="logout()">
-                  <ion-icon name="log-out"></ion-icon>{{'LOGOUT_MENU' | translate}}</ion-button>
-              </ion-menu-toggle>
-            </ion-label>
-            <ng-template #stdudentBlock>
-              <ion-label *ngIf="(this.teacher$ | async) as uto; else adminBlock">
-                <ion-text>
-                  <h1><strong> {{uto.user.surname + ' ' + uto.user.name}}</strong></h1>
-                </ion-text>
-                <ion-text>
-                  <h3>{{uto.user.roles | uppercase}}</h3>
-                </ion-text>
-                <ion-menu-toggle auto-hide="false">
-                  <ion-button fill="solid" size="small" color="light" (click)="logout()">
-                    <ion-icon name="log-out"></ion-icon>{{'LOGOUT_MENU' | translate}}</ion-button>
-                </ion-menu-toggle>
-              </ion-label>
-            </ng-template>
+    <ion-menu *ngIf="loggedIn" class="menu" side="start" menuId="first">
 
-            <ng-template #adminBlock>
-              <ion-label>
-                <ion-text>
-                  <h1><strong></strong></h1>
-                </ion-text>
-                <ion-text>
-                  <h3></h3>
-                </ion-text>
-                <ion-menu-toggle auto-hide="false">
-                  <ion-button fill="solid" size="small" color="light" (click)="logout()">
-                    <ion-icon name="log-out"></ion-icon>{{'LOGOUT_MENU' | translate}}</ion-button>
-                </ion-menu-toggle>
-              </ion-label>
-            </ng-template>
-          </ion-item>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
-            <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
-              <ion-label>{{p.title}}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
-      </ion-content>
+      <!--<ion-title class="menu-title menu-toolbar">Start Menu</ion-title>-->
+      <ion-row >
+        <ion-col class="ion-align-self-center" size="auto">
+          <ion-icon *ngIf="true" name="contact" style="font-size: 80px"></ion-icon>
+        </ion-col>
+        <ion-col size="8" class="ion-align-self-center">
+          <h1 *ngIf="(this.teacher$ | async) as teacher; else studentBlockType" class="ion-no-margin font-weight-400" >{{teacher.user.name}} {{teacher.user.surname}}</h1>
+          <h5  class="ion-no-margin font-weight-400">Docente</h5>
+          <ng-template #studentBlockType>
+            <h1 class="ion-no-margin font-weight-400">{{(this.student$ | async).user.name}} {{(this.student$ | async).user.surname}}</h1>
+            <h5 class="ion-no-margin font-weight-400">Studente</h5>
+          </ng-template>
+        </ion-col>
+      </ion-row>
+      <ion-col *ngIf="(this.teacher$ | async); else stdudentBlock" style="padding-left: 0; padding-right: 0;">
+
+        <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click" (click)="closeMenu($event)" *ngFor="let p of appPagesTeacher" [routerLink]="[p.url]">
+          <ion-col size="auto" class="ion-align-self-center">
+            <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
+          </ion-col>
+          <ion-col class="ion-align-self-center">
+            <h4 class="ion-no-margin font-weight-400">{{p.title}}</h4>
+          </ion-col>
+        </ion-row>
+
+      </ion-col>
+      <ng-template #stdudentBlock>
+        <ion-col style="padding-left: 0; padding-right: 0;" >
+
+          <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click" (click)="closeMenu($event)" *ngFor="let p of appPagesStudent" [routerLink]="[p.url]">
+            <ion-col size="auto" class="ion-align-self-center">
+              <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
+            </ion-col>
+            <ion-col class="ion-align-self-center">
+              <h4 class="ion-no-margin font-weight-400" >{{p.title}}</h4>
+            </ion-col>
+          </ion-row>
+
+        </ion-col>
+      </ng-template>
+      <ion-col class="ion-margin-top" (click)="logout()">
+        <ion-row class="ion-margin-top">
+          <ion-col size="auto" class="ion-align-self-center">
+            <ion-icon name="exit" class="menu-icon"></ion-icon>
+          </ion-col>
+          <ion-col class="ion-align-self-center">
+            <h4 class="ion-no-margin font-weight-400">Sing Out</h4>
+          </ion-col>
+        </ion-row>
+      </ion-col>
     </ion-menu>
     <ion-router-outlet main></ion-router-outlet>
   </ion-split-pane>

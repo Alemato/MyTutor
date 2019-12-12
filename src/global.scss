@@ -27,30 +27,44 @@
 
 // font
 html.ios {
-  --ion-default-font: -apple-system, BlinkMacSystemFont,"Roboto", "Helvetica Neue", sans-serif;
+  --ion-default-font: -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
 }
 
 html.md {
   --ion-default-font: "Roboto", "Helvetica Neue", sans-serif;
 }
 
-$colors: (
-        primary:    #488aff,
-        secondary:  #32db64,
-        danger:     #f53d3d,
-        light:      #f4f4f4,
-        dark:       #222,
-        appprimary: #029db4,
-        apptesto: #808080,
-        appbotton: #01BD74,
-        appetichetta: #6ACA25
-);
+$apprimary: #029db4;
 
-ion-toolbar{
+$apprimary-rgb: (2, 157, 180);
+
+$apprimary-contrast: #ffffff;
+
+$apprimary-contrast-rgb: 255, 255, 255;
+
+$apprimary-shade: #028a9e;
+
+$color-apprimary-tint: #1ba7bc;
+
+.menu{
+  --background:#029db4;
+  color: $apprimary-contrast;
+}
+
+.menu-toolbar{
+  background-color: $apprimary;
+}
+
+.menu-title{
+  color: $apprimary-contrast;
+}
+
+ion-toolbar {
   --background: #029db4;
   --color: #f4f4f4;
 }
-ion-toolbar ion-title{
+
+ion-toolbar ion-title {
   text-transform: capitalize;
   text-align: center;
 }
@@ -84,4 +98,9 @@ ion-toolbar ion-title{
 .pl-15 {
   padding-left: 15px !important;
 }
+
+.font-weight-400{
+  font-weight: 400;
+}
+
 
