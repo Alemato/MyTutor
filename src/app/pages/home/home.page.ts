@@ -4,8 +4,9 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, interval, Subscription} from 'rxjs';
 import {URL} from '../../constants';
 import {ChildActivationEnd, ChildActivationStart, Router} from '@angular/router';
-import {Events, NavController} from '@ionic/angular';
+import {NavController} from '@ionic/angular';
 import {ChatMessage} from '../../model/chat.model';
+import {UserService} from '../../services/user.service';
 
 @Component({
     selector: 'app-home',
@@ -21,8 +22,8 @@ export class HomePage implements OnInit, OnDestroy {
         private storage: Storage,
         private httpClient: HttpClient,
         public navController: NavController,
-        public events: Events,
-        private http: HttpClient) {
+        private http: HttpClient,
+        private userService: UserService) {
     }
 
     ionViewWillEnter() {
@@ -55,12 +56,14 @@ export class HomePage implements OnInit, OnDestroy {
             console.log(mes);
         });
     }
-    backButtonPressed(someData) {
-        this.events.publish('stats', someData);
-    }
     ngOnInit() {
-        this.backButtonPressed ('MarioBelloBello');
     }
+
+    logout() {
+        this.userService.logout();
+        this.navController.navigateRoot('login');
+    }
+
     ngOnDestroy() {
         console.log('mario');
     }
