@@ -12,12 +12,12 @@ const routes: Routes = [
   {
     path: 'home',
     loadChildren: './pages/home/home.module#HomePageModule',
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'chat',
     loadChildren: './pages/chat/chat.module#ChatPageModule',
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'chatrest',
@@ -31,7 +31,7 @@ const routes: Routes = [
   {
     path: 'registrazione',
     loadChildren: './pages/registrazione/registrazione.module#RegistrazionePageModule',
-    //  canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   // tslint:disable-next-line:max-line-length
   { path: 'registrazione-docente-modal', loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule' },
