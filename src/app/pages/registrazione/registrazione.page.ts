@@ -190,12 +190,12 @@ export class RegistrazionePage implements OnInit {
         console.log('registro utenza:');
         if (this.teacher == null || typeof this.teacher === 'undefined') {
             this.utente = this.registrazioneFormModel.value;
-            this.utente.roles = 'Student';
+            this.utente.roles = 1;
             this.utente.language = false;
             this.utente.image = this.croppedImagepath;
             console.log(this.utente);
         } else {
-            this.teacher.user.roles = 'Teacher';
+            this.teacher.user.roles = 2;
             this.teacher.user.language = false;
             this.teacher.user.image = this.croppedImagepath;
             console.log(this.teacher);
@@ -255,14 +255,14 @@ export class RegistrazionePage implements OnInit {
         if (this.toogle) {
             this.toogle = false;
             this.teacher = null;
-            this.utente.roles = 'Student';
+            this.utente.roles = 1;
             console.log(this.toogle);
         } else {
             this.toogle = true;
             this.utente = this.registrazioneFormModel.value;
             console.log('sto con il true, teacher');
             console.log(this.utente);
-            this.utente.roles = 'Teacher';
+            this.utente.roles = 2;
             this.openModal();
             console.log(this.toogle);
         }
@@ -279,7 +279,7 @@ export class RegistrazionePage implements OnInit {
         } else {
             // caso in cui l'utente non ha mai aperto il model e non esiste l'utenza
             this.utente = this.registrazioneFormModel.value;
-            this.utente.roles = 'Student';
+            this.utente.roles = 1;
         }
     }
 }
