@@ -27,7 +27,7 @@
 
 // font
 html.ios {
-  --ion-default-font: -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
+  --ion-default-font: -apple-system, BlinkMacSystemFont,"Roboto", "Helvetica Neue", sans-serif;
 }
 
 html.md {
@@ -59,12 +59,16 @@ $color-apprimary-tint: #1ba7bc;
   color: $apprimary-contrast;
 }
 
-ion-toolbar {
+super-tab-button{
+  background-color: #029DB4;
+  color: #f4f4f4;
+}
+
+ion-toolbar{
   --background: #029db4;
   --color: #f4f4f4;
 }
-
-ion-toolbar ion-title {
+ion-toolbar ion-title{
   text-transform: capitalize;
   text-align: center;
 }

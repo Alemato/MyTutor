@@ -22,7 +22,6 @@ import {httpInterceptorProviders} from './interceptors';
 import {RegistrazioneDocenteModalPageModule} from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
 import {ProfiloPageModule} from './pages/profilo/profilo.module';
 import {ModificaProfiloPageModule} from './pages/modifica-profilo/modifica-profilo.module';
-import {MenuRefresh} from './services/menuRefresh';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -34,6 +33,7 @@ export function createTranslateLoader(http: HttpClient) {
     imports: [BrowserModule,
         HttpClientModule,
         IonicModule.forRoot(),
+        FontAwesomeModule,  // per le icone
         IonicStorageModule.forRoot({
             name: '__mydb',
             driverOrder: ['indexeddb', 'sqlite', 'websql']
@@ -58,7 +58,6 @@ export function createTranslateLoader(http: HttpClient) {
         Map,
         StatusBar,
         SplashScreen,
-        MenuRefresh,
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
         httpInterceptorProviders,
         Crop,

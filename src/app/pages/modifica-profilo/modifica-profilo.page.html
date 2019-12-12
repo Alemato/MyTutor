@@ -1,3 +1,148 @@
-<ion-content>
-<h1>MODIFICA</h1>
+<ion-content class="login-content" padding text-center>
+    <ion-icon name="contact" class="icona-foto-profilo"></ion-icon>
+    <ion-row>
+        <ion-col>
+            Scegli foto
+        </ion-col>
+    </ion-row>
+    <div *ngIf="this.students$ | async as students" class="registrati-box">
+        <form [formGroup]="profiloFormModel">
+            <ion-row>
+                <ion-col>
+                    <ion-list inset class="ion-no-padding">
+                        <ion-row>
+                            <ion-col size="6" class="ion-no-padding">
+                                <ion-item lines="inset">
+                                    <ion-icon name="contacts" class="icone"></ion-icon>
+                                    <ion-input class="pa16" type="text" text-center placeholder="nome"
+                                               formControlName="nome"
+                                               required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col class="ion-no-padding">
+                                <ion-item lines="inset">
+                                    <ion-input type="text" text-center placeholder="cognome" formControlName="cognome"
+                                               required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+
+                        <ion-item lines="inset">
+                            <fa-icon [icon]="faGift" class="icona-regalo"></fa-icon>
+                            <ion-datetime style="margin: auto;" class="pa16" displayFormat="DD MMMM YYYY"
+                                          placeholder="Data di nascita"
+                                          monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
+                                          max="2001" formControlName="datanascita" required="true" text-center>
+                            </ion-datetime>
+                        </ion-item>
+                        <ion-item lines="inset">
+                            <ion-icon name="mail" class="icone"></ion-icon>
+                            <ion-input text-center type="email" placeholder="email" formControlName="email"
+                                       required></ion-input>
+                        </ion-item>
+                        <ion-item lines="inset">
+                            <ion-icon name="key" class="icone"></ion-icon>
+                            <ion-input class="pa16" type="text" placeholder="Immetti vecchia password"
+                                       formControlName="password1" text-center></ion-input>
+                        </ion-item>
+                        <ion-item lines="inset">
+                            <ion-icon name="key" class="icone"></ion-icon>
+                            <ion-input class="pa16"
+                                       [disabled]="profiloFormModel.get('password1').value === ''"
+                                       [required]="profiloFormModel.get('password1').value !==''"
+                                       [type]="passwordType" placeholder="Immetti nuova password"
+                                       formControlName="password2" text-center>
+                            </ion-input>
+                            <ion-icon (click)="togglePassword()"
+                                      [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                                      color="gray" style="z-index: 1">
+                            </ion-icon>
+                        </ion-item>
+                        <ion-item lines="inset">
+                            <ion-icon name="flag" class="icone"></ion-icon>
+                            <ion-select formControlName="regione" ok-text="Seleziona" cancel-text="Cancella"
+                                        placeholder="Seleziona una Regione" required="true">
+                                <ion-select-option value="Abruzzo">Abruzzo</ion-select-option>
+                                <ion-select-option value="Basilicata">Basilicata</ion-select-option>
+                                <ion-select-option value="Calabria">Calabria</ion-select-option>
+                                <ion-select-option value="Campania">Campania</ion-select-option>
+                                <ion-select-option value="Emilia Romagna">Emilia Romagna</ion-select-option>
+                                <ion-select-option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia
+                                </ion-select-option>
+                                <ion-select-option value="Lazio">Lazio</ion-select-option>
+                                <ion-select-option value="Liguria">Liguria</ion-select-option>
+                                <ion-select-option value="Lombardia">Lombardia</ion-select-option>
+                                <ion-select-option value="Marche">Marche</ion-select-option>
+                                <ion-select-option value="Molise">Molise</ion-select-option>
+                                <ion-select-option value="Piemonte">Piemonte</ion-select-option>
+                                <ion-select-option value="Puglia">Puglia</ion-select-option>
+                                <ion-select-option value="Sardegna">Sardegna</ion-select-option>
+                                <ion-select-option value="Sicilia">Sicilia</ion-select-option>
+                                <ion-select-option value="Toscana">Toscana</ion-select-option>
+                                <ion-select-option value="Trentino-Alto Adige">Trentino-Alto Adige</ion-select-option>
+                                <ion-select-option value="Umbria">Umbria</ion-select-option>
+                                <ion-select-option value="Val d'Aosta">Val d'Aosta</ion-select-option>
+                                <ion-select-option value="Veneto">Veneto</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                        <ion-row>
+                            <ion-col class="ion-no-padding">
+                                <ion-item lines="inset">
+                                    <fa-icon [icon]="faCity" class="icona-citta"></fa-icon>
+                                    <ion-input class="pa16" formControlName="citta" type="text" placeholder="città"
+                                               required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col class="ion-no-padding">
+                                <ion-item lines="inset">
+                                    <ion-input class="pa16"
+                                               formControlName="cap" type="number" placeholder="cap"
+                                               required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col class="ion-no-padding" size="8">
+                                <ion-item lines="inset">
+                                    <fa-icon [icon]="faRoad" class="icona-strada"></fa-icon>
+                                    <ion-input class="pa16" formControlName="via" type="text"
+                                               placeholder="via"
+                                               required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col class="ion-no-padding" size="4">
+                                <ion-item lines="inset">
+                                    <ion-input formControlName="civico" type="number" placeholder="civico"
+                                               required></ion-input>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-grid class="ion-no-padding">
+                            <ion-row>
+                                <ion-col size="auto" class="colonna-IdCard">
+                                    <fa-icon [icon]="faIdCard" class="icona-biografia"></fa-icon>
+                                </ion-col>
+                                <ion-col class="colonna-label-text">
+                                    <ion-row>
+                                        <ion-label class="bio" position="undefined">Biografia</ion-label>
+                                    </ion-row>
+                                    <ion-row class="ion-no-padding">
+                                        <ion-textarea class="testo-biografia" rows="3" formControlName="biografia"
+                                                      placeholder="Inserisci una breve descrizione di te..."></ion-textarea>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-list>
+                </ion-col>
+            </ion-row>
+        </form>
+    </div>
+    <ion-col class="signup-col">
+        <ion-button (click)="salvaModifica()" class="submit-btn" full type="submit"
+                    [disabled]="!profiloFormModel.valid"
+                    [routerLink]="['/profilo-modifica']">Salva
+        </ion-button>
+    </ion-col>
 </ion-content>
+
