@@ -37,6 +37,10 @@ const routes: Routes = [
   { path: 'registrazione-docente-modal', loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule' },
   // tslint:disable-next-line:max-line-length
   { path: 'profilo-modifica', loadChildren: () => import('./pages/profilo-modifica-profilo/profilo-modifica-profilo.module').then(m => m.ProfiloModificaProfiloPageModule) },
+  { path: 'inserimento-lezioni', loadChildren: './pages/inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule' },
+    // tslint:disable-next-line:max-line-length
+  { path: 'inserimento-lezioni-modal', loadChildren: './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module#InserimentoLezioniModalPageModule' },
+
 
 
 

@@ -3,7 +3,7 @@
     <ion-menu>
       <ion-header>
         <ion-toolbar color="secondary" class="user-profile">
-          <ion-item>
+          <ion-item lines="inset">
             <ion-label *ngIf="(this.student$ | async) as uto; else stdudentBlock">
               <ion-text>
                 <h1><strong> {{uto.user.surname + ' ' + uto.user.name}}</strong></h1>

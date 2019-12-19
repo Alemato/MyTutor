@@ -24,6 +24,7 @@ import {ProfiloPageModule} from './pages/profilo/profilo.module';
 import {ModificaProfiloPageModule} from './pages/modifica-profilo/modifica-profilo.module';
 // aggiunte per le icone
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {InserimentoLezioniModalPageModule} from './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -50,7 +51,8 @@ export function createTranslateLoader(http: HttpClient) {
         AppRoutingModule,
         RegistrazioneDocenteModalPageModule,
         ProfiloPageModule,
-        ModificaProfiloPageModule
+        ModificaProfiloPageModule,
+        InserimentoLezioniModalPageModule
     ],
     // qui si aggiungonoi componenti e le direttive da usate nel modulo/typescript (nel componente)
     providers: [
