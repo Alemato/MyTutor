@@ -1,5 +1,6 @@
 export class User {
 
+    idUser: number;
     email: string;
     roles: number;
     password: string;
@@ -10,6 +11,7 @@ export class User {
     image: string;
 
     constructor(obj: any) {
+        this.idUser = obj.id;
         this.email = obj.email;
         this.roles = obj.roles;
         this.password = obj.password;
