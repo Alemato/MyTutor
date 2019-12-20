@@ -1,0 +1,42 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>InserimentoLezioniModal</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div>
+        <form [formGroup]="dataLezioneFormModel" (submit)="submit()" >
+            <ion-list formArrayName="dataOraIF" *ngFor="let contact of dataOraIFFormGroup.controls; let i = index;">
+                <ion-item [formGroupName]="i">
+                  <ion-icon name="remove-circle-outline" (click)="rimuoviCampo(i)"></ion-icon>
+                  il
+                    <ion-datetime displayFormat="DD MMMM YYYY"
+                                  placeholder="Data lezione"
+                                  monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
+                                  formControlName="dataLezione" required></ion-datetime>
+                  dalle
+                  <ion-datetime displayFormat="HH:mm" placeholder="Inizio" formControlName="oraInizio"
+                                  required></ion-datetime>
+                  alle
+                    <ion-datetime displayFormat="HH:mm" placeholder="Fine" formControlName="oraFine"
+                                  required></ion-datetime>
+                </ion-item>
+            </ion-list>
+        </form>
+    </div>
+
+    <ion-row>
+        <ion-col class="ion-text-center">
+            <ion-button (click)="chiudiModale()"
+                        [disabled]="!dataLezioneFormModel.valid">Chiudi
+            </ion-button>
+        </ion-col>
+    </ion-row>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button (click)="aggiungiCampo()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+</ion-content>

@@ -1,0 +1,53 @@
+.icona-foto-profilo {
+  color: #029db4;
+  font-size: 200px;
+}
+// sovrascrivo registrati-box perchè lo prende dal css globale
+.registrati-box {
+  background: transparent;
+  margin-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+}
+ion-item {
+  font-size: 16px;
+  box-shadow: none !important;
+}
+.pa16{
+  padding-left: 16px !important;
+}
+.icone {
+  padding-bottom: 5px;
+  color: #1e1e1e;
+}
+.icona-regalo {
+  font-size: 25px;
+}
+.icona-citta {
+  font-size: 20px;
+}
+.icona-strada {
+  font-size: 23px;
+}
+.icona-biografia {
+  font-size: 20px;
+}
+.testo-biografia {
+  --padding-start: 0px;
+  text-align: left;
+  --padding-top: 5px
+}
+.colonna-IdCard {
+  padding-left: 0px;
+  margin-top: 5px;
+}
+.bio {
+  font-size: 15px;
+  margin-top: 8px;
+  display: block;
+}
+.colonna-label-text {
+  padding-left: 16px;
+}
+

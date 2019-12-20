@@ -5,13 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ModificaProfiloPage } from './modifica-profilo.page';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import { InserimentoLezioniModalPage } from './inserimento-lezioni-modal.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ModificaProfiloPage
+    component: InserimentoLezioniModalPage
   }
 ];
 
@@ -21,9 +20,8 @@ const routes: Routes = [
         FormsModule,
         IonicModule,
         RouterModule.forChild(routes),
-        ReactiveFormsModule,
-        FontAwesomeModule
+        ReactiveFormsModule
     ],
-  declarations: [ModificaProfiloPage]
+  declarations: [InserimentoLezioniModalPage]
 })
-export class ModificaProfiloPageModule {}
+export class InserimentoLezioniModalPageModule {}

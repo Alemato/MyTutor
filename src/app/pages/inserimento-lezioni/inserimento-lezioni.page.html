@@ -1,0 +1,85 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Inserimento Lezione</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div>
+        <form [formGroup]="lezioneFormModel">
+<!--                <ion-row> &lt;!&ndash; super riga &ndash;&gt;-->
+<!--                    <ion-col> &lt;!&ndash; super colonna &ndash;&gt;-->
+                        <ion-row>
+                            <!-- Nome Lezione -->
+                            <ion-item>
+                                <!--                                <ion-icon name="contacts" class="icone"></ion-icon>-->
+                                <ion-input type="text" text-center placeholder="Nome lezione"
+                                           formControlName="nomeLezione"
+                                           required></ion-input>
+                            </ion-item>
+                        </ion-row>
+                        <ion-row>
+                                <!-- Macro Materia -->
+                                <ion-item>
+                                    <!--                                    <ion-icon name="contacts" class="icone"></ion-icon>-->
+                                    <ion-select formControlName="macroMateria" ok-text="Seleziona"
+                                                cancel-text="Cancella"
+                                                placeholder="Seleziona macro Materia" required="true">
+                                        <ion-select-option value="Matematica">Matematica</ion-select-option>
+                                        <ion-select-option value="Informatica">Informatica</ion-select-option>
+                                        <ion-select-option value="Fisica">Fisica</ion-select-option>
+                                        <ion-select-option value="Biologia">Biologia</ion-select-option>
+                                        <ion-select-option value="Lettere">Lettere</ion-select-option>
+                                        <ion-select-option value="Storia">Storia</ion-select-option>
+                                        <ion-select-option value="Diritto">Diritto</ion-select-option>
+                                        <ion-select-option value="Lingue">Lingue</ion-select-option>
+                                    </ion-select>
+                                </ion-item>
+                        </ion-row>
+                            <ion-row>
+                                <!-- Micro Materia -->
+                                <ion-item>
+                                    <!--                                    <ion-icon name="contacts" class="icone"></ion-icon>-->
+                                    <ion-select formControlName="microMateria" ok-text="Seleziona"
+                                                cancel-text="Cancella"
+                                                placeholder="Seleziona micro Materia" required="true">
+                                        <ion-select-option value="Analisi 1">Analisi 1</ion-select-option>
+                                        <ion-select-option value="App Mobili">App Mobili</ion-select-option>
+                                        <ion-select-option value="Fisica 1">Fisica 1</ion-select-option>
+                                        <ion-select-option value="Biologia 1">Biologia 1</ion-select-option>
+                                        <ion-select-option value="Italiano">Italiano</ion-select-option>
+                                        <ion-select-option value="Storia moderna">Storia Moderna</ion-select-option>
+                                        <ion-select-option value="Diritto Privato">Diritto Privato</ion-select-option>
+                                        <ion-select-option value="Giapponese">Giapponese</ion-select-option>
+                                    </ion-select>
+                                </ion-item>
+                            </ion-row>
+                        <ion-row>
+                                <!-- prezzo orario-->
+                                <ion-item>
+                                    <ion-input formControlName="prezzoOrario" type="number" placeholder="prezzo Orario"
+                                               required></ion-input>
+                                </ion-item>
+                        </ion-row>
+                            <ion-row>
+                                <!-- imposta data ed ora -->
+                                <ion-item>
+                                    <ion-button (click)="notificaCondizione()">Imposta data ed ora</ion-button>
+                                </ion-item>
+                            </ion-row>
+                        <ion-row>
+                            <!-- Descrizione -->
+                            <ion-textarea formControlName="descrizione"
+                                          placeholder="Inserisci una descrizione della lezione" required></ion-textarea>
+                        </ion-row>
+<!--                    </ion-col> &lt;!&ndash; super colonna &ndash;&gt;-->
+<!--                </ion-row> &lt;!&ndash; super riga &ndash;&gt;-->
+        </form>
+    </div>
+    <ion-col class="signup-col">
+        <ion-button (click)="inserisciLezione()" class="submit-btn" type="submit"
+                     [disabled]="!lezioneFormModel.valid || !this.ok"> Inserisci
+            <!--                    [routerLink]="['/profilo-modifica']">Salva-->
+        </ion-button>
+    </ion-col>
+</ion-content>

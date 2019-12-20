@@ -1,3 +1,69 @@
 <ion-content>
-<h1>PROFILO</h1>
+        <div *ngIf="this.students$ | async as students">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="auto" class="ion-align-self-center">
+            <ion-icon name="contact" class="foto-profilo"></ion-icon>
+                </ion-col>
+                <ion-col class="ion-align-self-center" size="7">
+                    <ion-row class="nome-cognome">
+                            <div>{{students.nome}} {{students.cognome}}</div>
+                    </ion-row>
+                    <ion-row class="eta">
+                        <div>{{age}} anni</div>
+                    </ion-row>
+                    <ion-row class="email">
+                        <div>{{students.email}}</div>
+                    </ion-row>
+                </ion-col>
+                    </ion-row>
+            </ion-grid>
+        </div>
+    <ion-card>
+        <ion-card-content>
+            <ion-card-title class="ion-text-center"> Dati Anagrafici </ion-card-title>
+            <div *ngIf="this.students$ | async as students">
+                <ion-row>
+                    <div>
+                        <div class="scritta">Data di nascita:</div>
+                       <div class="risposta">{{students.datanascita | date: 'dd/MM/yyyy'}}</div>
+                    </div>
+                </ion-row>
+                <ion-row>
+                    <div>
+                        <div class="scritta">Regione:</div>
+                        <div class="risposta">{{students.regione}}</div>
+                    </div>
+                </ion-row>
+                <ion-row>
+                    <div>
+                        <div class="scritta">Città:</div>
+                        <div class="risposta">{{students.citta}}</div>
+                    </div>
+                </ion-row>
+                <ion-row>
+                    <div>
+                        <div class="scritta">Cap:</div>
+                        <div class="risposta">{{students.cap}}</div>
+                    </div>
+                </ion-row>
+                <ion-row>
+                    <div>
+                        <div class="scritta">Via:</div>
+                        <div class="risposta">{{students.via}}, {{students.civico}}</div>
+                    </div>
+                </ion-row>
+            </div>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-content>
+            <ion-card-title class="ion-text-center">Biografia</ion-card-title>
+            <div *ngIf="this.students$ | async as students">
+                <ion-row>
+                    <div class="biografia">{{students.biografia}}</div>
+                </ion-row>
+            </div>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
