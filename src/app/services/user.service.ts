@@ -5,7 +5,7 @@ import {Storage} from '@ionic/storage';
 import {AUTH_TOKEN, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
 import {User} from '../model/user.model';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {delay, map} from 'rxjs/operators';
 import {Student} from '../model/student.model';
 import {Teacher} from '../model/teacher.model';
 
@@ -25,7 +25,7 @@ export class UserService {
     private type: string;
 
     constructor(private http: HttpClient, private storage: Storage) {
-         this.storage.get('loggedIn').then((loggedIn) => {
+        this.storage.get('loggedIn').then((loggedIn) => {
             if (loggedIn) {
                 console.log('dallo storage di loggedIn ho preso true');
                 this.loggedIn$.next(true);
@@ -34,7 +34,7 @@ export class UserService {
                 this.loggedIn$.next(false);
             }
         });
-         this.storage.get(AUTH_TOKEN).then((token) => {
+        this.storage.get(AUTH_TOKEN).then((token) => {
             this.authToken = token;
             if (token !== null && token !== undefined && token !== '') {
                 console.log('token dallo storage');
@@ -42,9 +42,13 @@ export class UserService {
                 this.loggedIn$.next(true);
             }
         });
-         this.storage.get(UTENTE_STORAGE).then((utente) => {
+        this.storage.get(UTENTE_STORAGE).then((utente) => {
+            console.log('utente');
             if (utente) {
+                console.log('whichUserType()');
                 this.whichUserType().then((tipo) => {
+                    console.log('tipo');
+                    console.log(tipo);
                     if (tipo === 'teacher') {
                         this.teacher$.next(utente);
                     } else if (tipo === 'student') {
@@ -67,8 +71,8 @@ export class UserService {
                 this.storage.set(AUTH_TOKEN, token).then();
                 this.authToken = token;
                 this.storage.set(UTENTE_STORAGE, resp.body).then();
-                if (resp.headers.get('X-X-User-Type') === 'student') {
-                    console.log('studenteeee');
+                if (resp.headers.get('X-User-Type') === 'student') {
+                    console.log('setto studente');
                     this.student$.next(resp.body);
                 } else if (resp.headers.get('X-User-Type') === 'teacher') {
                     console.log('professoreeeee');
@@ -78,37 +82,89 @@ export class UserService {
                 }
                 this.storage.set('typeUser', resp.headers.get('X-User-Type')).then();
                 this.loggedIn$.next(true);
-                this.bob2();
+                this.setLoggeIn(true);
                 console.log('setto loggedIn nello storage e in loggedIn$');
                 return resp.body;
             }));
     }
 
-    async bob2() {
-        await this.storage.set('loggedIn', true);
+    async setLoggeIn(value: boolean) {
+        await this.storage.set('loggedIn', value);
+    }
+
+    async neodimio() {
+        await this.storage.set('loggedIn', false);
+        await this.storage.remove('typeUser');
+        await this.storage.remove(UTENTE_STORAGE);
+        await this.storage.remove(AUTH_TOKEN);
     }
 
     async logout() {
         this.authToken = null;
         this.loggedIn$.next(false);
-        await this.storage.remove(AUTH_TOKEN);
-        await this.storage.remove(UTENTE_STORAGE);
-        await this.storage.set('loggedIn', false);
+        this.neodimio();
+    }
+
+    prendiUtente() {
+        this.storage.get(UTENTE_STORAGE).then((utente) => {
+            console.log('utente');
+            if (utente) {
+                console.log('whichUserType()');
+                this.whichUserType().then((tipo) => {
+                    console.log('tipo');
+                    console.log(tipo);
+                    if (tipo === 'teacher') {
+                        this.teacher$.next(utente);
+                    } else if (tipo === 'student') {
+                        this.student$.next(utente);
+                    } else if (tipo === 'admin') {
+                        console.log('io sono admin');
+                    }
+                });
+            }
+        });
+    }
+
+    prendiLoggato() {
+        this.storage.get('loggedIn').then((loggedIn) => {
+            if (loggedIn) {
+                console.log('dallo storage di loggedIn ho preso true');
+                this.loggedIn$.next(true);
+            } else {
+                console.log('dallo storage di loggedIn ho preso false');
+                this.loggedIn$.next(false);
+            }
+        });
+    }
+
+    prendiToken() {
+        this.storage.get(AUTH_TOKEN).then((token) => {
+            this.authToken = token;
+            if (token !== null && token !== undefined && token !== '') {
+                console.log('token dallo storage');
+                console.log(token);
+                this.loggedIn$.next(true);
+            }
+        });
     }
 
     getStudent(): BehaviorSubject<Student> {
+        this.prendiUtente();
         return this.student$;
     }
 
     getTeacher(): BehaviorSubject<Teacher> {
+        this.prendiUtente();
         return this.teacher$;
     }
 
     getAuthToken(): string {
+        this.prendiToken();
         return this.authToken;
     }
 
     isLogged(): Observable<boolean> {
+        this.prendiLoggato();
         return this.loggedIn$.asObservable();
     }
 

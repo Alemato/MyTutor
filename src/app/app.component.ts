@@ -20,6 +20,7 @@ import {Storage} from '@ionic/storage';
 export class AppComponent implements OnInit {
 
     private student$: BehaviorSubject<Student>;
+    private a$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
     private loggedIn: boolean;
 
@@ -124,21 +125,13 @@ export class AppComponent implements OnInit {
     initializeApp() {
         this.platform.ready().then(() => {
             this.initTranslate();
+            this.userService.setLoggeIn(false);
             this.statusBar.styleDefault();
             this.splashScreen.hide();
         });
     }
 
     ngOnInit() {
-        this.storage.get('loggedIn').then((loggato) => {
-            if (loggato) {
-                console.log('loggato su initial');
-                this.loggedIn = loggato;
-            } else {
-                console.log('loggato false su initial');
-                this.loggedIn = false;
-            }
-        });
     }
 
     async closeMenu(event: any) {

@@ -1,6 +1,6 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu *ngIf="loggedIn" class="menu" side="start" menuId="first">
+  <ion-split-pane contentId="menu-content">
+    <ion-menu *ngIf="loggedIn" class="menu" side="start" menuId="first" contentId="menu-content">
 
       <!--<ion-title class="menu-title menu-toolbar">Start Menu</ion-title>-->
       <ion-row >
@@ -53,6 +53,6 @@
         </ion-row>
       </ion-col>
     </ion-menu>
-    <ion-router-outlet main></ion-router-outlet>
+    <ion-router-outlet id="menu-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

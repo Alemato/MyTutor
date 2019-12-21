@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import {AuthGuard} from './guard/auth.guard';
+import {AuthGuard} from './guards/auth.guard';
 import {SuperTabsModule} from '@ionic-super-tabs/angular';
+import {LoginGuard} from './guards/login.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
@@ -25,13 +26,13 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: './pages/login/login.module#LoginPageModule'
+    loadChildren: './pages/login/login.module#LoginPageModule',
+    canActivate: [LoginGuard]
   },
 
   {
     path: 'registrazione',
     loadChildren: './pages/registrazione/registrazione.module#RegistrazionePageModule',
-    canActivate: [AuthGuard]
   },
   // tslint:disable-next-line:max-line-length
   { path: 'registrazione-docente-modal', loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule' },

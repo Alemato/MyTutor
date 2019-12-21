@@ -24,8 +24,8 @@ export class LoginPage implements OnInit {
     passwordShow = false;
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
-    private teacher: Teacher;
-    private student: Student;
+    private teacher: Teacher = new Teacher();
+    private student: Student = new Student();
     private loading;
 
 
@@ -59,12 +59,6 @@ export class LoginPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.menuCtrl.enable(false);
-        this.bob();
-    }
-
-    async bob() {
-        await this.storage.set('loggedIn', false);
     }
 
     ionViewDidLeave() {
@@ -92,18 +86,6 @@ export class LoginPage implements OnInit {
         console.log('eseguo la chiamata');
         this.Loading();
         this.userService.login(account).subscribe((utente) => {
-                this.userService.whichUserType().then((tipo) => {
-                    if (tipo === 'teacher') {
-                        this.teacher = new Teacher(utente);
-                        this.teacher$ = this.userService.getTeacher();
-                    } else if (tipo === 'student') {
-                        console.log('stud');
-                        this.student = new Student(utente);
-                        this.student$ = this.userService.getStudent();
-                    } else if (tipo === 'admin') {
-                        console.log('sono admin');
-                    }
-                });
                 this.Diss();
                 this.loginFormModel.reset();
                 this.navController.navigateRoot('home');
