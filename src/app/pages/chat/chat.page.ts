@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {NavController} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
-import {ChatMessage} from '../../model/chat.model';
+import {ChatMessage} from '../../model/chat-message.model';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {Observable} from 'rxjs';
 import {ChatService} from '../../services/chat.service';
@@ -39,13 +39,13 @@ export class ChatPage implements OnInit {
         // e quindi metterli nella lista di messaggi della presentazione
         await this.b.getFromStorageMex('mex').subscribe((value) => {
             if (value) {
-                for (const v of value.values()) {
-                    this.messages = v;
+                // for (const v of value.values()) {
+                //    this.messages = v;
                     // aggiorniamo idMex prendendo la lunghezza della lista di messaggi salvati nello storage che sono in messages
                     // this.idMex = this.messages.length;
                     // this.storage.set('idMex', this.idMex);
                     // console.log('idMex X = ' + this.idMex);
-                }
+                // }
             } // else {
             //     // se non ci sono messaggi precedenti inviati nella chat impostiamo ldMex a 0 nello storage
             //     this.storage.set('idMex', 0);

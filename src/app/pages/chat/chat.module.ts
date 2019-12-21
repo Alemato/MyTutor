@@ -7,7 +7,7 @@ import {IonicModule} from '@ionic/angular';
 
 import {ChatPage} from './chat.page';
 import {TranslateModule} from '@ngx-translate/core';
-import {ChatMessage} from '../../model/chat.model';
+import {ChatMessage} from '../../model/chat-message.model';
 import {ChatService} from '../../services/chat.service';
 
 const routes: Routes = [

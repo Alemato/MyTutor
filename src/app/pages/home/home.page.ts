@@ -5,7 +5,7 @@ import {Observable, interval, Subscription} from 'rxjs';
 import {URL} from '../../constants';
 import {ChildActivationEnd, ChildActivationStart, Router} from '@angular/router';
 import {NavController} from '@ionic/angular';
-import {ChatMessage} from '../../model/chat.model';
+import {ChatMessage} from '../../model/chat-message.model';
 import {UserService} from '../../services/user.service';
 
 @Component({
