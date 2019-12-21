@@ -1,5 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {ActionSheetController, ModalController} from '@ionic/angular';
+import {
+    ActionSheetController,
+    AlertController,
+    LoadingController,
+    ModalController,
+    NavController
+} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
 import {RegistrazioneService} from '../../services/registrazione.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -11,6 +17,9 @@ import {Teacher} from '../../model/teacher.model';
 import {User} from '../../model/user.model';
 import {RegisterEmailValidator} from '../../validators/registerEmail.validator';
 import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
+import {Student} from '../../model/student.model';
+import {RegistrationService} from '../../services/registration.service';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
     selector: 'app-registrazione',
@@ -18,29 +27,35 @@ import {RegisterBirthdayValidator} from '../../validators/registerBirthday.valid
     styleUrls: ['./registrazione.page.scss'],
 })
 export class RegistrazionePage implements OnInit {
-
-    constructor(
-        public formBuilder: FormBuilder,
-        private storage: Storage,
-        public registrazioneService: RegistrazioneService,
-        public modalController: ModalController,
-        private camera: Camera,
-        private crop: Crop,
-        public actionSheetController: ActionSheetController,
-        private file: File
-    ) {
-    }
-
     private registrazioneFormModel: FormGroup;
     registra = true;
-    utente: User;
+    utente: User = new User();
     teacher: Teacher;
+    student: Student = new Student();
     passwordType = 'password';
     passwordShow = false;
     public toogle = false;
     croppedImagepath = '';
     img = false;
     isLoading = false;
+    private loading;
+    private errorTitle: string;
+    private errorSubTitle: string;
+
+    constructor(
+        public formBuilder: FormBuilder,
+        private storage: Storage,
+        public modalController: ModalController,
+        private camera: Camera,
+        private crop: Crop,
+        public actionSheetController: ActionSheetController,
+        public loadingController: LoadingController,
+        private registrationService: RegistrationService,
+        private alertController: AlertController,
+        private navController: NavController,
+        private file: File
+    ) {
+    }
 
     imagePickerOptions = {
         maximumImagesCount: 1,
@@ -94,7 +109,7 @@ export class RegistrazionePage implements OnInit {
                 Validators.required,
                 RegisterBirthdayValidator.isAdult
             ])],     // da verificare tipo
-            // language: [''],
+            languageNumber: ['true', Validators.required]
             // image: [''],
         });
     }
@@ -186,28 +201,81 @@ export class RegistrazionePage implements OnInit {
         }
     }
 
+    async Loading() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async Diss() {
+        await this.loading.dismiss();
+    }
+
+    async showLoginError(status: number, message: string) {
+        this.Diss();
+        const alert = await this.alertController.create({
+            header: this.errorTitle = 'Errore ' + status,
+            message: this.errorSubTitle = message,
+            buttons: ['OK']
+        });
+
+        await alert.present();
+    }
+
     prendiRegistrazione() {
         console.log('registro utenza:');
         if (this.teacher == null || typeof this.teacher === 'undefined') {
             this.utente = this.registrazioneFormModel.value;
+            this.utente.idUser = 0;
             this.utente.roles = 1;
-            this.utente.language = false;
+            if (this.registrazioneFormModel.value.languageNumber === '0') {
+                this.utente.language = false;
+            } else {
+                this.utente.language = true;
+            }
             this.utente.image = this.croppedImagepath;
-            console.log(this.utente);
+            this.student.set('', this.utente);
+            this.Loading();
+            this.registrationService.registrationStudent(this.student).subscribe((data) => {
+                    this.Diss();
+                    this.registrazioneFormModel.reset();
+                    this.navController.navigateRoot('login');
+                },
+                (err: HttpErrorResponse) => {
+                    if (err.status === 500) {
+                        console.error('login request error: ' + err.status);
+                        this.showLoginError(err.status, err.message);
+                    }
+                });
+            console.log(this.student);
+            console.log(JSON.stringify(this.student));
         } else {
-            this.teacher.user.roles = 2;
-            this.teacher.user.language = false;
-            this.teacher.user.image = this.croppedImagepath;
+            this.utente.idUser = 0;
+            this.utente.roles = 2;
+            if (this.registrazioneFormModel.value.languageNumber === '0') {
+                this.utente.language = false;
+            } else {
+                this.utente.language = true;
+            }
+            this.utente.image = this.croppedImagepath;
+            this.teacher.set(this.teacher, this.utente);
+            this.Loading();
+            this.registrationService.registrationTeacher(this.teacher).subscribe((data) => {
+                    this.Diss();
+                    this.registrazioneFormModel.reset();
+                    this.navController.navigateRoot('login');
+                },
+                (err: HttpErrorResponse) => {
+                    if (err.status === 500) {
+                        console.error('login request error: ' + err.status + ' message:' + err.message);
+                        this.showLoginError(err.status, err.message);
+                    }
+                });
             console.log(this.teacher);
+            console.log(JSON.stringify(this.teacher));
         }
-        // this.registrazioneService.setStoreRegistrazione('ute', this.utente);
-        // this.registrazioneService.postRegistrazione(utente).subscribe((prendeMessaggi) => {
-        //    console.log(prendeMessaggi);
-        // });
-        // this.registrazioneService.getRegistrazione()
-        // console.log(JSON.stringify(utente));
-        // console.log(this.registrazioneFormModel.value);
-        // console.log(utente1);
     }
 
     async openModal() {
@@ -225,7 +293,8 @@ export class RegistrazionePage implements OnInit {
             modal.onDidDismiss().then((dataReturned) => {
                 console.log('teache null o indeficnito i dati sono: ');
                 console.log(dataReturned.data);
-                this.teacher = dataReturned.data[0];
+                this.teacher = new Teacher();
+                this.teacher.set(dataReturned.data[0], dataReturned.data[0].user);
                 this.registra = dataReturned.data[1];
             });
 
@@ -264,7 +333,6 @@ export class RegistrazionePage implements OnInit {
             console.log(this.utente);
             this.utente.roles = 2;
             this.openModal();
-            console.log(this.toogle);
         }
     }
 
@@ -273,7 +341,6 @@ export class RegistrazionePage implements OnInit {
     }
 
     notifyCondition() {
-        console.log(this.toogle);
         if (this.toogle) {
             this.openModal();
         } else {

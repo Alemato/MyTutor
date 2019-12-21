@@ -90,7 +90,8 @@ export class RegistrazioneDocenteModalPage implements OnInit {
   async closeModal() {
     this.bob = this.registrazioneModelDocente.value;
     this.bob.user = this.user;
-    this.teachr = new Teacher(this.bob);
+    this.teachr = new Teacher();
+    this.teachr.set(this.bob, this.bob.user);
     await this.modalController.dismiss([this.teachr, true]);
   }
 

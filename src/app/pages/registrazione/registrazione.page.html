@@ -102,6 +102,13 @@
                                 <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
                             </div>
                         </ng-container>
+                        <ion-item class="item-lines-inset">
+                            <ion-select class="select-full-width" formControlName="languageNumber" ok-text="Seleziona" cancel-text="Cancella"
+                                        placeholder="Seleziona una Lingua" required="true">
+                                <ion-select-option selected value="0">Italiano</ion-select-option>
+                                <ion-select-option value="1">English</ion-select-option>
+                            </ion-select>
+                        </ion-item>
                     </ion-list>
 
                     <ion-item style="padding-right: 15px; padding-left: 15px; --border-radius: 2px;">
