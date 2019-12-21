@@ -1,10 +1,16 @@
 import {User} from './user.model';
 
 export  class Student {
-    user: User;
+    user: User = new User();
     studyGrade: string;
-    constructor(obj: any) {
-        this.user = new User(obj.user);
-        this.studyGrade = obj.studyGrade;
+
+    set(studyGrade: string , user: User) {
+        this.user.set(user);
+        this.studyGrade = studyGrade;
+    }
+
+    constructor() {
+        this.user = new User();
+        this.studyGrade = '';
     }
 }

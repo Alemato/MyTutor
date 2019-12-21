@@ -10,8 +10,8 @@ export class User {
     language: boolean;
     image: string;
 
-    constructor(obj: any) {
-        this.idUser = obj.id;
+    set(obj: any) {
+        this.idUser = obj.idUser;
         this.email = obj.email;
         this.roles = obj.roles;
         this.password = obj.password;
@@ -20,5 +20,17 @@ export class User {
         this.birthday = obj.birthday;
         this.language = obj.language;
         this.image = obj.image;
+    }
+
+    constructor() {
+        this.idUser = 0;
+        this.email = '';
+        this.roles = 0;
+        this.password = '';
+        this.name = '';
+        this.surname = '';
+        this.birthday = new Date();
+        this.language = false;
+        this.image = '';
     }
 }
