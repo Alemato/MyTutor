@@ -11,6 +11,7 @@ import {Student} from './model/student.model';
 import {Teacher} from './model/teacher.model';
 import {MenuRefresh} from './services/menuRefresh';
 import {Storage} from '@ionic/storage';
+import {AUTH_TOKEN} from './constants';
 
 @Component({
     selector: 'app-root',
@@ -53,8 +54,10 @@ export class AppComponent implements OnInit {
                 }
                 this.storage.get('loggedIn').then((loggato) => {
                     if (loggato) {
+                        console.log('loggato = ' + loggato);
                         this.loggedIn = loggato;
                     } else {
+                        console.log('loggato =  false');
                         this.loggedIn = false;
                     }
                 });
@@ -125,9 +128,15 @@ export class AppComponent implements OnInit {
     initializeApp() {
         this.platform.ready().then(() => {
             this.initTranslate();
-            this.userService.setLoggeIn(false);
+            this.userService.ifExistKey('auth-token').then((condiction) => {
+                if (!condiction) {
+                    console.log('setto falso ');
+                    this.userService.setLoggeIn(false);
+                }
+            });
             this.statusBar.styleDefault();
             this.splashScreen.hide();
+            this.menuSource.publishMenuRefresh();
         });
     }
 

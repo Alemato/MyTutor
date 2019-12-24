@@ -23,6 +23,7 @@ export class UserService {
     private student$: BehaviorSubject<Student> = new BehaviorSubject<Student>({} as Student);
     private teacher$: BehaviorSubject<Teacher> = new BehaviorSubject<Teacher>({} as Teacher);
     private type: string;
+    public exist: boolean;
 
     constructor(private http: HttpClient, private storage: Storage) {
         this.storage.get('loggedIn').then((loggedIn) => {
@@ -86,6 +87,17 @@ export class UserService {
                 console.log('setto loggedIn nello storage e in loggedIn$');
                 return resp.body;
             }));
+    }
+
+    ifExistKey(value: string): Promise<boolean> {
+        return this.storage.get(value).then(data => {
+            if (data) {
+                return true;
+            } else {
+                return false;
+            }
+            }
+        );
     }
 
     async setLoggeIn(value: boolean) {
