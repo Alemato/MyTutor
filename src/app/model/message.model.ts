@@ -1,28 +1,26 @@
-
-export interface Messaggi {
-    text: string;
-    sendDate: Date;
-    chat: {idChat: number, chatName: string};
-    users: {idUser: number}[];
-}
+import {Chat} from './chat.model';
+import {User} from './user.model';
 
 export class Message {
-idMessage: number;
-text: string;
-sendDate: Date;
-chat: {idChat: number, chatName: string};
-users: {idUser: number, name: string, surname: string}[] = [];
+    idMessage: number;
+    text: string;
+    sendDate: number;
+    chat: Chat;
+    user: User;
 
-    // public constructor(message: Message) {
-    //     this.idMessage = message.idMessage;
-    //     this.text = message.text;
-    //     this.sendDate = new Date(message.sendDate.toLocaleDateString());
-    //     this.chat.idChat = message.chat.idChat;
-    //     this.chat.chatName = message.chat.chatName;
-    //     for (const user of message.users) {
-    //         let useAppo: { idUser: number; name: string; surname: string };
-    //         useAppo = {idUser: user.idUser, name: user.name, surname: user.surname};
-    //         this.users.push(useAppo);
-    //     }
-    // }
+    constructor() {
+        this.idMessage = 0;
+        this.text = '';
+        this.sendDate = new Date().getTime();
+        this.chat = new Chat();
+        this.user = new User();
+    }
+
+    set(obj: any) {
+        this.idMessage = obj.idMessage ;
+        this.text = obj.text;
+        this.sendDate = obj.sendDate;
+        this.chat = obj.chat;
+        this.user = obj.user;
+    }
 }
