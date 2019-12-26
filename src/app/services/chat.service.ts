@@ -3,7 +3,7 @@ import {Storage} from '@ionic/storage';
 import {Observable} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {URL, LINGUA} from '../constants';
-import {ChatMessage} from '../model/chat-message.model';
+import {ChatMessage} from '../model/old/chat-message.model';
 import {HttpClient} from '@angular/common/http';
 
 

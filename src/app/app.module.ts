@@ -17,7 +17,7 @@ import { File } from '@ionic-native/file/ngx';
 import { Camera } from '@ionic-native/Camera/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import {ChatService} from './services/chat.service';
-import {ChatMessage} from './model/chat-message.model';
+import {ChatMessage} from './model/old/chat-message.model';
 import {httpInterceptorProviders} from './interceptors';
 import {RegistrazioneDocenteModalPageModule} from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
 import {ProfiloPageModule} from './pages/profilo/profilo.module';

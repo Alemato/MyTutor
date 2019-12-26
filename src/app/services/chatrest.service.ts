@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {ChatMessage} from '../model/chat-message.model';
+import {ChatMessage} from '../model/old/chat-message.model';
 import {Storage} from '@ionic/storage';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';

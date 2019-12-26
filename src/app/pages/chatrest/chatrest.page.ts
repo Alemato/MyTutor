@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {NavController} from '@ionic/angular';
 import {Storage} from '@ionic/storage';
-import {ChatMessage} from '../../model/chat-message.model';
+import {ChatMessage} from '../../model/old/chat-message.model';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {Observable} from 'rxjs';
 import {ChatrestService} from '../../services/chatrest.service';
