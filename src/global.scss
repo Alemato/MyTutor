@@ -95,6 +95,35 @@ ion-toolbar ion-title{
   vertical-align: middle;
 }
 
+.mx-auto{
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.m-auto{
+  margin: auto;
+}
+
+.ml--56 {
+  margin-left: -56px;
+}
+
+.mr-15{
+  margin-right: 15px;
+}
+
+.pb-15{
+  padding-bottom: 15px;
+}
+
+.h-62{
+  height: 62px;
+}
+
+.w-62{
+  width: 62px;
+}
+
 .pl-16 {
   padding-left: 16px !important;
 }
@@ -103,8 +132,59 @@ ion-toolbar ion-title{
   padding-left: 15px !important;
 }
 
+.pt-5{
+  padding-top: 5px;
+}
+
+.pt-3{
+  padding-top: 3px;
+}
+
+.ls-1{
+  letter-spacing: 1px;
+}
+
+.ls-01em{
+  letter-spacing: 0.1em;
+}
+
 .font-weight-400{
   font-weight: 400;
+}
+
+.font-weight-300{
+  font-weight: 300;
+}
+
+.fw-normal{
+  font-weight: normal;
+}
+
+.text-troncate{
+  text-overflow: ellipsis;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fs-62{
+  font-size: 62px;
+}
+
+.fs-large{
+  font-size: large;
+}
+
+.fs-medium{
+  font-size: medium;
+}
+
+.fs-small{
+  font-size: small;
+}
+
+.c-primary{
+  color: $apprimary;
 }
 
 .select-full-width{

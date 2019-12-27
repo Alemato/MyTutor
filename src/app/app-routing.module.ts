@@ -41,6 +41,7 @@ const routes: Routes = [
   { path: 'inserimento-lezioni', loadChildren: './pages/inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule' },
     // tslint:disable-next-line:max-line-length
   { path: 'inserimento-lezioni-modal', loadChildren: './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module#InserimentoLezioniModalPageModule' },
+  { path: 'lista-chat', loadChildren: './pages/lista-chat/lista-chat.module#ListaChatPageModule' },
 
 
 

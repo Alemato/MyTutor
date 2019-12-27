@@ -74,7 +74,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'Chat',
-            url: '/chat',
+            url: '/lista-chat',
             icon: 'chatboxes',
             click: false
         },
@@ -101,7 +101,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'Chat',
-            url: '/chat',
+            url: '/lista-chat',
             icon: 'chatboxes',
             click: false
         },
