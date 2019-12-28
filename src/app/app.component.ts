@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'Cerca Lezioni Disponibili',
-            url: '/',
+            url: '/ricerca-lezioni',
             icon: 'search',
             click: false
         }
