@@ -1,0 +1,12 @@
+<ion-list>
+  <ion-list-header class="px-0"><span class="ion-text-center" style="width: 100%">Slot orari disponibili per {{day}}</span></ion-list-header>
+    <ion-item-divider style="min-height: 1px !important;"></ion-item-divider>
+    <ion-item class="px-0" lines="" *ngFor="let s of slot">
+      <div class="ion-text-center" style="width: 100%">{{s.inizio}} - {{s.fine}}</div>
+    </ion-item>
+  <ion-row>
+    <div style="margin-right: auto; margin-left: auto">
+  <ion-button class="ion-margin-top ion-margin-bottom"  (click)="close()">Chiudi</ion-button>
+    </div>
+  </ion-row>
+</ion-list>

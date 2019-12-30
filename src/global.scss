@@ -124,6 +124,12 @@ ion-toolbar ion-title{
   width: 62px;
 }
 
+.px-0{
+  padding-left: 0;
+  padding-right: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+}
 .pl-16 {
   padding-left: 16px !important;
 }
@@ -140,6 +146,13 @@ ion-toolbar ion-title{
   padding-top: 3px;
 }
 
+.pt-15{
+  padding-top: 15px;
+}
+
+.pt-13{
+  padding-top: 13px;
+}
 .ls-1{
   letter-spacing: 1px;
 }
@@ -181,6 +194,10 @@ ion-toolbar ion-title{
 
 .fs-small{
   font-size: small;
+}
+
+.fs-ultra-small{
+  font-size: xx-small;
 }
 
 .c-primary{
