@@ -43,6 +43,7 @@ const routes: Routes = [
   { path: 'inserimento-lezioni-modal', loadChildren: './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module#InserimentoLezioniModalPageModule' },
   { path: 'lista-chat', loadChildren: './pages/lista-chat/lista-chat.module#ListaChatPageModule' },
   { path: 'ricerca-lezioni', loadChildren: './pages/ricerca-lezioni/ricerca-lezioni.module#RicercaLezioniPageModule' },
+  { path: 'risultati-ricerca', loadChildren: './pages/risultati-ricerca/risultati-ricerca.module#RisultatiRicercaPageModule' },
 
 
 

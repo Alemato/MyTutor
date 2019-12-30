@@ -1,0 +1,74 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title class="ml--56">Risultati Ricerca</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item class="px-0">
+      <ion-grid style="width: 100%">
+        <ion-row>
+            <ion-col size="auto">
+                <ion-icon *ngIf="true; else imgBlock" name="contact" class="fs-62 c-primary"></ion-icon>
+                <ng-template #imgBlock>
+                    <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+                        <img [src]="" alt="img" style="width: 51px; height: 51px;">
+                    </ion-avatar>
+                </ng-template>
+            </ion-col>
+            <ion-col size="9">
+                <div class="ion-no-margin fs-large fw-normal">Nome Lezione</div>
+                <div class="ion-no-margin fs-large font-weight-300 ls-01em c-primary">Nome Cognome Prof</div>
+                <ion-row>
+                    <ion-col class="ion-no-padding">
+                        <div class="ion-no-margin px-0 fs-medium font-weight-300">Sotto Materia</div>
+                    </ion-col>
+                    <ion-col  class="ion-no-padding">
+                        <div class="ion-no-margin fs-medium font-weight-400 c-primary ion-float-right">10€/h</div>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="auto" class="px-0 pt-13">
+                    <div class="ion-no-margin fs-medium font-weight-300">Slots:</div>
+                  </ion-col>
+                  <ion-col *ngIf="slot[1]!== null && slot[1] !== undefined; else nessunSlot">
+                    <ion-row>
+                    <ion-chip *ngIf="slot[1].lunedi !== null && slot[1].lunedi !== undefined">
+                        <ion-label (click)="presentPopover($event, slot[1].lunedi, 'lunedi')" class="">Lunedi</ion-label>
+                    </ion-chip>
+                    <ion-chip *ngIf="slot[1].martedi !== null && slot[1].martedi !== undefined">
+                        <ion-label (click)="stampaNumero(slot[1].martedi)" class="">Martedi</ion-label>
+                    </ion-chip>
+                    <ion-chip *ngIf="slot[1].mercoledi !== null && slot[1].mercoledi !== undefined">
+                        <ion-label (click)="stampaNumero(slot[1].mercoledi)"  class="">Mercoledi</ion-label>
+                    </ion-chip>
+                      <ion-chip *ngIf="slot[1].giovedi !== null && slot[1].giovedi !== undefined">
+                        <ion-label (click)="stampaNumero(slot[1].giovedi)"  class="">Giovedi</ion-label>
+                      </ion-chip>
+                      <ion-chip *ngIf="slot[1].venerdi !== null && slot[1].venerdi !== undefined">
+                        <ion-label (click)="stampaNumero(slot[1].venrdi)"  class="">Venerdi</ion-label>
+                      </ion-chip>
+                      <ion-chip *ngIf="slot[1].sabato !== null && slot[1].sabato !== undefined">
+                        <ion-label (click)="stampaNumero(slot[1].sabato)"  class="">Sabato</ion-label>
+                      </ion-chip>
+                      <ion-chip *ngIf="slot[1].domenica !== null && slot[1].domenica !== undefined">
+                        <ion-label (click)="stampaNumero(slot[1].domenica)"  class="">Domenica</ion-label>
+                      </ion-chip>
+                    </ion-row>
+                  </ion-col>
+                  <ng-template #nessunSlot>
+                    <ion-col class="px-0 pt-13">
+                      <div class="ion-no-margin fs-medium fw-normal ion-float-right"> Non disponibili!!</div>
+                    </ion-col>
+                  </ng-template>
+                </ion-row>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    </ion-item>
+  </ion-list>
+</ion-content>
