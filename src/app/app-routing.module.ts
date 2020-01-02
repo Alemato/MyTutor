@@ -44,6 +44,7 @@ const routes: Routes = [
   { path: 'lista-chat', loadChildren: './pages/lista-chat/lista-chat.module#ListaChatPageModule' },
   { path: 'ricerca-lezioni', loadChildren: './pages/ricerca-lezioni/ricerca-lezioni.module#RicercaLezioniPageModule' },
   { path: 'risultati-ricerca', loadChildren: './pages/risultati-ricerca/risultati-ricerca.module#RisultatiRicercaPageModule' },
+  { path: 'storico-lezioni', loadChildren: './pages/storico-lezioni/storico-lezioni.module#StoricoLezioniPageModule' },
 
 
 
