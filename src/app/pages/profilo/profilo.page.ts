@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import {Utente} from '../../model/utente.model';
+import {Utente} from '../../model/old/utente.model';
 import {Events} from '@ionic/angular';
 import {BehaviorSubject} from 'rxjs';
 

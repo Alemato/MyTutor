@@ -1,12 +1,4 @@
-import {Lesson, Lezione} from './lesson.model';
-
-export interface Pianificazione {
-    idPlanning: number;
-    date: number;
-    startTime: string;
-    endTime: string;
-    lesson: Lezione;
-}
+import {Lesson} from './lesson.model';
 
 export class Planning {
     idPlanning: number;
@@ -14,11 +6,20 @@ export class Planning {
     startTime: string;
     endTime: string;
     lesson: Lesson;
-    // public constructor(planning: any) {
-    //     this.idPlanning = planning.idPlanning;
-    //     this.date = new Date(planning.date.toLocaleDateString());
-    //     this.startTime = planning.startTime;
-    //     this.endTime = planning.endTime;
-    //     this.lesson = new Lesson(planning.lesson);
-    // }
+
+    constructor() {
+        this.idPlanning = 0;
+        this.date = new Date();
+        this.startTime = '';
+        this.endTime = '';
+        this.lesson = new Lesson();
+    }
+
+    set(obj: any, lesson: Lesson) {
+        this.idPlanning = obj.idPlanning;
+        this.date = obj.date;
+        this.startTime = obj.startTime;
+        this.endTime = obj.endTime;
+        this.lesson = lesson;
+    }
 }

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {Lezione} from '../../model/lezione.model';
+import {Lezione} from '../../model/old/lezione.model';
 import {Storage} from '@ionic/storage';
 import {BehaviorSubject} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Utente} from '../../model/utente.model';
+import {Utente} from '../../model/old/utente.model';
 import {ModalController} from '@ionic/angular';
 import {InserimentoLezioniModalPage} from '../inserimento-lezioni-modal/inserimento-lezioni-modal.page';
 

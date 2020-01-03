@@ -1,25 +1,26 @@
-import {Lesson} from './lesson.model';
-
-export interface Prenotazione {
-    idBooking: number;
-    date: Date;
-    startTime: string;
-    endTime: string;
-    lesson: Lesson;
-}
+import {Student} from './student.model';
+import {Planning} from './planning.model';
 
 export class Booking {
     idBooking: number;
     date: Date;
-    startTime: string;
-    endTime: string;
-    lesson: Lesson;
+    lessonState: number;
+    student: Student;
+    planning: Planning;
 
-    // public constructor(booking: any) {
-    //     this.idBooking = booking.idBooking;
-    //     this.date = new Date(booking.date.toLocaleDateString());
-    //     this.startTime = booking.startTime;
-    //     this.endTime = booking.endTime;
-    //     this.lesson = new Lesson(booking.lesson);
-    // }
+    constructor() {
+        this.idBooking = 0;
+        this.date = new Date();
+        this.lessonState = 3;
+        this.student = new Student();
+        this.planning = new Planning();
+    }
+
+    set(obj: any, student: Student, planning: Planning) {
+        this.idBooking = obj.idBooking;
+        this.date = obj.date;
+        this.lessonState = obj.lessonState;
+        this.student = student;
+        this.planning = planning;
+    }
 }

@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ModalController, NavParams} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
-import {Lezione} from '../../model/lezione.model';
+import {Lezione} from '../../model/old/lezione.model';
 
 @Component({
     selector: 'app-inserimento-lezioni-modal',

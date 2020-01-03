@@ -4,14 +4,14 @@ import {User} from './user.model';
 export class Message {
     idMessage: number;
     text: string;
-    sendDate: number;
+    sendDate: Date;
     chat: Chat;
     user: User;
 
     constructor() {
         this.idMessage = 0;
         this.text = '';
-        this.sendDate = new Date().getTime();
+        this.sendDate = new Date();
         this.chat = new Chat();
         this.user = new User();
     }

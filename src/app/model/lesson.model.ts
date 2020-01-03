@@ -1,14 +1,5 @@
-import {Materia, Subject} from './subject.model';
-
-export interface Lezione {
-    idLesson: number;
-    name: string;
-    price: number;
-    description: string;
-    publicationDate: Date;
-    subject: Materia;
-    teacher: {idTeacher: number, nameTeacher: string, surnameTeacher: string};
-}
+import {Subject} from './subject.model';
+import {Teacher} from './teacher.model';
 
 export class Lesson {
     idLesson: number;
@@ -17,17 +8,26 @@ export class Lesson {
     description: string;
     publicationDate: Date;
     subject: Subject;
-    teacher: {idTeacher: number, nameTeacher: string, surnameTeacher: string};
+    teacher: Teacher;
 
-    // public constructor(lesson: any) {
-    //     this.idLesson = lesson.idLesson;
-    //     this.name = lesson.name;
-    //     this.price = lesson.price;
-    //     this.description = lesson.description;
-    //     this.publicationDate = new Date(lesson.publicationDate.toLocaleDateString());
-    //     this.subject = new Subject(lesson.subject);
-    //     this.teacher.idTeacher = lesson.teacher.idTeacher;
-    //     this.teacher.nameTeacher = lesson.teacher.nameTeacher;
-    //     this.teacher.surnameTeacher = lesson.teacher.surnameTeacher;
-    // }
+
+    set(obj: any, subject: Subject, teacher: Teacher) {
+        this.idLesson = obj.idLesson;
+        this.name = obj.name;
+        this.price = obj.price;
+        this.description = obj.description;
+        this.publicationDate = obj.publicationDate;
+        this.subject = subject;
+        this.teacher = teacher;
+    }
+
+    constructor() {
+        this.idLesson = 0;
+        this.name = '';
+        this.price = 0;
+        this.description = '';
+        this.publicationDate = new Date();
+        this.subject = new Subject();
+        this.teacher = new Teacher();
+    }
 }
