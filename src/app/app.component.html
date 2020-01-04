@@ -4,12 +4,27 @@
 
       <!--<ion-title class="menu-title menu-toolbar">Start Menu</ion-title>-->
       <ion-row >
-        <ion-col class="ion-align-self-center" size="auto">
-          <ion-icon *ngIf="true" name="contact" style="font-size: 80px"></ion-icon>
+        <ion-col *ngIf="(this.teacher$ | async) as teacher; else imgStudentBlock" class="ion-align-self-center" size="auto">
+          <ion-icon *ngIf="teacher.user.image === null || teacher.user.image === '' || teacher.user.image ===' '; else imgBlock"
+                    name="contact" class="fs-62"></ion-icon>
+          <ng-template #imgBlock>
+            <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+              <img [src]="teacher.user.image" alt="img" style="width: 51px; height: 51px;">
+            </ion-avatar>
+          </ng-template>
         </ion-col>
+        <ng-template #imgStudentBlock>
+          <ion-icon *ngIf="(this.student$ | async).user.image === null || (this.student$ | async).user.image === '' || (this.student$ | async).user.image ===' '; else imgBlock"
+                    name="contact" class="fs-62"></ion-icon>
+          <ng-template #imgBlock>
+            <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+              <img [src]="(this.student$ | async).user.image" alt="img" style="width: 51px; height: 51px;">
+            </ion-avatar>
+          </ng-template>
+        </ng-template>
         <ion-col size="8" class="ion-align-self-center">
           <h1 *ngIf="(this.teacher$ | async) as teacher; else studentBlockType" class="ion-no-margin font-weight-400" >{{teacher.user.name}} {{teacher.user.surname}}</h1>
-          <h5  class="ion-no-margin font-weight-400">Docente</h5>
+          <h5 *ngIf="(this.teacher$ | async) as teacher;" class="ion-no-margin font-weight-400">Docente</h5>
           <ng-template #studentBlockType>
             <h1 class="ion-no-margin font-weight-400">{{(this.student$ | async).user.name}} {{(this.student$ | async).user.surname}}</h1>
             <h5 class="ion-no-margin font-weight-400">Studente</h5>
