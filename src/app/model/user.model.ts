@@ -6,7 +6,7 @@ export class User {
     password: string;
     name: string;
     surname: string;
-    birthday: Date;     // da verificare tipo
+    birthday: number;     // da verificare tipo
     language: boolean;
     image: string;
 
@@ -29,7 +29,7 @@ export class User {
         this.password = '';
         this.name = '';
         this.surname = '';
-        this.birthday = new Date();
+        this.birthday = new Date().getTime();
         this.language = false;
         this.image = '';
     }

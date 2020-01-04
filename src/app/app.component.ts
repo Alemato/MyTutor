@@ -21,7 +21,6 @@ import {AUTH_TOKEN} from './constants';
 export class AppComponent implements OnInit {
 
     private student$: BehaviorSubject<Student>;
-    private a$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
     private loggedIn: boolean;
 

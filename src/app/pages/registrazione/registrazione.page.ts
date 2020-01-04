@@ -230,6 +230,7 @@ export class RegistrazionePage implements OnInit {
             this.utente = this.registrazioneFormModel.value;
             this.utente.idUser = 0;
             this.utente.roles = 1;
+            this.utente.birthday = new Date(this.utente.birthday).getTime();
             if (this.registrazioneFormModel.value.languageNumber === '0') {
                 this.utente.language = false;
             } else {
@@ -254,6 +255,7 @@ export class RegistrazionePage implements OnInit {
         } else {
             this.utente.idUser = 0;
             this.utente.roles = 2;
+            this.utente.birthday = new Date(this.utente.birthday).getTime();
             if (this.registrazioneFormModel.value.languageNumber === '0') {
                 this.utente.language = false;
             } else {
