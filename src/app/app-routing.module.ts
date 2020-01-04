@@ -45,11 +45,6 @@ const routes: Routes = [
   { path: 'ricerca-lezioni', loadChildren: './pages/ricerca-lezioni/ricerca-lezioni.module#RicercaLezioniPageModule' },
   { path: 'risultati-ricerca', loadChildren: './pages/risultati-ricerca/risultati-ricerca.module#RisultatiRicercaPageModule' },
   { path: 'storico-lezioni', loadChildren: './pages/storico-lezioni/storico-lezioni.module#StoricoLezioniPageModule' },
-
-
-
-
-
 ];
 
 @NgModule({
