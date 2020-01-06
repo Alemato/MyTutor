@@ -2,7 +2,7 @@
    <div *ngIf="(this.teacher$ | async) as teacher; then teacherBlock else studentBlock"></div>
      <ng-template #studentBlock>
          <ion-list *ngIf="(this.student$ | async) as student;" style="margin-bottom: 100px">
-             <ion-list-header style="margin-bottom: -14px">Lista lezioni accettate (limit 10/20)</ion-list-header>
+             <ion-list-header style="margin-bottom: -14px">Lista lezioni accettate</ion-list-header>
              <div *ngFor="let lez of lezioni">
                  <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 1">
                      <ion-item lines="full" class="py-10">
@@ -18,8 +18,18 @@
                          <ion-col size="10">
                              <div class="ion-no-margin"
                                   style="font-size: large; font-weight: normal">{{lez.nomeLezione}}</div>
+                           <ion-row>
+                             <ion-col class="ion-no-padding">
                              <div class="ion-no-margin"
                                   style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.nomeProf}}</div>
+                             </ion-col>
+                             <ion-col class="ion-no-padding">
+                               <div class="ion-float-right c-primary ion-padding-end"
+                                    style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.price}}€/h</div>
+                             </ion-col>
+                           </ion-row>
+                           <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">Per
+                             il {{lez.date | date:'short'}}</div>
                              <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">
                                  Tra {{lez.days}} giorni, {{lez.hours}} ore, {{lez.minutes}} min, {{lez.seconds}} sec
                              </div>
@@ -38,44 +48,6 @@
          </ion-fab>
      </ng-template>
      <ng-template #teacherBlock>
-       <!--<ion-list>
-         <ion-list-header>Lista Lezioni Prenotate Da Accettare (limit 3)</ion-list-header>
-         <ion-item lines="full" class="py-10 pl-0 pr-0" *ngFor="let ric of richiestePrenotazioni">
-           <ion-grid style="width: 100%;">
-             <ion-row>
-               <ion-col size="2" style="margin-right: 15px;">
-                 <ion-icon *ngIf="true" name="contact" style="font-size: 62px; color: #029db4"></ion-icon>
-                 <ion-avatar *ngIf="false" class="ion-text-center"
-                             style="margin: auto !important; padding-bottom: 15px; height: 62px; width: 62px;">
-                   <img [src]="imgBase64" alt="img">
-                 </ion-avatar>
-               </ion-col>
-               <ion-col>
-                 <div class="ion-no-margin"
-                      style="font-size: large; font-weight: normal">{{ric.nomeLezione}}</div>
-                 <div class="ion-no-margin"
-                      style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{ric.nomeStudent}}</div>
-                 <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">Per
-                   il {{ric.date | date:'short'}}</div>
-                 <ion-row class="ion-margin-top ion-no-padding ">
-                   <ion-col class="ion-no-padding ion-align-self-start">
-                     <div>
-                       <ion-button color="primary" size="default" class="ion-float-start">Accetta
-                       </ion-button>
-                     </div>
-                   </ion-col>
-                   <ion-col class="ion-no-padding">
-                     <div>
-                       <ion-button color="danger" size="default" class="ion-float-end">Rifiuta
-                       </ion-button>
-                     </div>
-                   </ion-col>
-                 </ion-row>
-               </ion-col>
-             </ion-row>
-           </ion-grid>
-         </ion-item>
-       </ion-list>-->
          <ion-list>
              <ion-list-header style="margin-bottom: -14px">Lista lezioni prenotate </ion-list-header>
            <div *ngFor="let lez of lezioni">
@@ -93,8 +65,18 @@
                      <ion-col size="10">
                          <div class="ion-no-margin"
                               style="font-size: large; font-weight: normal">{{lez.nomeLezione}}</div>
-                         <div class="ion-no-margin"
-                              style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.nomeStudent}}</div>
+                       <ion-row>
+                         <ion-col class="ion-no-padding">
+                           <div class="ion-no-margin"
+                                style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.nomeStudent}}</div>
+                         </ion-col>
+                         <ion-col class="ion-no-padding">
+                           <div class="ion-float-right c-primary ion-padding-end"
+                                style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.price}}€/h</div>
+                         </ion-col>
+                       </ion-row>
+                       <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">Per
+                         il {{lez.date | date:'short'}}</div>
                          <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">
                              Tra {{lez.days}} giorni, {{lez.hours}} ore, {{lez.minutes}} min, {{lez.seconds}} sec
                          </div>

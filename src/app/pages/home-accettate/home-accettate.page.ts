@@ -176,6 +176,7 @@ export class HomeAccettatePage implements OnInit {
       const lezioneSingola = {
         lessonState: 0,
         nomeLezione: '',
+        price: 0,
         nomeProf: '',
         imgProf: '',
         nomeStudent: '',
@@ -188,6 +189,7 @@ export class HomeAccettatePage implements OnInit {
       };
       lezioneSingola.lessonState = item.lessonState;
       lezioneSingola.nomeLezione = item.planning.lesson.name;
+      lezioneSingola.price = item.planning.lesson.price;
       lezioneSingola.nomeProf = item.planning.lesson.teacher.user.name + ' ' + item.planning.lesson.teacher.user.surname;
       lezioneSingola.imgProf = item.planning.lesson.teacher.user.image;
       lezioneSingola.nomeStudent = item.student.user.name + ' ' + item.student.user.surname;

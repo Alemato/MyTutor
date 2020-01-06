@@ -1,9 +1,92 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>homeRichieste</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-
+  <div *ngIf="(this.teacher$ | async) as teacher; then teacherBlock else studentBlock"></div>
+  <ng-template #studentBlock>
+    <ion-list *ngIf="(this.student$ | async) as student;" style="margin-bottom: 100px">
+      <ion-list-header style="margin-bottom: -14px">Lista Lezioni Prenotate Da Accettare</ion-list-header>
+      <div *ngFor="let lez of lezioni">
+        <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 0">
+          <ion-item lines="full" class="py-10">
+            <ion-col size="auto">
+              <ion-icon *ngIf="lez.imgProf === null || lez.imgProf === '' || lez.imgProf ===' '; else imgBlock"
+                        name="contact" class="fs-62"></ion-icon>
+              <ng-template #imgBlock>
+                <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+                  <img [src]="lez.imgStudent" alt="img" style="width: 51px; height: 51px;">
+                </ion-avatar>
+              </ng-template>
+            </ion-col>
+            <ion-col size="10">
+              <div class="ion-no-margin"
+                   style="font-size: large; font-weight: normal">{{lez.nomeLezione}}</div>
+              <ion-row>
+                <ion-col class="ion-no-padding">
+                  <div class="ion-no-margin"
+                       style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.nomeProf}}</div>
+                </ion-col>
+                <ion-col class="ion-no-padding">
+                  <div class="ion-float-right c-primary ion-padding-end"
+                       style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.price}}€/h</div>
+                </ion-col>
+              </ion-row>
+              <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">Per
+                il {{lez.date | date:'short'}}</div>
+            </ion-col>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="presentAlert(itemSliding)">Annulla</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </div>
+    </ion-list>
+  </ng-template>
+  <ng-template #teacherBlock>
+    <ion-list>
+      <ion-list-header>Lista Lezioni Prenotate Da Accettare</ion-list-header>
+      <div *ngFor="let lez of lezioni">
+      <ion-item lines="full" class="py-10 pl-0 pr-0" *ngIf="lez.lessonState === 0">
+        <ion-grid style="width: 100%;">
+          <ion-row>
+            <ion-col size="2" style="margin-right: 15px;">
+              <ion-icon *ngIf="true" name="contact" style="font-size: 62px; color: #029db4"></ion-icon>
+              <ion-avatar *ngIf="false" class="ion-text-center"
+                          style="margin: auto !important; padding-bottom: 15px; height: 62px; width: 62px;">
+                <img [src]="" alt="img">
+              </ion-avatar>
+            </ion-col>
+            <ion-col>
+              <div class="ion-no-margin"
+                   style="font-size: large; font-weight: normal">{{lez.nomeLezione}}</div>
+              <ion-row>
+                <ion-col class="ion-no-padding">
+                  <div class="ion-no-margin"
+                       style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.nomeStudent}}</div>
+                </ion-col>
+                <ion-col class="ion-no-padding">
+                  <div class="ion-float-right c-primary ion-padding-end"
+                       style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.price}}€/h</div>
+                </ion-col>
+              </ion-row>
+              <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">Per
+                il {{lez.date | date:'short'}}</div>
+              <ion-row class="ion-margin-top ion-no-padding ">
+                <ion-col class="ion-no-padding ion-align-self-start">
+                  <div>
+                    <ion-button color="primary" size="default" class="ion-float-start">Accetta
+                    </ion-button>
+                  </div>
+                </ion-col>
+                <ion-col class="ion-no-padding">
+                  <div>
+                    <ion-button color="danger" size="default" class="ion-float-end">Rifiuta
+                    </ion-button>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      </div>
+    </ion-list>
+  </ng-template>
 </ion-content>

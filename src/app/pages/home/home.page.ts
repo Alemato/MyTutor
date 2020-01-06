@@ -14,7 +14,6 @@ import {UserService} from '../../services/user.service';
 })
 export class HomePage implements OnInit {
     private num: number;
-    private countDowns: Subscription;
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
 
@@ -157,28 +156,6 @@ export class HomePage implements OnInit {
         }
     ];
 
-    public  lezioni2 = [];
-
-    public richiestePrenotazioni = [
-        {
-            nomeLezione: 'Richiesta Lezione 1',
-            nomeStudent: 'Antonio Rossi',
-            date: new Date(2019, 10, 27, 9, 0, 0, 0).getTime(),
-        },
-        {
-            nomeLezione: 'Richiesta Lezione 2',
-            nomeStudent: 'Antonio Rossi',
-            date: new Date(2019, 11, 1, 10, 30, 0, 0).getTime(),
-        },
-        {
-            nomeLezione: 'Richiesta Lezione 3',
-            nomeStudent: 'Antonio Rossi',
-            date: new Date(2019, 11, 12, 15, 30, 0, 0).getTime(),
-        }
-    ];
-
-    public lezioni = [];
-
     constructor(public alertController: AlertController, private userService: UserService) {
         this.userService.whichUserType().then((tipo) => {
             if (tipo === 'student') {
@@ -196,88 +173,6 @@ export class HomePage implements OnInit {
                 this.num++;
             }
         });
-    }
-
-    setArrayLezioni() {
-        this.json.forEach((item) => {
-            const lezioneSingola = {
-                lessonState: 0,
-                nomeLezione: '',
-                nomeProf: '',
-                nomeStudent: '',
-                date: 0,
-                days: 0,
-                hours: 0,
-                minutes: 0,
-                seconds: 0
-            };
-            lezioneSingola.lessonState = item.lessonState;
-            lezioneSingola.nomeLezione = item.planning.lesson.name;
-            lezioneSingola.nomeProf = item.planning.lesson.teacher.user.name + ' ' + item.planning.lesson.teacher.user.surname;
-            lezioneSingola.nomeStudent = item.student.user.name + ' ' + item.student.user.surname;
-            const [h, m, s] = item.planning.startTime.split(':');
-            const data = new Date(item.planning.date);
-            data.setHours(+h);
-            data.setMinutes(+m);
-            data.setSeconds(+s);
-            lezioneSingola.date = data.getTime();
-            console.log(new Date(lezioneSingola.date));
-            this.lezioni.push(lezioneSingola);
-        });
-        console.log(this.lezioni);
-    }
-
-    countDown() {
-        this.lezioni.forEach((item) => {
-            const nowDate = new Date().getTime();
-            const distance = item.date - nowDate;
-            item.days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            item.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            item.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            item.seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        });
-    }
-
-    ionViewWillEnter() {
-        // this.countDown();
-        /*console.log(new Date(this.lezioni[0].date));
-        this.countDowns = interval(800).subscribe(x => {
-            this.countDown();
-        });*/
-    }
-
-    async presentAlert(item) {
-        const alert = await this.alertController.create({
-            header: 'Annullare la Lezzione',
-            subHeader: 'Conferma',
-            message: 'Sei sicuro di voler annullare la lezione?',
-            buttons: [
-                {
-                    text: 'Annulla',
-                    role: 'cancel',
-                    cssClass: 'secondary',
-                    handler: (blah) => {
-                        console.log('Annulla operazione');
-                        item.close();
-                    }
-                }, {
-                    text: 'OK',
-                    handler: () => {
-                        console.log('Conferma annullamento lezione');
-                        item.close();
-                    }
-                }]
-        });
-
-        await alert.present();
-    }
-
-    addPrenotazioneLezione() {
-        console.log('Vai a alla pagina per prenotare la lezione');
-    }
-
-    ionViewDidLeave() {
-        // this.countDowns.unsubscribe();
     }
 
     ngOnInit() {
