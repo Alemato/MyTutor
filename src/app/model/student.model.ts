@@ -6,7 +6,7 @@ export  class Student {
 
     set(studyGrade: string , user: User) {
         this.user.set(user);
-        this.studyGrade = studyGrade;
+        if (studyGrade) {this.studyGrade = studyGrade; }
     }
 
     constructor() {
