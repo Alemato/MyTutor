@@ -11,12 +11,12 @@ export class Teacher {
 
     set(obj: any, user: User) {
         this.user.set(user);
-        this.postCode = obj.postCode;
-        this.city = obj.city;
-        this.region = obj.region;
-        this.street = obj.street;
-        this.streetNumber = obj.streetNumber;
-        this.byography = obj.byography;
+        if (obj.postCode) {this.postCode = obj.postCode; }
+        if (obj.city) {this.city = obj.city; }
+        if (obj.region) {this.region = obj.region; }
+        if (obj.street) {this.street = obj.street; }
+        if (obj.streetNumber) {this.streetNumber = obj.streetNumber; }
+        if (obj.byography) {this.byography = obj.byography; }
     }
 
     constructor() {
