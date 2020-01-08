@@ -11,7 +11,7 @@ import {RegistrazioneService} from '../../services/registrazione.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RegistrazioneDocenteModalPage} from '../registrazione-docente-modal/registrazione-docente-modal.page';
 import {Crop} from '@ionic-native/crop/ngx';
-import {Camera, CameraOptions} from '@ionic-native/Camera/ngx';
+import {Camera, CameraOptions} from '@ionic-native/camera/ngx';
 import {File} from '@ionic-native/file/ngx';
 import {Teacher} from '../../model/teacher.model';
 import {User} from '../../model/user.model';

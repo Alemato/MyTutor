@@ -8,6 +8,7 @@ export const URL_BASE3 = USE_PROXY ? 'posts' : 'https://jsonplaceholder.typicode
 
 export const URL = {
     LOGIN: URL_BASE + '/authentication-1',
+    GET_PROFILO: URL_BASE + '/auth/profiles',
     REGISTRATION_STUDENT: URL_BASE + '/registration/student',
     REGISTRATION_TEACHER: URL_BASE + '/registration/teacher',
     TEST: URL_BASE + '/test/aut',

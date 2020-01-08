@@ -141,6 +141,14 @@ ion-toolbar ion-title{
   --padding-start: 0;
   --padding-end: 0;
 }
+
+.py-0{
+  padding-top: 0;
+  padding-bottom: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
 .pl-16 {
   padding-left: 16px !important;
 }

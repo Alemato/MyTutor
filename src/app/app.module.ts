@@ -14,7 +14,7 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {IonicStorageModule} from '@ionic/storage';
 import { File } from '@ionic-native/file/ngx';
-import { Camera } from '@ionic-native/Camera/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import {ChatService} from './services/chat.service';
 import {ChatMessage} from './model/old/chat-message.model';
