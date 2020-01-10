@@ -4,19 +4,5 @@
     "secure": false,
     "logLevel": "debug",
     "changeOrigin": true
-  },
-
-  "/todos/*": {
-    "target": "http://jsonplaceholder.typicode.com/",
-    "secure": false,
-    "logLevel": "debug",
-    "changeOrigin": true
-  },
-
-  "/posts": {
-    "target": "http://jsonplaceholder.typicode.com/",
-    "secure": false,
-    "logLevel": "debug",
-    "changeOrigin": true
   }
 }
