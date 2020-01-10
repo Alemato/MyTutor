@@ -16,6 +16,7 @@ export const URL = {
     CHAT_POST: URL_BASE + '/chats/post',
     MESSAGE: URL_BASE + '/chats/1/messaggi',
     HOME_BOOKING: URL_BASE + 'bookings-lessons/home',
+    PLANNING: URL_BASE + '/lessons/plannings',
 };
 
 export const X_AUTH = 'X-Auth';
@@ -29,4 +30,5 @@ export const MARIO = 'pluto';
 
 export const STORAGE = {
     BOOKING : 'booking',
+    HISTORY : 'storico',
 };
