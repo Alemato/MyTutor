@@ -4,19 +4,44 @@ import {Student} from './student.model';
 
 export class CreatesChat {
     idCreates: number;
-    name: string;
     userListser: object[];
     chat: Chat;
 
-    constructor() {
-        this.idCreates = 0;
-        this.userListser = [new Student(), new Teacher()];
-        this.chat = new Chat();
+    constructor(idCreates: number, student: Student, teacher: Teacher, chat: Chat) {
+        if (idCreates !== undefined) {
+            this.idCreates = idCreates;
+        } else {
+            this.idCreates = 0;
+        }
+        if (student !== undefined && teacher !== undefined) {
+            this.userListser = [student, teacher];
+        } else if (student !== undefined) {
+            this.userListser = [student, new Teacher(undefined)];
+        } else if (teacher !== undefined) {
+            this.userListser = [new Student(undefined), teacher];
+        } else {
+            this.userListser = [new Student(undefined), new Teacher(undefined)];
+        }
+        if (chat !== undefined) {
+            this.chat = chat;
+        } else {
+            this.chat = new Chat(undefined);
+        }
     }
 
-    set(obj: any, student: Student, teacher: Teacher, chat: Chat) {
-        this.idCreates = obj.idCreates;
-        this.userListser = [student, teacher];
-        this.chat = chat;
+    set(idCreates: number, student: Student, teacher: Teacher, chat: Chat) {
+        if (idCreates !== undefined) {
+            this.idCreates = idCreates;
+        }
+        if (student !== undefined && teacher !== undefined) {
+            this.userListser = [student, teacher];
+        } else if (student !== undefined) {
+            this.userListser = [student, new Teacher(undefined)];
+        } else if (teacher !== undefined) {
+            this.userListser = [new Student(undefined), teacher];
+        }
+        if (chat !== undefined) {
+            this.chat = chat;
+        }
     }
 }

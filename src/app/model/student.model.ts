@@ -1,16 +1,25 @@
 import {User} from './user.model';
 
-export  class Student {
-    user: User = new User();
+export class Student extends User {
     studyGrade: string;
 
-    set(studyGrade: string , user: User) {
-        this.user.set(user);
-        if (studyGrade) {this.studyGrade = studyGrade; }
+    constructor(obj: any) {
+        super(obj);
+        if (obj !== undefined) {
+            if (obj.studyGrade !== undefined) {
+                this.studyGrade = obj.studyGrade;
+            } else {
+                this.studyGrade = '';
+            }
+        } else {
+            this.studyGrade = '';
+        }
     }
 
-    constructor() {
-        this.user = new User();
-        this.studyGrade = '';
+    set(obj: any) {
+        super.set(obj);
+        if (obj.studyGrade !== undefined) {
+            this.studyGrade = obj.studyGrade;
+        }
     }
 }

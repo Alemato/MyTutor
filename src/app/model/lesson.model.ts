@@ -10,24 +10,75 @@ export class Lesson {
     subject: Subject;
     teacher: Teacher;
 
-
-    set(obj: any, subject: Subject, teacher: Teacher) {
-        this.idLesson = obj.idLesson;
-        this.name = obj.name;
-        this.price = obj.price;
-        this.description = obj.description;
-        this.publicationDate = obj.publicationDate;
-        this.subject = subject;
-        this.teacher = teacher;
+    constructor(obj: any, subject: Subject, teacher: Teacher) {
+        if (obj !== undefined) {
+            if (obj.idLesson !== undefined) {
+                this.idLesson = obj.idLesson;
+            } else {
+                this.idLesson = 0;
+            }
+            if (obj.name !== undefined) {
+                this.name = obj.name;
+            } else {
+                this.name = '';
+            }
+            if (obj.price !== undefined) {
+                this.price = obj.price;
+            } else {
+                this.price = 0;
+            }
+            if (obj.description !== undefined) {
+                this.description = obj.description;
+            } else {
+                this.description = '';
+            }
+            if (obj.publicationDate !== undefined) {
+                this.publicationDate = obj.publicationDate;
+            } else {
+                this.publicationDate = new Date();
+            }
+        } else {
+            this.idLesson = 0;
+            this.name = '';
+            this.price = 0;
+            this.description = '';
+            this.publicationDate = new Date();
+        }
+        if (subject !== undefined) {
+            this.subject = subject;
+        } else {
+            this.subject = new Subject(undefined);
+        }
+        if (teacher !== undefined) {
+            this.teacher = teacher;
+        } else {
+            this.teacher = new Teacher(undefined);
+        }
     }
 
-    constructor() {
-        this.idLesson = 0;
-        this.name = '';
-        this.price = 0;
-        this.description = '';
-        this.publicationDate = new Date();
-        this.subject = new Subject();
-        this.teacher = new Teacher();
+    set(obj: any, subject: Subject, teacher: Teacher) {
+        if (obj !== undefined) {
+            if (obj.idLesson !== undefined) {
+                this.idLesson = obj.idLesson;
+            }
+            if (obj.name !== undefined) {
+                this.name = obj.name;
+            }
+            if (obj.price !== undefined) {
+                this.price = obj.price;
+            }
+            if (obj.description !== undefined) {
+                this.description = obj.description;
+            }
+            if (obj.publicationDate !== undefined) {
+                this.publicationDate = obj.publicationDate;
+            }
+        }
+        if (subject !== undefined) {
+            this.subject = subject;
+        }
+        if (teacher !== undefined) {
+            this.teacher = teacher;
+        }
     }
 }
