@@ -7,7 +7,6 @@ import {
     NavController
 } from '@ionic/angular';
 import {Storage} from '@ionic/storage';
-import {RegistrazioneService} from '../../services/registrazione.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RegistrazioneDocenteModalPage} from '../registrazione-docente-modal/registrazione-docente-modal.page';
 import {Crop} from '@ionic-native/crop/ngx';
@@ -29,9 +28,9 @@ import {HttpErrorResponse} from '@angular/common/http';
 export class RegistrazionePage implements OnInit {
     private registrazioneFormModel: FormGroup;
     registra = true;
-    utente: User = new User();
+    utente: User = new User(undefined);
     teacher: Teacher;
-    student: Student = new Student();
+    student: Student = new Student(undefined);
     passwordType = 'password';
     passwordShow = false;
     public toogle = false;
@@ -227,6 +226,7 @@ export class RegistrazionePage implements OnInit {
     prendiRegistrazione() {
         console.log('registro utenza:');
         if (this.teacher == null || typeof this.teacher === 'undefined') {
+            console.log('utenza di tipo student');
             this.utente = this.registrazioneFormModel.value;
             this.utente.idUser = 0;
             this.utente.roles = 1;
@@ -237,7 +237,7 @@ export class RegistrazionePage implements OnInit {
                 this.utente.language = true;
             }
             this.utente.image = this.croppedImagepath;
-            this.student.set('', this.utente);
+            this.student.set(this.utente);
             this.Loading();
             this.registrationService.registrationStudent(this.student).subscribe((data) => {
                     this.Diss();
@@ -253,16 +253,16 @@ export class RegistrazionePage implements OnInit {
             console.log(this.student);
             console.log(JSON.stringify(this.student));
         } else {
-            this.utente.idUser = 0;
-            this.utente.roles = 2;
-            this.utente.birthday = new Date(this.utente.birthday).getTime();
+            console.log('utenza di tipo docente');
+            this.teacher.idUser = 0;
+            this.teacher.roles = 2;
+            this.teacher.birthday = new Date(this.utente.birthday).getTime();
             if (this.registrazioneFormModel.value.languageNumber === '0') {
-                this.utente.language = false;
+                this.teacher.language = false;
             } else {
-                this.utente.language = true;
+                this.teacher.language = true;
             }
-            this.utente.image = this.croppedImagepath;
-            this.teacher.set(this.teacher, this.utente);
+            this.teacher.image = this.croppedImagepath;
             this.Loading();
             this.registrationService.registrationTeacher(this.teacher).subscribe((data) => {
                     this.Diss();
@@ -285,7 +285,7 @@ export class RegistrazionePage implements OnInit {
         this.registra = false;
         const teacher1: Teacher = this.teacher;
         const utente1: User = this.utente;
-        if (this.teacher == null || typeof this.teacher === 'undefined') {
+        if (this.teacher == null || typeof this.teacher === undefined) {
             const modal = await this.modalController.create({
                 component: RegistrazioneDocenteModalPage,
                 componentProps: {
@@ -295,8 +295,8 @@ export class RegistrazionePage implements OnInit {
             modal.onDidDismiss().then((dataReturned) => {
                 console.log('teache null o indeficnito i dati sono: ');
                 console.log(dataReturned.data);
-                this.teacher = new Teacher();
-                this.teacher.set(dataReturned.data[0], dataReturned.data[0].user);
+                this.teacher = new Teacher(undefined);
+                this.teacher.set(dataReturned.data[0]);
                 this.registra = dataReturned.data[1];
             });
 

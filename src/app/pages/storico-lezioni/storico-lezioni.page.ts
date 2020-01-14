@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {PopoverRisultatiRicercaComponent} from "../../popovers/popover-risultati-ricerca/popover-risultati-ricerca.component";
-import {PopoverController} from "@ionic/angular";
-import {PopoverFiltroStoricoLezioniComponent} from "../../popovers/popover-filtro-storico-lezioni/popover-filtro-storico-lezioni.component";
+import {PopoverController} from '@ionic/angular';
+import {PopoverFiltroStoricoLezioniComponent} from '../../popovers/popover-filtro-storico-lezioni/popover-filtro-storico-lezioni.component';
 
 @Component({
   selector: 'app-storico-lezioni',

@@ -4,9 +4,6 @@ import {AlertController, LoadingController, MenuController, NavController} from 
 import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Account, UserService} from '../../services/user.service';
-import {BehaviorSubject} from 'rxjs';
-import {Student} from '../../model/student.model';
-import {Teacher} from '../../model/teacher.model';
 import {MenuRefresh} from '../../services/menuRefresh';
 import {Storage} from '@ionic/storage';
 
@@ -22,10 +19,6 @@ export class LoginPage implements OnInit {
     private loginSubTitle: string;
     passwordType = 'password';
     passwordShow = false;
-    private student$: BehaviorSubject<Student>;
-    private teacher$: BehaviorSubject<Teacher>;
-    private teacher: Teacher = new Teacher();
-    private student: Student = new Student();
     private loading;
 
 
@@ -36,8 +29,7 @@ export class LoginPage implements OnInit {
                 private userService: UserService,
                 public menuCtrl: MenuController,
                 public loadingController: LoadingController,
-                private menuSource: MenuRefresh,
-                private storage: Storage) {
+                private menuSource: MenuRefresh) {
     }
 
     public togglePassword() {
@@ -63,7 +55,6 @@ export class LoginPage implements OnInit {
 
     ionViewDidLeave() {
         this.menuCtrl.enable(true);
-        // this.events.publish('leaveLogin', true);
         this.menuSource.publishMenuRefresh();
     }
 
@@ -89,8 +80,10 @@ export class LoginPage implements OnInit {
                 this.Diss();
                 this.loginFormModel.reset();
                 this.navController.navigateRoot('home');
+                console.log('vado in home');
             },
             (err: HttpErrorResponse) => {
+                console.log(err);
                 if (err.status === 401) {
                     console.error('login request error: ' + err.status);
                     this.showLoginError();
