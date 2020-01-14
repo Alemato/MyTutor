@@ -50,11 +50,13 @@ export class UserService {
         console.log('costruttore service');
     }
 
-    getProfiloEmail(emailProfilo: string): Observable<any> {
+    getProfiloEmail(emailProfilo: string, saveUser: boolean): Observable<any> {
         return this.http.get<any>(URL.GET_PROFILO, {observe: 'response', params: {email: emailProfilo}}).pipe(
             map ( (resp: HttpResponse<any>) => {
-                this.storage.set(UTENTE_STORAGE, resp.body);
-                this.user$.next(resp.body);
+                if (saveUser) {
+                    this.storage.set(UTENTE_STORAGE, resp.body);
+                    this.user$.next(resp.body);
+                }
                 return resp.body;
             }));
     }

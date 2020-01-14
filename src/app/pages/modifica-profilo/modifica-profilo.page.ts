@@ -281,7 +281,7 @@ export class ModificaProfiloPage implements OnInit {
             } else {
                 this.student.password = this.studentFormModel.controls.password2.value;
                 this.userService.editProfiloStudent(this.student, this.studentFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.getProfiloEmail(this.student.email).subscribe(() => {
+                    this.userService.getProfiloEmail(this.student.email, true).subscribe(() => {
                         this.superTab.selectTab(0);
                     });
                 }, (err: HttpErrorResponse) => {
@@ -314,7 +314,7 @@ export class ModificaProfiloPage implements OnInit {
             } else {
                 this.teacher.password = this.teacherFormModel.controls.password2.value;
                 this.userService.editProfiloTeacher(this.teacher, this.teacherFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.getProfiloEmail(this.teacher.email).subscribe(() => {
+                    this.userService.getProfiloEmail(this.teacher.email, true).subscribe(() => {
                         this.superTab.selectTab(0);
                     });
                 }, (err: HttpErrorResponse) => {
