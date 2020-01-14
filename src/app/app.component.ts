@@ -11,7 +11,7 @@ import {Student} from './model/student.model';
 import {Teacher} from './model/teacher.model';
 import {MenuRefresh} from './services/menuRefresh';
 import {Storage} from '@ionic/storage';
-import {AUTH_TOKEN} from './constants';
+
 
 @Component({
     selector: 'app-root',
@@ -19,7 +19,7 @@ import {AUTH_TOKEN} from './constants';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-
+    private userType: string;
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
     private loggedIn: boolean;
@@ -34,32 +34,25 @@ export class AppComponent implements OnInit {
         private userService: UserService,
         private navController: NavController,
         private menuSource: MenuRefresh,
-        private menu: MenuController,
-        private storage: Storage
+        private menu: MenuController
     ) {
         this.initializeApp();
         this.menuSource.menuRefreshSource$.subscribe(assert => {
-            console.log('which');
-            this.userService.whichUserType().then((tipo) => {
-                console.log(tipo);
-                if (tipo === 'student') {
-                    this.student$ = this.userService.getStudent();
-                    this.appPagesStudent.find(x => x.click === true).click = false;
-                    this.appPagesStudent.find(x => x.title === 'Home' ).click = true;
-                } else if (tipo === 'teacher') {
-                    this.teacher$ = this.userService.getTeacher();
-                    this.appPagesTeacher.find(x => x.click === true).click = false;
-                    this.appPagesTeacher.find(x => x.title === 'Home' ).click = true;
-                }
-                this.storage.get('loggedIn').then((loggato) => {
-                    if (loggato) {
-                        console.log('loggato = ' + loggato);
-                        this.loggedIn = loggato;
-                    } else {
-                        console.log('loggato =  false');
-                        this.loggedIn = false;
-                    }
-                });
+            this.userType = this.userService.getTypeUser();
+            console.log(this.userType);
+            if (this.userType === 'student' ) {
+                this.student$ = this.userService.getUser();
+                this.teacher$ = null;
+                this.appPagesStudent.find(x => x.click === true).click = false;
+                this.appPagesStudent.find(x => x.title === 'Home' ).click = true;
+            } else if (this.userType === 'teacher') {
+                this.teacher$ = this.userService.getUser();
+                this.student$ = null;
+                this.appPagesTeacher.find(x => x.click === true).click = false;
+                this.appPagesTeacher.find(x => x.title === 'Home' ).click = true;
+            }
+            this.userService.loggedIn$.subscribe(value => {
+                this.loggedIn = value;
             });
         });
     }
@@ -131,19 +124,32 @@ export class AppComponent implements OnInit {
                 if (!condiction) {
                     console.log('setto falso ');
                     this.userService.setLoggeIn(false);
+                } else {
+                    this.menuSource.publishMenuRefresh();
                 }
             });
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-            this.menuSource.publishMenuRefresh();
         });
     }
 
     ngOnInit() {
+        this.userType = this.userService.getTypeUser();
+        console.log(this.userType);
+        this.navController.navigateRoot('home');
     }
 
-    async closeMenu(event: any) {
+    profilo() {
+        this.navController.navigateForward('profilo').finally(() => {this.menu.close(); });
+    }
+
+    openPage(url: string) {
+        this.navController.navigateForward(url);
+    }
+
+    async closeMenu(event: any, url: string) {
         await this.menu.close();
+        this.openPage(url);
         this.appPagesStudent.find(x => x.click === true).click = false;
         this.appPagesStudent.find(x => x.title === event.path[0].innerText).click = true;
     }
