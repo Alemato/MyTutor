@@ -1,69 +1,149 @@
 <ion-content>
-        <div *ngIf="this.students$ | async as students">
+    <div *ngIf="(this.teacher$ | async) as teacher; else studentBlock" class="mx-auto">
+        <div class="mx-auto fit-content">
+            <ion-icon *ngIf="teacher.image === null || teacher.image === '' || teacher.image ===' '; else imgBlock"
+                      name="contact" class="fs-100" color="primary"></ion-icon>
+        </div>
+        <ng-template #imgBlock>
+            <ion-avatar class="center ion-margin-top" style="width: 100px; height: 100px;">
+                <img [src]="teacher.image" alt="img" width="100" height="100">
+            </ion-avatar>
+        </ng-template>
+        <ion-grid>
+            <ion-row>
+                <ion-col size="12" class="py-0"><h1
+                        class="ion-no-margin font-weight-400 ls-01em select-full-width">{{teacher.name}} {{teacher.surname}}</h1>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12" class="py-0">
+                    <ion-text color="medium"><h2 class="ion-no-margin select-full-width"><b>Docente</b></h2></ion-text>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="12" class="py-0 ion-margin-bottom">
+                    <ion-text color="medium"><h6 class="ion-no-margin select-full-width"><b>{{this.age}} anni</b></h6>
+                    </ion-text>
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col class="ion-padding-horizontal ion-margin-bottom" style="background-color:#1ba7bc">
+                    <ion-row>
+                        <ion-col>
+                            <ion-text color="light"><h1><b>Account Info</b></h1></ion-text>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="ion-margin-bottom">
+                        <ion-col size="auto" class="pt-3">
+                            <ion-icon class="" style="font-size: 45px;" color="light" name="calendar"></ion-icon>
+                        </ion-col>
+                        <ion-col>
+                            <ion-text color="light">
+                                <h6 class="ion-no-margin"><b>Data di Nascita</b></h6>
+                            </ion-text>
+                            <ion-text color="light">
+                                <h6 class="ion-no-margin font-weight-400">{{teacher.birthday | date:"dd/MM/yyyy"}}</h6>
+                            </ion-text>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="ion-margin-bottom">
+                        <ion-col size="auto">
+                            <ion-icon class="" style="font-size: 45px;" color="light" name="pin"></ion-icon>
+                        </ion-col>
+                        <ion-col>
+                            <ion-text color="light">
+                                <h6 class="ion-no-margin"><b>Luogo svolgimento Lezione</b></h6>
+                            </ion-text>
+                            <ion-text color="light">
+                                <h6 class="ion-no-margin font-weight-400">{{teacher.region}}
+                                    , {{teacher.city}} {{teacher.postCode}}</h6>
+                            </ion-text>
+                            <ion-text color="light">
+                                <h6 class="ion-no-margin font-weight-400">{{teacher.street}} {{teacher.streetNumber}}</h6>
+                            </ion-text>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row class="ion-margin-bottom">
+                        <ion-col size="auto" class="pt-3">
+                            <ion-icon class="" style="font-size: 45px;" color="light"
+                                      name="information-circle-outline"></ion-icon>
+                        </ion-col>
+                        <ion-col>
+                            <ion-text color="light">
+                                <h6 class="ion-no-margin"><b>Biografia</b></h6>
+                            </ion-text>
+                            <ion-text color="light">
+                                <h6 class="ion-no-margin font-weight-400">{{teacher.byography}}</h6>
+                            </ion-text>
+                        </ion-col>
+                    </ion-row>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+    <ng-template #studentBlock>
+        <div *ngIf="(this.student$ | async) as student">
+            <div class="mx-auto fit-content">
+                <ion-icon *ngIf="student.image === null || student.image === '' || student.image ===' '; else imgStudentBlock"
+                          name="contact" class="fs-100" color="primary"></ion-icon>
+            </div>
+            <ng-template #imgStudentBlock>
+                <ion-avatar class="center ion-margin-top" style="width: 100px; height: 100px;">
+                    <img [src]="student.image" alt="img" width="100" height="100">
+                </ion-avatar>
+            </ng-template>
             <ion-grid>
                 <ion-row>
-                    <ion-col size="auto" class="ion-align-self-center">
-            <ion-icon name="contact" class="foto-profilo"></ion-icon>
-                </ion-col>
-                <ion-col class="ion-align-self-center" size="7">
-                    <ion-row class="nome-cognome">
-                            <div>{{students.nome}} {{students.cognome}}</div>
-                    </ion-row>
-                    <ion-row class="eta">
-                        <div>{{age}} anni</div>
-                    </ion-row>
-                    <ion-row class="email">
-                        <div>{{students.email}}</div>
-                    </ion-row>
-                </ion-col>
-                    </ion-row>
+                    <ion-col size="12" class="py-0"><h1
+                            class="ion-no-margin font-weight-400 ls-01em select-full-width">{{student.name}} {{student.surname}}</h1>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="ion-margin-bottom">
+                    <ion-col size="12" class="py-0">
+                        <ion-text color="medium"><h2 class="ion-no-margin select-full-width"><b>Studente</b></h2>
+                        </ion-text>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col class="ion-padding-horizontal ion-margin-bottom" style="background-color:#1ba7bc">
+                        <ion-row>
+                            <ion-col>
+                                <ion-text color="light"><h1><b>Account Info</b></h1></ion-text>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="ion-margin-bottom">
+                            <ion-col size="auto" class="pt-3">
+                                <ion-icon class="" style="font-size: 45px;" color="light" name="calendar"></ion-icon>
+                            </ion-col>
+                            <ion-col>
+                                <ion-text color="light">
+                                    <h6 class="ion-no-margin"><b>Data di Nascita</b></h6>
+                                </ion-text>
+                                <ion-text color="light">
+                                    <h6 class="ion-no-margin font-weight-400">{{student.birthday | date:"dd/MM/yyyy"}}</h6>
+                                </ion-text>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row class="ion-margin-bottom">
+                            <ion-col size="auto" class="pt-3">
+                                <ion-icon class="" style="font-size: 45px;" color="light"
+                                          name="information-circle-outline"></ion-icon>
+                            </ion-col>
+                            <ion-col>
+                                <ion-text color="light">
+                                    <h6 class="ion-no-margin"><b>Livello Scolastico</b></h6>
+                                </ion-text>
+                                <ion-text color="light">
+                                    <h6 class="ion-no-margin font-weight-400" *ngIf="student.studyGrade!=='' && student.studyGrade!==null; else ndBlock">{{student.studyGrade}}</h6>
+                                    <ng-template #ndBlock>
+                                        <h6 class="ion-no-margin font-weight-400">Non Disponibile</h6>
+                                    </ng-template>
+                                </ion-text>
+                            </ion-col>
+                        </ion-row>
+                    </ion-col>
+                </ion-row>
             </ion-grid>
         </div>
-    <ion-card>
-        <ion-card-content>
-            <ion-card-title class="ion-text-center"> Dati Anagrafici </ion-card-title>
-            <div *ngIf="this.students$ | async as students">
-                <ion-row>
-                    <div>
-                        <div class="scritta">Data di nascita:</div>
-                       <div class="risposta">{{students.datanascita | date: 'dd/MM/yyyy'}}</div>
-                    </div>
-                </ion-row>
-                <ion-row>
-                    <div>
-                        <div class="scritta">Regione:</div>
-                        <div class="risposta">{{students.regione}}</div>
-                    </div>
-                </ion-row>
-                <ion-row>
-                    <div>
-                        <div class="scritta">Città:</div>
-                        <div class="risposta">{{students.citta}}</div>
-                    </div>
-                </ion-row>
-                <ion-row>
-                    <div>
-                        <div class="scritta">Cap:</div>
-                        <div class="risposta">{{students.cap}}</div>
-                    </div>
-                </ion-row>
-                <ion-row>
-                    <div>
-                        <div class="scritta">Via:</div>
-                        <div class="risposta">{{students.via}}, {{students.civico}}</div>
-                    </div>
-                </ion-row>
-            </div>
-        </ion-card-content>
-    </ion-card>
-    <ion-card>
-        <ion-card-content>
-            <ion-card-title class="ion-text-center">Biografia</ion-card-title>
-            <div *ngIf="this.students$ | async as students">
-                <ion-row>
-                    <div class="biografia">{{students.biografia}}</div>
-                </ion-row>
-            </div>
-        </ion-card-content>
-    </ion-card>
+    </ng-template>
 </ion-content>

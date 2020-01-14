@@ -1,41 +1,5 @@
-.bordi{
-  border-bottom: 1px solid black;
-  padding-bottom: 5px;
-}
-.nome-cognome{
-  font-weight: bold;
-  font-size: 23px;
-}
-.eta{
-  margin-top: 10px;
-  margin-bottom: 10px;
-  color: grey;
-}
-.email{
-  font-size: 17px;
-}
-.ion-text-center{
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 15px;
-}
-.scritta{
-  display: inline;
-  font-weight: bold;
-  font-size: 19px;
-  color: #1e1e1e;
-}
-.risposta{
-  display: inline;
-  font-size: 16px;
-  margin-left: 20px;
-  color: #1e1e1e;
-}
-.biografia{
-  font-size: 16px;
-  color: #1e1e1e;
-}
-.foto-profilo {
-  color: #029db4;
-  font-size: 125px;
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

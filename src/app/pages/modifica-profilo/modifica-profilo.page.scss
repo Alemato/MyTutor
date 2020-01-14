@@ -2,14 +2,6 @@
   color: #029db4;
   font-size: 200px;
 }
-// sovrascrivo registrati-box perchè lo prende dal css globale
-.registrati-box {
-  background: transparent;
-  margin-top: 0px;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-}
 ion-item {
   font-size: 16px;
   box-shadow: none !important;
@@ -50,4 +42,10 @@ ion-item {
 .colonna-label-text {
   padding-left: 16px;
 }
+
+ion-icon{
+  font-size: 30px;
+  padding-left: 15px;
+}
+
 
