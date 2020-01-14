@@ -34,6 +34,7 @@ export class Teacher extends User {
                 this.byography = obj.byography;
             }
         } else {
+            this.idTeacher = 0;
             this.postCode = 0;
             this.city = '';
             this.region = '';
@@ -46,6 +47,9 @@ export class Teacher extends User {
     set(obj: any) {
         super.set(obj);
         if (obj !== undefined) {
+            if (obj.idTeacher !== undefined) {
+                this.idTeacher = obj.idTeacher;
+            }
             if (obj.postCode !== undefined) {
                 this.postCode = obj.postCode;
             }
