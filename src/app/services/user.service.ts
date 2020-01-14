@@ -1,13 +1,12 @@
-import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Storage} from '@ionic/storage';
-
-import {AUTH_TOKEN, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
-import {User} from '../model/user.model';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {delay, map} from 'rxjs/operators';
 import {Student} from '../model/student.model';
 import {Teacher} from '../model/teacher.model';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Storage} from '@ionic/storage';
+import {AUTH_TOKEN, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
+import {map} from 'rxjs/operators';
+import {sha512} from 'js-sha512';
 
 export interface Account {
     username: string;
@@ -18,49 +17,62 @@ export interface Account {
     providedIn: 'root'
 })
 export class UserService {
-    private authToken: string;
-    private loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    private student$: BehaviorSubject<Student> = new BehaviorSubject<Student>({} as Student);
-    private teacher$: BehaviorSubject<Teacher> = new BehaviorSubject<Teacher>({} as Teacher);
-    private type: string;
+    public authToken: string;
+    public loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public user$: BehaviorSubject<any> = new BehaviorSubject<any>({} as any);
+    public userType: string;
     public exist: boolean;
 
     constructor(private http: HttpClient, private storage: Storage) {
-        this.storage.get('loggedIn').then((loggedIn) => {
-            if (loggedIn) {
-                console.log('dallo storage di loggedIn ho preso true');
-                this.loggedIn$.next(true);
-            } else {
-                console.log('dallo storage di loggedIn ho preso false');
-                this.loggedIn$.next(false);
-            }
-        });
         this.storage.get(AUTH_TOKEN).then((token) => {
             this.authToken = token;
+            console.log('this.authToken');
+            console.log(this.authToken);
             if (token !== null && token !== undefined && token !== '') {
-                console.log('token dallo storage');
+                console.log('token dallo storage construck');
                 console.log(token);
                 this.loggedIn$.next(true);
             }
         });
         this.storage.get(UTENTE_STORAGE).then((utente) => {
             console.log('utente');
-            if (utente) {
-                console.log('whichUserType()');
-                this.whichUserType().then((tipo) => {
-                    console.log('tipo');
-                    console.log(tipo);
-                    if (tipo === 'teacher') {
-                        this.teacher$.next(utente);
-                    } else if (tipo === 'student') {
-                        this.student$.next(utente);
-                    } else if (tipo === 'admin') {
-                        console.log('io sono admin');
-                    }
-                });
+            console.log(utente);
+            if (utente !== null && utente !== undefined && utente !== '') {
+                if (utente.roles === 1) {
+                    this.userType = 'student';
+                    this.user$.next(utente);
+                } else if (utente.roles === 2) {
+                    this.userType = 'teacher';
+                    this.user$.next(utente);
+                }
             }
         });
+        console.log('costruttore service');
+    }
 
+    getProfiloEmail(emailProfilo: string): Observable<any> {
+        return this.http.get<any>(URL.GET_PROFILO, {observe: 'response', params: {email: emailProfilo}}).pipe(
+            map ( (resp: HttpResponse<any>) => {
+                this.storage.set(UTENTE_STORAGE, resp.body);
+                this.user$.next(resp.body);
+                return resp.body;
+            }));
+    }
+
+    editProfiloTeacher(teacher: Teacher, password: string): Observable<any> {
+        const pwdHash = sha512(password).toUpperCase();
+        return this.http.put(URL.PUT_PROFILO_TEACHER, teacher, {observe: 'response', params: {hspwd: pwdHash}}).pipe(
+            map( (resp: HttpResponse<any>) => {
+                return resp;
+            } ));
+    }
+
+    editProfiloStudent(student: Student, password: string): Observable<any> {
+        const pwdHash = sha512(password).toUpperCase();
+        return this.http.put(URL.PUT_PROFILO_STUDENT, student, {observe: 'response', params: {hspwd: pwdHash}}).pipe(
+            map( (resp: HttpResponse<any>) => {
+                return resp.body;
+            } ));
     }
 
     login(account: Account): Observable<any> {
@@ -69,33 +81,26 @@ export class UserService {
                 const token = resp.headers.get(X_AUTH);
                 console.log('token dal server');
                 console.log(token);
-                this.storage.set(AUTH_TOKEN, token).then();
+                this.storage.set(AUTH_TOKEN, token);
                 this.authToken = token;
-                this.storage.set(UTENTE_STORAGE, resp.body).then();
-                if (resp.headers.get('X-User-Type') === 'student') {
-                    console.log('setto studente');
-                    this.student$.next(resp.body);
-                } else if (resp.headers.get('X-User-Type') === 'teacher') {
-                    console.log('professoreeeee');
-                    this.teacher$.next(resp.body);
-                } else if (resp.headers.get('X-User-Type') === 'admin') {
-                    console.log('I\'m Admin');
-                }
+                this.storage.set(UTENTE_STORAGE, resp.body);
+                this.user$.next(resp.body);
                 this.storage.set('typeUser', resp.headers.get('X-User-Type')).then();
+                this.userType = resp.headers.get('X-User-Type');
                 this.loggedIn$.next(true);
-                this.setLoggeIn(true);
-                console.log('setto loggedIn nello storage e in loggedIn$');
+                console.log('setto loggedIn in loggedIn$');
+                console.log(resp);
                 return resp.body;
             }));
     }
 
     ifExistKey(value: string): Promise<boolean> {
         return this.storage.get(value).then(data => {
-            if (data) {
-                return true;
-            } else {
-                return false;
-            }
+                if (data) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         );
     }
@@ -104,86 +109,35 @@ export class UserService {
         await this.storage.set('loggedIn', value);
     }
 
-    async neodimio() {
-        await this.storage.set('loggedIn', false);
-        await this.storage.remove('typeUser');
-        await this.storage.remove(UTENTE_STORAGE);
-        await this.storage.remove(AUTH_TOKEN);
+    neodimio() {
+        this.storage.set('loggedIn', false);
+        this.storage.remove('typeUser');
+        this.storage.remove(UTENTE_STORAGE);
+        this.storage.remove(AUTH_TOKEN);
+        this.userType = null;
+        this.authToken = null;
+        this.user$ = new BehaviorSubject<any>({} as any);
     }
 
-    async logout() {
+    logout() {
         this.authToken = null;
         this.loggedIn$.next(false);
         this.neodimio();
     }
 
-    prendiUtente() {
-        this.storage.get(UTENTE_STORAGE).then((utente) => {
-            console.log('utente');
-            if (utente) {
-                console.log('whichUserType()');
-                this.whichUserType().then((tipo) => {
-                    console.log('tipo');
-                    console.log(tipo);
-                    if (tipo === 'teacher') {
-                        this.teacher$.next(utente);
-                    } else if (tipo === 'student') {
-                        this.student$.next(utente);
-                    } else if (tipo === 'admin') {
-                        console.log('io sono admin');
-                    }
-                });
-            }
-        });
+    getTypeUser(): string {
+        return this.userType;
     }
 
-    prendiLoggato() {
-        this.storage.get('loggedIn').then((loggedIn) => {
-            if (loggedIn) {
-                console.log('dallo storage di loggedIn ho preso true');
-                this.loggedIn$.next(true);
-            } else {
-                console.log('dallo storage di loggedIn ho preso false');
-                this.loggedIn$.next(false);
-            }
-        });
+    getUser(): BehaviorSubject<any> {
+        return this.user$;
     }
 
-    prendiToken() {
-        this.storage.get(AUTH_TOKEN).then((token) => {
-            this.authToken = token;
-            if (token !== null && token !== undefined && token !== '') {
-                console.log('token dallo storage');
-                console.log(token);
-                this.loggedIn$.next(true);
-            }
-        });
-    }
-
-    getStudent(): BehaviorSubject<Student> {
-        this.prendiUtente();
-        return this.student$;
-    }
-
-    getTeacher(): BehaviorSubject<Teacher> {
-        this.prendiUtente();
-        return this.teacher$;
-    }
-
-    getAuthToken(): string {
-        this.prendiToken();
+    getToken(): string {
         return this.authToken;
     }
 
     isLogged(): Observable<boolean> {
-        this.prendiLoggato();
         return this.loggedIn$.asObservable();
-    }
-
-    async whichUserType(): Promise<string> {
-        await this.storage.get('typeUser').then((tipo) => {
-            this.type = tipo;
-        });
-        return this.type;
     }
 }
