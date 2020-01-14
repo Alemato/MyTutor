@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {BehaviorSubject, interval, Subscription} from 'rxjs';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
-import {AlertController} from "@ionic/angular";
-import {UserService} from "../../services/user.service";
+import {AlertController} from '@ionic/angular';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-home-richieste',
@@ -175,16 +175,16 @@ export class HomeRichiestePage implements OnInit {
   ];
 
   constructor(public alertController: AlertController, private userService: UserService) {
-    this.userService.whichUserType().then((tipo) => {
-      if (tipo === 'student') {
-        this.student$ = this.userService.getStudent();
-      } else if (tipo === 'teacher') {
-        this.teacher$ = this.userService.getTeacher();
-      }
-    });
   }
 
   ngOnInit() {
+    const tipo = this.userService.getTypeUser();
+    console.log(tipo);
+    if (tipo === 'student') {
+      this.student$ = this.userService.getUser();
+    } else if (tipo === 'teacher') {
+      this.teacher$ = this.userService.getUser();
+    }
     this.setArrayLezioni();
     this.countDown();
   }
@@ -218,10 +218,8 @@ export class HomeRichiestePage implements OnInit {
       data.setMinutes(+m);
       data.setSeconds(+s);
       lezioneSingola.date = data.getTime();
-      console.log(new Date(lezioneSingola.date));
       this.lezioni.push(lezioneSingola);
     });
-    console.log(this.lezioni);
   }
 
   countDown() {
@@ -237,7 +235,6 @@ export class HomeRichiestePage implements OnInit {
 
   ionViewWillEnter() {
     // this.countDown();
-    console.log(new Date(this.lezioni[0].date));
     this.countDowns = interval(800).subscribe(x => {
       this.countDown();
     });

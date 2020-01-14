@@ -1,6 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
-import {AlertController} from '@ionic/angular';
+import {Component, OnInit} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
@@ -156,15 +155,7 @@ export class HomePage implements OnInit {
         }
     ];
 
-    constructor(public alertController: AlertController, private userService: UserService) {
-        this.userService.whichUserType().then((tipo) => {
-            if (tipo === 'student') {
-                this.student$ = this.userService.getStudent();
-            } else if (tipo === 'teacher') {
-                this.teacher$ = this.userService.getTeacher();
-            }
-        });
-    }
+    constructor(private userService: UserService) {}
 
     setNumeroRichieste() {
         this.num = 0;
@@ -176,7 +167,12 @@ export class HomePage implements OnInit {
     }
 
     ngOnInit() {
+        const tipo = this.userService.getTypeUser();
+        if (tipo === 'student') {
+            this.student$ = this.userService.getUser();
+        } else if (tipo === 'teacher') {
+            this.teacher$ = this.userService.getUser();
+        }
         this.setNumeroRichieste();
     }
-
 }
