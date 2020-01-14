@@ -17,6 +17,8 @@ export class AuthGuard implements CanActivate, CanActivateChild {
             .pipe(
                 take(1),
                 map((isLoggedIn: boolean) => {
+                    console.log('isloggedIn');
+                    console.log(isLoggedIn);
                     if (!isLoggedIn) {
                         this.navController.navigateRoot('login');
                         return false;
