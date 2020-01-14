@@ -78,6 +78,10 @@ const routes: Routes = [
         path: 'lezione',
         loadChildren: './pages/lezione/lezione.module#LezionePageModule',
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'profilo-singolo/:email',
+        loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule'
     }
 ];
 
