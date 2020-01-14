@@ -16,7 +16,6 @@ export class ProfiloPage implements OnInit {
     private timeDiff: number;
     private age: number;
     private data1;
-    private datirest: any;
 
     constructor(
         private userService: UserService,
@@ -27,13 +26,13 @@ export class ProfiloPage implements OnInit {
         this.userType = this.userService.getTypeUser();
         if (this.userType === 'teacher') {
             this.teacher$ = this.userService.getUser();
-            this.userService.getProfiloEmail(this.teacher$.value.email).subscribe((data) => {
-            });
+            this.userService.getProfiloEmail(this.teacher$.value.email).subscribe(() => {});
             this.data1 = new Date(this.teacher$.value.birthday);
             this.timeDiff = Math.abs(Date.now() - this.data1.getTime());
             this.age = Math.floor((this.timeDiff / (1000 * 3600 * 24)) / 365.25);
         } else if (this.userType === 'student') {
             this.student$ = this.userService.getUser();
+            this.userService.getProfiloEmail(this.student$.value.email).subscribe(() => {});
         }
     }
 }
