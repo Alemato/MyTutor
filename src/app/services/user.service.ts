@@ -4,7 +4,7 @@ import {Student} from '../model/student.model';
 import {Teacher} from '../model/teacher.model';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Storage} from '@ionic/storage';
-import {AUTH_TOKEN, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
+import {AUTH_TOKEN, STORAGE, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
 import {map} from 'rxjs/operators';
 import {sha512} from 'js-sha512';
 
@@ -116,6 +116,7 @@ export class UserService {
         this.storage.remove('typeUser');
         this.storage.remove(UTENTE_STORAGE);
         this.storage.remove(AUTH_TOKEN);
+        this.storage.remove(STORAGE.BOOKING);
         this.userType = null;
         this.authToken = null;
         this.user$ = new BehaviorSubject<any>({} as any);

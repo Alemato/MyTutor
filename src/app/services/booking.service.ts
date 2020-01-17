@@ -18,6 +18,11 @@ export class BookingService {
         private storage: Storage,
         private http: HttpClient
     ) {
+        this.storage.get(STORAGE.BOOKING).then((data) => {
+            if (data !== null && data !== undefined && data !== {}) {
+                this.bookings$.next(data);
+            }
+        });
     }
 
     getRestBooking(): Observable<Booking[]> {
@@ -30,9 +35,13 @@ export class BookingService {
     }
 
     getRestBookingResearch(nomeUtente: string): Observable<Booking[]> {
-        return this.http.get<Booking[]>(URL.BOOKING_RESEARCH, {observe: 'response', params: {'macro-materia': '1',
+        return this.http.get<Booking[]>(URL.BOOKING_RESEARCH, {
+            observe: 'response', params: {
+                'macro-materia': '1',
                 'nome-lezione': '2', zona: '3', 'micro-materia': '4', 'giorno-settimana': '5',
-                prezzo: '6', 'ora-inizio': '7', 'ora-fine': '8'}}).pipe(
+                prezzo: '6', 'ora-inizio': '7', 'ora-fine': '8'
+            }
+        }).pipe(
             map((resp: HttpResponse<Booking[]>) => {
                 return resp.body;
             }));
@@ -47,16 +56,22 @@ export class BookingService {
     }
 
     getRestHistoricalBookingFilter(): Observable<Booking[]> {
-        return this.http.get<Booking[]>(URL.BOOKING_HISTORY_FILTER, {params: {'macro-materia': '1',
+        return this.http.get<Booking[]>(URL.BOOKING_HISTORY_FILTER, {
+            params: {
+                'macro-materia': '1',
                 'nome-lezione': '2', 'micro-materia': '3', data: '4',
-                'id-utente': '5', stato: '6'}});
+                'id-utente': '5', stato: '6'
+            }
+        });
     }
 
     createRestBooking(bookings: Booking[]) {
-        this.http.post(URL.BOOKING, bookings);
+        return this.http.post(URL.BOOKING, bookings);
     }
-    modifyRestLessonState(idBooking: number, lessonState: string) {
-        this.http.put(URL.BOOKING_MODIFY_LESSON_STATE + idBooking.toString(), null, {params: {'lesson-state': lessonState}});
+
+    modifyRestLessonState(boking: Booking) {
+        // const url = `${}/${idBooking}`;
+        return this.http.put( URL.BOOKING_MODIFY_LESSON_STATE, boking);
     }
 
     getRestCountBooking(): Observable<Booking[]> {
