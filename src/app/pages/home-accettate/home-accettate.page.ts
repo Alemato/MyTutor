@@ -13,6 +13,7 @@ import {Booking} from '../../model/booking.model';
     styleUrls: ['./home-accettate.page.scss'],
 })
 export class HomeAccettatePage implements OnInit {
+    private agg = false;
     private countDowns: Subscription;
     private getBokingPeriodic: Subscription;
     private loading;
@@ -108,6 +109,13 @@ export class HomeAccettatePage implements OnInit {
     }
 
     ionViewWillEnter() {
+        if (this.agg) {
+            this.loadingPresent().then(() => {
+                this.getlezioni();
+            });
+            this.disLoading();
+            this.agg = false;
+        }
         this.countDowns = interval(800).subscribe(x => {
             this.countDown();
         });
@@ -117,6 +125,7 @@ export class HomeAccettatePage implements OnInit {
     }
 
     ionViewDidLeave() {
+        this.agg = true;
         this.countDowns.unsubscribe();
         this.getBokingPeriodic.unsubscribe();
     }
