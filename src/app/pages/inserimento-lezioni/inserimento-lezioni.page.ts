@@ -17,7 +17,7 @@ export class InserimentoLezioniPage implements OnInit {
     private lezioneFormModel: FormGroup;
     public lezioni: Lezione[];
     public lezione: Lezione;
-    public lezioneapp: Lezione;
+    public lezioneapp: Lezione = new Lezione();  // è settato tutto a Null però esiste
     private ok = false;
 
     constructor(
