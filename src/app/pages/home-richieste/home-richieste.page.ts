@@ -4,7 +4,7 @@ import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {UserService} from '../../services/user.service';
-import {BookingService} from '../../services/booking.service';
+import {BookingService, Lez} from '../../services/booking.service';
 import {Booking} from '../../model/booking.model';
 
 @Component({
@@ -14,11 +14,10 @@ import {Booking} from '../../model/booking.model';
 })
 export class HomeRichiestePage implements OnInit {
   private agg = false;
-  private countDowns: Subscription;
-  private getBokingPeriodic: Subscription;
   private loading;
   private tipo;
   private bookings$: BehaviorSubject<Booking[]>;
+  private listLez$: BehaviorSubject<Lez[]>;
   private student$: BehaviorSubject<Student>;
   private teacher$: BehaviorSubject<Teacher>;
 
@@ -39,61 +38,15 @@ export class HomeRichiestePage implements OnInit {
     } else if (this.tipo === 'teacher') {
       this.teacher$ = this.userService.getUser();
     }
-    this.loadingPresent().then(() => {
-      this.bookings$ = this.bookingService.getBookings();
-      this.getlezioni();
-    });
-  }
-
-  getlezioni() {
-    this.bookingService.getRestBooking().subscribe((date) => {
-      console.log(date);
+    this.listLez$ = this.bookingService.getListaLezioni();
+    this.bookings$ = this.bookingService.getBookings();
+    this.listLez$.subscribe((l) => {
       this.lezioni = [];
-      this.setArrayLezioni();
-      this.countDown();
-      this.disLoading().then(() => {
+      l.forEach((item) => {
+        if (item.lessonState === 0) {
+          this.lezioni.push(item);
+        }
       });
-    });
-  }
-
-  setArrayLezioni() {
-    this.bookings$.value.forEach((item) => {
-      if (item.lessonState === 0) {
-        const lezioneSingola = {
-          idbook: 0,
-          lessonState: 0,
-          nomeLezione: '',
-          nomeProf: '',
-          emailProf: '',
-          price: 0,
-          imgProf: '',
-          nomeStudent: '',
-          emailStudent: '',
-          imgStudent: '',
-          date: 0,
-          days: 0,
-          hours: 0,
-          minutes: 0,
-          seconds: 0
-        };
-        lezioneSingola.idbook = item.idBooking;
-        lezioneSingola.lessonState = item.lessonState;
-        lezioneSingola.nomeLezione = item.planning.lesson.name;
-        lezioneSingola.price = item.planning.lesson.price;
-        lezioneSingola.nomeProf = item.planning.lesson.teacher.name + ' ' + item.planning.lesson.teacher.surname;
-        lezioneSingola.emailProf = item.planning.lesson.teacher.email;
-        lezioneSingola.imgProf = item.planning.lesson.teacher.image;
-        lezioneSingola.nomeStudent = item.student.name + ' ' + item.student.surname;
-        lezioneSingola.emailStudent = item.student.email;
-        lezioneSingola.imgStudent = item.student.image;
-        const [h, m, s] = item.planning.startTime.split(':');
-        const data = new Date(item.planning.date);
-        data.setHours(+h);
-        data.setMinutes(+m);
-        data.setSeconds(+s);
-        lezioneSingola.date = data.getTime();
-        this.lezioni.push(lezioneSingola);
-      }
     });
   }
 
@@ -105,8 +58,6 @@ export class HomeRichiestePage implements OnInit {
       this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
         console.log(data);
         this.bookingService.getRestBooking().subscribe(() => {
-          this.lezioni = [];
-          this.setArrayLezioni();
           this.disLoading();
         });
       }, (error => {
@@ -118,13 +69,10 @@ export class HomeRichiestePage implements OnInit {
   rifiutaLezione(idBok: number) {
     const booking = this.bookings$.value.find(x => x.idBooking === idBok);
     booking.lessonState = 2;
-    console.log(booking);
     this.loadingPresent().then(() => {
       this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
         console.log(data);
         this.bookingService.getRestBooking().subscribe(() => {
-          this.lezioni = [];
-          this.setArrayLezioni();
           this.disLoading();
         });
       }, (error => {
@@ -133,37 +81,20 @@ export class HomeRichiestePage implements OnInit {
     });
   }
 
-  countDown() {
-    this.lezioni.forEach((item) => {
-      const nowDate = new Date().getTime();
-      const distance = item.date - nowDate;
-      item.days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      item.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      item.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      item.seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    });
-  }
 
   ionViewWillEnter() {
     if (this.agg) {
       this.loadingPresent().then(() => {
-        this.getlezioni();
+        this.bookingService.getRestBooking().subscribe(() => {
+          this.disLoading();
+        });
       });
-      this.disLoading();
       this.agg = false;
     }
-    this.countDowns = interval(800).subscribe(x => {
-      this.countDown();
-    });
-    this.getBokingPeriodic = interval(60000).subscribe(() => {
-      this.getlezioni();
-    });
   }
 
   ionViewDidLeave() {
     this.agg = true;
-    this.countDowns.unsubscribe();
-    this.getBokingPeriodic.unsubscribe();
   }
 
   async presentAlertAccettaLezione(idbook) {
@@ -240,8 +171,6 @@ export class HomeRichiestePage implements OnInit {
               this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
                 console.log(data);
                 this.bookingService.getRestBooking().subscribe(() => {
-                  this.lezioni = [];
-                  this.setArrayLezioni();
                   this.disLoading();
                 });
               }, (error => {

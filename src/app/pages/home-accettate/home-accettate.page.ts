@@ -2,9 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {UserService} from '../../services/user.service';
 import {BehaviorSubject, interval, Subscription} from 'rxjs';
+import { delay } from 'rxjs/operators';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
-import {BookingService} from '../../services/booking.service';
+import {BookingService, Lez} from '../../services/booking.service';
 import {Booking} from '../../model/booking.model';
 
 @Component({
@@ -14,13 +15,12 @@ import {Booking} from '../../model/booking.model';
 })
 export class HomeAccettatePage implements OnInit {
     private agg = false;
-    private countDowns: Subscription;
-    private getBokingPeriodic: Subscription;
     private loading;
     private tipo;
     private bookings$: BehaviorSubject<Booking[]>;
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
+    private listLez$: BehaviorSubject<Lez[]>;
 
     public lezioni = [];
 
@@ -39,95 +39,34 @@ export class HomeAccettatePage implements OnInit {
         } else if (this.tipo === 'teacher') {
             this.teacher$ = this.userService.getUser();
         }
-        this.loadingPresent().then(() => {
-            this.bookings$ = this.bookingService.getBookings();
-            this.getlezioni();
-        });
-    }
-
-    getlezioni() {
-        this.bookingService.getRestBooking().subscribe((date) => {
-            console.log(date);
+        this.listLez$ = this.bookingService.getListaLezioni();
+        this.bookings$ = this.bookingService.getBookings();
+        this.listLez$.subscribe((l) => {
             this.lezioni = [];
-            this.setArrayLezioni();
-            this.countDown();
-            this.disLoading().then(() => {
+            l.forEach((item) => {
+                if (item.lessonState === 1) {
+                    this.lezioni.push(item);
+                }
             });
-        });
-    }
-
-    setArrayLezioni() {
-        this.bookings$.value.forEach((item) => {
-            if (item.lessonState === 1) {
-                const lezioneSingola = {
-                    idbok: 0,
-                    lessonState: 0,
-                    nomeLezione: '',
-                    price: 0,
-                    nomeProf: '',
-                    emailProf: '',
-                    imgProf: '',
-                    nomeStudent: '',
-                    emailStudent: '',
-                    imgStudent: '',
-                    date: 0,
-                    days: 0,
-                    hours: 0,
-                    minutes: 0,
-                    seconds: 0
-                };
-                lezioneSingola.idbok = item.idBooking;
-                lezioneSingola.lessonState = item.lessonState;
-                lezioneSingola.nomeLezione = item.planning.lesson.name;
-                lezioneSingola.price = item.planning.lesson.price;
-                lezioneSingola.nomeProf = item.planning.lesson.teacher.name + ' ' + item.planning.lesson.teacher.surname;
-                lezioneSingola.emailProf = item.planning.lesson.teacher.email;
-                lezioneSingola.imgProf = item.planning.lesson.teacher.image;
-                lezioneSingola.nomeStudent = item.student.name + ' ' + item.student.surname;
-                lezioneSingola.emailStudent = item.student.email;
-                lezioneSingola.imgStudent = item.student.image;
-                const [h, m, s] = item.planning.startTime.split(':');
-                const data = new Date(item.planning.date);
-                data.setHours(+h);
-                data.setMinutes(+m);
-                data.setSeconds(+s);
-                lezioneSingola.date = data.getTime();
-                this.lezioni.push(lezioneSingola);
-            }
-        });
-    }
-
-    countDown() {
-        this.lezioni.forEach((item) => {
-            const nowDate = new Date().getTime();
-            const distance = item.date - nowDate;
-            item.days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            item.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            item.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            item.seconds = Math.floor((distance % (1000 * 60)) / 1000);
         });
     }
 
     ionViewWillEnter() {
+        console.log('ionViewWillEnter home/accetta');
         if (this.agg) {
-            this.loadingPresent().then(() => {
-                this.getlezioni();
-            });
-            this.disLoading();
-            this.agg = false;
-        }
-        this.countDowns = interval(800).subscribe(x => {
-            this.countDown();
-        });
-        this.getBokingPeriodic = interval(60000).subscribe(() => {
-            this.getlezioni();
-        });
+             this.loadingPresent().then(() => {
+                 // this.getlezioni();
+                 this.bookingService.getRestBooking().subscribe(() => {});
+                 this.disLoading();
+             });
+             this.agg = false;
+         }
     }
 
+
     ionViewDidLeave() {
+        console.log('ionViewDidLeave home/accetta');
         this.agg = true;
-        this.countDowns.unsubscribe();
-        this.getBokingPeriodic.unsubscribe();
     }
 
     async presentAlert(item, id) {
@@ -156,8 +95,6 @@ export class HomeAccettatePage implements OnInit {
                             this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
                                 console.log(data);
                                 this.bookingService.getRestBooking().subscribe(() => {
-                                    this.lezioni = [];
-                                    this.setArrayLezioni();
                                     this.disLoading();
                                 });
                             }, (error => {

@@ -72,7 +72,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'Storico',
-            url: '/',
+            url: '/storico-lezioni',
             icon: 'time',
             click: false
         },
@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'Storico',
-            url: '/',
+            url: '/storico-lezioni',
             icon: 'time',
             click: false
         },
@@ -135,6 +135,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.userType = this.userService.getTypeUser();
+        console.log('onInit');
         console.log(this.userType);
         this.navController.navigateRoot('home');
     }
@@ -144,7 +145,7 @@ export class AppComponent implements OnInit {
     }
 
     openPage(url: string) {
-        this.navController.navigateForward(url);
+        this.navController.navigateRoot(url);
     }
 
     async closeMenu(event: any, url: string) {

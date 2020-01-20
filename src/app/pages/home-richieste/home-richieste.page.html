@@ -41,7 +41,7 @@
   </ng-template>
   <ng-template #teacherBlock>
     <ion-list>
-      <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">Lista Lezioni Prenotate Da Accettare</ion-list-header>
+      <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">Lista Lezioni Prenotate Da Accettare {{lezioni.length}}</ion-list-header>
       <ng-template #notLesT>
         <div class="mx-auto fit-content">
           <h5 class="fit-content font-weight-300 ls-1">Nessuna richiesta di lezione in vista!</h5>

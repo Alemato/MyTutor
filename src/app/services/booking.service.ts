@@ -1,23 +1,46 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
 import {Booking} from '../model/booking.model';
 import {STORAGE, URL} from '../constants';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
 import {Planning} from '../model/planning.model';
 
+export interface Lez {
+    idbook: number;
+    lessonState: number;
+    nomeLezione: string;
+    price: number;
+    nomeProf: string;
+    emailProf: string;
+    imgProf: string;
+    nomeStudent: string;
+    emailStudent: string;
+    imgStudent: string;
+    date: number;
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class BookingService {
-    private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>({} as Booking[]);
+    private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
+    private listLez$: BehaviorSubject<Lez[]> = new BehaviorSubject<Lez[]>([] as Lez[]);
+    private countDowns: Subscription;
+    private periodicGet: Subscription;
+    private listaLezioni: Lez[];
 
     constructor(
         private storage: Storage,
         private http: HttpClient
     ) {
+        this.listaLezioni = [];
         this.storage.get(STORAGE.BOOKING).then((data) => {
             if (data !== null && data !== undefined && data !== {}) {
                 this.bookings$.next(data);
@@ -71,7 +94,7 @@ export class BookingService {
 
     modifyRestLessonState(boking: Booking) {
         // const url = `${}/${idBooking}`;
-        return this.http.put( URL.BOOKING_MODIFY_LESSON_STATE, boking);
+        return this.http.put(URL.BOOKING_MODIFY_LESSON_STATE, boking);
     }
 
     getRestCountBooking(): Observable<Booking[]> {
@@ -121,5 +144,57 @@ export class BookingService {
 
     getBookings(): BehaviorSubject<Booking[]> {
         return this.bookings$;
+    }
+
+    getListaLezioni(): BehaviorSubject<Lez[]> {
+        return this.listLez$;
+    }
+
+    setListaLezioni(listLez: Lez[]) {
+        this.listaLezioni = listLez;
+    }
+
+    setBehaviorSubjectLezioni() {
+        this.listLez$.next(this.listaLezioni);
+    }
+
+    startCoundown() {
+        this.countDowns = interval(800).subscribe(x => {
+            this.runCountDown();
+        });
+    }
+
+    stopCoundown() {
+        if (!this.countDowns.closed) {
+            this.countDowns.unsubscribe();
+        }
+    }
+
+    runCountDown() {
+        this.listaLezioni.forEach((item) => {
+            const nowDate = new Date().getTime();
+            const distance = item.date - nowDate;
+            item.days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            item.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            item.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            item.seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        });
+        this.setBehaviorSubjectLezioni();
+    }
+
+    startPeriodicGet() {
+        console.log('startPeriodicGet');
+        this.periodicGet = interval(12000).subscribe(x => {
+            console.log('startPeriodicGet');
+            this.getRestBooking().subscribe(() => {
+            });
+        });
+    }
+
+    stopPeriodicGet() {
+        console.log('stopPeriodicGet');
+        if (!this.periodicGet.closed) {
+            this.periodicGet.unsubscribe();
+        }
     }
 }

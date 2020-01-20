@@ -38,7 +38,7 @@
                          </ion-col>
                      </ion-item>
                      <ion-item-options side="end">
-                         <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbok)">Annulla</ion-item-option>
+                         <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">Annulla</ion-item-option>
                      </ion-item-options>
                  </ion-item-sliding>
              </div>
@@ -51,7 +51,7 @@
      </ng-template>
      <ng-template #teacherBlock>
          <ion-list class="mb-100">
-             <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">Lista lezioni prenotate </ion-list-header>
+             <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">Lista lezioni prenotate</ion-list-header>
              <ng-template #notLesT>
              <div class="mx-auto fit-content">
                 <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata in vista!</h5>
@@ -88,13 +88,13 @@
                      </ion-col>
                  </ion-item>
                  <ion-item-options side="end">
-                     <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbok)">Annulla</ion-item-option>
+                     <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">Annulla</ion-item-option>
                  </ion-item-options>
              </ion-item-sliding>
            </div>
          </ion-list>
          <div class="bottone-aggiungi">
-                <ion-button expand="full" color="medium" class="ion-margin-bottom ion-margin-top">INSERISCI UN NUOVO ANNUNCIO
+                <ion-button expand="full" color="medium" class="ion-margin-bottom ion-margin-top" [routerLink]="['/inserimento-lezioni']" routerDirection="forward">INSERISCI UN NUOVO ANNUNCIO
                 </ion-button>
          </div>
      </ng-template>
