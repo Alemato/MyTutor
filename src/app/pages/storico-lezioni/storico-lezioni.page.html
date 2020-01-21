@@ -12,43 +12,192 @@
 
 <ion-content>
     <ion-list>
-        <ion-list-header>Lista lezioni frequentate</ion-list-header>
-        <ion-item class="px-0" *ngFor="let s of storico">
-            <ion-grid>
-                <ion-row>
-                    <ion-col size="auto">
-                        <ion-icon
-                                *ngIf="s.teacher.image === null || s.teacher.image === '' || s.teacher.image ===' '; else imgBlock"
-                                name="contact" class="fs-62 c-primary"></ion-icon>
-                        <ng-template #imgBlock>
-                            <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                                <img [src]="s.teacher.image" alt="img" style="width: 51px; height: 51px;">
-                            </ion-avatar>
-                        </ng-template>
-                    </ion-col>
-                    <ion-col size="9" class="pt-15">
+        <ion-list-header *ngIf="storico.length > 0; else notSto">Lista lezioni frequentate</ion-list-header>
+        <ng-template #notSto>
+            <div class="mx-auto fit-content">
+                <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata, frequentata, o annullata!</h5>
+            </div>
+        </ng-template>
+        <div *ngIf="(user$| async) as user">
+            <div *ngIf="user.roles === 1; else teacherBlock">
+                <ion-item class="px-0" *ngFor="let s of storico">
+                    <ion-grid>
                         <ion-row>
-                            <ion-col class="ion-no-padding">
-                                <div class="ion-no-margin fs-large fw-normal">{{s.nome}}</div>
+                            <ion-col size="auto" class="vertical-middle">
+                                <ion-icon
+                                        *ngIf="s.planning.lesson.teacher.image === null || s.planning.lesson.teacher.image === '' || s.planning.lesson.teacher.image ===' '; else imgBlock"
+                                        name="contact" class="fs-62 c-primary"
+                                        [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]"></ion-icon>
+                                <ng-template #imgBlock>
+                                    <ion-avatar class="ion-text-center h-62 w-62 pt-3 vertical-middle"
+                                                [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]"
+                                                routerDirection="forward">
+                                        <img class="vertical-middle w-51 h-51" [src]="s.planning.lesson.teacher.image"
+                                             alt="img">
+                                    </ion-avatar>
+                                </ng-template>
                             </ion-col>
-                            <ion-col class="ion-no-padding">
-                                <div class="fs-small font-weight-300 vertical-middle ion-float-right"
-                                     style="padding-top: 3px">{{s.createDate | date:'dd/MM/yyyy'}}</div>
+                            <ion-col size="6">
+                                <ion-row>
+                                    <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
+                                             [routerLink]="['/']"
+                                             routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col
+                                            class="ion-no-padding pt-5 ion-no-margin fs-medium font-weight-300 ls-01em c-primary"
+                                            [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]"
+                                            routerDirection="forward">{{s.planning.lesson.teacher.name}} {{s.planning.lesson.teacher.surname}}</ion-col>
+                                </ion-row>
+                                <ion-row *ngIf="s.lessonState === 0; else lessonState1">
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="fs-medium fw-normal ls-1" color="warning">Stato: Richiesta
+                                        </ion-text>
+                                    </ion-col>
+                                </ion-row>
+                                <ng-template #lessonState1>
+                                    <ion-row *ngIf="s.lessonState === 1; else lessonState2">
+                                        <ion-col class="ion-no-padding pt-5">
+                                            <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">Stato:
+                                                Accettata
+                                            </ion-text>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-template>
+                                <ng-template #lessonState2>
+                                    <ion-row *ngIf="s.lessonState === 2; else lessonState3">
+                                        <ion-col class="ion-no-padding pt-5">
+                                            <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger">
+                                                Stato:
+                                                Rifiutata
+                                            </ion-text>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-template>
+                                <ng-template #lessonState3>
+                                    <ion-row *ngIf="s.lessonState === 3; else lessonState4">
+                                        <ion-col class="ion-no-padding pt-5">
+                                            <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
+                                                      color="danger">Stato:
+                                                Annullata
+                                            </ion-text>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-template>
+                                <ng-template #lessonState4>
+                                    <ion-row>
+                                        <ion-col class="ion-no-padding pt-5">
+                                            <ion-text class="fs-medium fw-normal ls-1" color="success">Stato:
+                                                Eseguita
+                                            </ion-text>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-template>
+                            </ion-col>
+                            <ion-col size="auto">
+                                <ion-row>
+                                    <ion-col
+                                            class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col
+                                            class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.startTime}}</ion-col>
+                                </ion-row>
                             </ion-col>
                         </ion-row>
-                        <ion-row>
-                            <ion-col class="ion-no-padding">
-                                <div class="ion-no-margin fs-medium font-weight-300 ls-01em c-primary">{{s.teacher.name}} {{s.teacher.surname}}</div>
-                            </ion-col>
-                            <ion-col class="ion-no-padding">
-                                <div class="fs-small font-weight-300 vertical-middle ion-float-right"
-                                     style="padding-top: 3px">{{s.createDate | date:'HH:mm'}}</div>
-                            </ion-col>
-                        </ion-row>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </ion-item>
+                    </ion-grid>
+                </ion-item>
+            </div>
+            <ng-template #teacherBlock>
+                <div *ngIf="user.roles === 2">
+                    <ion-item class="px-0" *ngFor="let s of storico">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="auto" class="vertical-middle">
+                                    <ion-icon
+                                            *ngIf="s.student.image === null || s.student.image === '' || s.student.image ===' '; else imgBlock"
+                                            name="contact" class="fs-62 c-primary"
+                                            [routerLink]="['/profilo-singolo', s.student.email]"></ion-icon>
+                                    <ng-template #imgBlock>
+                                        <ion-avatar class="ion-text-center h-62 w-62 pt-3 vertical-middle"
+                                                    [routerLink]="['/profilo-singolo', s.student.email]"
+                                                    routerDirection="forward">
+                                            <img class="vertical-middle w-51 h-51" [src]="s.student.image" alt="img">
+                                        </ion-avatar>
+                                    </ng-template>
+                                </ion-col>
+                                <ion-col size="6">
+                                    <ion-row>
+                                        <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
+                                                 [routerLink]="['/']"
+                                                 routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col
+                                                class="ion-no-padding pt-5 ion-no-margin fs-medium font-weight-300 ls-01em c-primary"
+                                                [routerLink]="['/profilo-singolo', s.student.email]"
+                                                routerDirection="forward">{{s.student.name}} {{s.student.surname}}</ion-col>
+                                    </ion-row>
+                                    <ion-row *ngIf="s.lessonState === 0; else lessonState1">
+                                        <ion-col class="ion-no-padding pt-5">
+                                            <ion-text class="fs-medium fw-normal ls-1" color="warning">Stato: Richiesta
+                                            </ion-text>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ng-template #lessonState1>
+                                        <ion-row *ngIf="s.lessonState === 1; else lessonState2">
+                                            <ion-col class="ion-no-padding pt-5">
+                                                <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">Stato:
+                                                    Accettata
+                                                </ion-text>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ng-template>
+                                    <ng-template #lessonState2>
+                                        <ion-row *ngIf="s.lessonState === 2; else lessonState3">
+                                            <ion-col class="ion-no-padding pt-5">
+                                                <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger">
+                                                    Stato:
+                                                    Rifiutata
+                                                </ion-text>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ng-template>
+                                    <ng-template #lessonState3>
+                                        <ion-row *ngIf="s.lessonState === 3; else lessonState4">
+                                            <ion-col class="ion-no-padding pt-5">
+                                                <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
+                                                          color="danger">Stato:
+                                                    Annullata
+                                                </ion-text>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ng-template>
+                                    <ng-template #lessonState4>
+                                        <ion-row>
+                                            <ion-col class="ion-no-padding pt-5">
+                                                <ion-text class="fs-medium fw-normal ls-1" color="success">Stato:
+                                                    Eseguita
+                                                </ion-text>
+                                            </ion-col>
+                                        </ion-row>
+                                    </ng-template>
+                                </ion-col>
+                                <ion-col size="auto">
+                                    <ion-row>
+                                        <ion-col
+                                                class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col
+                                                class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.startTime}}</ion-col>
+                                    </ion-row>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-item>
+                </div>
+            </ng-template>
+        </div>
     </ion-list>
-
 </ion-content>

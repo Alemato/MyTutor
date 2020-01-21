@@ -7,6 +7,8 @@ import {STORAGE, URL} from '../constants';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
 import {Planning} from '../model/planning.model';
+import {User} from '../model/user.model';
+import {compilerSetStylingMode} from '@angular/compiler/src/render3/view/styling_state';
 
 export interface Lez {
     idbook: number;
@@ -35,6 +37,7 @@ export class BookingService {
     private countDowns: Subscription;
     private periodicGet: Subscription;
     private listaLezioni: Lez[];
+    private listUser: User[] = [new User(undefined)];
 
     constructor(
         private storage: Storage,
@@ -55,6 +58,33 @@ export class BookingService {
                 this.bookings$.next(resp.body);
                 return resp.body;
             }));
+    }
+
+    getRestUsersBooking(): Observable<User[]> {
+        return this.http.get<Booking[]>(URL.BOOKING_HOME, {observe: 'response'}).pipe(map((resp: HttpResponse<Booking[]>) => {
+            this.listUser.pop();
+            resp.body.forEach((item) => {
+                this.listUser.push(item.student);
+                this.listUser.push(item.planning.lesson.teacher);
+            });
+            const newOb = [];
+            for (let i = 0; i < this.listUser.length; i++) {
+                let flag = false;
+                for (let j = i + 1; j < this.listUser.length; j++) {
+                    if (this.listUser[i].idUser === this.listUser[j].idUser) {
+                        flag = false;
+                        break;
+                    } else {
+                        flag = true;
+                    }
+                }
+                if (flag) {
+                    newOb.push(this.listUser[i]);
+                }
+            }
+            newOb.push(this.listUser[this.listUser.length - 1]);
+            return newOb;
+        }));
     }
 
     getRestBookingResearch(nomeUtente: string): Observable<Booking[]> {
@@ -78,14 +108,19 @@ export class BookingService {
             }));
     }
 
-    getRestHistoricalBookingFilter(): Observable<Booking[]> {
+    // tslint:disable-next-line:max-line-length
+    getRestHistoricalBookingFilter(macroMateria: string, microMateria: string, nomeLezione: string, dataLezione: string, utente: string, statoLezione: string): Observable<Booking[]> {
         return this.http.get<Booking[]>(URL.BOOKING_HISTORY_FILTER, {
+            observe: 'response',
             params: {
-                'macro-materia': '1',
-                'nome-lezione': '2', 'micro-materia': '3', data: '4',
-                'id-utente': '5', stato: '6'
+                'macro-materia': macroMateria,
+                'nome-lezione': nomeLezione, 'micro-materia': microMateria, data: dataLezione,
+                'id-utente': utente, stato: statoLezione
             }
-        });
+        }).pipe(map((resp: HttpResponse<Booking[]>) => {
+            this.bookings$.next(resp.body);
+            return resp.body;
+        }));
     }
 
     createRestBooking(bookings: Booking[]) {
