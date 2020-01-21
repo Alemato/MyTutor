@@ -36,6 +36,7 @@ export const URL = {
     PLANNING_ADD: URL_BASE + '/lessons/plannings/add',
     PLANNING_RESEARCH: URL_BASE + '/lessons/plannings/research',
     PLANNING_DELETE: URL_BASE + '/lessons/plannings/delete',
+    PLANNING: URL_BASE + '/lessons/plannings',
 
     BOOKING: URL_BASE + '/lessons/bookings',
     BOOKING_MODIFY_LESSON_STATE: URL_BASE + '/lessons/bookings',
@@ -62,6 +63,7 @@ export const STORAGE = {
     MESSAGE: 'message',
     CHATLIST: 'chat',
     CREATES: 'creates',
-    PLANNING: 'planning'
+    PLANNING: 'planning',
+    LESSON: 'lesson'
 
 };
