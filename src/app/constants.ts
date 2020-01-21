@@ -65,5 +65,4 @@ export const STORAGE = {
     CREATES: 'creates',
     PLANNING: 'planning',
     LESSON: 'lesson'
-
 };

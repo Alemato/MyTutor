@@ -44,7 +44,7 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'inserimento-lezioni',
+        path: 'inserimento-lezioni/:idLesson',
         loadChildren: './pages/inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule',
         canActivate: [AuthGuard]
     },
@@ -82,6 +82,14 @@ const routes: Routes = [
     {
         path: 'profilo-singolo/:email',
         loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule'
+    },
+    {
+        path: 'lista-annunci-publicati',
+        loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule'
+    },
+    {
+        path: 'inserimento-lezioni',
+        redirectTo: 'inserimento-lezioni/null'
     }
 ];
 

@@ -117,6 +117,7 @@ export class UserService {
         this.storage.remove(UTENTE_STORAGE);
         this.storage.remove(AUTH_TOKEN);
         this.storage.remove(STORAGE.BOOKING);
+        this.storage.remove(STORAGE.LESSON);
         this.userType = null;
         this.authToken = null;
         this.user$ = new BehaviorSubject<any>({} as any);
