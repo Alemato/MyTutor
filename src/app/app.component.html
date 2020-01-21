@@ -38,7 +38,7 @@
             </ion-row>
             <ion-col *ngIf="(this.teacher$ | async)" style="padding-left: 0; padding-right: 0;">
                 <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click"
-                         (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesTeacher" [routerLink]="[p.url]">
+                         (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesTeacher" >
                     <ion-col size="auto" class="ion-align-self-center">
                         <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                     </ion-col>
@@ -51,7 +51,7 @@
               <div *ngIf="(this.student$ | async) as student">
                 <ion-col style="padding-left: 0; padding-right: 0;">
                     <ion-row class="menu-item-margin ion-padding-start" *ngFor="let p of appPagesStudent" [class.menu-item-clicked]="p.click"
-                             [routerLink]="[p.url]" (click)="closeMenu($event, p.url)">
+                              (click)="closeMenu($event, p.url)">
                         <ion-col size="auto" class="ion-align-self-center">
                             <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                         </ion-col>
