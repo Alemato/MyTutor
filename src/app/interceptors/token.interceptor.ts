@@ -15,7 +15,7 @@ export class TokenInterceptor implements HttpInterceptor {
         // Get the auth token from the service.
         console.log('avvio intercettore');
         const authToken = this.userService.getToken();
-        console.log(req.url + ' ' + authToken);
+        console.log(req.url + ' ' + req.params + ' ' + authToken);
         if (authToken !== null && authToken !== undefined && authToken !== '') {
                 console.log('adding token into header');
                 // Clone the request and replace the original headers with
