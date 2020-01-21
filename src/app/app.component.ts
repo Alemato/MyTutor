@@ -111,7 +111,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'Annunci Publicati',
-            url: '/',
+            url: '/lista-annunci-publicati',
             icon: 'filing',
             click: false
         }
@@ -145,14 +145,19 @@ export class AppComponent implements OnInit {
     }
 
     openPage(url: string) {
-        this.navController.navigateRoot(url);
+        this.navController.navigateForward(url);
     }
 
     async closeMenu(event: any, url: string) {
         await this.menu.close();
         this.openPage(url);
-        this.appPagesStudent.find(x => x.click === true).click = false;
-        this.appPagesStudent.find(x => x.title === event.path[0].innerText).click = true;
+        if (this.userType === 'student') {
+            this.appPagesStudent.find(x => x.click === true).click = false;
+            this.appPagesStudent.find(x => x.title === event.path[0].innerText).click = true;
+        } else if (this.userType === 'teacher') {
+            this.appPagesTeacher.find(x => x.click === true).click = false;
+            this.appPagesTeacher.find(x => x.title === event.path[0].innerText).click = true;
+        }
     }
 
     async logout() {

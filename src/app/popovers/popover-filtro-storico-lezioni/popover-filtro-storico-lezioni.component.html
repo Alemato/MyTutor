@@ -8,22 +8,22 @@
   </ion-item>
   <ion-item>
     <ion-label>Materia:</ion-label>
-    <ion-select (ionChange)="setSotto()"  ok-text="Seleziona" formControlName="selectMateria" cancel-text="Cancella" style="width: 65%; max-width: 65%;">
-      <ion-select-option *ngFor="let mat of Materie"
+    <ion-select (ionChange)="setSotto()"  ok-text="Seleziona" formControlName="selectMateria" cancel-text="Cancella" style="width: 65%; max-width: 65%; padding-top: 14px;">
+      <ion-select-option *ngFor="let mat of materie"
                          value="{{mat.value}}">{{mat.text}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item *ngIf="materia!==null; else selctDisabilited">
-    <ion-label>Materia:</ion-label>
-    <ion-select ok-text="Seleziona" formControlName="selectSotto" cancel-text="Cancella" style="width: 65%; max-width: 65%;">
-      <ion-select-option *ngFor="let sot of SottoMaterie[materia]"
+    <ion-label>Sotto Materia:</ion-label>
+    <ion-select ok-text="Seleziona" formControlName="selectSotto" cancel-text="Cancella" style="width: 50%; max-width: 50%; padding-top: 14px">
+      <ion-select-option *ngFor="let sot of sottoMaterie[materia]"
                          value="{{sot.value}}">{{sot.text}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ng-template #selctDisabilited>
     <ion-item>
       <ion-label>Sotto Materia:</ion-label>
-      <ion-select ok-text="Seleziona" cancel-text="Cancella" style="width: 65%; max-width: 65%;" disabled
+      <ion-select ok-text="Seleziona" cancel-text="Cancella" style="width: 50%; max-width: 50%; padding-top: 14px;" disabled
                   placeholder="Seleziona Sotto Materie">
         <ion-select-option value="0">Tutte</ion-select-option>
       </ion-select>
@@ -36,10 +36,28 @@
                          value="{{usr.idUser}}">{{usr.name}} {{usr.surname}}</ion-select-option>
     </ion-select>
   </ion-item>
+  <ion-item>
+    <ion-label>Stato Lezione:</ion-label>
+    <ion-select ok-text="Seleziona" formControlName="statoLezione" cancel-text="Cancella" style="width: 45%; max-width: 45%;">
+      <ion-select-option selected="" value="">Tutte</ion-select-option>
+      <ion-select-option value="0">Prenotate</ion-select-option>
+      <ion-select-option value="1">Accettate</ion-select-option>
+      <ion-select-option value="2">Rifiutate</ion-select-option>
+      <ion-select-option value="3">Annullate</ion-select-option>
+      <ion-select-option value="4">Eseguite</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label>Data Lezione</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" placeholder="Data" formControlName="dataLezione"></ion-datetime>
+  </ion-item>
 </ion-list>
   <ion-row>
     <div style="margin-right: auto; margin-left: auto">
-      <ion-button class="ion-margin-top ion-margin-bottom"  (click)="subFiltro()">Chiudi</ion-button>
+      <ion-button class="ion-margin-top ion-margin-bottom" color="success" (click)="subFiltro()">Filtra</ion-button>
+    </div>
+    <div style="margin-right: auto; margin-left: auto">
+      <ion-button class="ion-margin-top ion-margin-bottom" color="primary"  (click)="resetFiltro()">Reset</ion-button>
     </div>
   </ion-row>
 </form>
