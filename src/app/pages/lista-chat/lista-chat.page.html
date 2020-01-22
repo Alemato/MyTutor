@@ -8,7 +8,9 @@
 </ion-header>
 
 <ion-content>
-    <ion-list *ngFor="let c of chats">
+    <ion-list *ngIf="(lastMessageFromChats$ | async) as lastMessageFromChats; else notChat">
+        <ion-list-header class="mb--14" *ngIf="lastMessageFromChats.length > 0; else notChat">Lista lezioni accettate</ion-list-header>
+        <ion-item *ngFor="let c of lastMessageFromChats" class="ion-no-padding">
         <ion-grid>
             <ion-row>
                 <ion-col size="auto">
@@ -36,5 +38,11 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
+        </ion-item>
     </ion-list>
+    <ng-template #notChat>
+        <div class="mx-auto fit-content">
+            <h5 class="fit-content font-weight-300 ls-1">Nessuna Chat disponibile!</h5>
+        </div>
+    </ng-template>
 </ion-content>
