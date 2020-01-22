@@ -94,6 +94,8 @@ export class UserService {
                 this.user$.next(resp.body);
                 if (resp.body.language) {
                     this.storage.set(LINGUA, 'en');
+                } else {
+                    this.storage.set(LINGUA, 'it');
                 }
                 this.storage.set('typeUser', resp.headers.get('X-User-Type')).then();
                 this.userType = resp.headers.get('X-User-Type');
