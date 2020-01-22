@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
     ) {
         this.initializeApp();
         this.menuSource.menuRefreshSource$.subscribe(assert => {
+            this.initTranslate();
             this.userType = this.userService.getTypeUser();
             console.log(this.userType);
             if (this.userType === 'student' ) {
