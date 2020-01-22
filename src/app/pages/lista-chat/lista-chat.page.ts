@@ -31,17 +31,10 @@ export class ListaChatPage implements OnInit {
 
     ngOnInit() {
         this.chatService.getRestCountChat().subscribe((n: number) => {
-            console.log('eseguo rest count chat');
-            console.log(n);
             if (n !== 0) {
                 this.chatService.countFromStorage().then((numb: number) => {
-                    console.log('numero sullo storage è');
-                    console.log(numb);
                     if (numb < n) {
-                        this.chatService.getRestChatList().subscribe((chat) => {
-                            console.log('eseguo rest lista chat');
-                            console.log(chat);
-                        });
+                        this.chatService.getRestChatList().subscribe(() => {});
                     }
                 });
             }

@@ -11,6 +11,7 @@ import {Student} from './model/student.model';
 import {Teacher} from './model/teacher.model';
 import {MenuRefresh} from './services/menuRefresh';
 import {Storage} from '@ionic/storage';
+import {ChatService} from "./services/chat.service";
 
 
 @Component({
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit {
         private statusBar: StatusBar,
         private linguaService: LinguaService,
         private userService: UserService,
+        private chatService: ChatService,
         private navController: NavController,
         private menuSource: MenuRefresh,
         private menu: MenuController
@@ -138,6 +140,7 @@ export class AppComponent implements OnInit {
         this.userType = this.userService.getTypeUser();
         console.log('onInit');
         console.log(this.userType);
+        this.chatService.startPeriodicGetCountChat();
         this.navController.navigateRoot('home');
     }
 
@@ -162,6 +165,7 @@ export class AppComponent implements OnInit {
     }
 
     async logout() {
+        this.chatService.stopPeriodicGetCountChat();
         await this.menu.close();
         await this.userService.logout();
         await this.navController.navigateRoot('login');
