@@ -8,7 +8,7 @@ import {AUTH_TOKEN, LINGUA, STORAGE, URL, UTENTE_STORAGE, X_AUTH} from '../const
 import {map} from 'rxjs/operators';
 import {sha512} from 'js-sha512';
 import {ChatService} from './chat.service';
-import {BookingService} from "./booking.service";
+import {BookingService} from './booking.service';
 
 export interface Account {
     username: string;
