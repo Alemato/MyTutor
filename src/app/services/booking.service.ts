@@ -219,7 +219,7 @@ export class BookingService {
 
     startPeriodicGet() {
         console.log('startPeriodicGet');
-        this.periodicGet = interval(12000).subscribe(x => {
+        this.periodicGet = interval(15000).subscribe(x => {
             console.log('startPeriodicGet');
             this.getRestBooking().subscribe(() => {
             });
@@ -231,5 +231,13 @@ export class BookingService {
         if (!this.periodicGet.closed) {
             this.periodicGet.unsubscribe();
         }
+    }
+
+    logout() {
+        this.storage.remove(STORAGE.BOOKING);
+        this.bookings$ = new BehaviorSubject<Booking[]>([] as Booking[]);
+        this.listLez$ = new BehaviorSubject<Lez[]>([] as Lez[]);
+        this.listaLezioni = [];
+        this.listUser = [new User(undefined)];
     }
 }
