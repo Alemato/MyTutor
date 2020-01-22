@@ -105,7 +105,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'Inserisci Annuncio',
-            url: '/',
+            url: '/inserimento-lezioni',
             icon: 'create',
             click: false
         },

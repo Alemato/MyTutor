@@ -4,9 +4,11 @@ import {Student} from '../model/student.model';
 import {Teacher} from '../model/teacher.model';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Storage} from '@ionic/storage';
-import {AUTH_TOKEN, STORAGE, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
+import {AUTH_TOKEN, LINGUA, STORAGE, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
 import {map} from 'rxjs/operators';
 import {sha512} from 'js-sha512';
+import {ChatService} from './chat.service';
+import {BookingService} from './booking.service';
 
 export interface Account {
     username: string;
@@ -23,7 +25,10 @@ export class UserService {
     public userType: string;
     public exist: boolean;
 
-    constructor(private http: HttpClient, private storage: Storage) {
+    constructor(private http: HttpClient,
+                private storage: Storage,
+                private bookingService: BookingService,
+                private chatService: ChatService) {
         this.storage.get(AUTH_TOKEN).then((token) => {
             this.authToken = token;
             console.log('this.authToken');
@@ -87,6 +92,9 @@ export class UserService {
                 this.authToken = token;
                 this.storage.set(UTENTE_STORAGE, resp.body);
                 this.user$.next(resp.body);
+                if (resp.body.language) {
+                    this.storage.set(LINGUA, 'en');
+                }
                 this.storage.set('typeUser', resp.headers.get('X-User-Type')).then();
                 this.userType = resp.headers.get('X-User-Type');
                 this.loggedIn$.next(true);
@@ -116,10 +124,12 @@ export class UserService {
         this.storage.remove('typeUser');
         this.storage.remove(UTENTE_STORAGE);
         this.storage.remove(AUTH_TOKEN);
-        this.storage.remove(STORAGE.BOOKING);
+        this.storage.remove(STORAGE.LESSON);
         this.userType = null;
         this.authToken = null;
         this.user$ = new BehaviorSubject<any>({} as any);
+        this.bookingService.logout();
+        this.chatService.logout();
     }
 
     logout() {

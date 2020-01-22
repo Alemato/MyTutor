@@ -4,9 +4,9 @@
          <ion-list class="mb-100" *ngIf="(this.student$ | async) as student;">
              <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesS">Lista lezioni accettate</ion-list-header>
              <ng-template #notLesS>
-             <div class="mx-auto fit-content">
-                 <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata in vista!</h5>
-             </div>
+                 <div class="mx-auto fit-content">
+                     <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata in vista!</h5>
+                 </div>
              </ng-template>
              <div *ngFor="let lez of lezioni">
                  <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 1">

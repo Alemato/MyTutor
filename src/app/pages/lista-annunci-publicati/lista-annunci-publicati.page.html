@@ -1,0 +1,47 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title class="ml--56">Annunci Publicati</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div *ngIf="(lessons$|async) as lessons; else noLessons">
+        <ion-list>
+            <ion-list-header *ngIf="lessons.length > 0 ; else noLessons">Lista Annunci Publicati</ion-list-header>
+            <ion-item *ngFor="let l of lessons" lines="full" class="py-10">
+                <ion-grid>
+                    <ion-row>
+                        <ion-text class="ion-no-margin fs-large fw-normal">{{l.name}}</ion-text>
+                    </ion-row>
+                    <ion-row>
+                        <ion-text class="ion-no-margin pt-5 fs-medium font-weight-300 ls-01em"><b>Materia:</b> {{l.subject.macroSubject}}
+                        </ion-text>
+                    </ion-row>
+                    <ion-row class="mb-10">
+                        <ion-text class="ion-no-margin pt-5 fs-medium font-weight-300 ls-01em"><b>Sotto Materia:</b>
+                            {{l.subject.microSubject}}
+                        </ion-text>
+                    </ion-row>
+                    <ion-row class="ion-justify-content-between">
+                        <ion-col size="auto" class="pt-15 pl-0">
+                            <ion-text class="fs-medium ls-01em">Prezzo:</ion-text>
+                            <ion-text class="c-primary ion-padding-start fs-medium font-weight-300 ls-01em">{{l.price}}€/h</ion-text>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <ion-button size="default" color="primary" [routerLink]="['/inserimento-lezioni', l.idLesson]" routerDirection="forward">Modifica</ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+        </ion-list>
+    </div>
+    <ng-template #noLessons>
+        <div class="mx-auto fit-content mb-100">
+            <h5 class="fit-content font-weight-300 ls-1">Non ci sono Anninci publicati!</h5>
+        </div>
+        <ion-button size="large" expand="block" color="primary" [routerLink]="['/inserimento-lezioni', 'null']" routerDirection="forward">Inserisci un Annuncio</ion-button>
+    </ng-template>
+</ion-content>

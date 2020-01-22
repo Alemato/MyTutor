@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {UserService} from '../../services/user.service';
 import {BehaviorSubject, interval, Subscription} from 'rxjs';
-import { delay } from 'rxjs/operators';
+import {delay} from 'rxjs/operators';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
 import {BookingService, Lez} from '../../services/booking.service';
@@ -14,7 +14,7 @@ import {Booking} from '../../model/booking.model';
     styleUrls: ['./home-accettate.page.scss'],
 })
 export class HomeAccettatePage implements OnInit {
-    private agg = false;
+    private agg = true;
     private loading;
     private tipo;
     private bookings$: BehaviorSubject<Booking[]>;
@@ -54,13 +54,14 @@ export class HomeAccettatePage implements OnInit {
     ionViewWillEnter() {
         console.log('ionViewWillEnter home/accetta');
         if (this.agg) {
-             this.loadingPresent().then(() => {
-                 // this.getlezioni();
-                 this.bookingService.getRestBooking().subscribe(() => {});
-                 this.disLoading();
-             });
-             this.agg = false;
-         }
+            this.loadingPresent().then(() => {
+                // this.getlezioni();
+                this.bookingService.getRestBooking().subscribe(() => {
+                    this.disLoading();
+                });
+            });
+            this.agg = false;
+        }
     }
 
 

@@ -19,7 +19,7 @@ export const URL = {
 
     CHATLIST: URL_BASE + '/chats',
     CHAT_CREATE: URL_BASE + '/chats/create',
-    CHAT_COUNT: URL_BASE + '/chats/create/count',
+    CHAT_COUNT: URL_BASE + '/chats/count',
 
     MESSAGE_OF_CHAT_PT_1: URL_BASE + '/chat/',
     MESSAGE_OF_CHAT_PT_2: '/message',
@@ -65,5 +65,4 @@ export const STORAGE = {
     CREATES: 'creates',
     PLANNING: 'planning',
     LESSON: 'lesson'
-
 };
