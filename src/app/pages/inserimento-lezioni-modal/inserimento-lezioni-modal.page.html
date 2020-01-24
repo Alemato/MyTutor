@@ -6,21 +6,24 @@
 
 <ion-content>
     <div>
-        <form [formGroup]="dataLezioneFormModel" (submit)="submit()" >
+        <form [formGroup]="dataLezioneFormModel" (submit)="submit()">
             <ion-list formArrayName="dataOraIF" *ngFor="let contact of dataOraIFFormGroup.controls; let i = index;">
                 <ion-item [formGroupName]="i">
-                  <ion-icon name="remove-circle-outline" (click)="rimuoviCampo(i)"></ion-icon>
-                  il
-                    <ion-datetime displayFormat="DD MMMM YYYY"
-                                  placeholder="Data lezione"
-                                  monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
-                                  formControlName="dataLezione" required></ion-datetime>
-                  dalle
-                  <ion-datetime displayFormat="HH:mm" placeholder="Inizio" formControlName="oraInizio"
-                                  required></ion-datetime>
-                  alle
-                    <ion-datetime displayFormat="HH:mm" placeholder="Fine" formControlName="oraFine"
-                                  required></ion-datetime>
+                    <ion-icon *ngIf="arrayDymension > 1" name="remove-circle-outline" (click)="rimuoviCampo(i)"></ion-icon>
+                    <ion-col size="5">
+                        <ion-datetime displayFormat="DD MMMM YYYY"
+                                      placeholder="Data"
+                                      monthNames="Gen, Feb, Mar, Apr, Mag, Giu, Lug, Ago, Set, Ott, Nov, Dic"
+                                      formControlName="dataLezione" required class="plr-0"></ion-datetime>
+                    </ion-col>
+                    <ion-col size="3">
+                        <ion-datetime (ionChange)="changeInizioLezione(i)" displayFormat="HH : mm" placeholder="Ora inizio" formControlName="oraInizio" hour-values="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22"
+                                      required class="plr-0" minute-values="0,05,10,15,20,25,30,35,40,45,50,55"></ion-datetime>
+                    </ion-col>
+                    <ion-col size="3">
+                    <ion-datetime displayFormat="HH : mm" placeholder="Ora fine" formControlName="oraFine" [hourValues]="hours" [minuteValues]="minutes"
+                                  required class="plr-0"></ion-datetime>
+                    </ion-col>
                 </ion-item>
             </ion-list>
         </form>
