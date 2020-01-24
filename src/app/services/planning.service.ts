@@ -6,6 +6,7 @@ import {map} from 'rxjs/operators';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Storage} from '@ionic/storage';
 import {fromPromise} from 'rxjs/internal-compatibility';
+import {Student} from '../model/student.model';
 
 export interface Plan {
     slot: Map<number, string[]>;
@@ -66,6 +67,9 @@ export class PlanningService {
                 return resp.body;
             })
         );
+    }
+    createRestPlannings(plannings: Planning[]): Observable<any> {
+        return this.http.post<any>(URL.PLANNING_CREATE, plannings, {observe: 'response'});
     }
 
 
