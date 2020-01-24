@@ -76,11 +76,13 @@ const routes: Routes = [
     },
     {
         path: 'profilo-singolo/:email',
-        loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule'
+        loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule',
+        canActivate: [AuthGuard]
     },
     {
         path: 'lista-annunci-publicati',
-        loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule'
+        loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule',
+        canActivate: [AuthGuard]
     },
     {
         path: 'inserimento-lezioni',
