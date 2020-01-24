@@ -21,13 +21,8 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'chat',
+        path: 'chat/:id',
         loadChildren: './pages/chat/chat.module#ChatPageModule',
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'chatrest',
-        loadChildren: './pages/chatrest/chatrest.module#ChatrestPageModule',
         canActivate: [AuthGuard]
     },
     {
