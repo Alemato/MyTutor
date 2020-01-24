@@ -1,14 +1,12 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Routes, RouterModule} from '@angular/router';
 
 import {IonicModule} from '@ionic/angular';
 
 import {ChatPage} from './chat.page';
 import {TranslateModule} from '@ngx-translate/core';
-import {ChatMessage} from '../../model/old/chat-message.model';
-import {ChatService} from '../../services/chat.service';
 
 const routes: Routes = [
     {
@@ -23,14 +21,10 @@ const routes: Routes = [
         FormsModule,
         TranslateModule.forChild(),
         IonicModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        ReactiveFormsModule
     ],
-    declarations: [ChatPage],
-// qui aggiungono i componenti e le direttive da usate nel modulo/typescript (nel componente)
-//     providers: [
-//         Array,
-//         Map
-//     ]
+    declarations: [ChatPage]
 })
 export class ChatPageModule {
 }

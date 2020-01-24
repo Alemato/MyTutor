@@ -1,97 +1,72 @@
 <ion-header>
-
     <ion-toolbar>
-        <ion-title>chat mario</ion-title>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title class="pl--56">{{chtn}}</ion-title>
     </ion-toolbar>
-
 </ion-header>
 
 <ion-content>
-    <div class="message-wrap">
-        <!--<div *ngFor="let msg of msgList"
-             class="message"
-             [class.left]=" msg.userId === toUser.id "
-             [class.right]=" msg.userId === user.id ">
-             &lt;!&ndash; <div class="message left">&ndash;&gt;
-            <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-            <div class="msg-detail">
-                <div class="msg-info">
-                    <p>
-                        Mario&nbsp;Rossi&nbsp;&nbsp;3ore&nbsp;fa</p>
-                </div>
-                <div class="msg-content">
-                    <span class="triangle"></span>
-                    <p class="line-breaker ">{{msg.message}}</p>
-                </div>
-            </div>
-        </div>-->
-
-        <!--<div *ngFor="let mex of messages" class="message"
-             [class.left]=" mex.userId == 1"
-             [class.right]=" mex.userId == 2">
-            <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-            <div class="msg-detail">
-                <div class="msg-info">
-                    <p>
-                        </p>
-                </div>
-                <div class="msg-content">
-                    <span class="triangle"></span>
-                    <p class="line-breaker ">{{mex.message}}</p>
-                </div>
-            </div>
-        </div>-->
-        <div class="message left">
-            <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-            <div class="msg-detail">
-                <div class="msg-info">
-                    <p>
-                        Mario&nbsp;Rossi&nbsp;&nbsp;3ore&nbsp;fa</p>
-                </div>
-                <div class="msg-content">
-                    <span class="triangle"></span>
-                    <p class="line-breaker ">Prova 3</p>
+    <div class="message-wrap" *ngFor="let message of (messages$ | async); let bo = last;">
+        <div  *ngIf="message.user.roles===1; else messageTeacherBlock">
+            <div class="message left">
+                <ion-icon
+                        *ngIf="message.user.image === null || message.user.image === '' || message.user.image ===' '; else noImgSt"
+                        name="contact" class="fs-62 user-img" color="primary"></ion-icon>
+                <ng-template #noImgSt>
+                    <img class="user-img" [src]="message.user.image" alt="">
+                </ng-template>
+                <div class="msg-detail">
+                    <div class="msg-info">
+                        <p>
+                            {{message.user.name}} {{message.user.surname}} inviato
+                            alle {{message.sendDate | date: "HH:mm"}}</p>
+                    </div>
+                    <div class="msg-content">
+                        <span class="triangle"></span>
+                        <p class="line-breaker ">{{message.text}}</p>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="message right">
-            <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-            <div class="msg-detail">
-                <div class="msg-info">
-                    <p>
-                        Mario&nbsp;Rossi&nbsp;&nbsp;3ore&nbsp;fa</p>
-                </div>
-                <div class="msg-content">
-                    <span class="triangle"></span>
-                    <p class="line-breaker ">Prova 4 adlkfnsdnlfndslfl sdfsdbfs sdjfnbjsdf jsdhfjbsdf hsjdfb</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="message right">
-            <img class="user-img" src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-            <div class="msg-detail">
-                <div class="msg-info">
-                    <p>
-                        Mario&nbsp;Rossi&nbsp;&nbsp;3ore&nbsp;fa</p>
-                </div>
-                <div class="msg-content">
-                    <span class="triangle"></span>
-                    <p class="line-breaker ">Prova 5 adlkfnsdnlfndslfl sdfsdbfs sdjfnbjsdf jsdhfjbsdf hsjdfb</p>
+        <ng-template #messageTeacherBlock>
+            <div class="message right">
+                <ion-icon
+                        *ngIf="message.user.image === null || message.user.image === '' || message.user.image ===' '; else noImgTe"
+                        name="contact" class="fs-62 user-img" color="primary"></ion-icon>
+                <ng-template #noImgTe>
+                    <img class="user-img" [src]="message.user.image" alt="">
+                </ng-template>
+                <div class="msg-detail">
+                    <div class="msg-info">
+                        <p>
+                            {{message.user.name}} {{message.user.surname}} inviato
+                            alle {{message.sendDate | date: "HH:mm"}}</p>
+                    </div>
+                    <div class="msg-content">
+                        <span class="triangle"></span>
+                        <p class="line-breaker ">{{message.text}}</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </ng-template>
+        <div [hidden]="bo" *ngIf="bo;">{{content.scrollToBottom(0)}}</div>
     </div>
+        <div *ngIf="sendStatus === 'pending'" class="ion-float-right ion-padding-end">
+            <ion-spinner name="dots"></ion-spinner>
+        </div>
 </ion-content>
-
-<ion-footer no-border [style.height]="'55px'">
+<ion-footer [style.height]="'55px'">
     <div class="input-wrap">
-    <textarea #chat_input [(ngModel)]="testoMessaggio"
-              placeholder="Text Input">
-    </textarea>
-        <ion-button fill="clear" (click)="messageUpdate()" slot="icon-only" item-right>
-            <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
-        </ion-button>
+        <form [formGroup]="scritturaMessaggio" style="width: 100%;" (ngSubmit)="inviaMessagio()" (click)="scrolla()">
+            <label>
+                <textarea style="width: 84%;" formControlName="text" placeholder="Text Input"></textarea>
+            </label>
+            <ion-button fill="clear" slot="icon-only" [disabled]="!scritturaMessaggio.valid" type="submit"
+                        style="margin-top: -38px;">
+                <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
+            </ion-button>
+        </form>
     </div>
 </ion-footer>
