@@ -8,7 +8,7 @@ export class Booking {
     student: Student;
     planning: Planning;
 
-    constructor(obj: any, student: Student, planning: Planning){
+    constructor(obj: any, student: Student, planning: Planning) {
         if (obj !== undefined) {
             if (obj.idBooking !== undefined) {
                 this.idBooking = obj.idBooking;
