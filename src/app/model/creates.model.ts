@@ -1,10 +1,11 @@
 import {Chat} from './chat.model';
 import {Teacher} from './teacher.model';
 import {Student} from './student.model';
+import {User} from './user.model';
 
 export class CreatesChat {
     idCreates: number;
-    userListser: object[];
+    userListser: User[];
     chat: Chat;
 
     constructor(idCreates: number, student: Student, teacher: Teacher, chat: Chat) {

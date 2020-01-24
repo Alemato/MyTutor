@@ -101,6 +101,14 @@ export class ChatService {
         );
     }
 
+    getRestCountChatUser2(idUser: number): Observable<number> {
+        return this.http.get(URL.CHAT_COUNT, {observe: 'response', params: {idUser2: idUser.toString()}}).pipe(
+            map((resp: HttpResponse<number>) => {
+                return resp.body;
+            })
+        );
+    }
+
     getLastMessageFromChats(): BehaviorSubject<Message[]> {
         return this.lastMessageFromChats$;
     }
