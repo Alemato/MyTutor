@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {CreatesChat} from '../model/creates.model';
 import {Observable} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import {STORAGE} from '../constants';
+import {STORAGE, URL} from '../constants';
+import {map} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -15,6 +16,13 @@ export class CreateService {
         private storage: Storage,
         private http: HttpClient
     ) {
+    }
+
+    getListCreates(idUser: number): Observable<CreatesChat[]> {
+        return this.http.get(URL.CHAT_CREATES, {observe: 'response', params:{idUser2: idUser.toString()}})
+            .pipe( map((resp: HttpResponse<CreatesChat[]>) => {
+            return resp.body;
+        }));
     }
 
     getStorageCreateList(): Observable<CreatesChat[]> {

@@ -20,6 +20,7 @@ export const URL = {
     CHATLIST: URL_BASE + '/chats',
     CHAT_CREATE: URL_BASE + '/chats/create',
     CHAT_COUNT: URL_BASE + '/chats/count',
+    CHAT_CREATES: URL_BASE + '/chats/creates/',
 
     MESSAGE_OF_CHAT_PT_1: URL_BASE + '/chats/',
     MESSAGE_OF_CHAT_PT_2: '/messaggi',
