@@ -12,6 +12,7 @@ import {compilerSetStylingMode} from '@angular/compiler/src/render3/view/styling
 
 export interface Lez {
     idbook: number;
+    idPlanning: number;
     lessonState: number;
     nomeLezione: string;
     price: number;
@@ -87,7 +88,7 @@ export class BookingService {
         }));
     }
 
-    getRestBookingResearch(nomeUtente: string): Observable<Booking[]> {
+    getRestBookingResearch(macroSubject: string, lessonName: string, zona: string, microSubject: string, ): Observable<Booking[]> {
         return this.http.get<Booking[]>(URL.BOOKING_RESEARCH, {
             observe: 'response', params: {
                 'macro-materia': '1',
@@ -148,10 +149,10 @@ export class BookingService {
         this.storage.remove(key);
     }
 
-    getStorageBookingById(idBooking: number, storageKey: string): Observable<Booking> {
+    getStorageBookingById(idPlanning: number, storageKey: string): Observable<Booking> {
         return fromPromise(this.storage.get(storageKey).then((bookings) => {
             console.log(bookings);
-            return bookings.find(i => i.idBooking === idBooking);
+            return bookings.find(i => i.planning.idPlanning === idPlanning);
         }));
     }
 
