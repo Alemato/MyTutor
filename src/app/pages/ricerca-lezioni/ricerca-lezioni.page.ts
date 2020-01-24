@@ -1,8 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {PickerController} from '@ionic/angular';
+import {NavController, PickerController} from '@ionic/angular';
 import {PickerOptions} from '@ionic/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {forEach} from '@angular-devkit/schematics';
+import {Subject} from '../../model/subject.model';
+import {SubjectService} from '../../services/subject.service';
+import {PlanningService} from '../../services/planning.service';
 
 @Component({
     selector: 'app-ricerca-lezioni',
@@ -10,60 +12,55 @@ import {forEach} from '@angular-devkit/schematics';
     styleUrls: ['./ricerca-lezioni.page.scss'],
 })
 export class RicercaLezioniPage implements OnInit {
-    private ricercaFormModel: FormGroup;
-    uscitaText = '';
+    materia = '';
     uscitaValue = null;
     minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
     hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
-
-    public Materie = [
-        {text: 'Matteria 1', value: 0},
-        {text: 'Matteria 2', value: 1},
-        {text: 'Matteria 3', value: 2},
-        {text: 'Matteria 4', value: 3},
-        {text: 'Matteria 5', value: 4}
-    ];
-
-    public SottoMaterie = [
-        [
-            {text: 'Sotto Materia 1.1', value: '1.1'},
-            {text: 'Sotto Materia 1.2', value: '1.2'},
-            {text: 'Sotto Materia 1.3', value: '1.3'},
-            {text: 'Sotto Materia 1.4', value: '1.4'}
-        ],
-        [
-            {text: 'Sotto Materia 2.1', value: '2.1'},
-            {text: 'Sotto Materia 2.2', value: '2.2'},
-            {text: 'Sotto Materia 2.3', value: '2.3'},
-            {text: 'Sotto Materia 2.4', value: '2.4'}
-        ],
-        [
-            {text: 'Sotto Materia 3.1', value: '3.1'},
-            {text: 'Sotto Materia 3.2', value: '3.2'},
-            {text: 'Sotto Materia 3.3', value: '3.3'},
-            {text: 'Sotto Materia 3.4', value: '3.4'}
-        ],
-        [
-            {text: 'Sotto Materia 4.1', value: '4.1'},
-            {text: 'Sotto Materia 4.2', value: '4.2'},
-            {text: 'Sotto Materia 4.3', value: '4.3'},
-            {text: 'Sotto Materia 4.4', value: '4.4'}
-        ],
-        [
-            {text: 'Sotto Materia 5.1', value: '5.1'},
-            {text: 'Sotto Materia 5.2', value: '5.2'},
-            {text: 'Sotto Materia 5.3', value: '5.3'},
-            {text: 'Sotto Materia 5.4', value: '5.4'}
-        ]
-    ];
+    public materie = [];
+    public sottoMaterie = [];
+    public giorniSettimana: number[] = [0, 0, 0, 0, 0, 0, 0];
+    private ricercaFormModel: FormGroup;
+    private subject: Subject[] = [];
+    public oraInizio = '';
+    public oraFine = '';
 
     constructor(private pickerCtrl: PickerController,
-                public formBuilder: FormBuilder) {
+                public formBuilder: FormBuilder,
+                private subjectService: SubjectService,
+                private planningService: PlanningService,
+                private navController: NavController) {
     }
 
     ngOnInit() {
+        this.subjectService.getRestList(false).subscribe((data: Subject[]) => {
+            this.subject = data;
+            console.log(this.subject);
+            this.materie = [];
+            let n = 0;
+            this.subject.forEach((item) => {
+                const obj1 = {text: item.macroSubject, value: n};
+                n++;
+                this.materie.push(obj1);
+            });
+            this.sottoMaterie = [];
+            let appogio = [];
+            this.subject.forEach((item) => {
+                this.subject.forEach((item1) => {
+                    if (item.macroSubject === item1.macroSubject) {
+                        const obj = {
+                            text: item1.microSubject,
+                            value: item1.microSubject
+                        };
+                        appogio.push(obj);
+                    }
+                });
+                this.sottoMaterie.push(appogio);
+                appogio = [];
+            });
+        });
+
         this.ricercaFormModel = this.formBuilder.group({
-            select: ['', Validators.required],
+            sottoMateria: ['', Validators.required],
             nomeLezione: [''],
             nomeCitta: [''],
             inizio: [''],
@@ -98,11 +95,58 @@ export class RicercaLezioniPage implements OnInit {
 
     changeSelectElents() {
         console.log('cambio');
-        this.ricercaFormModel.controls.select.reset();
+        this.ricercaFormModel.controls.sottoMateria.reset();
     }
 
     predi() {
-        console.log(this.ricercaFormModel.value);
+        this.ricercaFormModel.controls.giorni.value.forEach((item) => {
+            if (item === '1') {
+                this.giorniSettimana[1] = 1;
+            }
+            if (item === '2') {
+                this.giorniSettimana[2] = 1;
+            }
+            if (item === '3') {
+                this.giorniSettimana[3] = 1;
+            }
+            if (item === '4') {
+                this.giorniSettimana[4] = 1;
+            }
+            if (item === '5') {
+                this.giorniSettimana[5] = 1;
+            }
+            if (item === '6') {
+                this.giorniSettimana[6] = 1;
+            }
+            if (item === '7') {
+                this.giorniSettimana[0] = 1;
+            }
+        });
+        this.oraInizio = this.ricercaFormModel.controls.inizio.value;
+        console.log('this.oraInizio');
+        console.log(this.oraInizio);
+
+        if (this.oraInizio !== undefined && this.oraInizio !== '' && this.oraInizio !== null) {
+            this.oraInizio = this.oraInizio.substring(11, 16);
+        } else {
+            this.oraInizio = '';
+        }
+        this.oraFine = this.ricercaFormModel.controls.fine.value;
+        console.log('this.oraFine');
+        console.log(this.oraFine);
+        if (this.oraFine !== undefined && this.oraFine !== '' && this.oraFine !== null) {
+            this.oraFine = this.oraFine.substring(11, 16);
+        } else {
+            this.oraFine = '';
+        }
+        this.planningService.getRestPlannings(this.materia, this.ricercaFormModel.controls.nomeLezione.value,
+            this.ricercaFormModel.controls.nomeCitta.value, this.ricercaFormModel.controls.sottoMateria.value,
+            this.giorniSettimana[0], this.giorniSettimana[1], this.giorniSettimana[2],
+            this.giorniSettimana[3], this.giorniSettimana[4], this.giorniSettimana[5],
+            this.giorniSettimana[6], this.oraInizio, this.oraFine).subscribe((lessons) => {
+            console.log(lessons);
+        });
+        this.navController.navigateForward('risultati-ricerca');
     }
 
     async showPicker() {
@@ -117,16 +161,15 @@ export class RicercaLezioniPage implements OnInit {
                 }
             ],
             columns: [{
-                name: 'prova',
-                options: this.Materie
+                name: 'nome',
+                options: this.materie
             }]
         };
         const picker = await this.pickerCtrl.create(opts);
-        picker.present();
+        await picker.present();
         picker.onDidDismiss().then(async data => {
-            const col = await picker.getColumn('prova');
-            console.log(col);
-            this.uscitaText = col.options[col.selectedIndex].text;
+            const col = await picker.getColumn('nome');
+            this.materia = col.options[col.selectedIndex].text;
             this.uscitaValue = col.options[col.selectedIndex].value;
         });
         this.changeSelectElents();

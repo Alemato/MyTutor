@@ -15,13 +15,13 @@
             </ion-list-header>
             <ion-item class="ion-no-padding" style="margin-top: -10px">
                 <ion-label class="ion-padding-start">Materia:</ion-label>
-                <ion-label color="primary"> {{uscitaText}}</ion-label>
+                <ion-label color="primary"> {{materia}}</ion-label>
                 <ion-button slot="end" fill="clear" (click)="showPicker()" >Seleziona</ion-button>
             </ion-item>
             <ion-item *ngIf="uscitaValue!==null; else selctDisabilited">
                 <ion-label>Sotto Materia:</ion-label>
-                <ion-select ok-text="Seleziona" formControlName="select" cancel-text="Cancella" style="width: 65%; max-width: 65%;">
-                    <ion-select-option *ngFor="let sot of SottoMaterie[uscitaValue]"
+                <ion-select ok-text="Seleziona" formControlName="sottoMateria" cancel-text="Cancella" style="width: 65%; max-width: 65%;">
+                    <ion-select-option *ngFor="let sot of sottoMaterie[uscitaValue]"
                                        value="{{sot.value}}">{{sot.text}}</ion-select-option>
                 </ion-select>
             </ion-item>
@@ -49,7 +49,7 @@
                 <ion-label>Giorni:</ion-label>
                 <ion-select multiple="true" formControlName="giorni" ok-text="Seleziona" cancel-text="Cancella" style="width: 85%;
   max-width: 85%;">
-                    <ion-select-option value="1">Lunedi</ion-select-option>
+                    <ion-select-option value="1">Lunedi</ion-select-option>/
                     <ion-select-option value="2">Martedi</ion-select-option>
                     <ion-select-option value="3">Mercoledi</ion-select-option>
                     <ion-select-option value="4">Giovedi</ion-select-option>
