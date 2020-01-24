@@ -1,13 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import {URL, STORAGE} from '../constants';
+import {URL, STORAGE, AUTH, AUTH_TOKEN} from '../constants';
 import {ChatMessage} from '../model/old/chat-message.model';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../model/message.model';
 import {CreatesChat} from '../model/creates.model';
 import {map} from 'rxjs/operators';
+import {Chat} from '../model/chat.model';
 
 
 export const userAvatar = 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y';
@@ -25,8 +26,9 @@ export class ChatService {
     private messaggio: ChatMessage;
     private creates$: BehaviorSubject<CreatesChat[]> = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
     private lastMessageFromChats$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([] as Message[]);
-    private chatCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0 );
+    private chatCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private countChat = 0;
+    private periodicGet: Subscription;
 
     constructor(
         private storage: Storage,
@@ -44,6 +46,7 @@ export class ChatService {
             }
         });
     }
+
     // interoggazioni con il server devo utilizzare l'Oservable
     // inserire metodi per prendere i messaggi dallo storage;
     // getMessageId(): Observable<string> {
@@ -53,6 +56,7 @@ export class ChatService {
     getMessageId(): number {
         return this.messaggio.messageId;
     }
+
     // QUA VANNO SOLO LE CHIAMATE ALLO STORAGE ed OBSERVABLE
     // getMessaggio(): Observable<ChatMessage> {
     //   return fromPromise(this.storage.get('ll').get)
@@ -60,9 +64,11 @@ export class ChatService {
     getFromStorageId(chiave: string): Observable<ChatMessage> {
         return fromPromise(this.storage.get(chiave));
     }
+
     getFromStorageMex(chiave: string): Observable<Map<string, ChatMessage[]>> {
         return fromPromise(this.storage.get(chiave));
     }
+
     // metto nello storage
     setStoreMap(chiave: string, chatmap: Map<string, ChatMessage[]>) {
         this.storage.set(chiave, chatmap);
@@ -112,11 +118,20 @@ export class ChatService {
     }
 
     async countFromStorage(): Promise<number> {
-       return  this.storage.get(STORAGE.CHATLIST).then((item: Message[]) => {
-           if ( item ) {
-               return item.length;
-           } else { return 0; }
+        return this.storage.get(STORAGE.CHATLIST).then((item: Message[]) => {
+            if (item) {
+                return item.length;
+            } else {
+                return 0;
+            }
         });
+    }
+
+    getCurrentChat(id: number): Observable<Chat> {
+        return fromPromise(this.storage.get(STORAGE.CHATLIST).then( (item: Message[]) => {
+            const mes = item.find(x => x.chat.idChat === id);
+            return mes.chat;
+        }));
     }
 
     getCountFromStorage(): number {
@@ -155,14 +170,42 @@ export class ChatService {
         }));
     }
 
+    startPeriodicGetCountChat() {
+        console.log('startPeriodicGetCountChat');
+        this.periodicGet = interval(60000).subscribe(x => {
+            this.storage.get(AUTH_TOKEN).then((tok) => {
+                if (tok) {
+                    this.getRestCountChat().subscribe((n: number) => {
+                        if (n !== 0) {
+                            this.countFromStorage().then((numb: number) => {
+                                if (numb < n) {
+                                    this.getRestChatList().subscribe(() => {
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    stopPeriodicGetCountChat() {
+        console.log('stopPeriodicGet');
+        if (!this.periodicGet.closed) {
+            this.periodicGet.unsubscribe();
+        }
+    }
+
     logout() {
         this.storage.remove(STORAGE.CREATES);
         this.storage.remove(STORAGE.CHATLIST);
         this.messaggio = null;
         this.creates$ = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
         this.lastMessageFromChats$ = new BehaviorSubject<Message[]>([] as Message[]);
-        this.chatCount$ = new BehaviorSubject<number>(0 );
+        this.chatCount$ = new BehaviorSubject<number>(0);
         this.countChat = 0;
+        this.stopPeriodicGetCountChat();
     }
 
 }

@@ -21,13 +21,8 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'chat',
+        path: 'chat/:id',
         loadChildren: './pages/chat/chat.module#ChatPageModule',
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'chatrest',
-        loadChildren: './pages/chatrest/chatrest.module#ChatrestPageModule',
         canActivate: [AuthGuard]
     },
     {
@@ -81,11 +76,13 @@ const routes: Routes = [
     },
     {
         path: 'profilo-singolo/:email',
-        loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule'
+        loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule',
+        canActivate: [AuthGuard]
     },
     {
         path: 'lista-annunci-publicati',
-        loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule'
+        loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule',
+        canActivate: [AuthGuard]
     },
     {
         path: 'inserimento-lezioni',

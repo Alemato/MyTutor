@@ -4,7 +4,7 @@ import {User} from './user.model';
 export class Message {
     idMessage: number;
     text: string;
-    sendDate: Date;
+    sendDate: number;
     chat: Chat;
     user: User;
 
@@ -23,12 +23,12 @@ export class Message {
             if (obj.sendDate !== undefined) {
                 this.sendDate =  obj.sendDate;
             } else {
-                this.sendDate = new Date();
+                this.sendDate = new Date().getTime();
             }
         } else {
             this.idMessage = 0;
             this.text = '';
-            this.sendDate = new Date();
+            this.sendDate = new Date().getTime();
         }
         if (chat !== undefined) {
             this.chat = chat;

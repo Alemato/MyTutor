@@ -1,11 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {NavController} from '@ionic/angular';
-import {Storage} from '@ionic/storage';
-import {ChatMessage} from '../../model/old/chat-message.model';
-import {fromPromise} from 'rxjs/internal-compatibility';
-import {Observable} from 'rxjs';
+import {Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Message} from '../../model/message.model';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 import {ChatService} from '../../services/chat.service';
+import {UserService} from '../../services/user.service';
+import {BehaviorSubject} from 'rxjs';
+import {User} from '../../model/user.model';
+import {MessageService} from '../../services/message.service';
+import {IonContent, LoadingController} from '@ionic/angular';
 
 @Component({
     selector: 'page-chat',
@@ -13,103 +15,126 @@ import {ChatService} from '../../services/chat.service';
     styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-    public testoMessaggio: string;
-    public idMex: number;
-    public messages: ChatMessage[];                    // lista dei messaggi della chat
-    public idChat = 1;                        // id provvisorio della chat per prova
-    public a: ChatMessage;
-    // public listaMessaggi: ChatMessage[];
+    // @ts-ignore
+    @ViewChild(IonContent) content: IonContent;
+    private chtn = 'Chat';
+    private sendStatus = '';
+    private isStardted = false;
+    private scritturaMessaggio: FormGroup;
+    private messaggio: Message;
+    private idChat: number;
+    private loading;
+    private user$: BehaviorSubject<User>;
+    private messages$: BehaviorSubject<Message[]>;
 
-    constructor(
-        public b: ChatService,
-        public chatMap: Map<string, ChatMessage[]>,    // mappa che contiene idChat come chiave e messages come valore
-        public mex: ChatMessage,
-        private chatMessage: ChatMessage,
-        private chatService: ChatMessage,
-        private translateService: TranslateService,
-        private navController: NavController,
-        private storage: Storage
-    ) {
-        this.messages = new Array<ChatMessage>();
+    constructor(public formBuilder: FormBuilder,
+                private route: ActivatedRoute,
+                private chatService: ChatService,
+                private userService: UserService,
+                private messageService: MessageService,
+                private loadingController: LoadingController) {
     }
 
-    async ngOnInit() {
-        // this.storage.clear();                              // decommentare per pulire lo storage
-        // al primo avvio controlla se ci sono messaggi nello storage ed in tal caso li preleva per aggiungerlo a messages
-        // e quindi metterli nella lista di messaggi della presentazione
-        // await this.b.getFromStorageMex('mex').subscribe((value) => {
-        //     if (value) {
-        //         // for (const v of value.values()) {
-        //         //    this.messages = v;
-        //             // aggiorniamo idMex prendendo la lunghezza della lista di messaggi salvati nello storage che sono in messages
-        //             // this.idMex = this.messages.length;
-        //             // this.storage.set('idMex', this.idMex);
-        //             // console.log('idMex X = ' + this.idMex);
-        //         // }
-        //     } // else {
-        //     //     // se non ci sono messaggi precedenti inviati nella chat impostiamo ldMex a 0 nello storage
-        //     //     this.storage.set('idMex', 0);
-        //     // }
-        // });
-        // this.b.getMessages().subscribe((prendeMessaggi) => {
-        //     if (prendeMessaggi) {
-        //         this.listaMessaggi = prendeMessaggi;
-        //     }
-        // });
-        this.initTranslate();
+    ngOnInit() {
+        this.route.paramMap.subscribe((params: ParamMap) => {
+            this.user$ = this.userService.getUser();
+            this.messages$ = this.messageService.getBehaviorMessages();
+            this.messages$.next([]);
+            this.idChat = parseInt(params.get('id'), 0);
+            this.chatService.getCurrentChat(this.idChat).subscribe((chat) => {
+                this.chtn = chat.chatName;
+            });
+            console.log(this.idChat);
+            this.scritturaMessaggio = this.formBuilder.group({
+                text: ['', Validators.required]
+            });
+            this.messageService.ifEmpty(this.idChat).subscribe((condition) => {
+                this.loadingPresent().then(() => {
+                    console.log(condition);
+                    if (condition) {
+                        console.log('è vuoto');
+                        this.messageService.getRestMessageOfChat(this.idChat).subscribe((messages) => {
+                            console.log(messages);
+                            this.disLoading();
+                        });
+                        this.messages$.subscribe((value) => {
+                            if (value[value.length - 1] !== undefined) {
+                                if (!this.isStardted) {
+                                    // tslint:disable-next-line:max-line-length
+                                    this.messageService.startPeriodicGetMessageForChat(this.idChat);
+                                    this.isStardted = true;
+                                }
+                            }
+                        });
+                    } else {
+                        console.log('esiste');
+                        this.messageService.getStorageMessagesOfChat(this.idChat);
+                        this.messageService.getCountMessageFromStorage(this.idChat).subscribe((countMessageStorage) => {
+                            this.messageService.getRestCountMessage(this.idChat).subscribe((countMessageRest) => {
+                                if (countMessageStorage < countMessageRest) {
+                                    console.log('inferiore storage' + countMessageStorage.toString() + ' ' + countMessageRest.toString());
+                                    // tslint:disable-next-line:max-line-length
+                                    this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe((newmessages) => {
+                                        console.log(newmessages);
+                                    });
+                                    this.messages$ = this.messageService.getBehaviorMessages();
+                                    if (!this.isStardted) {
+                                        // tslint:disable-next-line:max-line-length
+                                        this.messageService.startPeriodicGetMessageForChat(this.idChat);
+                                        this.isStardted = true;
+                                    }
+                                } else {
+                                    console.log('uguale storage' + countMessageStorage.toString() + ' ' + countMessageRest.toString());
+                                    if (!this.isStardted) {
+                                        // tslint:disable-next-line:max-line-length
+                                        this.messageService.startPeriodicGetMessageForChat(this.idChat);
+                                        this.isStardted = true;
+                                    }
+                                }
+                            });
+                        });
+                        this.disLoading();
+                    }
+                });
+            });
+        });
     }
 
-    async messageUpdate() {
-        this.createMessage();
-        // this.b.postMessage(this.mex);
-        // aggiorno la lista di messages
-        // this.b.getFromStorageMex('mex').subscribe((value) => {
-        //         //     if (value) {
-        //         //         for (const v of value.values()) {
-        //         //             console.log('v =');
-        //         //             console.log(v);
-        //         //             this.messages = v;
-        //         //             console.log(this.messages);
-        //         //         }
-        //         //     }
-        //         // });
-        //         // await this.b.getFromStorageMex('mex').subscribe((value) => {
-        //         //     if (value) {
-        //         //         for (const v of value.values()) {
-        //         //             this.messages = v;
-        //         //         }
-        //         //     }
-        //         // });
-        // this.b.getMessage().subscribe((prendeMessaggi) => {
-        //     this.listaMessaggi = prendeMessaggi;
-        // });
-        this.messages.push(this.mex);                   // alla lista dei messaggi della aggiungo chat il messaggio corrente creato
-        this.chatMap.set(this.idChat.toString(), this.messages);
-        this.b.setStoreMap('mex', this.chatMap);
+    inviaMessagio() {
+        this.chatService.getCurrentChat(this.idChat).subscribe((chat) => {
+            this.sendStatus = 'pending';
+            this.messaggio = new Message(undefined, undefined, undefined);
+            this.messaggio.text = this.scritturaMessaggio.controls.text.value;
+            this.scritturaMessaggio.reset();
+            this.messaggio.chat = chat;
+            this.messaggio.user = this.user$.value;
+            console.log(this.messaggio);
+            this.messageService.createRestMessage(this.messaggio).subscribe((data) => {
+                console.log(data);
+                // tslint:disable-next-line:max-line-length
+                this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => this.sendStatus = '');
+            });
+        });
     }
 
-    // simulazione creazione dati del messaggio
-    createMessage() {
-        this.mex = new ChatMessage();
-        // this.mex.messageId = this.idMex;
-        this.mex.message = this.testoMessaggio;
-        this.testoMessaggio = '';
-        this.mex.userName = 'Zlatan'; // ma va preso dal token
-        this.mex.userId = 2;  // ma va preso dal token
-        this.mex.userAvatar = 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y';
-        this.mex.toUserId = 1;
-        this.mex.time = 10;
-        this.mex.status = 'prova';
-        this.idMex = this.idMex + 1;     // incremento variabile di appoggio per l'id del messaggio in attesa del prossimo messaggio
-        // this.storage.set('idMex', this.idMex);
-        // console.log('idmex = ' + this.idMex);
+    scrolla() {
+        this.content.scrollToBottom();
     }
 
-    initTranslate() {
+    ionViewDidLeave() {
+        console.log('ionViewDidLeave chat');
+        this.messageService.stopPeriodicGetMessageForChat();
+    }
+
+    async loadingPresent() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async disLoading() {
+        await this.loading.dismiss();
     }
 }
-
-// qua deve tedere solo: prendere messaggio, resettare il messaggio alla fine,
-// utilizzare la funzione che salva L'OGGETTO MESSAGIO (crearlo prima)
-// le altre vanno su chatservice
-
