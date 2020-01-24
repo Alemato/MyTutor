@@ -8,6 +8,7 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../model/message.model';
 import {CreatesChat} from '../model/creates.model';
 import {map} from 'rxjs/operators';
+import {Chat} from '../model/chat.model';
 
 
 export const userAvatar = 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y';
@@ -124,6 +125,13 @@ export class ChatService {
                 return 0;
             }
         });
+    }
+
+    getCurrentChat(id: number): Observable<Chat> {
+        return fromPromise(this.storage.get(STORAGE.CHATLIST).then( (item: Message[]) => {
+            const mes = item.find(x => x.chat.idChat === id);
+            return mes.chat;
+        }));
     }
 
     getCountFromStorage(): number {

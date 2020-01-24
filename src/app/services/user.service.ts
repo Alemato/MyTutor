@@ -9,6 +9,7 @@ import {map} from 'rxjs/operators';
 import {sha512} from 'js-sha512';
 import {ChatService} from './chat.service';
 import {BookingService} from './booking.service';
+import {MessageService} from './message.service';
 
 export interface Account {
     username: string;
@@ -28,7 +29,8 @@ export class UserService {
     constructor(private http: HttpClient,
                 private storage: Storage,
                 private bookingService: BookingService,
-                private chatService: ChatService) {
+                private chatService: ChatService,
+                private messageService: MessageService) {
         this.storage.get(AUTH_TOKEN).then((token) => {
             this.authToken = token;
             console.log('this.authToken');
@@ -132,6 +134,7 @@ export class UserService {
         this.user$ = new BehaviorSubject<any>({} as any);
         this.bookingService.logout();
         this.chatService.logout();
+        this.messageService.logout();
     }
 
     logout() {
