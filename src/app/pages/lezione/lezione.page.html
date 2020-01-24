@@ -3,121 +3,159 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">Lezione</ion-title>
+        <div *ngIf="(booking$ | async)">
+            <ion-title class="ml--56">{{lesson.name}}</ion-title>
+        </div>
     </ion-toolbar>
 </ion-header>
-
 <ion-content>
-    <ion-item class="pl-5" lines="none">
-        <ion-grid>
-            <ion-row>
+    <div *ngIf="(booking$ | async)">
+        <ion-item>
+            <ion-grid style="padding: 0;">
+                <ion-row>
 
-                <ion-col size="auto" class="px-0">
-                    <!--<ion-icon *ngIf="lez.img === null || lez.imgStudent === '' || lez.imgStudent ===' '; else imgBlock"
-                              name="contact" class="fs-62"></ion-icon>
-                    <ng-template #imgBlock>
-                        <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                            <img [src]="lez.imgStudent" alt="img" style="width: 51px; height: 51px;">
-                        </ion-avatar>
-                    </ng-template>-->
+                    <ion-col size="auto" class="px-0" style="padding-left: 0 !important; margin-right: 10px">
+                        <ion-icon
+                                *ngIf="lesson.teacher.image === null || lesson.teacher.image === '' || lesson.teacher.image ===' '; else imgBlock"
+                                name="contact" class="fs-62"></ion-icon>
+                        <ng-template #imgBlock>
+                            <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+                                <img [src]="lesson.teacher.image" alt="img"
+                                     style="width: 65px; height: 65px; margin-top: 18px">
+                            </ion-avatar>
+                        </ng-template>
+                    </ion-col>
+                    <ion-col class="pr-0">
+                        <h1 class="nome">{{lesson.teacher.user.name}} {{lesson.teacher.user.surname}}</h1>
+                        <h2 class="anni">{{age}} anni</h2>
+                        <ion-row class="ion-justify-content-between">
+                            <h2 class="tariffa pt-2">Tariffa Oraria:</h2>
+                            <h1 class="euro ion-no-margin">{{lesson.price}} €/h</h1>
+                        </ion-row>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-item>
+
+        <div class="box-materia">
+            <ion-row class="text-12">
+                <ion-col class="ion-align-items-center ion-text-center">
+                    {{lesson.subject.macroSubject}}
                 </ion-col>
-                <ion-col class="pr-0">
-                    <h1 class="nome">Sergio Notarantonio</h1>
-                    <h2 class="anni">45 anni</h2>
-                    <ion-row class="ion-justify-content-between">
-                        <h2 class="tariffa pt-2">Tariffa Oraria:</h2>
-                        <h1 class="euro ion-no-margin">15€/h</h1>
-                    </ion-row>
+                <div class="separatore">
+                    &nbsp;
+                </div>
+                <ion-col class="ion-align-items-center ion-text-center">
+                    {{lesson.subject.microSubject}}
                 </ion-col>
             </ion-row>
-        </ion-grid>
-    </ion-item>
+        </div>
 
-    <div class="box-materia">
-        <ion-row class="text-12">
-            <ion-col class="ion-align-items-center ion-text-center">
-                Matematica
-            </ion-col>
-            <div class="separatore">
-                &nbsp;
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>Descrizione</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                {{lesson.description}}
+                <ion-card-header class="px-0">
+                    <ion-card-title>Luogo svolgimento lezione</ion-card-title>
+                </ion-card-header>
+                <ion-row class="mb-10">
+                    <ion-text color="dark"><h2 class="text-bolder pr-3">Regione:</h2></ion-text>
+                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.region}}</h2></ion-row>
+                <ion-row class="mb-10">
+                    <ion-text color="dark"><h2 class="text-bolder pr-5">Città:</h2></ion-text>
+                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.city}}</h2></ion-row>
+                <ion-row class="mb-10">
+                    <ion-text color="dark"><h2 class="text-bolder pr-2">Cap:</h2></ion-text>
+                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.postCode}}</h2></ion-row>
+                <ion-row class="mb-10">
+                    <ion-text color="dark"><h2 class="text-bolder pr-3">Via:</h2></ion-text>
+                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.street}}, {{lesson.teacher.streetNumber}}</h2>
+                </ion-row>
+            </ion-card-content>
+        </ion-card>
+    </div>
+    <!--TODO da modificare teacher in user.rules-->
+    <!-- aggiungere il nome del ragazzo che ha prenotato la lezione-->
+    <div *ngIf="(this.teacher$ | async)">
+        <div *ngIf="(this.provenienza === 'booking')">
+            <div *ngIf="(this.booking$ | async)">
+                <ion-grid class="box-materia ion-margin-bottom">
+                    <ion-row>
+                        <ion-col>
+                            <ion-text color="dark" class="ion-text-center"><h3 class="mt-0"
+                                                                               style="margin-bottom: 0">Lezione
+                                Prenotata</h3>
+                            </ion-text>
+                        </ion-col>
+                    </ion-row>
+                    <ion-col>
+                        <ion-row>
+                            <div class="text-bolder mr-5">
+                                il
+                            </div>
+                            <ion-col size="4" class="p-0">
+                                {{this.dataBooking}}
+                            </ion-col>
+                            <div class="text-bolder mr-5">
+                                dalle
+                            </div>
+                            <ion-col size="2" class="p-0">
+                                {{this.startTime}}
+                            </ion-col>
+                            <div class="text-bolder mr-5">
+                                alle
+                            </div>
+                            <ion-col size="2" class="p-0">
+                                {{this.endTime}}
+                            </ion-col>
+                        </ion-row>
+                        <ion-button type="button" size="small" class="avvia-chat">Avvia Chat</ion-button>
+                    </ion-col>
+                </ion-grid>
             </div>
-            <ion-col class="ion-align-items-center ion-text-center">
-                Analisi I
-            </ion-col>
-        </ion-row>
+        </div>
+        <!--TODO aggiungere il nome del ragazzo che ha prenotato la lezione-->
+        <div *ngIf="(this.provenienza === 'history')">
+            <ion-grid class="box-materia ion-margin-bottom">
+                <ion-row>
+                    <ion-col>
+                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0"
+                                                                           style="margin-bottom: 0">Storico
+                            Lezione</h3>
+                        </ion-text>
+                    </ion-col>
+                </ion-row>
+                <ion-col>
+                    <ion-row>
+                        <div class="text-bolder mr-5">
+                            il
+                        </div>
+                        <ion-col size="4" class="p-0">
+                            {{this.dataBooking}}
+                        </ion-col>
+                        <div class="text-bolder mr-5">
+                            dalle
+                        </div>
+                        <ion-col size="2" class="p-0">
+                            {{this.startTime}}
+                        </ion-col>
+                        <div class="text-bolder mr-5">
+                            alle
+                        </div>
+                        <ion-col size="2" class="p-0">
+                            {{this.endTime}}
+                        </ion-col>
+                    </ion-row>
+                    <div >
+<!--                        TODO nella dif di sopra serve l'if della creates -->
+                        <ion-button type="button" size="small" class="avvia-chat">Avvia Chat</ion-button>
+                    </div>
+                </ion-col>
+            </ion-grid>
+        </div>
     </div>
 
-    <ion-card>
-        <ion-card-header>
-            <ion-card-title>Descrizione</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            Questo corso è orientato agli studenti che si approcciano per la prima volta su questa fantastica disciplina
-            e
-            verterà su tutti gli argomenti riguardanti analisi 1.
-        <ion-card-header class="px-0">
-            <ion-card-title>Luogo svolgimento lezione</ion-card-title>
-        </ion-card-header>
-            <ion-row class="mb-10">
-                <ion-text color="dark"><h2 class="text-bolder pr-3">Regione:</h2></ion-text>
-                <h2 class="ion-margin-left pt-2"> Abruzzo</h2></ion-row>
-            <ion-row class="mb-10">
-                <ion-text color="dark"><h2 class="text-bolder pr-5">Città:</h2></ion-text>
-                <h2 class="ion-margin-left pt-2"> L'Aquila</h2></ion-row>
-            <ion-row class="mb-10">
-                <ion-text color="dark"><h2 class="text-bolder pr-2">Cap:</h2></ion-text>
-                <h2 class="ion-margin-left pt-2"> 67100</h2></ion-row>
-            <ion-row class="mb-10">
-                <ion-text color="dark"><h2 class="text-bolder pr-3">Via:</h2></ion-text>
-                <h2 class="ion-margin-left pt-2"> Giuseppe Garibaldi, 1/A</h2></ion-row>
-        </ion-card-content>
-    </ion-card>
-    <ion-grid class="box-materia ion-margin-bottom">
-        <ion-row>
-            <ion-col>
-                <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">Effettua Prenotazione</h3></ion-text>
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col>
-          <form>
-              <ion-list>
-                  <ion-item class="ion-no-padding">
-                      <ion-icon name="remove-circle-outline"></ion-icon>
-                      <ion-col size="4">
-                      <ion-datetime displayFormat="DDDD DD" pickerFormat="DD/MM/YYYY"
-                                    day-names="Lunedi, Martedi, Mercoledi, Giovedi, Venerdi, Sabato, Domenica"
-                                    placeholder="Data lezione"
-                                    class="ion-no-padding"
-                      ></ion-datetime>
-                      </ion-col>
-                      dalle
-            <ion-col size="2">
-                      <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm"
-                                    day-names="Lunedi, Martedi, Mercoledi, Giovedi, Venerdi, Sabato, Domenica"
-                                    placeholder="inizio"
-                                    class="ion-no-padding"
-                      ></ion-datetime>
-            </ion-col>
-                      alle
-            <ion-col size="2">
-                      <ion-datetime displayFormat="HH:mm" pickerFormat="HH:mm"
-                                    day-names="Lunedi, Martedi, Mercoledi, Giovedi, Venerdi, Sabato, Domenica"
-                                    placeholder="fine"
-                                    class="ion-no-padding"
-                      ></ion-datetime>
-            </ion-col>
-                  </ion-item>
-              </ion-list>
-              <ion-row class="ion-justify-content-end">
-                  <ion-button type="button" size="small" fill="clear"><ion-icon name="add-circle-outline"></ion-icon>Aggiungi prenotazione</ion-button>
-              </ion-row>
-            <ion-row class="ion-justify-content-between ion-margin-top">
-                <ion-button type="button" size="small" class="avvia-chat">Avvia Chat</ion-button>
-                <ion-button type="submit" size="small" class="prenotazione" >Prenotati</ion-button>
-            </ion-row>
-          </form>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+
 </ion-content>
