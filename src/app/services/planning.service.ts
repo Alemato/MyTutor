@@ -7,11 +7,16 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Storage} from '@ionic/storage';
 import {fromPromise} from 'rxjs/internal-compatibility';
 
+export interface Plan {
+    slot: Map<number, string[]>;
+}
+
 @Injectable({
     providedIn: 'root'
 })
+
 export class PlanningService {
-    public plannings$: BehaviorSubject<Planning[]> = new BehaviorSubject<Planning[]>({} as Planning[]);
+    public plannings$: BehaviorSubject<Planning[]> = new BehaviorSubject<Planning[]>([] as Planning[]);
 
     constructor(
         private storage: Storage,
@@ -34,15 +39,30 @@ export class PlanningService {
         );
     }
 
-    getRestPlannings(idLesson: string): Observable<Planning[]> {
+    getRestPlannings(macroMateria: string, nomeLezione: string,
+                     citta: string, microMateria: string,
+                     domenica: number, lunedi: number, martedi: number,
+                     mercoledi: number, giovedi: number, venerdi: number,
+                     sabato: number, oraInizio: string, oraFine: string): Observable<Planning[]> {
         return this.http.get<Planning[]>(URL.PLANNING_RESEARCH, {
-            observe: 'response',
-            params: {
+            observe: 'response', params: {
+                'macro-materia': macroMateria,
+                nome: nomeLezione,
+                zona: citta,
+                'micro-materia': microMateria,
+                dom: domenica.toString(),
+                lun: lunedi.toString(),
+                mar: martedi.toString(),
+                mer: mercoledi.toString(),
+                gio: giovedi.toString(),
+                ven: venerdi.toString(),
+                sab: sabato.toString(),
+                'ora-inizio': oraInizio,
+                'ora-fine': oraFine
             }
-            }, ).pipe(
+        }).pipe(
             map((resp: HttpResponse<Planning[]>) => {
                 this.plannings$.next(resp.body);
-                this.setStoragePlanning(resp.body);
                 return resp.body;
             })
         );
