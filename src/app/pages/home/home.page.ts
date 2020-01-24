@@ -55,6 +55,7 @@ export class HomePage implements OnInit {
                 data.setSeconds(+s);
                 const lezioneSingola: Lez = {
                     idbook: item.idBooking,
+                    idPlanning: item.planning.idPlanning,
                     lessonState: item.lessonState,
                     nomeLezione: item.planning.lesson.name,
                     price: item.planning.lesson.price,
