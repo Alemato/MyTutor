@@ -3,8 +3,7 @@ import {Lezione} from '../../model/old/lezione.model';
 import {Storage} from '@ionic/storage';
 import {BehaviorSubject} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Utente} from '../../model/old/utente.model';
-import {ModalController, NavController, PickerController} from '@ionic/angular';
+import {LoadingController, ModalController, NavController, PickerController} from '@ionic/angular';
 import {InserimentoLezioniModalPage} from '../inserimento-lezioni-modal/inserimento-lezioni-modal.page';
 import {PickerOptions} from '@ionic/core';
 import {Subject} from '../../model/subject.model';
@@ -14,6 +13,8 @@ import {Lesson} from '../../model/lesson.model';
 import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
 import {PlanningService} from '../../services/planning.service';
+import {ActivatedRoute, ParamMap} from '@angular/router';
+import {LessonService} from '../../services/lesson.service';
 
 @Component({
     selector: 'app-inserimento-lezioni',
@@ -34,8 +35,11 @@ export class InserimentoLezioniPage implements OnInit {
     private subjects: Subject[] = [];
     private ok = false;
     uscitaValue = null;
-    // private lesson: Lesson;
+    private lesson: Lesson;
     private subject: Subject;
+    private loading;
+    public modifica = false;
+    public booleanSottomateria = false;
 
     constructor(
         private pickerCtrl: PickerController,
@@ -45,11 +49,45 @@ export class InserimentoLezioniPage implements OnInit {
         private subjectService: SubjectService,
         public modalController: ModalController,
         private planningService: PlanningService,
-        private navController: NavController
+        private navController: NavController,
+        public loadingController: LoadingController,
+        private activatedRoute: ActivatedRoute,
     ) {
     }
 
     ngOnInit() {
+        this.lezioneFormModel = this.formBuilder.group({
+            sottoMateria: ['', Validators.required],
+            nuovaMateria: ['', Validators.required],
+            nuovaSottoMateria: ['', Validators.required],
+            nomeLezione: ['', Validators.required],
+            prezzoOrario: ['', Validators.required],
+            descrizione: ['', Validators.required],
+        });
+        this.loadingPresent().then(() => {
+        this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+            if (params.get('idLesson') !== 'null') {
+                this.modifica = true;
+                this.planningService.getRestPlanningByIdLesson(params.get('idLesson')).subscribe((pList) => {
+                    this.lesson = pList.find(x => x !== undefined).lesson;
+                    this.materia = this.lesson.subject.macroSubject;
+                    const obj = {
+                        sottoMateria: this.lesson.subject.microSubject,
+                        nuovaMateria: '',
+                        nuovaSottoMateria: '',
+                        nomeLezione: this.lesson.name,
+                        prezzoOrario: this.lesson.price.toString(),
+                        descrizione: this.lesson.description
+                    };
+                    this.lezioneFormModel.get('sottoMateria').enable();
+                    // this.lezioneFormModel.get('sottoMateria').clearValidators();
+                    this.lezioneFormModel.setValue(obj);
+                    this.booleanSottomateria = true;
+                    this.onChanges();
+                    this.disLoading();
+                });
+            }
+        });
         this.teacher$ = this.userService.getUser();
         this.subjectService.getRestList(false).subscribe((data: Subject[]) => {
             this.subjects = data;
@@ -80,13 +118,6 @@ export class InserimentoLezioniPage implements OnInit {
                 appogio = [];
             });
         });
-        this.lezioneFormModel = this.formBuilder.group({
-            sottoMateria: ['', Validators.required],
-            nuovaMateria: ['', Validators.required],
-            nuovaSottoMateria: ['', Validators.required],
-            nomeLezione: ['', Validators.required],
-            prezzoOrario: ['', Validators.required],
-            descrizione: ['', Validators.required],
         });
     }
 
@@ -107,7 +138,7 @@ export class InserimentoLezioniPage implements OnInit {
             this.lezioneFormModel.get('nuovaSottoMateria').reset();
             this.lezioneFormModel.get('nuovaSottoMateria').disable();
             this.lezioneFormModel.get('sottoMateria').enable();
-            }
+        }
     }
 
     public findInvalidControls() {
@@ -126,42 +157,90 @@ export class InserimentoLezioniPage implements OnInit {
         this.planningAppoggio.forEach((pianificazione) => {
             let subject;
             if (this.materia === 'Creane una') {
-                subject = new Subject({idSubject: undefined, macroSubject: this.lezioneFormModel.controls.nuovaMateria.value,
-                    microSubject: this.lezioneFormModel.controls.nuovaSottoMateria.value});
+                subject = new Subject({
+                    idSubject: undefined, macroSubject: this.lezioneFormModel.controls.nuovaMateria.value,
+                    microSubject: this.lezioneFormModel.controls.nuovaSottoMateria.value
+                });
             } else {
-                subject = new Subject({idSubject: undefined, macroSubject: this.materia,
-                    microSubject: this.lezioneFormModel.controls.sottoMateria.value});
+                subject = new Subject({
+                    idSubject: undefined, macroSubject: this.materia,
+                    microSubject: this.lezioneFormModel.controls.sottoMateria.value
+                });
             }
-            const lesson = new Lesson({idLesson: undefined, name: this.lezioneFormModel.controls.nomeLezione.value,
+            const lesson = new Lesson({
+                idLesson: undefined, name: this.lezioneFormModel.controls.nomeLezione.value,
                 price: this.lezioneFormModel.controls.prezzoOrario.value, description: this.lezioneFormModel.controls.descrizione.value,
-                publicationDate: undefined}, subject, this.teacher$.value);
-            const planning = new Planning({idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime,
-                endTime: pianificazione.endTime}, lesson);
+                publicationDate: undefined
+            }, subject, this.teacher$.value);
+            const planning = new Planning({
+                idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime,
+                endTime: pianificazione.endTime, available: true
+            }, lesson);
             this.plannings.push(planning);
         });
         console.log(this.plannings);
-        this.planningService.createRestPlannings(this.plannings).subscribe((data) => {
-            this.navController.navigateForward('lista-annunci-publicati');
+        this.loadingPresent().then(() => {
+            this.planningService.createRestPlannings(this.plannings).subscribe((data) => {
+                this.disLoading();
+                this.navController.navigateRoot('lista-annunci-publicati');
+            });
         });
-        }
+
+    }
+
+    modificaLezione() {
+
+    }
+
+
+    async loadingPresent() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async disLoading() {
+        await this.loading.dismiss();
+    }
 
     notificaCondizione() {
         this.apriModale();
     }
 
     async apriModale() {
-        const modal = await this.modalController.create({
-            component: InserimentoLezioniModalPage,
-        });
-        modal.onDidDismiss().then((dataReturned) => {
-            console.log('i dati sono: ');
-            console.log(dataReturned.data[0]);
-            this.fillPlannings(dataReturned.data[0].dataOraIF);
-            this.ok = dataReturned.data[1];
-            console.log(this.ok);
-        });
-        await modal.present();
+        if (this.modifica) {
+            const modal = await this.modalController.create({
+                component: InserimentoLezioniModalPage,
+                componentProps: {
+                    modifica: this.modifica,
+                    idLesson: this.lesson.idLesson
+                }
+            });
+            modal.onDidDismiss().then((dataReturned) => {
+                console.log('i dati sono: ');
+                console.log(dataReturned.data[0]);
+                this.fillPlannings(dataReturned.data[0].dataOraIF);
+                this.ok = dataReturned.data[1];
+                console.log(this.ok);
+            });
+            await modal.present();
+        } else {
+            const modal = await this.modalController.create({
+                component: InserimentoLezioniModalPage
+            });
+            modal.onDidDismiss().then((dataReturned) => {
+                console.log('i dati sono: ');
+                console.log(dataReturned.data[0]);
+                this.fillPlannings(dataReturned.data[0].dataOraIF);
+                this.ok = dataReturned.data[1];
+                console.log(this.ok);
+            });
+            await modal.present();
+        }
     }
+
     reverse(value: string): string {
         return value
             .split('')
@@ -171,12 +250,16 @@ export class InserimentoLezioniPage implements OnInit {
 
     fillPlannings(datasReturned: any) {
         datasReturned.forEach((planning) => {
-            const planningSingolo: any = {date: new Date(planning.dataLezione).getTime(),
-                startTime: planning.oraInizio.slice(11, 16), endTime: planning.oraFine.slice(11, 16)};
+            const planningSingolo: any = {
+                date: new Date(planning.dataLezione).getTime(),
+                startTime: planning.oraInizio.slice(11, 16) + ':00', endTime: planning.oraFine.slice(11, 16) + ':00'
+            };
             const data: string = planning.dataLezione.slice(8, 10) + '-' +
                 planning.dataLezione.slice(5, 7) + '-' + planning.dataLezione.slice(0, 4);
-            const planningPreVisual: any = {date: data,
-                startTime: planning.oraInizio.slice(11, 16), endTime: planning.oraFine.slice(11, 16)};
+            const planningPreVisual: any = {
+                date: data,
+                startTime: planning.oraInizio.slice(11, 16), endTime: planning.oraFine.slice(11, 16)
+            };
             this.planningAppoggio.push(planningSingolo);
             this.planningVisualizzazione.push(planningPreVisual);
         });
