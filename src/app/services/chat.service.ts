@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import {URL, STORAGE, AUTH, AUTH_TOKEN} from '../constants';
+import {URL, STORAGE, AUTH_TOKEN} from '../constants';
 import {ChatMessage} from '../model/old/chat-message.model';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../model/message.model';
@@ -10,13 +10,6 @@ import {CreatesChat} from '../model/creates.model';
 import {map} from 'rxjs/operators';
 import {Chat} from '../model/chat.model';
 
-
-export const userAvatar = 'https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y';
-
-// export interface ChatList {
-//     creates: CreatesChat;
-//     messages: Message;
-// }
 
 @Injectable({
     providedIn: 'root'
@@ -136,9 +129,12 @@ export class ChatService {
     }
 
     getCurrentChat(id: number): Observable<Chat> {
-        return fromPromise(this.storage.get(STORAGE.CHATLIST).then( (item: Message[]) => {
-            const mes = item.find(x => x.chat.idChat === id);
-            return mes.chat;
+        return fromPromise(this.storage.get(STORAGE.CHATLIST).then((item: Message[]) => {
+            console.log(item);
+            if (item) {
+                const mes = item.find(x => x.chat.idChat === id);
+                return mes.chat;
+            }
         }));
     }
 
@@ -180,7 +176,7 @@ export class ChatService {
 
     startPeriodicGetCountChat() {
         console.log('startPeriodicGetCountChat');
-        this.periodicGet = interval(60000).subscribe(x => {
+        this.periodicGet = interval(60000).subscribe(() => {
             this.storage.get(AUTH_TOKEN).then((tok) => {
                 if (tok) {
                     this.getRestCountChat().subscribe((n: number) => {

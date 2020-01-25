@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {STORAGE, URL, URL_BASE} from '../constants';
+import {STORAGE, URL} from '../constants';
 import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
 import {Message} from '../model/message.model';
 import {map} from 'rxjs/operators';
-import {Planning} from '../model/planning.model';
 import {fromPromise} from 'rxjs/internal-compatibility';
 
 @Injectable({
@@ -90,12 +89,18 @@ export class MessageService {
 
     addNewMessaggesOfChat(messages: Message[]) {
         this.getStorageMessages().subscribe((messageList: Map<string, Message[]>) => {
-            if (messageList.has(messages[0].chat.idChat.toString())) {
-                const oldMessages: Message[] = messageList.get(messages[0].chat.idChat.toString());
-                const newMessage = oldMessages.concat(messages.reverse());
-                const mex: Map<string, Message[]> = messageList;
-                this.messages$.next(newMessage);
-                mex.set(messages[0].chat.idChat.toString(), newMessage);
+            if (messageList) {
+                if (messageList.has(messages[0].chat.idChat.toString())) {
+                    const oldMessages: Message[] = messageList.get(messages[0].chat.idChat.toString());
+                    const newMessage = oldMessages.concat(messages.reverse());
+                    const mex: Map<string, Message[]> = messageList;
+                    this.messages$.next(newMessage);
+                    mex.set(messages[0].chat.idChat.toString(), newMessage);
+                    this.storage.set(STORAGE.MESSAGE, mex);
+                }
+            } else {
+                const mex: Map<string, Message[]> = new Map<string, Message[]>();
+                mex.set(messages[0].chat.idChat.toString(), messages);
                 this.storage.set(STORAGE.MESSAGE, mex);
             }
         });
@@ -149,7 +154,7 @@ export class MessageService {
 
     startPeriodicGetMessageForChat(idChat: number) {
         console.log('startPeriodicGetMessageForChat');
-        this.periodicGet = interval(10000).subscribe(x => {
+        this.periodicGet = interval(10000).subscribe(() => {
             console.log('startPeriodicGet');
             this.getLastMessageOfChat(idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => {
             });

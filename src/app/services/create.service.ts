@@ -19,9 +19,17 @@ export class CreateService {
     }
 
     getListCreates(idUser: number): Observable<CreatesChat[]> {
-        return this.http.get(URL.CHAT_CREATES, {observe: 'response', params:{idUser2: idUser.toString()}})
+        return this.http.get(URL.CHAT_CREATES, {observe: 'response', params: {idUser2: idUser.toString()}})
             .pipe( map((resp: HttpResponse<CreatesChat[]>) => {
             return resp.body;
+        }));
+    }
+
+    postSigleCreates(idUser2: number, NameChat: string): Observable<any> {
+        // tslint:disable-next-line:max-line-length
+        return  this.http.post(URL.CHAT_CREATE, {}, {observe: 'response', params: {'id-addressee': idUser2.toString(), 'chat-name': NameChat }} )
+            .pipe(map((resp: HttpResponse<any>) => {
+            return resp;
         }));
     }
 
