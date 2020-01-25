@@ -18,6 +18,7 @@ export class LessonService {
         private storage: Storage,
         private http: HttpClient
     ) {
+        this.getRestLessons();
         this.storage.get(STORAGE.LESSON).then((item: Lesson[]) => {
             this.lessons$.next(item);
         });
