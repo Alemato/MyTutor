@@ -11,8 +11,10 @@ import {Lezione} from '../../model/old/lezione.model';
 
 export class InserimentoLezioniModalPage implements OnInit {
     public dataLezioneFormModel: FormGroup;
-    public lezione1: Lezione;
     public listaDataOraIF: FormArray;
+    public arrayDymension = 1;
+    minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+    hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
     // returns all form groups under contacts
     // prende l'oggetto
@@ -34,6 +36,34 @@ export class InserimentoLezioniModalPage implements OnInit {
         this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
     }
 
+    changeInizioLezione(index) {
+        this.minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+        this.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+        // this.dataLezioneFormModel.get('dataOraIF').get(index)
+        // this.dataLezioneFormModel.get('dataOraIF').value.controls.oraFine.reset();
+        // @ts-ignore
+        console.log(this.dataLezioneFormModel.get('dataOraIF').controls[index].controls.oraFine.reset());
+        console.log('cambio o setto orario lezione');
+        // @ts-ignore
+        const oraInizio = new Date(this.dataLezioneFormModel.get('dataOraIF').controls[index].controls.oraInizio.value);
+        console.log(oraInizio);
+        let i;
+        let e = 0;
+        for (i = 0; i < this.hours.length; i++) {
+            if (this.hours[i] < oraInizio.getHours()) {
+                e++;
+            }
+        }
+        this.hours = this.hours.slice(e + 1, this.hours.length);
+        e = 0;
+        for (i = 0; i < this.minutes.length; i++) {
+            if (this.minutes[i] < oraInizio.getMinutes()) {
+                e++;
+            }
+        }
+        this.minutes = this.minutes.slice(e, this.minutes.length);
+    }
+
     // contact formgroup
     creaDataOraIF(): FormGroup {
         return this.formBuilder.group({
@@ -46,12 +76,18 @@ export class InserimentoLezioniModalPage implements OnInit {
     // add a contact form group
     aggiungiCampo() {
         this.listaDataOraIF.push(this.creaDataOraIF());
+        // @ts-ignore
+        this.arrayDymension = this.dataLezioneFormModel.get('dataOraIF').length;
     }
 
     // remove contact from group
     rimuoviCampo(index) {
-        // this.contactList = this.form.get('contacts') as FormArray;
-        this.listaDataOraIF.removeAt(index);
+        // @ts-ignore
+        if (this.dataLezioneFormModel.get('dataOraIF').length > 1) {
+            this.listaDataOraIF.removeAt(index);
+        }
+        // @ts-ignore
+        this.arrayDymension = this.dataLezioneFormModel.get('dataOraIF').length;
     }
 
     async chiudiModale() {

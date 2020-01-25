@@ -21,7 +21,7 @@
                            </ng-template>
                          </ion-col>
                          <ion-col size="10">
-                             <div class="ion-no-margin fs-large fw-normal">{{lez.nomeLezione}}</div>
+                             <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{lez.nomeLezione}}</div>
                            <ion-row>
                              <ion-col class="ion-no-padding">
                              <div class="ion-no-margin fs-medium font-weight-300 ls-01em">{{lez.nomeProf}}</div>
@@ -70,7 +70,7 @@
                        </ng-template>
                      </ion-col>
                      <ion-col size="10">
-                         <div class="ion-no-margin fs-large fw-normal">{{lez.nomeLezione}}</div>
+                         <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{lez.nomeLezione}}</div>
                        <ion-row>
                          <ion-col class="ion-no-padding">
                            <div class="ion-no-margin fs-medium font-weight-300 ls-01em"

@@ -70,7 +70,7 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'lezione',
+        path: 'lezione/:prov/:idPlanning',
         loadChildren: './pages/lezione/lezione.module#LezionePageModule',
         canActivate: [AuthGuard]
     },

@@ -7,79 +7,91 @@
 <ion-content>
     <div>
         <form [formGroup]="lezioneFormModel">
-<!--                <ion-row> &lt;!&ndash; super riga &ndash;&gt;-->
-<!--                    <ion-col> &lt;!&ndash; super colonna &ndash;&gt;-->
-                        <ion-row>
-                            <!-- Nome Lezione -->
-                            <ion-item>
-                                <!--                                <ion-icon name="contacts" class="icone"></ion-icon>-->
-                                <ion-input type="text" text-center placeholder="Nome lezione"
-                                           formControlName="nomeLezione"
-                                           required></ion-input>
-                            </ion-item>
-                        </ion-row>
-                        <ion-row>
-                                <!-- Macro Materia -->
-                                <ion-item>
-                                    <!--                                    <ion-icon name="contacts" class="icone"></ion-icon>-->
-                                    <ion-select formControlName="macroMateria" ok-text="Seleziona"
-                                                cancel-text="Cancella"
-                                                placeholder="Seleziona macro Materia" required="true">
-                                        <ion-select-option value="Matematica">Matematica</ion-select-option>
-                                        <ion-select-option value="Informatica">Informatica</ion-select-option>
-                                        <ion-select-option value="Fisica">Fisica</ion-select-option>
-                                        <ion-select-option value="Biologia">Biologia</ion-select-option>
-                                        <ion-select-option value="Lettere">Lettere</ion-select-option>
-                                        <ion-select-option value="Storia">Storia</ion-select-option>
-                                        <ion-select-option value="Diritto">Diritto</ion-select-option>
-                                        <ion-select-option value="Lingue">Lingue</ion-select-option>
-                                    </ion-select>
-                                </ion-item>
-                        </ion-row>
-                            <ion-row>
-                                <!-- Micro Materia -->
-                                <ion-item>
-                                    <!--                                    <ion-icon name="contacts" class="icone"></ion-icon>-->
-                                    <ion-select formControlName="microMateria" ok-text="Seleziona"
-                                                cancel-text="Cancella"
-                                                placeholder="Seleziona micro Materia" required="true">
-                                        <ion-select-option value="Analisi 1">Analisi 1</ion-select-option>
-                                        <ion-select-option value="App Mobili">App Mobili</ion-select-option>
-                                        <ion-select-option value="Fisica 1">Fisica 1</ion-select-option>
-                                        <ion-select-option value="Biologia 1">Biologia 1</ion-select-option>
-                                        <ion-select-option value="Italiano">Italiano</ion-select-option>
-                                        <ion-select-option value="Storia moderna">Storia Moderna</ion-select-option>
-                                        <ion-select-option value="Diritto Privato">Diritto Privato</ion-select-option>
-                                        <ion-select-option value="Giapponese">Giapponese</ion-select-option>
-                                    </ion-select>
-                                </ion-item>
-                            </ion-row>
-                        <ion-row>
-                                <!-- prezzo orario-->
-                                <ion-item>
-                                    <ion-input formControlName="prezzoOrario" type="number" placeholder="prezzo Orario"
-                                               required></ion-input>
-                                </ion-item>
-                        </ion-row>
-                            <ion-row>
-                                <!-- imposta data ed ora -->
-                                <ion-item>
-                                    <ion-button (click)="notificaCondizione()">Imposta data ed ora</ion-button>
-                                </ion-item>
-                            </ion-row>
-                        <ion-row>
-                            <!-- Descrizione -->
-                            <ion-textarea formControlName="descrizione"
-                                          placeholder="Inserisci una descrizione della lezione" required></ion-textarea>
-                        </ion-row>
-<!--                    </ion-col> &lt;!&ndash; super colonna &ndash;&gt;-->
-<!--                </ion-row> &lt;!&ndash; super riga &ndash;&gt;-->
+            <ion-item class="ion-no-padding" style="margin-top: 5px">
+                <ion-label class="ion-padding-start">Materia:</ion-label>
+                <ion-label color="primary"> {{materia}}</ion-label>
+                <ion-button slot="end" fill="clear" (click)="showPicker()">Seleziona</ion-button>
+            </ion-item>
+            <div *ngIf="materia !== 'Creane una'">
+                <ion-item *ngIf="uscitaValue!==null; else selctDisabilited">
+                    <ion-label>Sotto Materia:</ion-label>
+                    <ion-select ok-text="Seleziona" formControlName="sottoMateria" cancel-text="Cancella"
+                                style="width: 65%; max-width: 65%;">
+                        <ion-select-option *ngFor="let sot of sottoMaterie[uscitaValue]"
+                                           value="{{sot.value}}">{{sot.text}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </div>
+            <div *ngIf="materia === 'Creane una'">
+                <ion-item class="ion-no-padding">
+                    <ion-label style="padding-left: 18px!important;">Nuova Materia</ion-label>
+                    <ion-input type="text" formControlName="nuovaMateria"
+                               required style="padding-left: 18px!important;"></ion-input>
+                </ion-item>
+                <ion-item class="ion-no-padding">
+                    <ion-label style="padding-left: 18px!important;">Nuova Sotto Materia</ion-label>
+                    <ion-input type="text" formControlName="nuovaSottoMateria"
+                               required style="padding-left: 18px!important;"></ion-input>
+                </ion-item>
+            </div>
+            <ng-template #selctDisabilited>
+                <ion-item>
+                    <ion-label>Sotto Materia:</ion-label>
+                    <ion-select ok-text="Seleziona" cancel-text="Cancella" style="width: 65%; max-width: 65%;" disabled
+                                placeholder="Seleziona Sotto Materie">
+                        <ion-select-option value="0">Tutte</ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </ng-template>
+            <ion-item class="ion-no-padding">
+                <ion-label style="padding-left: 18px!important;">Nome Lezione</ion-label>
+                <ion-input type="text" formControlName="nomeLezione"
+                           required style="padding-left: 18px!important; "></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+                <ion-label style="padding-left: 18px!important;">Prezzo Orario:</ion-label>
+                <ion-input formControlName="prezzoOrario" type="number" placeholder="00,00"
+                           required style="padding-left: 18px!important;"></ion-input>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+                <ion-button style="margin-left: auto!important; margin-right: auto!important;"
+                            (click)="notificaCondizione()">Imposta data ed ora
+                </ion-button>
+            </ion-item>
+            <ion-item class="ion-no-padding">
+                <ion-textarea style="padding-left: 18px!important;" formControlName="descrizione"
+                              placeholder="Inserisci una descrizione" required></ion-textarea>
+            </ion-item>
         </form>
     </div>
-    <ion-col class="signup-col">
-        <ion-button (click)="inserisciLezione()" class="submit-btn" type="submit"
-                     [disabled]="!lezioneFormModel.valid || !this.ok"> Inserisci
-            <!--                    [routerLink]="['/profilo-modifica']">Salva-->
+    <div class="mt-15">
+        <ion-list-header class="text-bolder fs-large fw-normal c-primary">LISTA PIANIFICAZIONI</ion-list-header>
+        <div *ngIf="planningVisualizzazione.length > 0; else noPlannings">
+            <ion-list  *ngFor="let planning of planningVisualizzazione; let i = index;">
+                <ion-item>
+                    <ion-icon name="remove-circle-outline" (click)="rimuoviPlanning(i)"></ion-icon>
+                    <ion-col size="5">
+                        {{planning.date}}
+                    </ion-col>
+                    <ion-col size="3">
+                        {{planning.startTime}}
+                    </ion-col>
+                    <ion-col size="3">
+                        {{planning.endTime}}
+                    </ion-col>
+                </ion-item>
+            </ion-list>
+        </div>
+        <ng-template #noPlannings>
+            <div class="mx-auto fit-content testo-centrato">
+                <h6> Nessuna pianificazione inserita</h6>
+                <h6> Clicca su "IMPOSTA DATA E ORA"</h6>
+            </div>
+        </ng-template>
+    </div>
+    <div class="bottone-inserisci">
+        <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="inserisciLezione()"
+                    [disabled]="!lezioneFormModel.valid || !this.ok">Inserisci
         </ion-button>
-    </ion-col>
+    </div>
 </ion-content>

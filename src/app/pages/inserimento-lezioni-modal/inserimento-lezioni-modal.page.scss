@@ -1,0 +1,104 @@
+.scroll-content {
+  overflow-y: auto;
+}
+
+.p-0 {
+  padding: 0 !important;
+}
+.plr-0 {
+  padding-left: 0!important;
+  padding-right: 0!important;
+}
+
+.pl-5 {
+  padding-left: 5px !important;
+}
+.mt--5 {
+  margin-top: -5px;
+}
+.m-0 {
+  margin: 0 !important;
+}
+.mr-5 {
+  margin-right: 8px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+.p-3 {
+  padding: 3px;
+}
+.p-8 {
+  padding: 9px;
+}
+h2 {
+  margin-top: 0 !important;
+  margin-bottom: 0;
+}
+.text-bolder {
+  font-weight: bolder;
+}
+ion-card-header {
+  font-weight: bolder;
+}
+
+.item-md.item-block .item-inner {
+  border: none;
+}
+
+.item-md ion-avatar ion-img, .item-md ion-avatar img {
+  border-radius: 50%;
+  height: 85px;
+  width: 85px;
+}
+
+.box-tariffa {
+  margin-top: 8px;
+}
+
+.nome {
+  font-size: 25px !important;
+  margin-top: 15px;
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+
+.anni {
+  font-size: 18px;
+  margin-top: 5px;
+  color: grey;
+}
+.tariffa {
+  line-height: 30px;
+  font-size: 20px;
+}
+
+.euro {
+  color: #029DB4;
+  font-weight: 900;
+}
+
+.box-materia {
+  border: 1px solid #cccccc;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.text-12 {
+  font-size: large;
+}
+.separatore {
+  border-right: 1px solid #cccccc;
+}
+
+#map_canvas {
+  height: 50%;
+}
+
+.prenotazione{
+  --background: #01BD74;
+}
+
+.avvia-chat{
+  --background: #029DB4;
+}
