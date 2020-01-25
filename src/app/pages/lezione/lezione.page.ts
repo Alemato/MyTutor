@@ -28,14 +28,16 @@ export class LezionePage implements OnInit {
     private user$: BehaviorSubject<User>;
     private bookings$: BehaviorSubject<Booking[]>;
     private booking$: Observable<Booking>;
-    private lession$: Observable<Lesson>;
+    private lesson$: Observable<Lesson>;
     private age = 0;
     private isBooking = false;
     private idChat = 0;
     private existsChat = false;
     private loading;
 
-    private plannings$: Observable<Planning[]>;
+    private isLesson = false;
+    private plannings$: BehaviorSubject<Planning[]>;
+
     private teacher: Teacher;
     private id: string;
     private provenienza: string;
@@ -65,24 +67,22 @@ export class LezionePage implements OnInit {
     ngOnInit() {
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
             this.provenienza = params.get('prov');
-            this.id = params.get('idPlanning');
+            this.id = params.get('id');
             if (params.get('prov') === 'booking') {
                 this.isBooking = true;
-                this.loadingPresent().then(()=>{
+                this.isLesson = false;
+                this.loadingPresent().then(() => {
                     this.bookings$ = this.bookingService.getBookings();
                     this.bookings$.subscribe((bookings) => {
                         this.booking$ = new Observable<Booking>(subscriber => {
                             subscriber.next(bookings.find(x => x.planning.idPlanning === +this.id));
                         });
-                        this.lession$ = new Observable<Lesson>(subscriber => {
+                        this.lesson$ = new Observable<Lesson>(subscriber => {
                             subscriber.next(bookings.find(x => x.planning.idPlanning === +this.id).planning.lesson);
                         });
                     });
-                    this.lession$.subscribe((lesson) => {
-                        console.log(lesson);
-                        const data = new Date(lesson.teacher.birthday);
-                        const timeDiff = Math.abs(Date.now() - data.getTime());
-                        this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+                    this.lesson$.subscribe((lesson) => {
+                        this.calcolaDataTeacher(lesson);
                     });
                     this.booking$.subscribe((booking) => {
                         console.log(booking);
@@ -122,14 +122,48 @@ export class LezionePage implements OnInit {
                         }
                     });
                 });
-            } else if (params.get('prov') === 'history') {
-                console.log('history');
-                // this.getBookingFromStorage(STORAGE.HISTORY);
-            } else if (params.get('prov') === 'risric') {
-                console.log('risultati ricerca');
-                // this.getPlanningsFromRest();
+            } else if (params.get('prov') === 'lesson') {
+                console.log('da lesson');
+                // Aggiungere logica del form model PRIMA DI SETTARE I BOOLEANI
+                this.isBooking = false;
+                this.isLesson = true;
+                this.plannings$ = this.planningService.getPlannings();
+                this.planningService.getRestPlanningByIdLesson(this.id).subscribe((plannings) => {
+                    console.log(plannings);
+                    this.lesson$ = new Observable<Lesson>(subscriber => {
+                        subscriber.next(plannings[0].lesson);
+                    });
+                    this.lesson$.subscribe((lesson) => {
+                        this.calcolaDataTeacher(lesson);
+                        if (this.user$.value.roles === 1) {
+                            this.chatService.getRestCountChatUser2(lesson.teacher.idUser).subscribe((data) => {
+                                console.log(data);
+                                if (data === 1) {
+                                    console.log('esiste chat');
+                                    this.existsChat = true;
+                                    this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                                        console.log(creates);
+                                        // tslint:disable-next-line:max-line-length
+                                        this.idChat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat.idChat;
+                                    });
+                                } else {
+                                    this.existsChat = false;
+                                }
+                            });
+                            console.log('eseguire codice student');
+                            // Aggiungere logica per spedire i booking creati
+                        }
+                    });
+                });
             }
         });
+    }
+
+    calcolaDataTeacher(lesson: Lesson) {
+        console.log(lesson);
+        const data = new Date(lesson.teacher.birthday);
+        const timeDiff = Math.abs(Date.now() - data.getTime());
+        this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
     }
 
     creaChatTeacher() {
@@ -192,6 +226,34 @@ export class LezionePage implements OnInit {
                         });
                     });
             });
+        });
+    }
+
+    creaChatStudentLesson() {
+        this.lesson$.subscribe((lesson) => {
+            console.log(lesson);
+            this.createService.postSigleCreates(lesson.teacher.idUser, this.user$.value.name + ' ' + this.user$.value.name)
+                .subscribe((resp) => {
+                    console.log('creato');
+                    console.log(resp);
+                    this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                        console.log(creates);
+                        let chat = new Chat(undefined);
+                        chat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat;
+                        const message = new Message(undefined, chat, this.user$.value);
+                        // tslint:disable-next-line:max-line-length
+                        message.text = 'System: ' + this.user$.value.name + ' ' + this.user$.value.surname + ' ha aggiunto ' + lesson.teacher.name + ' ' + lesson.teacher.surname + ' alla chat';
+                        this.messageService.createRestMessage(message).subscribe((respMes) => {
+                            console.log(respMes);
+                            this.messageService.getLastMessageOfChat(chat.idChat, 0).subscribe((lastMes) => {
+                                console.log(lastMes);
+                                this.disLoading();
+                                const url = '/chat/' + chat.idChat.toString();
+                                this.navController.navigateForward(url);
+                            });
+                        });
+                    });
+                });
         });
     }
 
