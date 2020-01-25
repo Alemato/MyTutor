@@ -21,6 +21,7 @@ export class HomeAccettatePage implements OnInit {
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
     private listLez$: BehaviorSubject<Lez[]>;
+    private idPlanningList: number[] = [];
 
     public lezioni = [];
 
@@ -44,6 +45,7 @@ export class HomeAccettatePage implements OnInit {
         this.listLez$.subscribe((l) => {
             this.lezioni = [];
             l.forEach((item) => {
+
                 if (item.lessonState === 1) {
                     this.lezioni.push(item);
                 }
@@ -72,7 +74,7 @@ export class HomeAccettatePage implements OnInit {
 
     async presentAlert(item, id) {
         const alert = await this.alertController.create({
-            header: 'Annullare la Lezzione',
+            header: 'Annullare la Lezione',
             subHeader: 'Conferma',
             message: 'Sei sicuro di voler annullare la lezione?',
             buttons: [
@@ -124,6 +126,7 @@ export class HomeAccettatePage implements OnInit {
 
     addPrenotazioneLezione() {
         console.log('Vai a alla pagina per prenotare la lezione');
+
     }
 
 }

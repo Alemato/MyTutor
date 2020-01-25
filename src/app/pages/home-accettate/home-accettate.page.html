@@ -8,9 +8,10 @@
                      <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata in vista!</h5>
                  </div>
              </ng-template>
-             <div *ngFor="let lez of lezioni">
+             <div *ngFor="let lez of lezioni let i = index">
                  <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 1">
-                     <ion-item lines="full" class="py-10">
+
+                     <ion-item lines="full" class="py-10" [routerLink]="['/lezione', 'accettate', lez.idPlanning]" routerDirection="forward">
                          <ion-col size="auto">
                            <ion-icon *ngIf="lez.imgProf === null || lez.imgProf === '' || lez.imgProf ===' '; else imgBlock"
                                      name="contact" class="fs-62"></ion-icon>
@@ -59,7 +60,7 @@
              </ng-template>
            <div *ngFor="let lez of lezioni">
              <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 1">
-                 <ion-item lines="full" class="py-10">
+                 <ion-item lines="full" class="py-10" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">
                      <ion-col size="auto">
                        <ion-icon *ngIf="lez.imgStudent === null || lez.imgStudent === '' || lez.imgStudent ===' '; else imgBlock"
                                  name="contact" class="fs-62"></ion-icon>
