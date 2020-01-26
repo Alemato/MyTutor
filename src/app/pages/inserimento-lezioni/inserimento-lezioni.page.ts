@@ -15,6 +15,7 @@ import {UserService} from '../../services/user.service';
 import {PlanningService} from '../../services/planning.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {LessonService} from '../../services/lesson.service';
+import {delay} from 'rxjs/operators';
 
 @Component({
     selector: 'app-inserimento-lezioni',
@@ -65,59 +66,62 @@ export class InserimentoLezioniPage implements OnInit {
             descrizione: ['', Validators.required],
         });
         this.loadingPresent().then(() => {
-        this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
-            if (params.get('idLesson') !== 'null') {
-                this.modifica = true;
-                this.planningService.getRestPlanningByIdLesson(params.get('idLesson')).subscribe((pList) => {
-                    this.lesson = pList.find(x => x !== undefined).lesson;
-                    this.materia = this.lesson.subject.macroSubject;
-                    const obj = {
-                        sottoMateria: this.lesson.subject.microSubject,
-                        nuovaMateria: '',
-                        nuovaSottoMateria: '',
-                        nomeLezione: this.lesson.name,
-                        prezzoOrario: this.lesson.price.toString(),
-                        descrizione: this.lesson.description
-                    };
-                    this.lezioneFormModel.get('sottoMateria').enable();
-                    // this.lezioneFormModel.get('sottoMateria').clearValidators();
-                    this.lezioneFormModel.setValue(obj);
-                    this.booleanSottomateria = true;
-                    this.onChanges();
-                    this.disLoading();
-                });
-            }
-        });
-        this.teacher$ = this.userService.getUser();
-        this.subjectService.getRestList(false).subscribe((data: Subject[]) => {
-            this.subjects = data;
-            console.log(this.subjects);
-            this.materie = [];
-            let n = 0;
-            this.materie.push();
-            this.subjects.forEach((item) => {
-                const obj1 = {text: item.macroSubject, value: n};
-                n++;
-                this.materie.push(obj1);
-            });
-            n++;
-            this.materie.push({text: 'Creane una', value: n});
-            this.sottoMaterie = [];
-            let appogio = [];
-            this.subjects.forEach((item) => {
-                this.subjects.forEach((item1) => {
-                    if (item.macroSubject === item1.macroSubject) {
+            this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
+                if (params.get('idLesson') !== 'null') {
+                    this.modifica = true;
+                    this.planningService.getRestPlanningByIdLesson(params.get('idLesson')).subscribe((pList) => {
+                        this.lesson = pList.find(x => x !== undefined).lesson;
+                        this.materia = this.lesson.subject.macroSubject;
                         const obj = {
-                            text: item1.microSubject,
-                            value: item1.microSubject
+                            sottoMateria: this.lesson.subject.microSubject,
+                            nuovaMateria: '',
+                            nuovaSottoMateria: '',
+                            nomeLezione: this.lesson.name,
+                            prezzoOrario: this.lesson.price.toString(),
+                            descrizione: this.lesson.description
                         };
-                        appogio.push(obj);
-                    }
-                });
-                this.sottoMaterie.push(appogio);
-                appogio = [];
+                        this.lezioneFormModel.get('sottoMateria').enable();
+                        // this.lezioneFormModel.get('sottoMateria').clearValidators();
+                        this.lezioneFormModel.setValue(obj);
+                        this.booleanSottomateria = true;
+                        this.onChanges();
+                        this.disLoading();
+                    });
+                }
             });
-        });
+            this.teacher$ = this.userService.getUser();
+            this.subjectService.getRestList(false).subscribe((data: Subject[]) => {
+                this.subjects = data;
+                console.log(this.subjects);
+                this.materie = [];
+                let n = 0;
+                this.materie.push();
+                this.subjects.forEach((item) => {
+                    const obj1 = {text: item.macroSubject, value: n};
+                    n++;
+                    this.materie.push(obj1);
+                });
+                n++;
+                this.materie.push({text: 'Creane una', value: n});
+                this.sottoMaterie = [];
+                let appogio = [];
+                this.subjects.forEach((item) => {
+                    this.subjects.forEach((item1) => {
+                        if (item.macroSubject === item1.macroSubject) {
+                            const obj = {
+                                text: item1.microSubject,
+                                value: item1.microSubject
+                            };
+                            appogio.push(obj);
+                        }
+                    });
+                    this.sottoMaterie.push(appogio);
+                    appogio = [];
+                });
+                if (!this.modifica) {
+                    this.disLoading();
+                }
+            });
         });
     }
 
@@ -189,7 +193,37 @@ export class InserimentoLezioniPage implements OnInit {
     }
 
     modificaLezione() {
-
+        this.planningAppoggio.forEach((pianificazione) => {
+            let subject;
+            if (this.materia === 'Creane una') {
+                subject = new Subject({
+                    idSubject: undefined, macroSubject: this.lezioneFormModel.controls.nuovaMateria.value,
+                    microSubject: this.lezioneFormModel.controls.nuovaSottoMateria.value
+                });
+            } else {
+                subject = new Subject({
+                    idSubject: undefined, macroSubject: this.materia,
+                    microSubject: this.lezioneFormModel.controls.sottoMateria.value
+                });
+            }
+            const lesson = new Lesson({
+                idLesson: this.lesson.idLesson, name: this.lezioneFormModel.controls.nomeLezione.value,
+                price: this.lezioneFormModel.controls.prezzoOrario.value, description: this.lezioneFormModel.controls.descrizione.value,
+                publicationDate: this.lesson.publicationDate
+            }, subject, this.teacher$.value);
+            const planning = new Planning({
+                idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime,
+                endTime: pianificazione.endTime, available: true
+            }, lesson);
+            this.plannings.push(planning);
+        });
+        console.log(this.plannings);
+        this.loadingPresent().then(() => {
+            this.planningService.modifyRestPlannings(this.plannings).subscribe((data) => {
+                this.disLoading();
+                this.navController.navigateRoot('lista-annunci-publicati');
+            });
+        });
     }
 
 
@@ -221,6 +255,8 @@ export class InserimentoLezioniPage implements OnInit {
             modal.onDidDismiss().then((dataReturned) => {
                 console.log('i dati sono: ');
                 console.log(dataReturned.data[0]);
+                this.planningVisualizzazione = [];
+                this.planningAppoggio = [];
                 this.fillPlannings(dataReturned.data[0].dataOraIF);
                 this.ok = dataReturned.data[1];
                 console.log(this.ok);
@@ -233,6 +269,8 @@ export class InserimentoLezioniPage implements OnInit {
             modal.onDidDismiss().then((dataReturned) => {
                 console.log('i dati sono: ');
                 console.log(dataReturned.data[0]);
+                this.planningVisualizzazione = [];
+                this.planningAppoggio = [];
                 this.fillPlannings(dataReturned.data[0].dataOraIF);
                 this.ok = dataReturned.data[1];
                 console.log(this.ok);
@@ -250,15 +288,22 @@ export class InserimentoLezioniPage implements OnInit {
 
     fillPlannings(datasReturned: any) {
         datasReturned.forEach((planning) => {
+            const inizioAppo = new Date(new Date(planning.oraInizio).getTime() + (1000 * 60 * 60)).toISOString();
+            console.log('inizioAppo');
+            console.log(inizioAppo);
+            const fineAppo = new Date(new Date(planning.oraFine).getTime() + (1000 * 60 * 60)).toISOString();
+            console.log('fineAppo');
+            console.log(fineAppo);
+
             const planningSingolo: any = {
-                date: new Date(planning.dataLezione).getTime(),
-                startTime: planning.oraInizio.slice(11, 16) + ':00', endTime: planning.oraFine.slice(11, 16) + ':00'
+                date: new Date(planning.dataLezione).getTime() + (1000 * 60 * 60),
+                startTime: inizioAppo.slice(11, 16) + ':00', endTime: fineAppo.slice(11, 16) + ':00'
             };
-            const data: string = planning.dataLezione.slice(8, 10) + '-' +
-                planning.dataLezione.slice(5, 7) + '-' + planning.dataLezione.slice(0, 4);
+            const dataAppo = new Date(new Date(planning.dataLezione).getTime() + (1000 * 60 * 60));
+            const data: string = dataAppo.toLocaleDateString();
             const planningPreVisual: any = {
                 date: data,
-                startTime: planning.oraInizio.slice(11, 16), endTime: planning.oraFine.slice(11, 16)
+                startTime: inizioAppo.slice(11, 16), endTime: fineAppo.slice(11, 16)
             };
             this.planningAppoggio.push(planningSingolo);
             this.planningVisualizzazione.push(planningPreVisual);

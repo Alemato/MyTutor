@@ -102,20 +102,20 @@
         </div>
         <ng-template #modificaLessonOrNoPlannings>
             <div *ngIf="booleanSottomateria; else noPlannings" class="mx-auto fit-content testo-centrato">
-                <h6>Per modificare le pianificazioni</h6>
-                <h6>clicca su "IMPOSTA DATA E ORA"</h6>
+                <h6>Per le pianificazioni clicca sul bottone</h6>
+                <h6>"IMPOSTA DATA E ORA"</h6>
             </div>
         </ng-template>
         <ng-template #noPlannings>
             <div class="mx-auto fit-content testo-centrato">
                 <h6> Nessuna pianificazione inserita</h6>
-                <h6> Clicca su "IMPOSTA DATA E ORA"</h6>
+                <h6> Clicca su "IMPOSTA DATA ED ORA"</h6>
             </div>
         </ng-template>
     </div>
     <div class="bottone-inserisci" *ngIf="modifica; else bottoneInserisci">
         <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="modificaLezione()"
-                    [disabled]="!lezioneFormModel.valid">Modifica
+                    [disabled]="!lezioneFormModel.valid || !this.ok">Modifica
         </ion-button>
     </div>
     <ng-template #bottoneInserisci>
