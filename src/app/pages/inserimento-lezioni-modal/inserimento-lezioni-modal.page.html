@@ -1,9 +1,11 @@
 <ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">Inserimento Data e Ora</ion-title>
+        <ion-title *ngIf="modifica; else titoloinserisci" class="ml--56">Modifica Data e Ora</ion-title>
+        <ng-template #titoloinserisci>
+            <ion-title class="ml--56">Inserimento Data e Ora</ion-title>
+        </ng-template>
     </ion-toolbar>
 </ion-header>
 

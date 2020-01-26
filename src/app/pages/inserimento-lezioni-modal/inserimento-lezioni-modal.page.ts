@@ -21,7 +21,7 @@ export class InserimentoLezioniModalPage implements OnInit {
     public plannings: Planning[] = [];
     public planningsCompattati: Planning[] = [];
     minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-    hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+    hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
     // returns all form groups under contacts
     // prende l'oggetto
@@ -116,7 +116,7 @@ export class InserimentoLezioniModalPage implements OnInit {
 
     changeInizioLezione(index) {
         this.minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-        this.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+        this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
         // this.dataLezioneFormModel.get('dataOraIF').get(index)
         // this.dataLezioneFormModel.get('dataOraIF').value.controls.oraFine.reset();
         // @ts-ignore

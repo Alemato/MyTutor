@@ -10,7 +10,7 @@
 <ion-content>
 
     <ion-list *ngIf="(planning$ | async).length > 0 && vuotaLista; else listaVuota">
-        <ion-item class="px-0" *ngFor="let less of lessonList; let y = index">
+        <ion-item class="px-0" *ngFor="let less of lessonList; let y = index" [routerLink]="['/lezione', 'lesson', less.idLesson]">
             <ion-grid style="width: 100%">
                 <ion-row>
                     <ion-col size="auto">
@@ -42,8 +42,9 @@
                                 <ion-row>
                                     <div *ngFor="let giorno of listaChiaveMappaFin[y]; let k = index">
                                         <ion-chip>
-                                            <ion-label (click)="presentPopover($event, listaValoriMappaFin[y][k], giorno)"
-                                                       class="">
+                                            <ion-label
+                                                    (click)="presentPopover($event, listaValoriMappaFin[y][k], giorno)"
+                                                    class="">
                                                 <div *ngIf="giorno === 1">
                                                     lunedi
                                                 </div>
@@ -84,10 +85,10 @@
         </ion-item>
     </ion-list>
     <ng-template #listaVuota>
-    <ion-list>
-        <div class="mx-auto fit-content" *ngIf="!vuotaLista">
-            <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione trovata</h5>
-        </div>
-    </ion-list>
+        <ion-list>
+            <div class="mx-auto fit-content" *ngIf="!vuotaLista">
+                <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione trovata</h5>
+            </div>
+        </ion-list>
     </ng-template>
 </ion-content>

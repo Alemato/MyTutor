@@ -124,8 +124,8 @@ export class BookingService {
         }));
     }
 
-    createRestBooking(bookings: Booking[]) {
-        return this.http.post(URL.BOOKING, bookings);
+    createRestBooking(bookings: Booking[]): Observable<any> {
+        return this.http.post<any>(URL.BOOKING, bookings, {observe: 'response'});
     }
 
     modifyRestLessonState(boking: Booking) {

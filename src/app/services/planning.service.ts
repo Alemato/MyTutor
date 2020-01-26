@@ -71,6 +71,9 @@ export class PlanningService {
     createRestPlannings(plannings: Planning[]): Observable<any> {
         return this.http.post<any>(URL.PLANNING_CREATE, plannings, {observe: 'response'});
     }
+    modifyRestPlannings(plannings: Planning[]): Observable<any> {
+        return this.http.put<any>(URL.PLANNING_MODIFY, plannings, {observe: 'response'});
+    }
 
 
 
