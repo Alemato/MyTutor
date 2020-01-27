@@ -18,6 +18,7 @@ import {Chat} from '../../model/chat.model';
 import {AlertController, LoadingController, NavController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Student} from '../../model/student.model';
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({
@@ -57,6 +58,12 @@ export class LezionePage implements OnInit {
     private hoursInizio = [];
     private hoursFine = [];
     public prenotazioneFormModel: FormGroup;
+    private pleaseWaitMessage: string;
+    private lessonBookedHeader: string;
+    private lessonBookedSubHeader: string;
+    private lessonBookedMessage: string;
+    private book: string;
+    private doneButton: string;
 
     constructor(
         public alertController: AlertController,
@@ -72,7 +79,8 @@ export class LezionePage implements OnInit {
         private chatService: ChatService,
         private createService: CreateService,
         private messageService: MessageService,
-        private loadingController: LoadingController
+        private loadingController: LoadingController,
+        private translateService: TranslateService
     ) {
         this.user$ = this.userService.getUser();
         const tipoU = this.userService.getTypeUser();
@@ -267,6 +275,7 @@ export class LezionePage implements OnInit {
                 });
             }
         });
+        this.initTranslate();
     }
 
 
@@ -446,18 +455,18 @@ export class LezionePage implements OnInit {
 
     async presentAlertAccettaLezione() {
         const alert = await this.alertController.create({
-            header: 'Lezione Prenotata',
-            subHeader: 'Vuoi prenotarne un\'altra',
-            message: 'Clicca su PRENOTA per prenotarne un\'altra altrimenti clicca su FATTO',
+            header: this.lessonBookedHeader,
+            subHeader: this.lessonBookedSubHeader,
+            message: this.lessonBookedMessage,
             buttons: [
                 {
-                    text: 'PRENOTA',
+                    text: this.book,
                     handler: () => {
                         this.navController.navigateRoot('/ricerca-lezioni');
                         // this.resetta();
                     }
                 }, {
-                    text: 'FATTO',
+                    text: this.doneButton,
                     handler: () => {
                         this.navController.navigateRoot('home');
                     }
@@ -569,7 +578,7 @@ export class LezionePage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -577,5 +586,26 @@ export class LezionePage implements OnInit {
 
     async disLoading() {
         await this.loading.dismiss();
+    }
+
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
+        this.translateService.get('LESSON_BOOKED_HEADER').subscribe((data) => {
+            this.lessonBookedHeader = data;
+        });
+        this.translateService.get('LESSON_BOOKED_SUBHEADER').subscribe((data) => {
+            this.lessonBookedSubHeader = data;
+        });
+        this.translateService.get('LESSON_BOOKED_MESSAGE').subscribe((data) => {
+            this.lessonBookedMessage = data;
+        });
+        this.translateService.get('BOOK').subscribe((data) => {
+            this.book = data;
+        });
+        this.translateService.get('DONE_BUTTON').subscribe((data) => {
+            this.doneButton = data;
+        });
     }
 }

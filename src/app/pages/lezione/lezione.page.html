@@ -27,8 +27,8 @@
                         <h1 class="nome">{{lesson.teacher.name}} {{lesson.teacher.surname}}</h1>
                         <h2 class="anni">{{age}} anni</h2>
                         <ion-row class="ion-justify-content-between">
-                            <h2 class="tariffa pt-2">Tariffa Oraria:</h2>
-                            <h1 class="euro ion-no-margin">{{lesson.price}}€/h</h1>
+                            <h2 class="tariffa pt-2">{{"PRICE_HOUR"|translate}}:</h2>
+                            <h1 class="euro ion-no-margin">{{lesson.price}} €/h</h1>
                         </ion-row>
                     </ion-col>
                 </ion-row>
@@ -51,25 +51,25 @@
 
         <ion-card>
             <ion-card-header>
-                <ion-card-title>Descrizione</ion-card-title>
+                <ion-card-title>{{"DESCRIPTION_CARD_TITLE"|translate}}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 {{lesson.description}}
                 <ion-card-header class="px-0">
-                    <ion-card-title>Luogo svolgimento lezione</ion-card-title>
+                    <ion-card-title>{{"LOCATION_CARD_TITLE"|translate}}</ion-card-title>
                 </ion-card-header>
                 <ion-row class="mb-10">
-                    <ion-text color="dark"><h2 class="text-bolder pr-3">Regione:</h2></ion-text>
+                    <ion-text color="dark"><h2 class="text-bolder pr-3">{{"REGION_TEXT"|translate}}:</h2></ion-text>
                     <h2 class="ion-margin-left pt-2"> {{lesson.teacher.region}}</h2></ion-row>
                 <ion-row class="mb-10">
-                    <ion-text color="dark"><h2 class="text-bolder pr-5">Città:</h2></ion-text>
+                    <ion-text color="dark"><h2 class="text-bolder pr-5">{{"CITY_TEXT"|translate}}:</h2></ion-text>
                     <h2 class="ion-margin-left pt-2"> {{lesson.teacher.city}}</h2></ion-row>
                 <ion-row class="mb-10">
-                    <ion-text color="dark"><h2 class="text-bolder pr-2">Cap:</h2></ion-text>
+                    <ion-text color="dark"><h2 class="text-bolder pr-2">{{"ZIP_CODE_TEXT"|translate}}:</h2></ion-text>
                     <h2 class="ion-margin-left pt-2"> {{lesson.teacher.postCode}}</h2></ion-row>
                 <ion-row class="mb-10">
-                    <ion-text color="dark"><h2 class="text-bolder pr-3">Via:</h2></ion-text>
-                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.street}} {{lesson.teacher.streetNumber}}</h2>
+                    <ion-text color="dark"><h2 class="text-bolder pr-3">{{"STREET_TEXT"|translate}}:</h2></ion-text>
+                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.street}}, {{lesson.teacher.streetNumber}}</h2>
                 </ion-row>
             </ion-card-content>
         </ion-card>
@@ -77,7 +77,7 @@
             <div *ngIf="user.roles === 2 && isBooking && !isLesson">
                 <ion-row>
                     <ion-col>
-                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">Prenotazione Effetuata da:</h3>
+                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">{{"BOOKING_MADE_BY_TEXT"|translate}}:</h3>
                         </ion-text>
                     </ion-col>
                 </ion-row>
@@ -100,37 +100,37 @@
                     </ion-row>
                     <ion-row class="ion-justify-content-center ion-margin-top">
                         <h2 class="ion-no-margin">Per il {{booking.planning.date | date: "dd/MM/yyyy"}}
-                            alle {{booking.planning.startTime | slice:0:5}}</h2>
+                            {{"DATETIME_TO"|translate}} {{booking.planning.startTime | slice:0:5}}</h2>
                     </ion-row>
                     <ion-button *ngIf="existsChat" expand="full" class="avvia-chat ion-margin-top"
-                                [routerLink]="['/chat', idChat]">Avvia Chat
+                                [routerLink]="['/chat', idChat]">{{"START_CHAT_BUTTON"|translate}}
                     </ion-button>
                     <ion-button *ngIf="!existsChat" expand="full" class="avvia-chat ion-margin-top"
-                                (click)="creaChatTeacher()">Avvia Chat
+                                (click)="creaChatTeacher()">{{"START_CHAT_BUTTON"|translate}}
                     </ion-button>
                 </div>
             </div>
             <div *ngIf="user.roles === 1 && isBooking && !isLesson">
                 <div *ngIf="(booking$ |async) as booking">
                     <ion-col>
-                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">Prenotazione:</h3></ion-text>
+                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">{{"BOOKING"|translate}}:</h3></ion-text>
                     </ion-col>
                     <ion-row class="ion-justify-content-center ion-margin-top">
                         <h2 class="ion-no-margin">Per il {{booking.planning.date | date: "dd/MM/yyyy"}}
-                            alle {{booking.planning.startTime | slice:0:5}}</h2>
+                            {{"DATETIME_TO"|translate}} {{booking.planning.startTime | slice:0:5}}</h2>
                     </ion-row>
                     <ion-button *ngIf="existsChat" expand="full" class="avvia-chat ion-margin-top"
-                                [routerLink]="['/chat', idChat]" routerDirection="forward">Avvia Chat
+                                [routerLink]="['/chat', idChat]" routerDirection="forward">{{"START_CHAT_BUTTON"|translate}}
                     </ion-button>
                     <ion-button *ngIf="!existsChat" expand="full" class="avvia-chat ion-margin-top"
-                                (click)="creaChatStudent()">Avvia Chat
+                                (click)="creaChatStudent()">{{"START_CHAT_BUTTON"|translate}}
                     </ion-button>
                 </div>
             </div>
             <div *ngIf="user.roles=== 1 && isLesson && !isBooking">
                 <ion-row>
                     <ion-col>
-                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">Effettua Prenotazione:</h3>
+                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">{{"MAKE_RESERVATION_TEXT"|translate}}:</h3>
                         </ion-text>
                     </ion-col>
                 </ion-row>
@@ -144,7 +144,7 @@
                                     <ion-datetime (click)="clickAnno()" (ionChange)="cambioAnno()" displayFormat="YYYY" pickerFormat="YYYY"
                                                   formControlName="annoDataLezione"
                                                   [yearValues]="listaAnni"
-                                                  placeholder="AAAA"
+                                                  placeholder="{{'YEAR'|translate}}"
                                                   class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>
@@ -155,7 +155,7 @@
                                     <ion-datetime (click)="clickMese()" (ionChange)="cambioMese()" displayFormat="MM" pickerFormat="MM"
                                                   formControlName="meseDataLezione"
                                                   monthValues="{{listaMesi}}"
-                                                  placeholder="MM"
+                                                  placeholder="{{'MONTH'|translate}}"
                                                   class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>
@@ -166,11 +166,11 @@
                                     <ion-datetime (click)="clickGiorno()" (ionChange)="cambioGiorno()" displayFormat="DD" pickerFormat="DD"
                                                   formControlName="giornoDataLezione"
                                                   dayValues="{{listaGiorni}}"
-                                                  placeholder="GG"
+                                                  placeholder="{{'DIV_DAYS'|translate}}"
                                                   class="ion-no-padding"
                                     ></ion-datetime>
                                 </ion-col>
-                                dalle
+                                {{"DATETIME_FROM"|translate}}
                                 <!-- form model inizio lezione
                                      Ricordarsi che se si setta hour-values si deve usare in forma angulare cioè con [hour-values]="" -->
                                 <ion-col size="2">
@@ -178,29 +178,29 @@
                                                   formControlName="oraInizio"
                                                   [hourValues]="hoursInizio"
                                                   minute-values="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
-                                                  placeholder="inizio"
+                                                  placeholder="{{'START'|translate}}"
                                                   class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>
-                                alle
+                                {{"DATETIME_TO"|translate}}
                                 <ion-col size="2">
                                     <ion-datetime (click)="clickOraFine()" displayFormat="HH:mm" pickerFormat="HH:mm"
                                                   formControlName="oraFine"
                                                   [hourValues]="hoursFine"
                                                   minute-values="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
-                                                  placeholder="inizio"
+                                                  placeholder="{{'END'|translate}}"
                                                   class="ion-no-padding"
                                     ></ion-datetime>
                                 </ion-col>
                             </ion-item>
                             <ion-row class="ion-justify-content-between ion-margin-top">
                                 <ion-button *ngIf="existsChat" type="button" size="small" class="avvia-chat"
-                                            [routerLink]="['/chat', idChat]" routerDirection="forward">Avvia Chat
+                                            [routerLink]="['/chat', idChat]" routerDirection="forward">{{"START_CHAT_BUTTON"|translate}}
                                 </ion-button>
                                 <ion-button *ngIf="!existsChat" type="button" size="small" class="avvia-chat"
-                                            (click)="creaChatStudentLesson()">Avvia Chat
+                                            (click)="creaChatStudentLesson()">{{"START_CHAT_BUTTON"|translate}}
                                 </ion-button>
-                                <ion-button (click)="caricaPrenotazione()" type="submit" size="small" class="prenotazione">Prenotati</ion-button>
+                                <ion-button (click)="caricaPrenotazione()" type="submit" size="small" class="prenotazione">{{"BOOKING"|translate}}</ion-button>
                             </ion-row>
                         </form>
                     </ion-col>
@@ -208,8 +208,7 @@
             </div>
             <div *ngIf="user.roles === 2 && isLesson && !isBooking">
                 <ion-button type="button" expand="full" class="avvia-chat ion-margin-top"
-                            [routerLink]="['/inserimento-lezioni', lesson.idLesson]" routerDirection="forward">Modifica
-                    inserzione
+                            [routerLink]="['/inserimento-lezioni', lesson.idLesson]" routerDirection="forward">{{"MODIFIED_LESSON_TITLE"|translate}}
                 </ion-button>
             </div>
         </ion-grid>
