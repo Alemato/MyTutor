@@ -57,6 +57,7 @@ export class InserimentoLezioniPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.lezioneFormModel = this.formBuilder.group({
             sottoMateria: ['', Validators.required],
             nuovaMateria: ['', Validators.required],
@@ -125,7 +126,6 @@ export class InserimentoLezioniPage implements OnInit {
                 });
             });
         });
-        this.initTranslate();
     }
 
     onChanges() {
