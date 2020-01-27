@@ -10,8 +10,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Student} from './model/student.model';
 import {Teacher} from './model/teacher.model';
 import {MenuRefresh} from './services/menuRefresh';
-import {Storage} from '@ionic/storage';
-import {ChatService} from "./services/chat.service";
+import {ChatService} from './services/chat.service';
 
 
 @Component({
@@ -39,7 +38,7 @@ export class AppComponent implements OnInit {
         private menu: MenuController
     ) {
         this.initializeApp();
-        this.menuSource.menuRefreshSource$.subscribe(assert => {
+        this.menuSource.menuRefreshSource$.subscribe(() => {
             this.initTranslate();
             this.userType = this.userService.getTypeUser();
             console.log(this.userType);
