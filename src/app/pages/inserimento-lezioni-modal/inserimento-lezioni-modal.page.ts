@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {LoadingController, ModalController, NavParams} from '@ionic/angular';
+import {LoadingController, ModalController} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
-import {Lezione} from '../../model/old/lezione.model';
 import {PlanningService} from '../../services/planning.service';
 import {Planning} from '../../model/planning.model';
 
@@ -92,24 +91,6 @@ export class InserimentoLezioniModalPage implements OnInit {
         }
         this.planningsCompattati.push(this.plannings[0]);
         this.planningsCompattati.reverse();
-
-        // for (let i = 0; i < this.plannings.length; i++) {
-        //     let flag = false;
-        //     for (let j = i + 1; j < this.plannings.length; j++) {
-        //         if (new Date(this.plannings[i].date).getDay() === new Date(this.plannings[j].date).getDay() &&
-        //             this.plannings[i].startTime === this.plannings[j].startTime &&
-        //             this.plannings[i].endTime === this.plannings[j].endTime) {
-        //             flag = false;
-        //             break;
-        //         } else {
-        //             flag = true;
-        //         }
-        //     }
-        //     if (flag) {
-        //         this.planningsCompattati.push(this.plannings[i]);
-        //     }
-        // }
-        // this.planningsCompattati.push(this.plannings[this.plannings.length - 1]);
         console.log('this.planningsCompattati');
         console.log(this.planningsCompattati);
     }
@@ -117,13 +98,10 @@ export class InserimentoLezioniModalPage implements OnInit {
     changeInizioLezione(index) {
         this.minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
         this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-        // this.dataLezioneFormModel.get('dataOraIF').get(index)
-        // this.dataLezioneFormModel.get('dataOraIF').value.controls.oraFine.reset();
-        // @ts-ignore
-        console.log(this.dataLezioneFormModel.get('dataOraIF').controls[index].controls.oraFine.reset());
+        console.log(((this.dataLezioneFormModel.get('dataOraIF') as FormArray).controls[index] as FormGroup).controls.oraFine.reset());
         console.log('cambio o setto orario lezione');
-        // @ts-ignore
-        const oraInizio = new Date(this.dataLezioneFormModel.get('dataOraIF').controls[index].controls.oraInizio.value);
+        // tslint:disable-next-line:max-line-length
+        const oraInizio = new Date(((this.dataLezioneFormModel.get('dataOraIF') as FormArray).controls[index] as FormGroup).controls.oraInizio.value);
         console.log(oraInizio);
         let i;
         let e = 0;
@@ -158,8 +136,7 @@ export class InserimentoLezioniModalPage implements OnInit {
             console.log('obj');
             console.log(obj);
             this.listaDataOraIF.controls[index].setValue(obj);
-            // @ts-ignore
-            this.arrayDymension = this.dataLezioneFormModel.get('dataOraIF').length;
+            this.arrayDymension = (this.dataLezioneFormModel.get('dataOraIF') as FormArray).length;
         });
     }
 
@@ -176,22 +153,18 @@ export class InserimentoLezioniModalPage implements OnInit {
     // add a contact form group
     aggiungiCampo() {
         this.listaDataOraIF.push(this.creaDataOraIF());
-        // @ts-ignore
-        this.arrayDymension = this.dataLezioneFormModel.get('dataOraIF').length;
+        this.arrayDymension = (this.dataLezioneFormModel.get('dataOraIF') as FormArray).length;
     }
 
     // remove contact from group
     rimuoviCampo(index) {
-        // @ts-ignore
-        if (this.dataLezioneFormModel.get('dataOraIF').length > 1) {
+        if ((this.dataLezioneFormModel.get('dataOraIF') as FormArray).length > 1) {
             this.listaDataOraIF.removeAt(index);
         }
-        // @ts-ignore
-        this.arrayDymension = this.dataLezioneFormModel.get('dataOraIF').length;
+        this.arrayDymension = (this.dataLezioneFormModel.get('dataOraIF') as FormArray).length ;
     }
 
     async chiudiModale() {
-        // this.lezione1 = this.dataLezioneFormModel.value;
         await this.modalController.dismiss([this.dataLezioneFormModel.value, true]);
     }
 
@@ -211,32 +184,4 @@ export class InserimentoLezioniModalPage implements OnInit {
     async disLoading() {
         await this.loading.dismiss();
     }
-
-    // questi campi serviranno in futuro
-    // triggered to change validation of value field type
-    // changedFieldType(index) {
-    //     let validators = null;
-    //
-    //     if (this.getContactsFormGroup(index).controls['type'].value === 'email') {
-    //         validators = Validators.compose([Validators.required, Validators.email]);
-    //     } else {
-    //         validators = Validators.compose([
-    //             Validators.required,
-    //             Validators.pattern(new RegExp('^\\+[0-9]?()[0-9](\\d[0-9]{9})$')) // pattern for validating international phone number
-    //         ]);
-    //     }
-    //
-    //     this.getContactsFormGroup(index).controls['value'].setValidators(
-    //         validators
-    //     );
-    //
-    //     this.getContactsFormGroup(index).controls['value'].updateValueAndValidity();
-    // }
-    //
-    // // get the formgroup under contacts form array
-    // getContactsFormGroup(index): FormGroup {
-    //     // this.contactList = this.form.get('contacts') as FormArray;
-    //     const formGroup = this.contactList.controls[index] as FormGroup;
-    //     return formGroup;
-    // }
 }
