@@ -4,7 +4,6 @@ import {Planning} from '../model/planning.model';
 import {URL} from '../constants';
 import {map} from 'rxjs/operators';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Storage} from '@ionic/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +13,6 @@ export class PlanningService {
     public plannings$: BehaviorSubject<Planning[]> = new BehaviorSubject<Planning[]>([] as Planning[]);
 
     constructor(
-        private storage: Storage,
         private http: HttpClient
     ) {
     }
@@ -63,5 +61,9 @@ export class PlanningService {
     }
     getPlannings(): BehaviorSubject<Planning[]> {
         return this.plannings$;
+    }
+
+    logout() {
+        this.plannings$ = new BehaviorSubject<Planning[]>([] as Planning[]);
     }
 }
