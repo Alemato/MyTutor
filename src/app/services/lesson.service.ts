@@ -39,4 +39,9 @@ export class LessonService {
     getLessons(): BehaviorSubject<Lesson[]> {
         return this.lessons$;
     }
+
+    logout() {
+        this.storage.remove(STORAGE.LESSON);
+        this.lessons$ = new BehaviorSubject<Lesson[]>([] as Lesson[]);
+    }
 }
