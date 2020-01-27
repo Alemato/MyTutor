@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">Ricerca Lezioni</ion-title>
+        <ion-title class="ml--56">{{"SEARCH_LESSONS_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -11,66 +11,66 @@
     <form [formGroup]="ricercaFormModel">
         <ion-list>
             <ion-list-header class="ion-text-uppercase">
-                Materie disponibili :
+                {{"AVAILABLE_SUBJECTS"|translate}} :
             </ion-list-header>
             <ion-item class="ion-no-padding" style="margin-top: -10px">
-                <ion-label class="ion-padding-start">Materia:</ion-label>
+                <ion-label class="ion-padding-start">{{"SUBJECT"|translate}}:</ion-label>
                 <ion-label color="primary"> {{materia}}</ion-label>
-                <ion-button slot="end" fill="clear" (click)="showPicker()" >Seleziona</ion-button>
+                <ion-button slot="end" fill="clear" (click)="showPicker()" >{{"SELECT_BUTTON"|translate}}</ion-button>
             </ion-item>
             <ion-item *ngIf="uscitaValue!==null; else selctDisabilited">
-                <ion-label>Sotto Materia:</ion-label>
-                <ion-select ok-text="Seleziona" formControlName="sottoMateria" cancel-text="Cancella" style="width: 65%; max-width: 65%;">
+                <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
+                <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="sottoMateria" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%;">
                     <ion-select-option *ngFor="let sot of sottoMaterie[uscitaValue]"
                                        value="{{sot.value}}">{{sot.text}}</ion-select-option>
                 </ion-select>
             </ion-item>
             <ng-template #selctDisabilited>
                 <ion-item>
-                    <ion-label>Sotto Materia:</ion-label>
-                    <ion-select ok-text="Seleziona" cancel-text="Cancella" style="width: 65%; max-width: 65%;" disabled
-                                placeholder="Seleziona Sotto Materie">
-                        <ion-select-option value="0">Tutte</ion-select-option>
+                    <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
+                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%;" disabled
+                                placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
+                        <ion-select-option value="0">{{"ALL"|translate}}</ion-select-option>
                     </ion-select>
                 </ion-item>
             </ng-template>
             <ion-item>
-                <ion-label>Nome Lezione:</ion-label>
+                <ion-label>{{"NAME_LESSON"|translate}}:</ion-label>
                 <ion-input formControlName="nomeLezione" type="text"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label>Città:</ion-label>
+                <ion-label>{{"CITY_TEXT"|translate}}:</ion-label>
                 <ion-input formControlName="nomeCitta" type="text"></ion-input>
             </ion-item>
             <ion-list-header class="ion-text-uppercase ion-margin-top">
-                Giorno e Ora :
+                {{"DAY_HOUR"|translate}} :
             </ion-list-header>
             <ion-item style="margin-top: -10px">
-                <ion-label>Giorni:</ion-label>
-                <ion-select multiple="true" formControlName="giorni" ok-text="Seleziona" cancel-text="Cancella" style="width: 85%;
+                <ion-label>{{"DIV_DAYS"|translate}}:</ion-label>
+                <ion-select multiple="true" formControlName="giorni" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 85%;
   max-width: 85%;">
-                    <ion-select-option value="1">Lunedi</ion-select-option>/
-                    <ion-select-option value="2">Martedi</ion-select-option>
-                    <ion-select-option value="3">Mercoledi</ion-select-option>
-                    <ion-select-option value="4">Giovedi</ion-select-option>
-                    <ion-select-option value="5">Venerdi</ion-select-option>
-                    <ion-select-option value="6">Sabato</ion-select-option>
-                    <ion-select-option value="7">Domenica</ion-select-option>
+                    <ion-select-option value="1">{{"MONDAY"|translate}}</ion-select-option>/
+                    <ion-select-option value="2">{{"TUESDAY"|translate}}</ion-select-option>
+                    <ion-select-option value="3">{{"WEDNESDAY"|translate}}</ion-select-option>
+                    <ion-select-option value="4">{{"THURSDAY"|translate}}</ion-select-option>
+                    <ion-select-option value="5">{{"FRIDAY"|translate}}</ion-select-option>
+                    <ion-select-option value="6">{{"SATURDAY"|translate}}</ion-select-option>
+                    <ion-select-option value="7">{{"SUNDAY"|translate}}</ion-select-option>
                 </ion-select>
             </ion-item>
             <ion-item>
-                <ion-label>Ora di Inizio:</ion-label>
+                <ion-label>{{"START_TIME"|translate}}:</ion-label>
                 <ion-datetime (ionChange)="changeInizioLezione()" formControlName="inizio" displayFormat="HH mm" hour-values="08,09,10,11,12,13,14,15,16,17,18,19,20,21,22"
                               minute-values="0,05,10,15,20,25,30,35,40,45,50,55" placeholder="Ora"></ion-datetime>
             </ion-item>
             <ion-item>
-                <ion-label>Ora di Fine:</ion-label>
+                <ion-label>{{"END_TIME"|translate}}:</ion-label>
                 <ion-datetime formControlName="fine"  displayFormat="HH mm" [hourValues]="hours"
                               [minuteValues]="minutes" placeholder="Ora"></ion-datetime>
             </ion-item>
         </ion-list>
         <div style="margin-top: 25px; margin-left: auto; margin-right: auto; width: fit-content;">
-            <ion-button class="" type="submit" (click)="predi()"> RICERCA LEZIONI DISPONIBILI
+            <ion-button class="" type="submit" (click)="predi()"> {{"SEARCH_LESSONS_BUTTON"|translate}}
             </ion-button>
         </div>
     </form>

@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from '../../model/subject.model';
 import {SubjectService} from '../../services/subject.service';
 import {PlanningService} from '../../services/planning.service';
+import { TranslateService } from '@ngx-translate/core';
 import {BehaviorSubject} from 'rxjs';
 
 @Component({
@@ -25,6 +26,9 @@ export class RicercaLezioniPage implements OnInit {
     private subject: Subject[] = [];
     public oraInizio = '';
     public oraFine = '';
+    private cancelButton: string;
+    private doneButton: string;
+    private pleaseWaitMessage: string;
     private loading;
 
     constructor(private pickerCtrl: PickerController,
@@ -32,7 +36,8 @@ export class RicercaLezioniPage implements OnInit {
                 private subjectService: SubjectService,
                 private planningService: PlanningService,
                 private navController: NavController,
-                private loadingController: LoadingController) {
+                private loadingController: LoadingController,
+                public translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -76,7 +81,7 @@ export class RicercaLezioniPage implements OnInit {
                 this.disLoading();
             });
         });
-
+        this.initTranslate();
     }
 
     changeInizioLezione() {
@@ -163,7 +168,7 @@ export class RicercaLezioniPage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -177,11 +182,11 @@ export class RicercaLezioniPage implements OnInit {
         const opts: PickerOptions = {
             buttons: [
                 {
-                    text: 'cancella',
+                    text: this.cancelButton,
                     role: 'cancell'
                 },
                 {
-                    text: 'done'
+                    text: this.doneButton
                 }
             ],
             columns: [{
@@ -197,5 +202,16 @@ export class RicercaLezioniPage implements OnInit {
             this.uscitaValue = col.options[col.selectedIndex].value;
         });
         this.changeSelectElents();
+    }
+    private initTranslate() {
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
+        this.translateService.get('DONE_BUTTON').subscribe((data) => {
+            this.doneButton = data;
+        });
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
     }
 }
