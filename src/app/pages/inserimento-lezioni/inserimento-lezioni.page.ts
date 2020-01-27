@@ -21,6 +21,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 })
 export class InserimentoLezioniPage implements OnInit {
     private teacher$: BehaviorSubject<Teacher>;
+    public listSubject$: BehaviorSubject<Subject[]>;
     public materia = '';
     public materie = [];
     public sottoMaterie = [];
@@ -75,7 +76,6 @@ export class InserimentoLezioniPage implements OnInit {
                             descrizione: this.lesson.description
                         };
                         this.lezioneFormModel.get('sottoMateria').enable();
-                        // this.lezioneFormModel.get('sottoMateria').clearValidators();
                         this.lezioneFormModel.setValue(obj);
                         this.booleanSottomateria = true;
                         this.onChanges();
@@ -84,37 +84,40 @@ export class InserimentoLezioniPage implements OnInit {
                 }
             });
             this.teacher$ = this.userService.getUser();
-            this.subjectService.getRestList(false).subscribe((data: Subject[]) => {
-                this.subjects = data;
-                console.log(this.subjects);
-                this.materie = [];
-                let n = 0;
-                this.materie.push();
-                this.subjects.forEach((item) => {
-                    const obj1 = {text: item.macroSubject, value: n};
-                    n++;
-                    this.materie.push(obj1);
-                });
-                n++;
-                this.materie.push({text: 'Creane una', value: n});
-                this.sottoMaterie = [];
-                let appogio = [];
-                this.subjects.forEach((item) => {
-                    this.subjects.forEach((item1) => {
-                        if (item.macroSubject === item1.macroSubject) {
-                            const obj = {
-                                text: item1.microSubject,
-                                value: item1.microSubject
-                            };
-                            appogio.push(obj);
-                        }
+            this.listSubject$ = this.subjectService.getListSubjet();
+            this.subjectService.getRestList(false).subscribe(() => {
+                this.listSubject$.subscribe((data: Subject[]) => {
+                    this.subjects = data;
+                    console.log(this.subjects);
+                    this.materie = [];
+                    let n = 0;
+                    this.materie.push();
+                    this.subjects.forEach((item) => {
+                        const obj1 = {text: item.macroSubject, value: n};
+                        n++;
+                        this.materie.push(obj1);
                     });
-                    this.sottoMaterie.push(appogio);
-                    appogio = [];
+                    n++;
+                    this.materie.push({text: 'Creane una', value: n});
+                    this.sottoMaterie = [];
+                    let appogio = [];
+                    this.subjects.forEach((item) => {
+                        this.subjects.forEach((item1) => {
+                            if (item.macroSubject === item1.macroSubject) {
+                                const obj = {
+                                    text: item1.microSubject,
+                                    value: item1.microSubject
+                                };
+                                appogio.push(obj);
+                            }
+                        });
+                        this.sottoMaterie.push(appogio);
+                        appogio = [];
+                    });
+                    if (!this.modifica) {
+                        this.disLoading();
+                    }
                 });
-                if (!this.modifica) {
-                    this.disLoading();
-                }
             });
         });
     }
