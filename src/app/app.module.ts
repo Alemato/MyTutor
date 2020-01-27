@@ -17,7 +17,6 @@ import { File } from '@ionic-native/file/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import {ChatService} from './services/chat.service';
-import {ChatMessage} from './model/old/chat-message.model';
 import {httpInterceptorProviders} from './interceptors';
 import {RegistrazioneDocenteModalPageModule} from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
 import {ProfiloPageModule} from './pages/profilo/profilo.module';
@@ -57,8 +56,6 @@ export function createTranslateLoader(http: HttpClient) {
     ],
     // qui si aggiungonoi componenti e le direttive da usate nel modulo/typescript (nel componente)
     providers: [
-        // Array,
-        ChatMessage,
         ChatService,
         UserService,
         Map,
