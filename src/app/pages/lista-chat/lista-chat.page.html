@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">Lista Chat</ion-title>
+        <ion-title class="ml--56">{{"LIST-CHAT-TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
     <div *ngIf="(user$|async) as user">
         <div *ngIf="(creates$ | async) as creates">
     <ion-list *ngIf="(lastMessageFromChats$ | async) as lastMessageFromChats; else notChat">
-        <ion-list-header class="mb--14" *ngIf="lastMessageFromChats.length > 0; else notChat">Lista lezioni accettate</ion-list-header>
+        <ion-list-header class="mb--14" *ngIf="lastMessageFromChats.length > 0; else notChat">{{"LIST_LESSONS_ACCEPTED"|translate}}</ion-list-header>
         <ion-item *ngFor="let c of lastMessageFromChats; let i = index;" class="ion-no-padding" [routerLink]="['/chat', c.chat.idChat]" routerDirection="forward">
         <ion-grid>
             <ion-row>
@@ -56,7 +56,7 @@
     </ion-list>
     <ng-template #notChat>
         <div class="mx-auto fit-content">
-            <h5 class="fit-content font-weight-300 ls-1">Nessuna Chat disponibile!</h5>
+            <h5 class="fit-content font-weight-300 ls-1">{{"ANY_CHAT_AVAILABLE_TEXT"|translate}}</h5>
         </div>
     </ng-template>
         </div>

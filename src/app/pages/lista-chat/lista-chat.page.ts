@@ -6,6 +6,7 @@ import {User} from '../../model/user.model';
 import {CreatesChat} from '../../model/creates.model';
 import {Message} from '../../model/message.model';
 import {LoadingController} from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-lista-chat',
@@ -18,10 +19,12 @@ export class ListaChatPage implements OnInit {
     private lastMessageFromChats$: BehaviorSubject<Message[]>;
     private chatCount$: BehaviorSubject<number>;
     private loading;
+    private pleaseWaitMessage: string;
 
     constructor(private userService: UserService,
                 private chatService: ChatService,
-                private loadingController: LoadingController) {
+                private loadingController: LoadingController,
+                private translateService: TranslateService) {
         this.user$ = this.userService.getUser();
         this.lastMessageFromChats$ = this.chatService.getLastMessageFromChats();
         this.creates$ = this.chatService.getCreates();
@@ -40,6 +43,7 @@ export class ListaChatPage implements OnInit {
         });
         this.lastMessageFromChats$.subscribe();
         this.creates$.subscribe();
+        this.initTranslate();
     }
 
     ionViewWillEnter() {
@@ -52,7 +56,7 @@ export class ListaChatPage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -62,4 +66,9 @@ export class ListaChatPage implements OnInit {
         await this.loading.dismiss();
     }
 
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
+    }
 }
