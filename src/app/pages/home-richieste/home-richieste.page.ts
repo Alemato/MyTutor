@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BehaviorSubject, interval, Subscription} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
 import {AlertController, LoadingController} from '@ionic/angular';
