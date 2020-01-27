@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
 import {Planning} from '../../model/planning.model';
 import {LessonService} from '../../services/lesson.service';
