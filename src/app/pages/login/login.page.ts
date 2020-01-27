@@ -5,7 +5,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {HttpErrorResponse} from '@angular/common/http';
 import {Account, UserService} from '../../services/user.service';
 import {MenuRefresh} from '../../services/menuRefresh';
-import {Storage} from '@ionic/storage';
 
 @Component({
     selector: 'page-login',
@@ -17,6 +16,7 @@ export class LoginPage implements OnInit {
     private loginFormModel: FormGroup;
     private loginTitle: string;
     private loginSubTitle: string;
+    private pleaseWaitMessage: string;
     passwordType = 'password';
     passwordShow = false;
     private loading;
@@ -50,9 +50,6 @@ export class LoginPage implements OnInit {
         this.initTranslate();
     }
 
-    ionViewWillEnter() {
-    }
-
     ionViewDidLeave() {
         this.menuCtrl.enable(true);
         this.menuSource.publishMenuRefresh();
@@ -60,7 +57,7 @@ export class LoginPage implements OnInit {
 
     async Loading() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -76,7 +73,7 @@ export class LoginPage implements OnInit {
         console.log(account);
         console.log('eseguo la chiamata');
         this.Loading();
-        this.userService.login(account).subscribe((utente) => {
+        this.userService.login(account).subscribe(() => {
                 this.Diss();
                 this.loginFormModel.reset();
                 this.navController.navigateRoot('home');
@@ -113,6 +110,9 @@ export class LoginPage implements OnInit {
         });
         this.translateService.get('LOGIN_ERROR_TITLE').subscribe((data) => {
             this.loginTitle = data;
+        });
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
         });
     }
 }
