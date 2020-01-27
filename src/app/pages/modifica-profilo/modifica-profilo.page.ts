@@ -97,6 +97,7 @@ export class ModificaProfiloPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.userType = this.userService.getTypeUser();
         if (this.userType === 'student') {
             this.student$ = this.userService.getUser();
@@ -147,7 +148,6 @@ export class ModificaProfiloPage implements OnInit {
             });
             this.setValori();
         }
-        this.initTranslate();
     }
 
     setValori() {
