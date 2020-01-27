@@ -42,6 +42,7 @@ export class ChatPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.route.paramMap.subscribe((params: ParamMap) => {
             this.user$ = this.userService.getUser();
             this.messages$ = this.messageService.getBehaviorMessages();
@@ -108,7 +109,6 @@ export class ChatPage implements OnInit {
                 });
             });
         });
-        this.initTranslate();
     }
 
     inviaMessagio() {
