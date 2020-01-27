@@ -31,7 +31,11 @@ export class SubjectService {
         }
     }
 
-    getListSubjet() {
+    getListSubjet(): BehaviorSubject<Subject[]> {
         return this.listSubject$;
+    }
+
+    logout() {
+        this.listSubject$ = new BehaviorSubject<Subject[]>([] as any);
     }
 }

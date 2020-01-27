@@ -11,7 +11,8 @@ export class PopoverRisultatiRicercaComponent implements OnInit {
     slot;
     day;
 
-    constructor(public popoverController: PopoverController, private navParams: NavParams,) {
+    constructor(public popoverController: PopoverController,
+                private navParams: NavParams) {
     }
 
     ngOnInit() {
@@ -39,8 +40,6 @@ export class PopoverRisultatiRicercaComponent implements OnInit {
         if (this.navParams.get('giorno') === 0) {
             this.day = 'domenica';
         }
-        // this.day = this.navParams.get('giorno');
-        console.log(this.day);
     }
 
     close() {

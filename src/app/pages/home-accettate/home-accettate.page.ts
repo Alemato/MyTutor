@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AlertController, LoadingController} from '@ionic/angular';
 import {UserService} from '../../services/user.service';
-import {BehaviorSubject, interval, Subscription} from 'rxjs';
-import {delay} from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
 import {BookingService, Lez} from '../../services/booking.service';
@@ -21,7 +20,6 @@ export class HomeAccettatePage implements OnInit {
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
     private listLez$: BehaviorSubject<Lez[]>;
-    private idPlanningList: number[] = [];
 
     public lezioni = [];
 
@@ -57,7 +55,6 @@ export class HomeAccettatePage implements OnInit {
         console.log('ionViewWillEnter home/accetta');
         if (this.agg) {
             this.loadingPresent().then(() => {
-                // this.getlezioni();
                 this.bookingService.getRestBooking().subscribe(() => {
                     this.disLoading();
                 });
@@ -92,7 +89,7 @@ export class HomeAccettatePage implements OnInit {
                         console.log('Conferma annullamento lezione');
                         console.log(id);
                         const booking = this.bookings$.value.find(x => x.idBooking === id);
-                        booking.lessonState = 4;
+                        booking.lessonState = 3;
                         console.log(booking);
                         this.loadingPresent().then(() => {
                             this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
@@ -123,10 +120,4 @@ export class HomeAccettatePage implements OnInit {
     async disLoading() {
         await this.loading.dismiss();
     }
-
-    addPrenotazioneLezione() {
-        console.log('Vai a alla pagina per prenotare la lezione');
-
-    }
-
 }

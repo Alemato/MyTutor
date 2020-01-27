@@ -7,9 +7,12 @@ import {Storage} from '@ionic/storage';
 import {AUTH_TOKEN, LINGUA, STORAGE, URL, UTENTE_STORAGE, X_AUTH} from '../constants';
 import {map} from 'rxjs/operators';
 import {sha512} from 'js-sha512';
-import {ChatService} from './chat.service';
 import {BookingService} from './booking.service';
+import {ChatService} from './chat.service';
+import {LessonService} from './lesson.service';
 import {MessageService} from './message.service';
+import {PlanningService} from './planning.service';
+import {SubjectService} from './subject.service';
 
 export interface Account {
     username: string;
@@ -30,7 +33,10 @@ export class UserService {
                 private storage: Storage,
                 private bookingService: BookingService,
                 private chatService: ChatService,
-                private messageService: MessageService) {
+                private lessonService: LessonService,
+                private messageService: MessageService,
+                private planningService: PlanningService,
+                private subjectService: SubjectService) {
         this.storage.get(AUTH_TOKEN).then((token) => {
             this.authToken = token;
             console.log('this.authToken');
@@ -110,11 +116,7 @@ export class UserService {
 
     ifExistKey(value: string): Promise<boolean> {
         return this.storage.get(value).then(data => {
-                if (data) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return !!data;
             }
         );
     }
@@ -134,7 +136,10 @@ export class UserService {
         this.user$ = new BehaviorSubject<any>({} as any);
         this.bookingService.logout();
         this.chatService.logout();
+        this.lessonService.logout();
         this.messageService.logout();
+        this.planningService.logout();
+        this.subjectService.logout();
     }
 
     logout() {

@@ -56,7 +56,6 @@ export const AUTH_TOKEN = 'auth-token';
 export const LINGUA = 'lingua';
 
 export const UTENTE_STORAGE = 'utente';
-export const MARIO = 'pluto';
 
 export const STORAGE = {
     BOOKING: 'booking',

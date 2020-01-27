@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
 import {Planning} from '../../model/planning.model';
 import {LessonService} from '../../services/lesson.service';
@@ -17,7 +16,7 @@ import {MessageService} from '../../services/message.service';
 import {Message} from '../../model/message.model';
 import {Chat} from '../../model/chat.model';
 import {AlertController, LoadingController, NavController} from '@ionic/angular';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Student} from '../../model/student.model';
 
 
@@ -29,6 +28,7 @@ import {Student} from '../../model/student.model';
 export class LezionePage implements OnInit {
     private id: string;
     private provenienza: string;
+    private nameLesson  = '';
     private user$: BehaviorSubject<User>;
     private bookings$: BehaviorSubject<Booking[]>;
     private booking$: Observable<Booking>;
@@ -101,6 +101,7 @@ export class LezionePage implements OnInit {
                         });
                     });
                     this.lesson$.subscribe((lesson) => {
+                        this.nameLesson = lesson.name;
                         this.calcolaDataTeacher(lesson);
                     });
                     this.booking$.subscribe((booking) => {
@@ -151,113 +152,117 @@ export class LezionePage implements OnInit {
                     oraInizio: ['', Validators.required],
                     oraFine: ['', Validators.required],
                 });
-                this.prenotazioneFormModel.controls.meseDataLezione.disable();
-                this.prenotazioneFormModel.controls.giornoDataLezione.disable();
-                this.prenotazioneFormModel.controls.oraInizio.disable();
-                this.prenotazioneFormModel.controls.oraFine.disable();
-                this.isBooking = false;
-                this.isLesson = true;
-                this.plannings$ = this.planningService.getPlannings();
-                this.planningService.getRestPlanningByIdLesson(this.id).subscribe((plannings) => {
-                    console.log(plannings);
-                    this.plannings$.next(plannings);
-                    this.lesson$ = new Observable<Lesson>(subscriber => {
-                        subscriber.next(plannings[0].lesson);
-                    });
-                    this.lesson$.subscribe((lesson) => {
-                        this.calcolaDataTeacher(lesson);
-                        if (this.user$.value.roles === 1) {
-                            this.chatService.getRestCountChatUser2(lesson.teacher.idUser).subscribe((data) => {
-                                console.log(data);
-                                if (data === 1) {
-                                    console.log('esiste chat');
-                                    this.existsChat = true;
-                                    this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
-                                        console.log(creates);
-                                        // tslint:disable-next-line:max-line-length
-                                        this.idChat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat.idChat;
-                                    });
-                                } else {
-                                    this.existsChat = false;
-                                }
-                            });
-                            console.log('eseguire codice student');
-                            // Aggiungere logica per spedire i booking creati
+                this.loadingPresent().then(() => {
+                    this.prenotazioneFormModel.controls.meseDataLezione.disable();
+                    this.prenotazioneFormModel.controls.giornoDataLezione.disable();
+                    this.prenotazioneFormModel.controls.oraInizio.disable();
+                    this.prenotazioneFormModel.controls.oraFine.disable();
+                    this.isBooking = false;
+                    this.isLesson = true;
+                    this.plannings$ = this.planningService.getPlannings();
+                    this.planningService.getRestPlanningByIdLesson(this.id).subscribe((plannings) => {
+                        console.log(plannings);
+                        this.plannings$.next(plannings);
+                        this.lesson$ = new Observable<Lesson>(subscriber => {
+                            subscriber.next(plannings[0].lesson);
+                        });
+                        this.lesson$.subscribe((lesson) => {
+                            this.nameLesson = lesson.name;
+                            this.calcolaDataTeacher(lesson);
+                            if (this.user$.value.roles === 1) {
+                                this.chatService.getRestCountChatUser2(lesson.teacher.idUser).subscribe((data) => {
+                                    console.log(data);
+                                    if (data === 1) {
+                                        console.log('esiste chat');
+                                        this.existsChat = true;
+                                        this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                                            console.log(creates);
+                                            // tslint:disable-next-line:max-line-length
+                                            this.idChat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat.idChat;
+                                        });
+                                    } else {
+                                        this.existsChat = false;
+                                    }
+                                });
+                                console.log('eseguire codice student');
+                                // Aggiungere logica per spedire i booking creati
 
-                            console.log('plannings');
-                            console.log(plannings);
-                            this.plans = plannings;
-                            const listaDateAppo: string[] = [];
-                            plannings.forEach((pianificazione) => {
-                                const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
-                                const dataAppo1 = new Date(datAppo).toLocaleDateString();
-                                listaDateAppo.push(dataAppo1);
-                            });
-                            const uniqueDateSet = new Set(listaDateAppo);
-                            const listaDate = Array.from(uniqueDateSet);
-                            listaDate.forEach((date) => {
-                                let inizioFine: [string[]] = [[]];
+                                console.log('plannings');
+                                console.log(plannings);
+                                this.plans = plannings;
+                                const listaDateAppo: string[] = [];
                                 plannings.forEach((pianificazione) => {
                                     const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
                                     const dataAppo1 = new Date(datAppo).toLocaleDateString();
-                                    if (dataAppo1 === date) {
-                                        const startAndEnd = [];
-                                        startAndEnd[0] = pianificazione.startTime;
-                                        startAndEnd[1] = pianificazione.endTime;
-                                        inizioFine.push(startAndEnd);
-                                    }
+                                    listaDateAppo.push(dataAppo1);
                                 });
-                                inizioFine.splice(0, 1);
-                                this.mappaStartEnd.set(date, inizioFine);
-                                inizioFine = [[]];
-                            });
-                            console.log('this.mappaStartEnd');
-                            console.log(this.mappaStartEnd);
+                                const uniqueDateSet = new Set(listaDateAppo);
+                                const listaDate = Array.from(uniqueDateSet);
+                                listaDate.forEach((date) => {
+                                    let inizioFine: [string[]] = [[]];
+                                    plannings.forEach((pianificazione) => {
+                                        const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
+                                        const dataAppo1 = new Date(datAppo).toLocaleDateString();
+                                        if (dataAppo1 === date) {
+                                            const startAndEnd = [];
+                                            startAndEnd[0] = pianificazione.startTime;
+                                            startAndEnd[1] = pianificazione.endTime;
+                                            inizioFine.push(startAndEnd);
+                                        }
+                                    });
+                                    inizioFine.splice(0, 1);
+                                    this.mappaStartEnd.set(date, inizioFine);
+                                    inizioFine = [[]];
+                                });
+                                console.log('this.mappaStartEnd');
+                                console.log(this.mappaStartEnd);
 
-                            const listaAnniAppo = [];
-                            plannings.forEach((pianificazione) => {
-                                listaAnniAppo.push(new Date(pianificazione.date).getFullYear());
-                            });
-                            const uniqueSet = new Set(listaAnniAppo);
-                            const listaAnni = Array.from(uniqueSet);
-                            listaAnni.forEach((anno) => {
-                                const listaMesiPerAnnoAppo: number[] = [];
+                                const listaAnniAppo = [];
                                 plannings.forEach((pianificazione) => {
-                                    const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
-                                    const dataAppo1 = new Date(datAppo).toLocaleString();
-                                    const dataAppoArray = dataAppo1.split('/');
-                                    if (new Date(pianificazione.date).getFullYear() === anno) {
-                                        listaMesiPerAnnoAppo.push(parseInt(dataAppoArray[1], 0));
-                                    }
+                                    listaAnniAppo.push(new Date(pianificazione.date).getFullYear());
                                 });
-                                const uniqueSetMesi = new Set(listaMesiPerAnnoAppo);
-                                const listaMesiPerAnno = Array.from(uniqueSetMesi);
-                                console.log('listaMesiPerAnno');
-                                console.log(listaMesiPerAnno);
-                                listaMesiPerAnno.forEach((mese) => {
-                                    const listaGiorniPerMeseAppo: number[] = [];
+                                const uniqueSet = new Set(listaAnniAppo);
+                                const listaAnni = Array.from(uniqueSet);
+                                listaAnni.forEach((anno) => {
+                                    const listaMesiPerAnnoAppo: number[] = [];
                                     plannings.forEach((pianificazione) => {
                                         const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
                                         const dataAppo1 = new Date(datAppo).toLocaleString();
                                         const dataAppoArray = dataAppo1.split('/');
-                                        // tslint:disable-next-line:max-line-length
-                                        if (new Date(pianificazione.date).getFullYear() === anno && parseInt(dataAppoArray[1], 0) === mese) {
-                                            listaGiorniPerMeseAppo.push(parseInt(dataAppoArray[0], 0));
+                                        if (new Date(pianificazione.date).getFullYear() === anno) {
+                                            listaMesiPerAnnoAppo.push(parseInt(dataAppoArray[1], 0));
                                         }
                                     });
-                                    const uniqueSetGiorni = new Set(listaGiorniPerMeseAppo);
-                                    const listaGiorniPerMese = Array.from(uniqueSetGiorni);
-                                    this.mappaMesiGiorni.set(mese, listaGiorniPerMese);
+                                    const uniqueSetMesi = new Set(listaMesiPerAnnoAppo);
+                                    const listaMesiPerAnno = Array.from(uniqueSetMesi);
+                                    console.log('listaMesiPerAnno');
+                                    console.log(listaMesiPerAnno);
+                                    listaMesiPerAnno.forEach((mese) => {
+                                        const listaGiorniPerMeseAppo: number[] = [];
+                                        plannings.forEach((pianificazione) => {
+                                            const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
+                                            const dataAppo1 = new Date(datAppo).toLocaleString();
+                                            const dataAppoArray = dataAppo1.split('/');
+                                            // tslint:disable-next-line:max-line-length
+                                            if (new Date(pianificazione.date).getFullYear() === anno && parseInt(dataAppoArray[1], 0) === mese) {
+                                                listaGiorniPerMeseAppo.push(parseInt(dataAppoArray[0], 0));
+                                            }
+                                        });
+                                        const uniqueSetGiorni = new Set(listaGiorniPerMeseAppo);
+                                        const listaGiorniPerMese = Array.from(uniqueSetGiorni);
+                                        this.mappaMesiGiorni.set(mese, listaGiorniPerMese);
+                                    });
+                                    this.mappaAnnoMessiGiorno.set(anno, this.mappaMesiGiorni);
+                                    this.mappaMesiGiorni = new Map<number, number[]>();
                                 });
-                                this.mappaAnnoMessiGiorno.set(anno, this.mappaMesiGiorni);
-                                this.mappaMesiGiorni = new Map<number, number[]>();
-                            });
-                            this.listaAnni = Array.from(this.mappaAnnoMessiGiorno.keys());
-                            console.log(this.listaAnni);
+                                this.listaAnni = Array.from(this.mappaAnnoMessiGiorno.keys());
+                                console.log(this.listaAnni);
 
-                            console.log('this.mappaAnnoMessiGiorno');
-                            console.log(this.mappaAnnoMessiGiorno);
-                        }
+                                console.log('this.mappaAnnoMessiGiorno');
+                                console.log(this.mappaAnnoMessiGiorno);
+                                this.disLoading();
+                            }
+                        });
                     });
                 });
             }
@@ -419,23 +424,23 @@ export class LezionePage implements OnInit {
         let pAppoggio: Planning;
         this.plans.forEach((p: Planning) => {
             // tslint:disable-next-line:max-line-length
-            if ( new Date(p.date).getTime() === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
+            if (new Date(p.date).getTime() === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
                 console.log('planning uguale');
                 console.log(p);
                 pAppoggio = p;
+                const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
+                console.log('bookingDaInviare');
+                console.log(bookingDaInviare);
+                const bookList: Booking[] = [bookingDaInviare];
+                console.log('bookList');
+                console.log(bookList);
+                this.loadingPresent().then(() => {
+                    this.bookingService.createRestBooking(bookList).subscribe(() => {
+                        this.disLoading();
+                        this.presentAlertAccettaLezione();
+                    });
+                });
             }
-        });
-        const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
-        console.log('bookingDaInviare');
-        console.log(bookingDaInviare);
-        const bookList: Booking[] = [bookingDaInviare];
-        console.log('bookList');
-        console.log(bookList);
-        this.loadingPresent().then(() => {
-            this.bookingService.createRestBooking(bookList).subscribe((response) => {
-                this.disLoading();
-                this.presentAlertAccettaLezione();
-            });
         });
     }
 
@@ -460,30 +465,6 @@ export class LezionePage implements OnInit {
         });
 
         await alert.present();
-    }
-
-    resetta() {
-        this.annoClick = false;
-        this.meseClick = false;
-        this.giornoClick = false;
-        this.oraInizioClick = false;
-        this.oraFineClick = false;
-        this.prenotazioneFormModel.controls.annoDataLezione.reset();
-        this.prenotazioneFormModel.controls.meseDataLezione.reset();
-        this.prenotazioneFormModel.controls.giornoDataLezione.reset();
-        this.prenotazioneFormModel.controls.oraInizio.reset();
-        this.prenotazioneFormModel.controls.oraFine.reset();
-        this.prenotazioneFormModel.controls.meseDataLezione.disable();
-        this.prenotazioneFormModel.controls.giornoDataLezione.disable();
-        this.prenotazioneFormModel.controls.oraInizio.disable();
-        this.prenotazioneFormModel.controls.oraFine.disable();
-        this.listaAnni = [];
-        this.plans = [];
-        this.listaGiorni = [];
-        this.listaMesi = [];
-        this.listaAnni = [];
-        this.hoursInizio = [];
-        this.hoursFine = [];
     }
 
     calcolaDataTeacher(lesson: Lesson) {

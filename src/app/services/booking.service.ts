@@ -1,14 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
-import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
 import {Booking} from '../model/booking.model';
 import {STORAGE, URL} from '../constants';
-import {fromPromise} from 'rxjs/internal-compatibility';
 import {map} from 'rxjs/operators';
-import {Planning} from '../model/planning.model';
 import {User} from '../model/user.model';
-import {compilerSetStylingMode} from '@angular/compiler/src/render3/view/styling_state';
 
 export interface Lez {
     idbook: number;
@@ -88,27 +85,6 @@ export class BookingService {
         }));
     }
 
-    getRestBookingResearch(macroSubject: string, lessonName: string, zona: string, microSubject: string, ): Observable<Booking[]> {
-        return this.http.get<Booking[]>(URL.BOOKING_RESEARCH, {
-            observe: 'response', params: {
-                'macro-materia': '1',
-                'nome-lezione': '2', zona: '3', 'micro-materia': '4', 'giorno-settimana': '5',
-                prezzo: '6', 'ora-inizio': '7', 'ora-fine': '8'
-            }
-        }).pipe(
-            map((resp: HttpResponse<Booking[]>) => {
-                return resp.body;
-            }));
-    }
-
-    getRestHistoricalBooking(): Observable<Booking[]> {
-        return this.http.get<Booking[]>(URL.BOOKING_HISTORY, {observe: 'response'}).pipe(
-            map((resp: HttpResponse<Booking[]>) => {
-                this.setStoreBookings(STORAGE.HISTORY, resp.body);
-                return resp.body;
-            }));
-    }
-
     // tslint:disable-next-line:max-line-length
     getRestHistoricalBookingFilter(macroMateria: string, microMateria: string, nomeLezione: string, dataLezione: string, utente: string, statoLezione: string): Observable<Booking[]> {
         return this.http.get<Booking[]>(URL.BOOKING_HISTORY_FILTER, {
@@ -133,49 +109,8 @@ export class BookingService {
         return this.http.put(URL.BOOKING_MODIFY_LESSON_STATE, boking);
     }
 
-    getRestCountBooking(): Observable<Booking[]> {
-        return this.http.get<Booking[]>(URL.BOOKING_COUNT);
-    }
-
     setStoreBookings(key: string, bookings: Booking[]) {
         this.storage.set(key, bookings);
-    }
-
-    getStorageBookings(key: string): Observable<Booking[]> {
-        return fromPromise(this.storage.get(key));
-    }
-
-    removeStorageBooking(key: string) {
-        this.storage.remove(key);
-    }
-
-    getStorageBookingById(idPlanning: number, storageKey: string): Observable<Booking> {
-        return fromPromise(this.storage.get(storageKey).then((bookings) => {
-            console.log(bookings);
-            return bookings.find(i => i.planning.idPlanning === idPlanning);
-        }));
-    }
-
-    addOneStorageBooking(booking: Booking) {
-        this.getStorageBookings(STORAGE.BOOKING).subscribe((bookingList) => {
-            if (bookingList) {
-                const bookings: Booking[] = bookingList;
-                bookings.push(booking);
-                this.storage.set(STORAGE.BOOKING, bookings);
-            } else {
-                const bookings: Booking[] = [];
-                bookings.push(booking);
-                this.storage.set(STORAGE.BOOKING, bookings);
-            }
-        });
-    }
-
-    removeOneStorageBooking(booking: Booking) {
-        this.getStorageBookings(STORAGE.BOOKING).subscribe((bookingList) => {
-            const bookings: Booking[] = bookingList;
-            bookings.splice(bookings.findIndex(i => i.idBooking === booking.idBooking), 1);
-            this.storage.set(STORAGE.BOOKING, bookings);
-        });
     }
 
     getBookings(): BehaviorSubject<Booking[]> {
@@ -195,7 +130,7 @@ export class BookingService {
     }
 
     startCoundown() {
-        this.countDowns = interval(800).subscribe(x => {
+        this.countDowns = interval(800).subscribe(() => {
             this.runCountDown();
         });
     }
@@ -207,20 +142,26 @@ export class BookingService {
     }
 
     runCountDown() {
-        this.listaLezioni.forEach((item) => {
+        this.listaLezioni.forEach((item, index) => {
             const nowDate = new Date().getTime();
             const distance = item.date - nowDate;
             item.days = Math.floor(distance / (1000 * 60 * 60 * 24));
             item.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             item.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             item.seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            if (item.days < 0 || item.hours < 0 || item.minutes < 0 || item.seconds < 0) {
+                this.listaLezioni.splice(index, 1);
+                const oldbook = this.bookings$.value.find(x => x.idBooking === item.idbook);
+                oldbook.lessonState = 4;
+                this.modifyRestLessonState(oldbook).subscribe();
+            }
         });
         this.setBehaviorSubjectLezioni();
     }
 
     startPeriodicGet() {
         console.log('startPeriodicGet');
-        this.periodicGet = interval(15000).subscribe(x => {
+        this.periodicGet = interval(15000).subscribe(() => {
             console.log('startPeriodicGet');
             this.getRestBooking().subscribe(() => {
             });

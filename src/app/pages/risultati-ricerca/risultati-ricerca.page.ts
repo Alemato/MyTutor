@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {LoadingController, PopoverController} from '@ionic/angular';
 import {PopoverRisultatiRicercaComponent} from '../../popovers/popover-risultati-ricerca/popover-risultati-ricerca.component';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {Planning} from '../../model/planning.model';
-import {Plan, PlanningService} from '../../services/planning.service';
+import {PlanningService} from '../../services/planning.service';
 import {Lesson} from '../../model/lesson.model';
-import {last} from 'rxjs/operators';
 
 @Component({
     selector: 'app-risultati-ricerca',
@@ -22,7 +21,6 @@ export class RisultatiRicercaPage implements OnInit {
     public listaValoriMappa = [];
     public listaChiaveMappaFin = [];
     public listaValoriMappaFin = [];
-    public listaValoriMappaFin1 = [];
     public vuotaLista = false;
 
     constructor(public popoverController: PopoverController,
@@ -62,9 +60,10 @@ export class RisultatiRicercaPage implements OnInit {
 
 
                 if (pianificazioni.length > 0) {
-                    let contIF = 0;
-                    let contELSE = 0;
-                    let contGenerale = 0;
+
+
+
+
                     const pnanningList1 = [];
                     this.lessonList.forEach((les, index) => {
                         const planningArray = [];
@@ -73,16 +72,12 @@ export class RisultatiRicercaPage implements OnInit {
                             if (plen.lesson.idLesson === les.idLesson) {
                                 planningArray.push(plen);
                                 if (this.arrayMappe[index].get(plen.date) !== undefined) {
-                                    contGenerale++;
-                                    contIF++;
                                     const arrayValue = this.arrayMappe[index].get(plen.date);
                                     const list = [plen.startTime];
                                     list.push(plen.endTime);
                                     arrayValue.push(list);
                                     this.arrayMappe[index].set(plen.date, arrayValue);
                                 } else {
-                                    contGenerale++;
-                                    contELSE++;
                                     const list = [plen.startTime];
                                     list.push(plen.endTime);
                                     const arrayValue = [list];
@@ -93,10 +88,6 @@ export class RisultatiRicercaPage implements OnInit {
                         });
                         pnanningList1.push(planningArray);
                     });
-                    console.log('contIF');
-                    console.log(contIF);
-                    console.log('contELSE');
-                    console.log(contELSE);
                     console.log('this.arrayMappe');
                     console.log(this.arrayMappe);
                     console.log('this.lessonList');
@@ -106,7 +97,6 @@ export class RisultatiRicercaPage implements OnInit {
                         const listaChiaveperLez = [];
                         const listaValoreperLez = [];
                         mappa.forEach((value: [[string, string]], key: number) => {
-                            // console.log(key, value);
                             listaChiaveperLez.push(new Date(key).getDay());
                             listaValoreperLez.push(value);
                         });
@@ -171,9 +161,8 @@ export class RisultatiRicercaPage implements OnInit {
                     // this.listaChiaveMappa.reverse();
                     console.log(this.listaChiaveMappa);
                 }
-
+                this.disLoading();
             });
-            this.disLoading();
         });
     }
 

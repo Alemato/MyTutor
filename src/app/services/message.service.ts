@@ -106,24 +106,6 @@ export class MessageService {
         });
     }
 
-    addStorageMessageOfChat(message: Message) {
-        this.getStorageMessages().subscribe((messageList: Map<string, Message[]>) => {
-            if (messageList.has(message.chat.idChat.toString())) {
-                const messageChatX: Message[] = messageList.get(message.chat.idChat.toString());
-                messageChatX.push(message);
-                const mex: Map<string, Message[]> = messageList;
-                mex.set(message.chat.idChat.toString(), messageChatX);
-                this.storage.set(STORAGE.MESSAGE, mex);
-            } else {
-                const mex: Map<string, Message[]> = messageList;
-                const messageChatX: Message[] = [];
-                messageChatX.push(message);
-                mex.set(message.chat.idChat.toString(), messageChatX);
-                this.storage.set(STORAGE.MESSAGE, mex);
-            }
-        });
-    }
-
     addMultipleStorageMessageOfChat(messages: Message[]) {
         this.getStorageMessages().subscribe((messageList: Map<string, Message[]>) => {
             if (messageList) {

@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, PickerController} from '@ionic/angular';
+import {LoadingController, NavController, PickerController} from '@ionic/angular';
 import {PickerOptions} from '@ionic/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from '../../model/subject.model';
 import {SubjectService} from '../../services/subject.service';
 import {PlanningService} from '../../services/planning.service';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
     selector: 'app-ricerca-lezioni',
@@ -12,6 +13,7 @@ import {PlanningService} from '../../services/planning.service';
     styleUrls: ['./ricerca-lezioni.page.scss'],
 })
 export class RicercaLezioniPage implements OnInit {
+    private listSubject$: BehaviorSubject<Subject[]>;
     materia = '';
     uscitaValue = null;
     minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
@@ -23,42 +25,17 @@ export class RicercaLezioniPage implements OnInit {
     private subject: Subject[] = [];
     public oraInizio = '';
     public oraFine = '';
+    private loading;
 
     constructor(private pickerCtrl: PickerController,
                 public formBuilder: FormBuilder,
                 private subjectService: SubjectService,
                 private planningService: PlanningService,
-                private navController: NavController) {
+                private navController: NavController,
+                private loadingController: LoadingController) {
     }
 
     ngOnInit() {
-        this.subjectService.getRestList(false).subscribe((data: Subject[]) => {
-            this.subject = data;
-            console.log(this.subject);
-            this.materie = [];
-            let n = 0;
-            this.subject.forEach((item) => {
-                const obj1 = {text: item.macroSubject, value: n};
-                n++;
-                this.materie.push(obj1);
-            });
-            this.sottoMaterie = [];
-            let appogio = [];
-            this.subject.forEach((item) => {
-                this.subject.forEach((item1) => {
-                    if (item.macroSubject === item1.macroSubject) {
-                        const obj = {
-                            text: item1.microSubject,
-                            value: item1.microSubject
-                        };
-                        appogio.push(obj);
-                    }
-                });
-                this.sottoMaterie.push(appogio);
-                appogio = [];
-            });
-        });
-
         this.ricercaFormModel = this.formBuilder.group({
             sottoMateria: ['', Validators.required],
             nomeLezione: [''],
@@ -67,6 +44,39 @@ export class RicercaLezioniPage implements OnInit {
             fine: [''],
             giorni: [['1', '2', '3', '4', '5', '6', '7']]
         });
+        this.loadingPresent().then(() => {
+            this.listSubject$ = this.subjectService.getListSubjet();
+            this.subjectService.getRestList(false).subscribe(() => {
+                this.listSubject$.subscribe((data: Subject[]) => {
+                    this.subject = data;
+                    console.log(this.subject);
+                    this.materie = [];
+                    let n = 0;
+                    this.subject.forEach((item) => {
+                        const obj1 = {text: item.macroSubject, value: n};
+                        n++;
+                        this.materie.push(obj1);
+                    });
+                    this.sottoMaterie = [];
+                    let appogio = [];
+                    this.subject.forEach((item) => {
+                        this.subject.forEach((item1) => {
+                            if (item.macroSubject === item1.macroSubject) {
+                                const obj = {
+                                    text: item1.microSubject,
+                                    value: item1.microSubject
+                                };
+                                appogio.push(obj);
+                            }
+                        });
+                        this.sottoMaterie.push(appogio);
+                        appogio = [];
+                    });
+                });
+                this.disLoading();
+            });
+        });
+
     }
 
     changeInizioLezione() {
@@ -139,14 +149,28 @@ export class RicercaLezioniPage implements OnInit {
         } else {
             this.oraFine = '';
         }
-        this.planningService.getRestPlannings(this.materia, this.ricercaFormModel.controls.nomeLezione.value,
-            this.ricercaFormModel.controls.nomeCitta.value, this.ricercaFormModel.controls.sottoMateria.value,
-            this.giorniSettimana[0], this.giorniSettimana[1], this.giorniSettimana[2],
-            this.giorniSettimana[3], this.giorniSettimana[4], this.giorniSettimana[5],
-            this.giorniSettimana[6], this.oraInizio, this.oraFine).subscribe((lessons) => {
-            console.log(lessons);
+        this.loadingPresent().then(() => {
+            this.planningService.getRestPlannings(this.materia, this.ricercaFormModel.controls.nomeLezione.value,
+                this.ricercaFormModel.controls.nomeCitta.value, this.ricercaFormModel.controls.sottoMateria.value,
+                this.giorniSettimana[0], this.giorniSettimana[1], this.giorniSettimana[2],
+                this.giorniSettimana[3], this.giorniSettimana[4], this.giorniSettimana[5],
+                this.giorniSettimana[6], this.oraInizio, this.oraFine).subscribe(() => {
+                this.disLoading();
+                this.navController.navigateForward('risultati-ricerca');
+            });
         });
-        this.navController.navigateForward('risultati-ricerca');
+    }
+
+    async loadingPresent() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async disLoading() {
+        await this.loading.dismiss();
     }
 
     async showPicker() {
@@ -167,7 +191,7 @@ export class RicercaLezioniPage implements OnInit {
         };
         const picker = await this.pickerCtrl.create(opts);
         await picker.present();
-        picker.onDidDismiss().then(async data => {
+        picker.onDidDismiss().then(async () => {
             const col = await picker.getColumn('nome');
             this.materia = col.options[col.selectedIndex].text;
             this.uscitaValue = col.options[col.selectedIndex].value;
