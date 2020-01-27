@@ -41,6 +41,7 @@ export class RicercaLezioniPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.ricercaFormModel = this.formBuilder.group({
             sottoMateria: ['', Validators.required],
             nomeLezione: [''],
@@ -81,7 +82,6 @@ export class RicercaLezioniPage implements OnInit {
                 this.disLoading();
             });
         });
-        this.initTranslate();
     }
 
     changeInizioLezione() {
