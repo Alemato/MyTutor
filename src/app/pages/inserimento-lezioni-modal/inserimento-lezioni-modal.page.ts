@@ -40,6 +40,7 @@ export class InserimentoLezioniModalPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         console.log('this.modifica');
         console.log(this.modifica);
         console.log('this.idLesson');
@@ -65,7 +66,6 @@ export class InserimentoLezioniModalPage implements OnInit {
             });
             this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
         }
-        this.initTranslate();
     }
 
     planingCompat() {
