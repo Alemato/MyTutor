@@ -10,7 +10,7 @@
 <ion-content>
 
     <ion-list *ngIf="(planning$ | async).length > 0 && vuotaLista; else listaVuota">
-        <ion-item class="px-0" *ngFor="let less of lessonList; let y = index" [routerLink]="['/lezione', 'lesson', less.idLesson]">
+        <ion-item class="px-0" *ngFor="let less of lessonList; let y = index">
             <ion-grid style="width: 100%">
                 <ion-row>
                     <ion-col size="auto">
@@ -22,9 +22,9 @@
                         </ng-template>
                     </ion-col>
                     <ion-col size="9">
-                        <div class="ion-no-margin fs-large fw-normal">{{less.name}}</div>
-                        <div class="ion-no-margin fs-large font-weight-300 ls-01em c-primary">{{less.teacher.name}} {{less.teacher.surname}}</div>
-                        <ion-row>
+                        <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/lezione', 'lesson', less.idLesson]" >{{less.name}}</div>
+                        <div class="ion-no-margin fs-large font-weight-300 ls-01em c-primary" [routerLink]="['/lezione', 'lesson', less.idLesson]" >{{less.teacher.name}} {{less.teacher.surname}}</div>
+                        <ion-row [routerLink]="['/lezione', 'lesson', less.idLesson]">
                             <ion-col class="ion-no-padding">
                                 <div class="ion-no-margin px-0 fs-medium font-weight-300">{{less.subject.microSubject}}</div>
                             </ion-col>
