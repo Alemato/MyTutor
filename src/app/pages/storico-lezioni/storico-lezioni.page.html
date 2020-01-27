@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="">Storico Lezioni</ion-title>
+        <ion-title class="">{{"HISTORIC_LESSONS_TITLE"|translate}}</ion-title>
         <ion-button (click)="presentPopover($event)" slot="end" fill="clear" color="light">
             <ion-icon name="settings"></ion-icon>
         </ion-button>
@@ -12,10 +12,10 @@
 
 <ion-content>
     <ion-list>
-        <ion-list-header *ngIf="storico.length > 0; else notSto">Lista lezioni frequentate</ion-list-header>
+        <ion-list-header *ngIf="storico.length > 0; else notSto">{{"LIST_LESSONS_FREQUENTED_LD"|translate}}</ion-list-header>
         <ng-template #notSto>
             <div class="mx-auto fit-content">
-                <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata, frequentata, o annullata!</h5>
+                <h5 class="fit-content font-weight-300 ls-1">{{"NO_LESSONS_BOOKED_ATTENDED_CANCELLED"|translate}}</h5>
             </div>
         </ng-template>
         <div *ngIf="(user$| async) as user">
@@ -51,15 +51,14 @@
                                 </ion-row>
                                 <ion-row *ngIf="s.lessonState === 0; else lessonState1">
                                     <ion-col class="ion-no-padding pt-5">
-                                        <ion-text class="fs-medium fw-normal ls-1" color="warning">Stato: Richiesta
+                                        <ion-text class="fs-medium fw-normal ls-1" color="warning">{{"STATUS_REQUIRED"|translate}}
                                         </ion-text>
                                     </ion-col>
                                 </ion-row>
                                 <ng-template #lessonState1>
                                     <ion-row *ngIf="s.lessonState === 1; else lessonState2">
                                         <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">Stato:
-                                                Accettata
+                                            <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">{{"STATUS_ACCEPTED"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
@@ -68,8 +67,7 @@
                                     <ion-row *ngIf="s.lessonState === 2; else lessonState3">
                                         <ion-col class="ion-no-padding pt-5">
                                             <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger">
-                                                Stato:
-                                                Rifiutata
+                                                {{"STATUS_REJECTED"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
@@ -78,8 +76,7 @@
                                     <ion-row *ngIf="s.lessonState === 3; else lessonState4">
                                         <ion-col class="ion-no-padding pt-5">
                                             <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
-                                                      color="danger">Stato:
-                                                Annullata
+                                                      color="danger">{{"STATUS_CANCELLED"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
@@ -87,8 +84,7 @@
                                 <ng-template #lessonState4>
                                     <ion-row>
                                         <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1" color="success">Stato:
-                                                Eseguita
+                                            <ion-text class="fs-medium fw-normal ls-1" color="success">{{"STATUS_DONE"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
@@ -140,15 +136,14 @@
                                     </ion-row>
                                     <ion-row *ngIf="s.lessonState === 0; else lessonState1">
                                         <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1" color="warning">Stato: Richiesta
+                                            <ion-text class="fs-medium fw-normal ls-1" color="warning">{{"STATUS_REQUIRED"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
                                     <ng-template #lessonState1>
                                         <ion-row *ngIf="s.lessonState === 1; else lessonState2">
                                             <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">Stato:
-                                                    Accettata
+                                                <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">{{"STATUS_ACCEPTED"|translate}}
                                                 </ion-text>
                                             </ion-col>
                                         </ion-row>
@@ -157,8 +152,7 @@
                                         <ion-row *ngIf="s.lessonState === 2; else lessonState3">
                                             <ion-col class="ion-no-padding pt-5">
                                                 <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger">
-                                                    Stato:
-                                                    Rifiutata
+                                                   {{"STATUS_REJECTED"|translate}}
                                                 </ion-text>
                                             </ion-col>
                                         </ion-row>
@@ -167,8 +161,7 @@
                                         <ion-row *ngIf="s.lessonState === 3; else lessonState4">
                                             <ion-col class="ion-no-padding pt-5">
                                                 <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
-                                                          color="danger">Stato:
-                                                    Annullata
+                                                          color="danger">{{"STATUS_CANCELLED"|translate}}
                                                 </ion-text>
                                             </ion-col>
                                         </ion-row>
@@ -176,8 +169,7 @@
                                     <ng-template #lessonState4>
                                         <ion-row>
                                             <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="fs-medium fw-normal ls-1" color="success">Stato:
-                                                    Eseguita
+                                                <ion-text class="fs-medium fw-normal ls-1" color="success">{{"STATUS_DONE"|translate}}
                                                 </ion-text>
                                             </ion-col>
                                         </ion-row>

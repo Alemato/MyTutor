@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { StoricoLezioniPage } from './storico-lezioni.page';
 import {PopoverFiltroStoricoLezioniComponent} from '../../popovers/popover-filtro-storico-lezioni/popover-filtro-storico-lezioni.component';
+import {TranslateModule} from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -16,13 +17,14 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes),
-    ReactiveFormsModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        ReactiveFormsModule,
+        TranslateModule
+    ],
   entryComponents: [PopoverFiltroStoricoLezioniComponent],
   declarations: [StoricoLezioniPage, PopoverFiltroStoricoLezioniComponent]
 })

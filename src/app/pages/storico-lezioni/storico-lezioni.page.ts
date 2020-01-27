@@ -6,6 +6,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Booking} from '../../model/booking.model';
 import {UserService} from '../../services/user.service';
 import {User} from '../../model/user.model';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-storico-lezioni',
@@ -18,11 +19,13 @@ export class StoricoLezioniPage implements OnInit {
     private storico: Booking[];
     private loading;
     private listUser: User[];
+    private pleaseWaitMessage: string;
 
     constructor(public popoverController: PopoverController,
                 private bookingService: BookingService,
                 private userService: UserService,
-                private loadingController: LoadingController) {
+                private loadingController: LoadingController,
+                private translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -48,6 +51,7 @@ export class StoricoLezioniPage implements OnInit {
         this.bookings$.subscribe((data) => {
             this.storico = data;
         });
+        this.initTranslate();
     }
 
     async presentPopover(ev: any) {
@@ -71,7 +75,7 @@ export class StoricoLezioniPage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -79,5 +83,11 @@ export class StoricoLezioniPage implements OnInit {
 
     async disLoading() {
         await this.loading.dismiss();
+    }
+
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
     }
 }
