@@ -110,11 +110,7 @@ export class UserService {
 
     ifExistKey(value: string): Promise<boolean> {
         return this.storage.get(value).then(data => {
-                if (data) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return !!data;
             }
         );
     }
