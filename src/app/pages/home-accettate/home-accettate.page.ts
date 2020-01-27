@@ -6,6 +6,7 @@ import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
 import {BookingService, Lez} from '../../services/booking.service';
 import {Booking} from '../../model/booking.model';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-home-accettate',
@@ -22,11 +23,17 @@ export class HomeAccettatePage implements OnInit {
     private listLez$: BehaviorSubject<Lez[]>;
 
     public lezioni = [];
+    private cancelLessonHeader: string;
+    private confirmSubHeader: string;
+    private cancelLessonMessage: string;
+    private cancelButton: string;
+    private pleaseWaitMessage: string;
 
     constructor(public alertController: AlertController,
                 private userService: UserService,
                 private bookingService: BookingService,
-                public loadingController: LoadingController) {
+                public loadingController: LoadingController,
+                public translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -49,6 +56,7 @@ export class HomeAccettatePage implements OnInit {
                 }
             });
         });
+        this.initTranslate();
     }
 
     ionViewWillEnter() {
@@ -71,12 +79,12 @@ export class HomeAccettatePage implements OnInit {
 
     async presentAlert(item, id) {
         const alert = await this.alertController.create({
-            header: 'Annullare la Lezione',
-            subHeader: 'Conferma',
-            message: 'Sei sicuro di voler annullare la lezione?',
+            header: this.cancelLessonHeader,
+            subHeader: this.confirmSubHeader,
+            message: this.cancelLessonMessage,
             buttons: [
                 {
-                    text: 'Annulla',
+                    text: this.cancelButton,
                     role: 'cancel',
                     cssClass: 'secondary',
                     handler: () => {
@@ -111,7 +119,7 @@ export class HomeAccettatePage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -120,4 +128,23 @@ export class HomeAccettatePage implements OnInit {
     async disLoading() {
         await this.loading.dismiss();
     }
+
+    private initTranslate() {
+        this.translateService.get('CANCEL_LESSON_HEADER').subscribe((data) => {
+            this.cancelLessonHeader = data;
+        });
+        this.translateService.get('CONFIRM_SUBHEADER').subscribe((data) => {
+            this.confirmSubHeader = data;
+        });
+        this.translateService.get('CANCEL_LESSON_MESSAGE').subscribe((data) => {
+            this.cancelLessonMessage = data;
+        });
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
+    }
+
 }

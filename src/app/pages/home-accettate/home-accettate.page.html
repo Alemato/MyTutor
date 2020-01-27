@@ -2,10 +2,10 @@
    <div *ngIf="(this.teacher$ | async) as teacher; then teacherBlock else studentBlock"></div>
      <ng-template #studentBlock>
          <ion-list class="mb-100" *ngIf="(this.student$ | async) as student;">
-             <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesS">Lista lezioni accettate</ion-list-header>
+             <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesS">{{"LIST_LESSONS_ACCEPTED"|translate}}</ion-list-header>
              <ng-template #notLesS>
                  <div class="mx-auto fit-content">
-                     <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata in vista!</h5>
+                     <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
                  </div>
              </ng-template>
              <div *ngFor="let lez of lezioni let i = index">
@@ -31,15 +31,15 @@
                                <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{lez.price}}€/h</div>
                              </ion-col>
                            </ion-row>
-                           <div class="ion-no-margin fs-small font-weight-300 pt-5">Per
-                             il {{lez.date | date:'short'}}</div>
+                           <div class="ion-no-margin fs-small font-weight-300 pt-5">{{"DIV_FOR_THE"|translate}}
+                              {{lez.date | date:'short'}}</div>
                              <div class="ion-no-margin fs-small font-weight-300 pt-5">
-                                 Tra {{lez.days}} giorni, {{lez.hours}} ore, {{lez.minutes}} min, {{lez.seconds}} sec
+                                 {{"DIV_BETWEEN"|translate}} {{lez.days}} {{"DIV_DAYS"|translate}}, {{lez.hours}} {{"DIV_HOURS"|translate}}, {{lez.minutes}} min, {{lez.seconds}} sec
                              </div>
                          </ion-col>
                      </ion-item>
                      <ion-item-options side="end">
-                         <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">Annulla</ion-item-option>
+                         <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">{{"CANCEL_BUTTON"|translate}}</ion-item-option>
                      </ion-item-options>
                  </ion-item-sliding>
              </div>
@@ -52,10 +52,10 @@
      </ng-template>
      <ng-template #teacherBlock>
          <ion-list class="mb-100">
-             <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">Lista lezioni prenotate</ion-list-header>
+             <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">{{"LIST_LESSON_BOOKED"|translate}}</ion-list-header>
              <ng-template #notLesT>
              <div class="mx-auto fit-content">
-                <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione prenotata in vista!</h5>
+                <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
              </div>
              </ng-template>
            <div *ngFor="let lez of lezioni">
@@ -81,21 +81,21 @@
                            <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{lez.price}}€/h</div>
                          </ion-col>
                        </ion-row>
-                       <div class="ion-no-margin fs-small font-weight-300 ls-01em">Per
-                         il {{lez.date | date:'short'}}</div>
+                       <div class="ion-no-margin fs-small font-weight-300 ls-01em">{{"DIV_FOR_THE"|translate}}
+                          {{lez.date | date:'short'}}</div>
                          <div class="ion-no-margin fs-small font-weight-300 pt-5">
-                             Tra {{lez.days}} giorni, {{lez.hours}} ore, {{lez.minutes}} min, {{lez.seconds}} sec
+                             {{"DIV_BETWEEN"|translate}} {{lez.days}} {{"DIV_DAYS"|translate}}, {{lez.hours}} {{"DIV_HOURS"|translate}}, {{lez.minutes}} min, {{lez.seconds}} sec
                          </div>
                      </ion-col>
                  </ion-item>
                  <ion-item-options side="end">
-                     <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">Annulla</ion-item-option>
+                     <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">{{"CANCEL_BUTTON"|translate}}</ion-item-option>
                  </ion-item-options>
              </ion-item-sliding>
            </div>
          </ion-list>
          <div class="bottone-aggiungi">
-                <ion-button expand="full" color="medium" class="ion-margin-bottom ion-margin-top" [routerLink]="['/inserimento-lezioni']" routerDirection="forward">INSERISCI UN NUOVO ANNUNCIO
+                <ion-button expand="full" color="medium" class="ion-margin-bottom ion-margin-top" [routerLink]="['/inserimento-lezioni']" routerDirection="forward">{{"INSERT_AD"|translate}}
                 </ion-button>
          </div>
      </ng-template>
