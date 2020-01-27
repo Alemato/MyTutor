@@ -152,7 +152,6 @@ export class MessageService {
 
     logout() {
         this.storage.remove(STORAGE.MESSAGE);
-        this.stopPeriodicGetMessageForChat();
         this.messages$ = new BehaviorSubject<Message[]>([] as Message[]);
     }
 
