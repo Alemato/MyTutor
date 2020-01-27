@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {LoadingController, PopoverController} from '@ionic/angular';
 import {PopoverRisultatiRicercaComponent} from '../../popovers/popover-risultati-ricerca/popover-risultati-ricerca.component';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {Planning} from '../../model/planning.model';
-import {Plan, PlanningService} from '../../services/planning.service';
+import {PlanningService} from '../../services/planning.service';
 import {Lesson} from '../../model/lesson.model';
-import {last} from 'rxjs/operators';
 
 @Component({
     selector: 'app-risultati-ricerca',
@@ -22,7 +21,6 @@ export class RisultatiRicercaPage implements OnInit {
     public listaValoriMappa = [];
     public listaChiaveMappaFin = [];
     public listaValoriMappaFin = [];
-    public listaValoriMappaFin1 = [];
     public vuotaLista = false;
 
     constructor(public popoverController: PopoverController,
@@ -171,9 +169,8 @@ export class RisultatiRicercaPage implements OnInit {
                     // this.listaChiaveMappa.reverse();
                     console.log(this.listaChiaveMappa);
                 }
-
+                this.disLoading();
             });
-            this.disLoading();
         });
     }
 
