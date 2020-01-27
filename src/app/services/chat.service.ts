@@ -3,7 +3,6 @@ import {Storage} from '@ionic/storage';
 import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import {URL, STORAGE, AUTH_TOKEN} from '../constants';
-import {ChatMessage} from '../model/old/chat-message.model';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../model/message.model';
 import {CreatesChat} from '../model/creates.model';
@@ -16,7 +15,6 @@ import {Chat} from '../model/chat.model';
 })
 
 export class ChatService {
-    private messaggio: ChatMessage;
     private creates$: BehaviorSubject<CreatesChat[]> = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
     private lastMessageFromChats$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([] as Message[]);
     private chatCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -38,33 +36,6 @@ export class ChatService {
                 this.creates$.next(item);
             }
         });
-    }
-
-    // interoggazioni con il server devo utilizzare l'Oservable
-    // inserire metodi per prendere i messaggi dallo storage;
-    // getMessageId(): Observable<string> {
-    // return fromPromise(this.storage.get());
-    // }
-    // NON SERVE PERO' LO TENGO
-    getMessageId(): number {
-        return this.messaggio.messageId;
-    }
-
-    // QUA VANNO SOLO LE CHIAMATE ALLO STORAGE ed OBSERVABLE
-    // getMessaggio(): Observable<ChatMessage> {
-    //   return fromPromise(this.storage.get('ll').get)
-    // }
-    getFromStorageId(chiave: string): Observable<ChatMessage> {
-        return fromPromise(this.storage.get(chiave));
-    }
-
-    getFromStorageMex(chiave: string): Observable<Map<string, ChatMessage[]>> {
-        return fromPromise(this.storage.get(chiave));
-    }
-
-    // metto nello storage
-    setStoreMap(chiave: string, chatmap: Map<string, ChatMessage[]>) {
-        this.storage.set(chiave, chatmap);
     }
 
     /*
@@ -114,10 +85,6 @@ export class ChatService {
         return this.chatCount$;
     }
 
-    getStorageChatList(): Observable<Message[]> {
-        return fromPromise(this.storage.get(STORAGE.CHATLIST));
-    }
-
     async countFromStorage(): Promise<number> {
         return this.storage.get(STORAGE.CHATLIST).then((item: Message[]) => {
             if (item) {
@@ -134,42 +101,6 @@ export class ChatService {
             if (item) {
                 const mes = item.find(x => x.chat.idChat === id);
                 return mes.chat;
-            }
-        }));
-    }
-
-    getCountFromStorage(): number {
-        return this.countChat;
-    }
-
-    setSTorageChatList(firstMessages: Message[]) {
-        this.storage.set(STORAGE.CHATLIST, firstMessages);
-    }
-
-    addMultiStorageChat(firstMessages: Message[]) {
-        this.getStorageChatList().subscribe((chatList => {
-            if (chatList) {
-                const messages: Message[] = chatList;
-                messages.concat(firstMessages);
-                this.storage.set(STORAGE.CHATLIST, messages);
-            } else {
-                const messages: Message[] = [];
-                messages.concat(firstMessages);
-                this.storage.set(STORAGE.CHATLIST, messages);
-            }
-        }));
-    }
-
-    addOneStorageChat(firstMessage: Message) {
-        this.getStorageChatList().subscribe((chatList => {
-            if (chatList) {
-                const messages: Message[] = chatList;
-                messages.push(firstMessage);
-                this.storage.set(STORAGE.CHATLIST, messages);
-            } else {
-                const messages: Message[] = [];
-                messages.push(firstMessage);
-                this.storage.set(STORAGE.CHATLIST, messages);
             }
         }));
     }
@@ -204,7 +135,6 @@ export class ChatService {
     logout() {
         this.storage.remove(STORAGE.CREATES);
         this.storage.remove(STORAGE.CHATLIST);
-        this.messaggio = null;
         this.creates$ = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
         this.lastMessageFromChats$ = new BehaviorSubject<Message[]>([] as Message[]);
         this.chatCount$ = new BehaviorSubject<number>(0);
