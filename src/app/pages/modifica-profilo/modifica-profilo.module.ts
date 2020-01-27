@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ModificaProfiloPage } from './modifica-profilo.page';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {TranslateModule} from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -22,7 +23,8 @@ const routes: Routes = [
         IonicModule,
         RouterModule.forChild(routes),
         ReactiveFormsModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        TranslateModule
     ],
   declarations: [ModificaProfiloPage]
 })

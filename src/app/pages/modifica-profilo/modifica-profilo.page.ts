@@ -12,6 +12,7 @@ import {Crop} from '@ionic-native/crop/ngx';
 import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
 import {SuperTabs} from '@ionic-super-tabs/angular';
 import {HttpErrorResponse} from '@angular/common/http';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'modifica-profilo',
@@ -36,6 +37,22 @@ export class ModificaProfiloPage implements OnInit {
     private loading;
     private errorTitle: string;
     private errorSubTitle: string;
+    private imageSourceHeader: string;
+    private loadLibraryText: string;
+    private useCameraText: string;
+    private cancelButton: string;
+    private imageCroppingError: string;
+    private imageShowingError: string;
+    //
+    private emailRequiredMessage: string;
+    private emailMinLengthMessage: string;
+    private emailPatternMessage: string;
+    private emailValidEmailMessage: string;
+    private passwordRequiredMessage: string;
+    private nameRequiredMessage: string;
+    private surnameRequiredMessage: string;
+    private birthdayRequiredMessage: string;
+    private birthdayValidAgeMessage: string;
 
     imagePickerOptions = {
         maximumImagesCount: 1,
@@ -44,23 +61,23 @@ export class ModificaProfiloPage implements OnInit {
 
     validationMessages = {
         email: [
-            {type: 'required', message: 'Username is required.'},
-            {type: 'minlength', message: 'Username must be at least 5 characters long.'},
-            {type: 'pattern', message: 'Your username must contain only numbers and letters.'},
-            {type: 'validEmail', message: 'Your username has already been taken.'}
+            {type: 'required', message: this.emailRequiredMessage},
+            {type: 'minlength', message: this.emailMinLengthMessage},
+            {type: 'pattern', message: this.emailPatternMessage},
+            {type: 'validEmail', message: this.emailValidEmailMessage}
         ],
         password: [
-            {type: 'required', message: 'Username is required.'}
+            {type: 'required', message: this.passwordRequiredMessage}
         ],
         name: [
-            {type: 'required', message: 'Username is required.'}
+            {type: 'required', message: this.nameRequiredMessage}
         ],
         surname: [
-            {type: 'required', message: 'Username is required.'}
+            {type: 'required', message: this.surnameRequiredMessage}
         ],
         birthday: [
-            {type: 'required', message: 'Username is required.'},
-            {type: 'validAge', message: 'validAge is required.'}
+            {type: 'required', message: this.birthdayRequiredMessage},
+            {type: 'validAge', message: this.birthdayValidAgeMessage}
         ]
     };
 
@@ -75,6 +92,7 @@ export class ModificaProfiloPage implements OnInit {
         private navController: NavController,
         private superTab: SuperTabs,
         private alertController: AlertController,
+        public translateService: TranslateService,
     ) {
     }
 
@@ -129,6 +147,7 @@ export class ModificaProfiloPage implements OnInit {
             });
             this.setValori();
         }
+        this.initTranslate();
     }
 
     setValori() {
@@ -209,21 +228,21 @@ export class ModificaProfiloPage implements OnInit {
 
     async selectImage() {
         const actionSheet = await this.actionSheetController.create({
-            header: 'Select Image source',
+            header: this.imageSourceHeader,
             buttons: [{
-                text: 'Load from Library',
+                text: this.loadLibraryText,
                 handler: () => {
                     this.pickImage(this.camera.PictureSourceType.PHOTOLIBRARY);
                 }
             },
                 {
-                    text: 'Use Camera',
+                    text: this.useCameraText,
                     handler: () => {
                         this.pickImage(this.camera.PictureSourceType.CAMERA);
                     }
                 },
                 {
-                    text: 'Cancel',
+                    text: this.cancelButton,
                     role: 'cancel'
                 }
             ]
@@ -238,7 +257,7 @@ export class ModificaProfiloPage implements OnInit {
                     this.showCroppedImage(newPath.split('?')[0]);
                 },
                 error => {
-                    alert('Error cropping image' + error);
+                    alert(this.imageCroppingError + error);
                 }
             );
     }
@@ -254,7 +273,7 @@ export class ModificaProfiloPage implements OnInit {
             this.isLoading = false;
             this.img = true;
         }, error => {
-            alert('Error in showing image' + error);
+            alert(this.imageShowingError + error);
             this.isLoading = false;
         });
     }
@@ -347,5 +366,53 @@ export class ModificaProfiloPage implements OnInit {
             this.passwordShow = true;
             this.passwordType = 'text';
         }
+    }
+    private initTranslate() {
+        this.translateService.get('IMAGE_SOURCE_HEADER').subscribe((data) => {
+            this.imageSourceHeader = data;
+        });
+        this.translateService.get('LOAD_LIBRARY_TEXT').subscribe((data) => {
+            this.loadLibraryText = data;
+        });
+        this.translateService.get('USE_CAMERA_TEXT').subscribe((data) => {
+            this.useCameraText = data;
+        });
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
+        this.translateService.get('IMAGE_CROPPING_ERROR').subscribe((data) => {
+            this.imageCroppingError = data;
+        });
+        this.translateService.get('IMAGE_SHOWING_ERROR').subscribe((data) => {
+            this.imageShowingError = data;
+        });
+        //
+        this.translateService.get('EMAIL_REQUIRED_MESSAGE').subscribe((data) => {
+            this.emailRequiredMessage = data;
+        });
+        this.translateService.get('EMAIL_MIN_LENGTH_MESSAGE').subscribe((data) => {
+            this.emailMinLengthMessage = data;
+        });
+        this.translateService.get('EMAIL_PATTERN_MESSAGE').subscribe((data) => {
+            this.emailPatternMessage = data;
+        });
+        this.translateService.get('EMAIL_VALID_EMAIL_MESSAGE').subscribe((data) => {
+            this.emailValidEmailMessage = data;
+        });
+        this.translateService.get('PASSWORD_REQUIRED_MESSAGE').subscribe((data) => {
+            this.passwordRequiredMessage = data;
+        });
+        this.translateService.get('NAME_REQUIRED_MESSAGE').subscribe((data) => {
+            this.nameRequiredMessage = data;
+        });
+        this.translateService.get('SURNAME_REQUIRED_MESSAGE').subscribe((data) => {
+            this.surnameRequiredMessage = data;
+        });
+        this.translateService.get('BIRTHDAY_REQUIRED_MESSAGE').subscribe((data) => {
+            this.birthdayRequiredMessage = data;
+        });
+        this.translateService.get('BIRTHDAY_VALID_AGE_MESSAGE').subscribe((data) => {
+            this.birthdayValidAgeMessage = data;
+        });
     }
 }

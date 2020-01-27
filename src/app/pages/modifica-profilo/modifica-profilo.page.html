@@ -10,7 +10,7 @@
         </ion-avatar>
         <ion-row class="ion-text-center ion-margin-bottom">
             <ion-col class="foto-profilo">
-                <div>Scegli foto</div>
+                <div>{{"PHOTO_BUTTON"|translate}}</div>
             </ion-col>
         </ion-row>
 
@@ -22,7 +22,7 @@
                 <ion-item lines="inset">
                     <ion-icon name="lock"></ion-icon>
                     <ion-input class="pa16" (ionInput)="setPwdValidator()" [type]="passwordType"
-                               placeholder="nuova password"
+                               placeholder="{{'NEW_PASSWORD'|translate}}"
                                formControlName="password"></ion-input>
                     <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                               color="gray"
@@ -38,7 +38,7 @@
                 </ng-container>
                 <ion-item lines="inset">
                     <ion-icon name="key"></ion-icon>
-                    <ion-input class="pa16" [type]="passwordType" placeholder="Password vecchia"
+                    <ion-input class="pa16" [type]="passwordType" placeholder="{{'OLD_PASSWORD'|translate}}"
                                formControlName="password2" required="true"></ion-input>
                     <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                               color="gray"
@@ -62,7 +62,7 @@
                     </ion-col>
                     <ion-col size="5" class="ion-no-padding">
                         <ion-item lines="inset" class="ion-no-padding">
-                            <ion-input type="text" formControlName="name" placeholder="Nome"
+                            <ion-input type="text" formControlName="name" placeholder="{{'NAME'|translate}}"
                                        required="true"></ion-input>
                         </ion-item>
                         <ng-container *ngFor="let validation of validationMessages.name">
@@ -78,7 +78,7 @@
 
                     <ion-col class="ion-no-padding">
                         <ion-item lines="inset">
-                            <ion-input type="text" formControlName="surname" placeholder="Cognome"
+                            <ion-input type="text" formControlName="surname" placeholder="{{'SURNAME'|translate}}"
                                        required="true"></ion-input>
                         </ion-item>
                         <ng-container *ngFor="let validation of validationMessages.surname">
@@ -95,8 +95,8 @@
                 <ion-item>
                     <ion-icon name="calendar"></ion-icon>
                     <ion-datetime style="margin: auto;" class="pa16" displayFormat="DD MMMM YYYY"
-                                  placeholder="Data di nascita"
-                                  monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
+                                  placeholder="{{'BIRTHDAY'|translate}}"
+                                  monthNames="{{'MONTHS_DATETIME'|translate}}"
                                   max="2001" formControlName="birthday" required="true"></ion-datetime>
                 </ion-item>
                 <ng-container *ngFor="let validation of validationMessages.birthday">
@@ -109,18 +109,18 @@
                 </ng-container>
                 <ion-item class="item-lines-inset">
                     <ion-icon name="globe"></ion-icon>
-                    <ion-select class="select-full-width" formControlName="languageNumber" ok-text="Seleziona"
-                                cancel-text="Cancella"
-                                placeholder="Seleziona una Lingua" required="true">
+                    <ion-select class="select-full-width" formControlName="languageNumber" okText="{{'SELECT_BUTTON'|translate}}"
+                                cancelText="{{'CANCEL_BUTTON'|translate}}"
+                                placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
                         <ion-select-option value="0">Italiano</ion-select-option>
                         <ion-select-option value="1">English</ion-select-option>
                     </ion-select>
                 </ion-item>
                 <ion-item class="item-lines-inset">
                     <ion-icon name="map"></ion-icon>
-                    <ion-select class="select-full-width" formControlName="region" ok-text="Seleziona"
-                                cancel-text="Cancella"
-                                placeholder="Seleziona una Regione" required="true">
+                    <ion-select class="select-full-width" formControlName="region" okText="{{'SELECT_BUTTON'|translate}}"
+                                cancelText="{{'CANCEL_BUTTON'|translate}}"
+                                placeholder="{{'REGION_SELECT'|translate}}" required="true">
                         <ion-select-option value="Abruzzo">Abruzzo</ion-select-option>
                         <ion-select-option value="Basilicata">Basilicata</ion-select-option>
                         <ion-select-option value="Calabria">Calabria</ion-select-option>
@@ -146,7 +146,7 @@
                 </ion-item>
                 <ion-item lines="inset">
                     <ion-icon name="business"></ion-icon>
-                    <ion-input class="pa16" type="text" formControlName="city" placeholder="Città"
+                    <ion-input class="pa16" type="text" formControlName="city" placeholder="{{'CITY_TEXT'|translate}}"
                                required="true"></ion-input>
                 </ion-item>
                 <ion-row>
@@ -154,34 +154,34 @@
                         <ion-item lines="inset">
                             <ion-icon name="pin"></ion-icon>
                             <ion-input class="pa16" type="text" formControlName="street"
-                                       placeholder="indirizzo" required="true"></ion-input>
+                                       placeholder="{{'STREET_TEXT'|translate}}" required="true"></ion-input>
                         </ion-item>
                     </ion-col>
                     <ion-col class="ion-no-padding" size="4">
                         <ion-item lines="inset">
                             <ion-input class="pa16" type="text" formControlName="streetNumber"
-                                       placeholder="Civico" required="true"></ion-input>
+                                       placeholder="{{'NUMBER_TEXT'|translate}}" required="true"></ion-input>
                         </ion-item>
                     </ion-col>
                 </ion-row>
                 <ion-item lines="inset">
                     <ion-icon name="at"></ion-icon>
                     <ion-input class="pa16" type="text" pattern="[0-9]*" formControlName="postCode"
-                               placeholder="CAP" required="true"></ion-input>
+                               placeholder="{{'ZIP_CODE_TEXT'|translate}}" required="true"></ion-input>
                 </ion-item>
             </ion-list>
             <ion-row>
                 <ion-list inset="true" class="ion-no-padding" style="width: 100%">
                     <ion-item class="pa16">
-                        <ion-label class="bio" position="stacked">Biografia</ion-label>
+                        <ion-label class="bio" position="stacked">{{"BIOGRAPHY_LABEL"|translate}}</ion-label>
                         <ion-textarea rows="3" formControlName="byography"
-                                      placeholder="Inserisci una breve descrizione di te..."></ion-textarea>
+                                      placeholder="{{'BIOGRAPHY_TEXT'|translate}}"></ion-textarea>
                     </ion-item>
                 </ion-list>
             </ion-row>
             <ion-col class="signup-col">
                 <ion-button class="submit-btn" type="submit"
-                            [disabled]="!teacherFormModel.valid">Salva
+                            [disabled]="!teacherFormModel.valid">{{"SAVE_BUTTON"|translate}}
                 </ion-button>
                 <!--[routerLink]="['/profilo']-->
             </ion-col>
@@ -195,7 +195,7 @@
                     <ion-item lines="inset">
                         <ion-icon name="lock"></ion-icon>
                         <ion-input class="pa16" (change)="setPwdValidator()" [type]="passwordType"
-                                   placeholder="password"
+                                   placeholder="{{'NEW_PASSWORD'|translate}}"
                                    formControlName="password"></ion-input>
                         <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                                   color="gray"
@@ -211,7 +211,7 @@
                     </ng-container>
                     <ion-item lines="inset">
                         <ion-icon name="key"></ion-icon>
-                        <ion-input class="pa16" [type]="passwordType" placeholder="Password vecchia"
+                        <ion-input class="pa16" [type]="passwordType" placeholder="{{'OLD_PASSWORD'|translate}}"
                                    formControlName="password2" required="true"></ion-input>
                         <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                                   color="gray"
@@ -235,7 +235,7 @@
                         </ion-col>
                         <ion-col size="5" class="ion-no-padding">
                             <ion-item lines="inset" class="ion-no-padding">
-                                <ion-input type="text" formControlName="name" placeholder="Nome"
+                                <ion-input type="text" formControlName="name" placeholder="{{'NAME'|translate}}"
                                            required="true"></ion-input>
                             </ion-item>
                             <ng-container *ngFor="let validation of validationMessages.name">
@@ -251,7 +251,7 @@
 
                         <ion-col class="ion-no-padding">
                             <ion-item lines="inset">
-                                <ion-input type="text" formControlName="surname" placeholder="Cognome"
+                                <ion-input type="text" formControlName="surname" placeholder="{{'SURNAME'|translate}}"
                                            required="true"></ion-input>
                             </ion-item>
                             <ng-container *ngFor="let validation of validationMessages.surname">
@@ -269,8 +269,8 @@
                     <ion-item>
                         <ion-icon name="calendar"></ion-icon>
                         <ion-datetime style="margin: auto;" class="pa16" displayFormat="DD MMMM YYYY"
-                                      placeholder="Data di nascita"
-                                      monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
+                                      placeholder="{{'BIRTHDAY'|translate}}"
+                                      monthNames="{{'MONTHS_DATETIME'|translate}}"
                                       max="2001" formControlName="birthday" required="true"></ion-datetime>
                     </ion-item>
                     <ng-container *ngFor="let validation of validationMessages.birthday">
@@ -283,9 +283,9 @@
                     </ng-container>
                     <ion-item class="item-lines-inset">
                         <ion-icon name="globe"></ion-icon>
-                        <ion-select class="select-full-width" formControlName="languageNumber" ok-text="Seleziona"
-                                    cancel-text="Cancella"
-                                    placeholder="Seleziona una Lingua" required="true">
+                        <ion-select class="select-full-width" formControlName="languageNumber" okText="{{'SELECT_BUTTON'|translate}}"
+                                    cancelText="{{'CANCEL_BUTTON'|translate}}"
+                                    placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
                             <ion-select-option value="0">Italiano</ion-select-option>
                             <ion-select-option value="1">English</ion-select-option>
                         </ion-select>
@@ -293,12 +293,12 @@
                     <ion-item lines="inset">
                         <ion-icon name="bookmarks"></ion-icon>
                         <ion-input class="pa16" type="text" formControlName="studyGrade"
-                                   placeholder="Livello scolastico"></ion-input>
+                                   placeholder="{{'STUDY_GRADE_INPUT'|translate}}"></ion-input>
                     </ion-item>
                 </ion-list>
                 <ion-col class="signup-col">
                     <ion-button class="submit-btn" type="submit"
-                                [disabled]="!studentFormModel.valid">Salva
+                                [disabled]="!studentFormModel.valid">{{"SAVE_BUTTON"|translate}}
                     </ion-button>
                 </ion-col>
             </form>
