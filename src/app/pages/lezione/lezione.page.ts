@@ -27,6 +27,8 @@ import {Student} from '../../model/student.model';
     styleUrls: ['./lezione.page.scss'],
 })
 export class LezionePage implements OnInit {
+    private id: string;
+    private provenienza: string;
     private user$: BehaviorSubject<User>;
     private bookings$: BehaviorSubject<Booking[]>;
     private booking$: Observable<Booking>;
@@ -53,21 +55,8 @@ export class LezionePage implements OnInit {
     private oraInizioClick = false;
     private oraFineClick = false;
     private hoursInizio = [];
-    private minutesInizio = [];
     private hoursFine = [];
-    private minutesFine = [];
-    // private hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-    // private minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-
     public prenotazioneFormModel: FormGroup;
-
-    private teacher: Teacher;
-    private id: string;
-    private provenienza: string;
-    private dataBooking;
-    private startTime: string;
-    private endTime: string;
-    private userType: string;
 
     constructor(
         public alertController: AlertController,
@@ -200,8 +189,7 @@ export class LezionePage implements OnInit {
                             this.plans = plannings;
                             const listaDateAppo: string[] = [];
                             plannings.forEach((pianificazione) => {
-                                // @ts-ignore
-                                const datAppo = pianificazione.date + (1000 * 60 * 60);
+                                const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
                                 const dataAppo1 = new Date(datAppo).toLocaleDateString();
                                 listaDateAppo.push(dataAppo1);
                             });
@@ -210,8 +198,7 @@ export class LezionePage implements OnInit {
                             listaDate.forEach((date) => {
                                 let inizioFine: [string[]] = [[]];
                                 plannings.forEach((pianificazione) => {
-                                    // @ts-ignore
-                                    const datAppo = pianificazione.date + (1000 * 60 * 60);
+                                    const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
                                     const dataAppo1 = new Date(datAppo).toLocaleDateString();
                                     if (dataAppo1 === date) {
                                         const startAndEnd = [];
@@ -236,8 +223,7 @@ export class LezionePage implements OnInit {
                             listaAnni.forEach((anno) => {
                                 const listaMesiPerAnnoAppo: number[] = [];
                                 plannings.forEach((pianificazione) => {
-                                    // @ts-ignore
-                                    const datAppo = pianificazione.date + (1000 * 60 * 60);
+                                    const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
                                     const dataAppo1 = new Date(datAppo).toLocaleString();
                                     const dataAppoArray = dataAppo1.split('/');
                                     if (new Date(pianificazione.date).getFullYear() === anno) {
@@ -251,8 +237,7 @@ export class LezionePage implements OnInit {
                                 listaMesiPerAnno.forEach((mese) => {
                                     const listaGiorniPerMeseAppo: number[] = [];
                                     plannings.forEach((pianificazione) => {
-                                        // @ts-ignore
-                                        const datAppo = pianificazione.date + (1000 * 60 * 60);
+                                        const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
                                         const dataAppo1 = new Date(datAppo).toLocaleString();
                                         const dataAppoArray = dataAppo1.split('/');
                                         // tslint:disable-next-line:max-line-length
@@ -433,9 +418,8 @@ export class LezionePage implements OnInit {
         };
         let pAppoggio: Planning;
         this.plans.forEach((p: Planning) => {
-            // @ts-ignore
             // tslint:disable-next-line:max-line-length
-            if (p.date === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
+            if ( new Date(p.date).getTime() === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
                 console.log('planning uguale');
                 console.log(p);
                 pAppoggio = p;
@@ -477,6 +461,7 @@ export class LezionePage implements OnInit {
 
         await alert.present();
     }
+
     resetta() {
         this.annoClick = false;
         this.meseClick = false;
@@ -610,48 +595,4 @@ export class LezionePage implements OnInit {
     async disLoading() {
         await this.loading.dismiss();
     }
-
-    /*controlloProvenienzaForfettario() {
-        this.provenienza = 'history';
-        this.id = '8';
-        // this.getPlanningsFromRest();
-        // this.getBookingFromStorage(STORAGE.BOOKING);
-        // this.getBookingFromStorage(STORAGE.HISTORY);
-    }*/
-
-    controlloProvenienza() {
-        // this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    }
-
-    /*getPlanningsFromRest() {
-        this.plannings$ = this.planningService.getRestPlanningByIdLesson(this.id);
-        this.plannings$.subscribe((plannings1) => {
-            this.lesson = plannings1.find(x => x !== undefined).lesson;
-            this.teacher = this.lesson.teacher;
-        });
-    }*/
-
-    /*getBookingFromStorage(storageKey: string) {
-        this.booking$ = this.bookingService.getStorageBookingById(parseInt((this.id), 0), storageKey);
-        this.booking$.subscribe((booking) => {
-            this.lesson = booking.planning.lesson;
-
-            this.data = new Date(this.lesson.teacher.birthday);
-            this.timeDiff = Math.abs(Date.now() - this.data.getTime());
-            this.age = Math.floor((this.timeDiff / (1000 * 3600 * 24)) / 365.25);
-
-            this.dataBooking = this.datePipe.transform(new Date(booking.planning.date), 'dd-MM-yyyy');
-            this.startTime = booking.planning.startTime.substring(0, 5);
-            this.endTime = booking.planning.endTime.substring(0, 5);
-            console.log(this.lesson);
-        });
-    }*/
-
-    /*  }
-      getPlanningsFromRest() {
-        this.lessonService.getRestLesson().subscribe((planningList) => {
-          this.plannings$ = planningList;
-          this.lesson = this.plannings.get(0).lesson;
-        });
-      }*/
 }
