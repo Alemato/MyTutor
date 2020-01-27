@@ -32,6 +32,7 @@ export class ListaChatPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.chatService.getRestCountChat().subscribe((n: number) => {
             if (n !== 0) {
                 this.chatService.countFromStorage().then((numb: number) => {
@@ -43,7 +44,6 @@ export class ListaChatPage implements OnInit {
         });
         this.lastMessageFromChats$.subscribe();
         this.creates$.subscribe();
-        this.initTranslate();
     }
 
     ionViewWillEnter() {
