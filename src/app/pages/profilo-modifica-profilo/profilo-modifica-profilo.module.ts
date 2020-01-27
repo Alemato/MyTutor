@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ProfiloModificaProfiloPage } from './profilo-modifica-profilo.page';
 import {SuperTabsModule} from '@ionic-super-tabs/angular';
+import {TranslateModule} from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -21,7 +22,8 @@ const routes: Routes = [
         FormsModule,
         IonicModule,
         RouterModule.forChild(routes),
-        SuperTabsModule
+        SuperTabsModule,
+        TranslateModule
     ],
   declarations: [ProfiloModificaProfiloPage]
 })
