@@ -34,7 +34,7 @@ export class HomePage implements OnInit {
             this.teacher$ = this.userService.getUser();
         }
         this.bookings$ = this.bookingService.getBookings();
-        this.bookings$.subscribe((data) => {
+        this.bookings$.subscribe(() => {
             console.log('home subscribe');
             this.lezioni = [];
             this.setArrayLezioni();

@@ -6,9 +6,6 @@ import {RouterModule, Routes} from '@angular/router';
 
 import { HomePage } from './home.page';
 import {TranslateModule} from '@ngx-translate/core';
-import {HttpClient} from '@angular/common/http';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-// import {HomePageRoutingModule} from './home.router.module';
 
 const routes: Routes = [
   {
@@ -63,14 +60,7 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     TranslateModule.forChild(),
-    // HomePageRoutingModule,
     RouterModule.forChild(routes)
-    /*RouterModule.forChild([
-      {
-        path:  '',
-        component: HomePage
-      }
-    ])*/
   ],
   declarations: [HomePage]
 })
