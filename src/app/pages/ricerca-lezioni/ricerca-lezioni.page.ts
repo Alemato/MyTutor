@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from '../../model/subject.model';
 import {SubjectService} from '../../services/subject.service';
 import {PlanningService} from '../../services/planning.service';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
     selector: 'app-ricerca-lezioni',
@@ -12,6 +13,7 @@ import {PlanningService} from '../../services/planning.service';
     styleUrls: ['./ricerca-lezioni.page.scss'],
 })
 export class RicercaLezioniPage implements OnInit {
+    private listSubject$: BehaviorSubject<Subject[]>;
     materia = '';
     uscitaValue = null;
     minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
@@ -43,34 +45,38 @@ export class RicercaLezioniPage implements OnInit {
             giorni: [['1', '2', '3', '4', '5', '6', '7']]
         });
         this.loadingPresent().then(() => {
-            this.subjectService.getRestList(false).subscribe((data: Subject[]) => {
-                this.subject = data;
-                console.log(this.subject);
-                this.materie = [];
-                let n = 0;
-                this.subject.forEach((item) => {
-                    const obj1 = {text: item.macroSubject, value: n};
-                    n++;
-                    this.materie.push(obj1);
-                });
-                this.sottoMaterie = [];
-                let appogio = [];
-                this.subject.forEach((item) => {
-                    this.subject.forEach((item1) => {
-                        if (item.macroSubject === item1.macroSubject) {
-                            const obj = {
-                                text: item1.microSubject,
-                                value: item1.microSubject
-                            };
-                            appogio.push(obj);
-                        }
+            this.listSubject$ = this.subjectService.getListSubjet();
+            this.subjectService.getRestList(false).subscribe(() => {
+                this.listSubject$.subscribe((data: Subject[]) => {
+                    this.subject = data;
+                    console.log(this.subject);
+                    this.materie = [];
+                    let n = 0;
+                    this.subject.forEach((item) => {
+                        const obj1 = {text: item.macroSubject, value: n};
+                        n++;
+                        this.materie.push(obj1);
                     });
-                    this.sottoMaterie.push(appogio);
-                    appogio = [];
+                    this.sottoMaterie = [];
+                    let appogio = [];
+                    this.subject.forEach((item) => {
+                        this.subject.forEach((item1) => {
+                            if (item.macroSubject === item1.macroSubject) {
+                                const obj = {
+                                    text: item1.microSubject,
+                                    value: item1.microSubject
+                                };
+                                appogio.push(obj);
+                            }
+                        });
+                        this.sottoMaterie.push(appogio);
+                        appogio = [];
+                    });
                 });
                 this.disLoading();
             });
         });
+
     }
 
     changeInizioLezione() {
@@ -155,6 +161,18 @@ export class RicercaLezioniPage implements OnInit {
         });
     }
 
+    async loadingPresent() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async disLoading() {
+        await this.loading.dismiss();
+    }
+
     async showPicker() {
         const opts: PickerOptions = {
             buttons: [
@@ -179,17 +197,5 @@ export class RicercaLezioniPage implements OnInit {
             this.uscitaValue = col.options[col.selectedIndex].value;
         });
         this.changeSelectElents();
-    }
-
-    async loadingPresent() {
-        this.loading = await this.loadingController.create({
-            message: 'Please wait...',
-            translucent: true
-        });
-        return await this.loading.present();
-    }
-
-    async disLoading() {
-        await this.loading.dismiss();
     }
 }
