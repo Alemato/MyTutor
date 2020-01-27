@@ -1,16 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Planning} from '../model/planning.model';
-import {STORAGE, URL} from '../constants';
+import {URL} from '../constants';
 import {map} from 'rxjs/operators';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Storage} from '@ionic/storage';
-import {fromPromise} from 'rxjs/internal-compatibility';
-import {Student} from '../model/student.model';
-
-export interface Plan {
-    slot: Map<number, string[]>;
-}
 
 @Injectable({
     providedIn: 'root'
@@ -23,13 +17,6 @@ export class PlanningService {
         private storage: Storage,
         private http: HttpClient
     ) {
-        // this.http.get<Planning[]>(URL.PLANNING_RESEARCH, {observe: 'response'}).pipe(
-        //     map((resp: HttpResponse<Planning[]>) => {
-        //         this.plannings$.next(resp.body);
-        //         this.setStoragePlanning(resp.body);
-        //         return resp.body;
-        //     })
-        // );
     }
 
     getRestPlanningByIdLesson(idLesson: string): Observable<Planning[]> {
@@ -74,31 +61,6 @@ export class PlanningService {
     modifyRestPlannings(plannings: Planning[]): Observable<any> {
         return this.http.put<any>(URL.PLANNING_MODIFY, plannings, {observe: 'response'});
     }
-
-
-
-    setStoragePlanning(planning: Planning[]) {
-        this.storage.set(STORAGE.PLANNING, planning);
-    }
-
-    getStoragePlanning(): Observable<Planning[]> {
-        return fromPromise(this.storage.get(STORAGE.PLANNING));
-    }
-
-    addOneStoragePlanning(planning: Planning) {
-        this.getStoragePlanning().subscribe((planningList) => {
-            if (planningList) {
-                const plannings: Planning[] = planningList;
-                plannings.push(planning);
-                this.storage.set(STORAGE.PLANNING, plannings);
-            } else {
-                const plannings: Planning[] = [];
-                plannings.push(planning);
-                this.storage.set(STORAGE.PLANNING, plannings);
-            }
-        });
-    }
-
     getPlannings(): BehaviorSubject<Planning[]> {
         return this.plannings$;
     }
