@@ -29,6 +29,7 @@ export class StoricoLezioniPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.loadingPresent();
         this.storico = [];
         this.user$ = this.userService.getUser();
@@ -51,7 +52,6 @@ export class StoricoLezioniPage implements OnInit {
         this.bookings$.subscribe((data) => {
             this.storico = data;
         });
-        this.initTranslate();
     }
 
     async presentPopover(ev: any) {
