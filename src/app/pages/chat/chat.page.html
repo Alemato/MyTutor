@@ -8,8 +8,9 @@
 </ion-header>
 
 <ion-content>
+    <div *ngIf="(user$|async) as user">
     <div class="message-wrap" *ngFor="let message of (messages$ | async); let bo = last;">
-        <div  *ngIf="message.user.roles===1; else messageTeacherBlock">
+        <div  *ngIf="message.user.idUser !== user.idUser; else messageThisUserBlock">
             <div class="message left">
                 <ion-icon
                         *ngIf="message.user.image === null || message.user.image === '' || message.user.image ===' '; else noImgSt"
@@ -30,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <ng-template #messageTeacherBlock>
+        <ng-template #messageThisUserBlock>
             <div class="message right">
                 <ion-icon
                         *ngIf="message.user.image === null || message.user.image === '' || message.user.image ===' '; else noImgTe"
@@ -56,6 +57,7 @@
         <div *ngIf="sendStatus === 'pending'" class="ion-float-right ion-padding-end">
             <ion-spinner name="dots"></ion-spinner>
         </div>
+    </div>
 </ion-content>
 <ion-footer [style.height]="'55px'">
     <div class="input-wrap">

@@ -5,6 +5,7 @@ export class Planning {
     date: Date;
     startTime: string;
     endTime: string;
+    available: boolean;
     lesson: Lesson;
 
     constructor(obj: any, lesson: Lesson) {
@@ -29,11 +30,17 @@ export class Planning {
             } else {
                 this.endTime = '';
             }
+            if (obj.available !== undefined) {
+                this.available = obj.available;
+            } else {
+                this.available = true;
+            }
         } else {
             this.idPlanning = 0;
             this.date = new Date();
             this.startTime = '';
             this.endTime = '';
+            this.available = true;
         }
         if (lesson !== undefined) {
             this.lesson = lesson;
@@ -55,6 +62,9 @@ export class Planning {
             }
             if (obj.endTime !== undefined) {
                 this.endTime = obj.endTime;
+            }
+            if (obj.available !== undefined) {
+                this.available = obj.available;
             }
         }
         if (lesson !== undefined) {

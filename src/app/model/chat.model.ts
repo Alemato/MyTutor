@@ -1,6 +1,6 @@
 export class Chat {
     idChat: number;
-    chatName: string;
+    name: string;
 
     constructor(obj: any) {
         if (obj !== undefined) {
@@ -10,13 +10,13 @@ export class Chat {
                 this.idChat = 0;
             }
             if (obj.chatName !== undefined) {
-                this.chatName = obj.chatName;
+                this.name = obj.chatName;
             } else {
-                this.chatName = '';
+                this.name = '';
             }
         } else {
             this.idChat = 0;
-            this.chatName = '';
+            this.name = '';
         }
     }
 
@@ -26,7 +26,7 @@ export class Chat {
                 this.idChat = obj.idChat;
             }
             if (obj.chatName !== undefined) {
-                this.chatName = obj.chatName;
+                this.name = obj.chatName;
             }
         }
     }

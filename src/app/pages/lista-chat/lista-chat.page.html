@@ -8,24 +8,38 @@
 </ion-header>
 
 <ion-content>
+    <div *ngIf="(user$|async) as user">
+        <div *ngIf="(creates$ | async) as creates">
     <ion-list *ngIf="(lastMessageFromChats$ | async) as lastMessageFromChats; else notChat">
         <ion-list-header class="mb--14" *ngIf="lastMessageFromChats.length > 0; else notChat">Lista lezioni accettate</ion-list-header>
-        <ion-item *ngFor="let c of lastMessageFromChats" class="ion-no-padding" [routerLink]="['/chat', c.chat.idChat]" routerDirection="forward">
+        <ion-item *ngFor="let c of lastMessageFromChats; let i = index;" class="ion-no-padding" [routerLink]="['/chat', c.chat.idChat]" routerDirection="forward">
         <ion-grid>
             <ion-row>
                 <ion-col size="auto">
-                    <ion-icon *ngIf="c.user.image === null || c.user.image === '' || c.user.image ===' '; else imgBlock"
+                    <div *ngIf="user.roles === 1">
+                    <ion-icon *ngIf="creates[i].userListser[1].image === null || creates[i].userListser[1].image === '' || creates[i].userListser[1].image ===' '; else imgBlockTeacher"
                               name="contact" class="fs-62 c-primary"></ion-icon>
-                    <ng-template #imgBlock>
+                    <ng-template #imgBlockTeacher>
                         <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                            <img [src]="c.user.image" alt="img" style="width: 51px; height: 51px;">
+                            <img [src]="c.user.image" alt="img" class="w-51 h-51">
                         </ion-avatar>
                     </ng-template>
+                    </div>
+                    <div *ngIf="user.roles === 2">
+                        <ion-icon *ngIf="creates[i].userListser[0].image === null || creates[i].userListser[0].image === '' || creates[i].userListser[0].image ===' '; else imgBlockTeacher"
+                                  name="contact" class="fs-62 c-primary"></ion-icon>
+                        <ng-template #imgBlockTeacher>
+                            <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+                                <img [src]="c.user.image" alt="img" class="w-51 h-51">
+                            </ion-avatar>
+                        </ng-template>
+                    </div>
                 </ion-col>
                 <ion-col size="9">
                     <ion-row>
                         <ion-col class="ion-no-padding">
-                            <div class="ion-no-margin fs-large fw-normal">{{c.chat.chatName}}</div>
+                            <div *ngIf="user.roles === 1" class="ion-no-margin fs-large fw-normal">{{creates[i].userListser[1].name}} {{creates[i].userListser[1].surname}}</div>
+                            <div *ngIf="user.roles === 2" class="ion-no-margin fs-large fw-normal">{{creates[i].userListser[0].name}} {{creates[i].userListser[0].surname}}</div>
                         </ion-col>
                         <ion-col class="ion-no-padding">
                             <div class="fs-small font-weight-300 vertical-middle ion-float-right"
@@ -45,4 +59,6 @@
             <h5 class="fit-content font-weight-300 ls-1">Nessuna Chat disponibile!</h5>
         </div>
     </ng-template>
+        </div>
+    </div>
 </ion-content>

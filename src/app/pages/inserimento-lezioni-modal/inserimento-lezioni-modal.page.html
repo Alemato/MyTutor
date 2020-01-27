@@ -1,6 +1,11 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>InserimentoLezioniModal</ion-title>
+        <ion-buttons slot="start">
+        </ion-buttons>
+        <ion-title *ngIf="modifica; else titoloinserisci" class="ml--56">Modifica Data e Ora</ion-title>
+        <ng-template #titoloinserisci>
+            <ion-title class="ml--56">Inserimento Data e Ora</ion-title>
+        </ng-template>
     </ion-toolbar>
 </ion-header>
 
@@ -17,7 +22,7 @@
                                       formControlName="dataLezione" required class="plr-0"></ion-datetime>
                     </ion-col>
                     <ion-col size="3">
-                        <ion-datetime (ionChange)="changeInizioLezione(i)" displayFormat="HH : mm" placeholder="Ora inizio" formControlName="oraInizio" hour-values="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22"
+                        <ion-datetime (ionChange)="changeInizioLezione(i)" displayFormat="HH : mm" placeholder="Ora inizio" formControlName="oraInizio" hour-values="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
                                       required class="plr-0" minute-values="0,05,10,15,20,25,30,35,40,45,50,55"></ion-datetime>
                     </ion-col>
                     <ion-col size="3">

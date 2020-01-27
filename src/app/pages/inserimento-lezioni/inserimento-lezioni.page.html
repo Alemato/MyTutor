@@ -1,8 +1,15 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Inserimento Lezione</ion-title>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title *ngIf="modifica; else titoloinserisci" class="ml--56">Modifica Lezione</ion-title>
+        <ng-template #titoloinserisci>
+            <ion-title class="ml--56">Inserimento Lezione</ion-title>
+        </ng-template>
     </ion-toolbar>
 </ion-header>
+
 
 <ion-content>
     <div>
@@ -13,7 +20,7 @@
                 <ion-button slot="end" fill="clear" (click)="showPicker()">Seleziona</ion-button>
             </ion-item>
             <div *ngIf="materia !== 'Creane una'">
-                <ion-item *ngIf="uscitaValue!==null; else selctDisabilited">
+                <ion-item *ngIf="uscitaValue!==null; else selctDisabilitedOrModifica">
                     <ion-label>Sotto Materia:</ion-label>
                     <ion-select ok-text="Seleziona" formControlName="sottoMateria" cancel-text="Cancella"
                                 style="width: 65%; max-width: 65%;">
@@ -34,6 +41,17 @@
                                required style="padding-left: 18px!important;"></ion-input>
                 </ion-item>
             </div>
+            <ng-template #selctDisabilitedOrModifica>
+                <div *ngIf="booleanSottomateria; else selctDisabilited">
+                <ion-item>
+                    <ion-label>Sotto Materia:</ion-label>
+                    <ion-select ok-text="Seleziona" cancel-text="Cancella" formControlName="sottoMateria" style="width: 65%; max-width: 65%;"
+                                placeholder="Seleziona Sotto Materie">
+                        <ion-select-option value="{{this.lesson.subject.microSubject}}">{{this.lesson.subject.microSubject}}</ion-select-option>
+                    </ion-select>
+                </ion-item>
+                </div>
+            </ng-template>
             <ng-template #selctDisabilited>
                 <ion-item>
                     <ion-label>Sotto Materia:</ion-label>
@@ -66,7 +84,7 @@
     </div>
     <div class="mt-15">
         <ion-list-header class="text-bolder fs-large fw-normal c-primary">LISTA PIANIFICAZIONI</ion-list-header>
-        <div *ngIf="planningVisualizzazione.length > 0; else noPlannings">
+        <div *ngIf="planningVisualizzazione.length > 0; else modificaLessonOrNoPlannings">
             <ion-list  *ngFor="let planning of planningVisualizzazione; let i = index;">
                 <ion-item>
                     <ion-icon name="remove-circle-outline" (click)="rimuoviPlanning(i)"></ion-icon>
@@ -82,16 +100,29 @@
                 </ion-item>
             </ion-list>
         </div>
+        <ng-template #modificaLessonOrNoPlannings>
+            <div *ngIf="booleanSottomateria; else noPlannings" class="mx-auto fit-content testo-centrato">
+                <h6>Per le pianificazioni clicca sul bottone</h6>
+                <h6>"IMPOSTA DATA E ORA"</h6>
+            </div>
+        </ng-template>
         <ng-template #noPlannings>
             <div class="mx-auto fit-content testo-centrato">
                 <h6> Nessuna pianificazione inserita</h6>
-                <h6> Clicca su "IMPOSTA DATA E ORA"</h6>
+                <h6> Clicca su "IMPOSTA DATA ED ORA"</h6>
             </div>
         </ng-template>
     </div>
-    <div class="bottone-inserisci">
-        <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="inserisciLezione()"
-                    [disabled]="!lezioneFormModel.valid || !this.ok">Inserisci
+    <div class="bottone-inserisci" *ngIf="modifica; else bottoneInserisci">
+        <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="modificaLezione()"
+                    [disabled]="!lezioneFormModel.valid || !this.ok">Modifica
         </ion-button>
     </div>
+    <ng-template #bottoneInserisci>
+        <div class="bottone-inserisci">
+            <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="inserisciLezione()"
+                        [disabled]="!lezioneFormModel.valid || !this.ok">Inserisci
+            </ion-button>
+        </div>
+    </ng-template>
 </ion-content>

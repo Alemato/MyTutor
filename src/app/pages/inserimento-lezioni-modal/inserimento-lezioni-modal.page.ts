@@ -1,7 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ModalController, NavParams} from '@ionic/angular';
+import {LoadingController, ModalController, NavParams} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
 import {Lezione} from '../../model/old/lezione.model';
+import {PlanningService} from '../../services/planning.service';
+import {Planning} from '../../model/planning.model';
 
 @Component({
     selector: 'app-inserimento-lezioni-modal',
@@ -10,11 +12,16 @@ import {Lezione} from '../../model/old/lezione.model';
 })
 
 export class InserimentoLezioniModalPage implements OnInit {
+    @Input() modifica: boolean;
+    @Input() idLesson: number;
     public dataLezioneFormModel: FormGroup;
     public listaDataOraIF: FormArray;
     public arrayDymension = 1;
+    private loading;
+    public plannings: Planning[] = [];
+    public planningsCompattati: Planning[] = [];
     minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-    hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+    hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
     // returns all form groups under contacts
     // prende l'oggetto
@@ -25,20 +32,91 @@ export class InserimentoLezioniModalPage implements OnInit {
     constructor(
         public formBuilder: FormBuilder,
         public modalController: ModalController,
+        private planningService: PlanningService,
+        public loadingController: LoadingController
     ) {
     }
 
     ngOnInit() {
-        this.dataLezioneFormModel = this.formBuilder.group({
-            dataOraIF: this.formBuilder.array([this.creaDataOraIF()])
-        });
-        // set contactlist to this field
-        this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
+        console.log('this.modifica');
+        console.log(this.modifica);
+        console.log('this.idLesson');
+        console.log(this.idLesson);
+        if (this.modifica) {
+            this.dataLezioneFormModel = this.formBuilder.group({
+                dataOraIF: this.formBuilder.array([this.creaDataOraIF()])
+            });
+            this.loadingPresent().then(() => {
+                this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
+                this.planningService.getRestPlanningByIdLesson(this.idLesson.toString()).subscribe((planningList) => {
+                    this.plannings = planningList;
+                    console.log('this.plannings');
+                    console.log(this.plannings);
+                    this.planingCompat();
+                    this.aggiungiPlanning();
+                    this.disLoading();
+                });
+            });
+        } else {
+            this.dataLezioneFormModel = this.formBuilder.group({
+                dataOraIF: this.formBuilder.array([this.creaDataOraIF()])
+            });
+            this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
+        }
+    }
+
+    planingCompat() {
+        for (let i = this.plannings.length - 1; i >= 0; i--) {
+            console.log('i');
+            console.log(i);
+            let flag = false;
+            for (let j = i - 1; j >= 0; j--) {
+                console.log('j');
+                console.log(j);
+                console.log('this.plannings[i]');
+                console.log(this.plannings[i]);
+                console.log('this.plannings[j]');
+                console.log(this.plannings[j]);
+                if (new Date(this.plannings[i].date).getDay() === new Date(this.plannings[j].date).getDay() &&
+                    this.plannings[i].startTime === this.plannings[j].startTime &&
+                    this.plannings[i].endTime === this.plannings[j].endTime) {
+                    flag = false;
+                    break;
+                } else {
+                    flag = true;
+                }
+            }
+            if (flag) {
+                this.planningsCompattati.push(this.plannings[i]);
+            }
+        }
+        this.planningsCompattati.push(this.plannings[0]);
+        this.planningsCompattati.reverse();
+
+        // for (let i = 0; i < this.plannings.length; i++) {
+        //     let flag = false;
+        //     for (let j = i + 1; j < this.plannings.length; j++) {
+        //         if (new Date(this.plannings[i].date).getDay() === new Date(this.plannings[j].date).getDay() &&
+        //             this.plannings[i].startTime === this.plannings[j].startTime &&
+        //             this.plannings[i].endTime === this.plannings[j].endTime) {
+        //             flag = false;
+        //             break;
+        //         } else {
+        //             flag = true;
+        //         }
+        //     }
+        //     if (flag) {
+        //         this.planningsCompattati.push(this.plannings[i]);
+        //     }
+        // }
+        // this.planningsCompattati.push(this.plannings[this.plannings.length - 1]);
+        console.log('this.planningsCompattati');
+        console.log(this.planningsCompattati);
     }
 
     changeInizioLezione(index) {
         this.minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-        this.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+        this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
         // this.dataLezioneFormModel.get('dataOraIF').get(index)
         // this.dataLezioneFormModel.get('dataOraIF').value.controls.oraFine.reset();
         // @ts-ignore
@@ -63,6 +141,28 @@ export class InserimentoLezioniModalPage implements OnInit {
         }
         this.minutes = this.minutes.slice(e, this.minutes.length);
     }
+
+    aggiungiPlanning() {
+        let count = 0;
+        this.planningsCompattati.forEach((piani: Planning, index) => {
+            if (count > 0) {
+                this.listaDataOraIF.push(this.creaDataOraIF());
+            }
+            count++;
+            const obj = {
+                // 1968-11-16T00:00:00'
+                dataLezione: new Date(piani.date).toISOString(),
+                oraInizio: new Date('2020-01-25T' + piani.startTime).toISOString(),
+                oraFine: new Date('2020-01-25T' + piani.endTime).toISOString()
+            };
+            console.log('obj');
+            console.log(obj);
+            this.listaDataOraIF.controls[index].setValue(obj);
+            // @ts-ignore
+            this.arrayDymension = this.dataLezioneFormModel.get('dataOraIF').length;
+        });
+    }
+
 
     // contact formgroup
     creaDataOraIF(): FormGroup {
@@ -94,9 +194,22 @@ export class InserimentoLezioniModalPage implements OnInit {
         // this.lezione1 = this.dataLezioneFormModel.value;
         await this.modalController.dismiss([this.dataLezioneFormModel.value, true]);
     }
+
     // method triggered when form is submitted
     submit() {
         console.log(this.dataLezioneFormModel.value);
+    }
+
+    async loadingPresent() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async disLoading() {
+        await this.loading.dismiss();
     }
 
     // questi campi serviranno in futuro

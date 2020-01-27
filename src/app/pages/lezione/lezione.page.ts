@@ -1,19 +1,24 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
-import {AlertController} from '@ionic/angular';
 import {UserService} from '../../services/user.service';
 import {Planning} from '../../model/planning.model';
 import {LessonService} from '../../services/lesson.service';
 import {Lesson} from '../../model/lesson.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Booking} from '../../model/booking.model';
-import {Storage} from '@ionic/storage';
 import {DatePipe} from '@angular/common';
 import {BookingService} from '../../services/booking.service';
 import {PlanningService} from '../../services/planning.service';
-import {STORAGE} from '../../constants';
+import {User} from '../../model/user.model';
+import {ChatService} from '../../services/chat.service';
+import {CreateService} from '../../services/create.service';
+import {MessageService} from '../../services/message.service';
+import {Message} from '../../model/message.model';
+import {Chat} from '../../model/chat.model';
+import {AlertController, LoadingController, NavController} from '@ionic/angular';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Student} from '../../model/student.model';
 
 
 @Component({
@@ -22,525 +27,574 @@ import {STORAGE} from '../../constants';
     styleUrls: ['./lezione.page.scss'],
 })
 export class LezionePage implements OnInit {
-
-    private student$: BehaviorSubject<Student>;
-    private teacher$: BehaviorSubject<Teacher>;
-    private plannings$: Observable<Planning[]>;
-    private booking$: Observable<Booking>;
-    private bookings$: Observable<Booking[]>;
-    private teacher: Teacher;
     private id: string;
     private provenienza: string;
-    private timeDiff: number;
-    private age: number;
-    private data;
-    private dataBooking;
-    private startTime: string;
-    private endTime: string;
-    private userType: string;
+    private user$: BehaviorSubject<User>;
+    private bookings$: BehaviorSubject<Booking[]>;
+    private booking$: Observable<Booking>;
+    private lesson$: Observable<Lesson>;
+    private age = 0;
+    private isBooking = false;
+    private idChat = 0;
+    private existsChat = false;
+    private loading;
 
-    private lesson: Lesson;
-
-    private json = [
-        {
-            idBooking: 7,
-            date: 1578092400000,
-            lessonState: 0,
-            createDate: 1578133436000,
-            updateDate: 1578133436000,
-            student: {
-                idStudent: 3,
-                studyGrade: 'Scuola superiore',
-                idUser: 12,
-                user: {
-                    idUser: 12,
-                    email: 'studente@prova.it',
-                    name: 'Prova',
-                    surname: 'Studente',
-                    birthday: 662684400000,
-                    language: false,
-                    // tslint:disable-next-line:max-line-length
-                    image: 'data:image/png;base64,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',
-                    createDate: 1576842143000,
-                    updateDate: 1578138985000
-                }
-            },
-            planning: {
-                idPlanning: 30,
-                date: 1578351600000,
-                startTime: '09:00:00',
-                endTime: '10:00:00',
-                lesson: {
-                    idLesson: 1,
-                    name: 'Lezione BellaBella',
-                    price: 14.0,
-                    description: 'La lezione bellissima',
-                    publicationDate: 1575846000000,
-                    createDate: 1575970984000,
-                    updateDate: 1578149898000,
-                    subject: {
-                        idSubject: 1,
-                        macroSubject: 'Matematica',
-                        microSubject: 'Equazioni',
-                        createDate: 1575970829000,
-                        updateDate: 1575970829000
-                    },
-                    teacher: {
-                        idTeacher: 3,
-                        postCode: 67100,
-                        City: 'L\'aquila',
-                        region: 'Abruzzo',
-                        street: 'via roma',
-                        streetNumber: '1',
-                        byography: 'Sono un bravo professore di prova.\nModificato 5',
-                        user: {
-                            idUser: 13,
-                            email: 'teacher@prova.it',
-                            roles: 2,
-                            name: 'Mario',
-                            surname: 'Rossi',
-                            birthday: -3600000,
-                            language: false,
-                            // tslint:disable-next-line:max-line-length
-                            image: 'data:image/png;base64,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',
-                            createDate: 1576939992000,
-                            updateDate: 1578244558000
-                        }
-                    }
-                }
-            }
-        },
-        {
-            idBooking: 8,
-            date: 1578092400000,
-            lessonState: 0,
-            createDate: 1578133465000,
-            updateDate: 1578133465000,
-            student: {
-                idStudent: 3,
-                studyGrade: 'Scuola superiore',
-                idUser: 12,
-                user: {
-                    idUser: 12,
-                    email: 'studente@prova.it',
-                    name: 'Prova',
-                    surname: 'Studente',
-                    birthday: 662684400000,
-                    language: false,
-                    // tslint:disable-next-line:max-line-length
-                    image: 'data:image/png;base64,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',
-                    createDate: 1576842143000,
-                    updateDate: 1578138985000
-                }
-            },
-            planning: {
-                idPlanning: 32,
-                date: 1578351600000,
-                startTime: '11:00:00',
-                endTime: '12:00:00',
-                lesson: {
-                    idLesson: 2,
-                    name: 'Lezione Brutta',
-                    price: 10.0,
-                    description: 'La lezione bruttissima',
-                    publicationDate: 1546902000000,
-                    createDate: 1575971129000,
-                    updateDate: 1578130046000,
-                    subject: {
-                        idSubject: 2,
-                        macroSubject: 'Italiano',
-                        microSubject: 'Poesie',
-                        createDate: 1575970873000,
-                        updateDate: 1575970873000
-                    },
-                    teacher: {
-                        idTeacher: 3,
-                        postCode: 67100,
-                        City: 'L\'aquila',
-                        region: 'Abruzzo',
-                        street: 'via roma',
-                        streetNumber: '1',
-                        byography: 'Sono un bravo professore di prova.\nModificato 5',
-                        user: {
-                            idUser: 13,
-                            email: 'teacher@prova.it',
-                            roles: 2,
-                            name: 'Mario',
-                            surname: 'Rossi',
-                            birthday: -3600000,
-                            language: false,
-                            // tslint:disable-next-line:max-line-length
-                            image: 'data:image/png;base64,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',
-                            createDate: 1576939992000,
-                            updateDate: 1578244558000
-                        }
-                    }
-                }
-            }
-        },
-        {
-            idBooking: 9,
-            date: 1578092400000,
-            lessonState: 1,
-            createDate: 1578144886000,
-            updateDate: 1578145205000,
-            student: {
-                idStudent: 3,
-                studyGrade: 'Scuola superiore',
-                idUser: 12,
-                user: {
-                    idUser: 12,
-                    email: 'studente@prova.it',
-                    name: 'Prova',
-                    surname: 'Studente',
-                    birthday: 662684400000,
-                    language: false,
-                    // tslint:disable-next-line:max-line-length
-                    image: 'data:image/png;base64,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',
-                    createDate: 1576842143000,
-                    updateDate: 1578138985000
-                }
-            },
-            planning: {
-                idPlanning: 30,
-                date: 1578351600000,
-                startTime: '09:00:00',
-                endTime: '10:00:00',
-                lesson: {
-                    idLesson: 1,
-                    name: 'Lezione BellaBella',
-                    price: 14.0,
-                    description: 'La lezione bellissima',
-                    publicationDate: 1575846000000,
-                    createDate: 1575970984000,
-                    updateDate: 1578149898000,
-                    subject: {
-                        idSubject: 1,
-                        macroSubject: 'Matematica',
-                        microSubject: 'Equazioni',
-                        createDate: 1575970829000,
-                        updateDate: 1575970829000
-                    },
-                    teacher: {
-                        idTeacher: 3,
-                        postCode: 67100,
-                        City: 'L\'aquila',
-                        region: 'Abruzzo',
-                        street: 'via roma',
-                        streetNumber: '1',
-                        byography: 'Sono un bravo professore di prova.\nModificato 5',
-                        user: {
-                            idUser: 13,
-                            email: 'teacher@prova.it',
-                            roles: 2,
-                            name: 'Mario',
-                            surname: 'Rossi',
-                            birthday: -3600000,
-                            language: false,
-                            // tslint:disable-next-line:max-line-length
-                            image: 'data:image/png;base64,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',
-                            createDate: 1576939992000,
-                            updateDate: 1578244558000
-                        }
-                    }
-                }
-            }
-        }
-    ];
-
-    private jsonStorico = [
-        {
-            idBooking: 7,
-            date: 1578092400000,
-            lessonState: 1,
-            createDate: 1578133436000,
-            updateDate: 1578133436000,
-            student: {
-                idStudent: 3,
-                studyGrade: 'Scuola superiore',
-                idUser: 12,
-                user: {
-                    idUser: 12,
-                    email: 'studente@prova.it',
-                    name: 'Prova',
-                    surname: 'Studente',
-                    birthday: 662684400000,
-                    language: false,
-                    // tslint:disable-next-line:max-line-length
-                    image: 'data:image/png;base64,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',
-                    createDate: 1576842143000,
-                    updateDate: 1578138985000
-                }
-            },
-            planning: {
-                idPlanning: 30,
-                date: 1578351600000,
-                startTime: '09:00:00',
-                endTime: '10:00:00',
-                lesson: {
-                    idLesson: 1,
-                    name: 'Lezione BellaBella',
-                    price: 14.0,
-                    description: 'La lezione bellissima',
-                    publicationDate: 1575846000000,
-                    createDate: 1575970984000,
-                    updateDate: 1578149898000,
-                    subject: {
-                        idSubject: 1,
-                        macroSubject: 'Matematica',
-                        microSubject: 'Equazioni',
-                        createDate: 1575970829000,
-                        updateDate: 1575970829000
-                    },
-                    teacher: {
-                        idTeacher: 3,
-                        postCode: 67100,
-                        City: 'L\'aquila',
-                        region: 'Abruzzo',
-                        street: 'via roma',
-                        streetNumber: '1',
-                        byography: 'Sono un bravo professore di prova.\nModificato 5',
-                        user: {
-                            idUser: 13,
-                            email: 'teacher@prova.it',
-                            roles: 2,
-                            name: 'Mario',
-                            surname: 'Rossi',
-                            birthday: -3600000,
-                            language: false,
-                            // tslint:disable-next-line:max-line-length
-                            image: 'data:image/png;base64,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',
-                            createDate: 1576939992000,
-                            updateDate: 1578244558000
-                        }
-                    }
-                }
-            }
-        },
-        {
-            idBooking: 8,
-            date: 1578092400000,
-            lessonState: 2,
-            createDate: 1578133465000,
-            updateDate: 1578133465000,
-            student: {
-                idStudent: 3,
-                studyGrade: 'Scuola superiore',
-                idUser: 12,
-                user: {
-                    idUser: 12,
-                    email: 'studente@prova.it',
-                    name: 'Prova',
-                    surname: 'Studente',
-                    birthday: 662684400000,
-                    language: false,
-                    // tslint:disable-next-line:max-line-length
-                    image: 'data:image/png;base64,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',
-                    createDate: 1576842143000,
-                    updateDate: 1578138985000
-                }
-            },
-            planning: {
-                idPlanning: 32,
-                date: 1578351600000,
-                startTime: '11:00:00',
-                endTime: '12:00:00',
-                lesson: {
-                    idLesson: 2,
-                    name: 'Lezione Brutta',
-                    price: 10.0,
-                    description: 'La lezione bruttissima',
-                    publicationDate: 1546902000000,
-                    createDate: 1575971129000,
-                    updateDate: 1578130046000,
-                    subject: {
-                        idSubject: 2,
-                        macroSubject: 'Italiano',
-                        microSubject: 'Poesie',
-                        createDate: 1575970873000,
-                        updateDate: 1575970873000
-                    },
-                    teacher: {
-                        idTeacher: 3,
-                        postCode: 67100,
-                        City: 'L\'aquila',
-                        region: 'Abruzzo',
-                        street: 'via roma',
-                        streetNumber: '1',
-                        byography: 'Sono un bravo professore di prova.\nModificato 5',
-                        user: {
-                            idUser: 13,
-                            email: 'teacher@prova.it',
-                            roles: 2,
-                            name: 'Mario',
-                            surname: 'Rossi',
-                            birthday: -3600000,
-                            language: false,
-                            // tslint:disable-next-line:max-line-length
-                            image: 'data:image/png;base64,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',
-                            createDate: 1576939992000,
-                            updateDate: 1578244558000
-                        }
-                    }
-                }
-            }
-        },
-        {
-            idBooking: 9,
-            date: 1578092400000,
-            lessonState: 4,
-            createDate: 1578144886000,
-            updateDate: 1578145205000,
-            student: {
-                idStudent: 3,
-                studyGrade: 'Scuola superiore',
-                idUser: 12,
-                user: {
-                    idUser: 12,
-                    email: 'studente@prova.it',
-                    name: 'Prova',
-                    surname: 'Studente',
-                    birthday: 662684400000,
-                    language: false,
-                    // tslint:disable-next-line:max-line-length
-                    image: 'data:image/png;base64,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',
-                    createDate: 1576842143000,
-                    updateDate: 1578138985000
-                }
-            },
-            planning: {
-                idPlanning: 30,
-                date: 1578351600000,
-                startTime: '09:00:00',
-                endTime: '10:00:00',
-                lesson: {
-                    idLesson: 1,
-                    name: 'Lezione BellaBella',
-                    price: 14.0,
-                    description: 'La lezione bellissima',
-                    publicationDate: 1575846000000,
-                    createDate: 1575970984000,
-                    updateDate: 1578149898000,
-                    subject: {
-                        idSubject: 1,
-                        macroSubject: 'Matematica',
-                        microSubject: 'Equazioni',
-                        createDate: 1575970829000,
-                        updateDate: 1575970829000
-                    },
-                    teacher: {
-                        idTeacher: 3,
-                        postCode: 67100,
-                        City: 'L\'aquila',
-                        region: 'Abruzzo',
-                        street: 'via roma',
-                        streetNumber: '1',
-                        byography: 'Sono un bravo professore di prova.\nModificato 5',
-                        user: {
-                            idUser: 13,
-                            email: 'teacher@prova.it',
-                            roles: 2,
-                            name: 'Mario',
-                            surname: 'Rossi',
-                            birthday: -3600000,
-                            language: false,
-                            // tslint:disable-next-line:max-line-length
-                            image: 'data:image/png;base64,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',
-                            createDate: 1576939992000,
-                            updateDate: 1578244558000
-                        }
-                    }
-                }
-            }
-        }
-    ];
+    private student$: BehaviorSubject<Student>;
+    private isLesson = false;
+    private plannings$: BehaviorSubject<Planning[]>;
+    private plans: Planning[];
+    private listaAnni: number[] = [];
+    private listaMesi = [];
+    private mappaMesiGiorni: Map<number, number[]> = new Map<number, number[]>();
+    private listaGiorni = [];
+    private mappaAnnoMessiGiorno: Map<number, Map<number, number[]>> = new Map<number, Map<number, number[]>>();
+    private mappaStartEnd: Map<string, [string[]]> = new Map<string, [string[]]>();
+    private annoClick = false;
+    private meseClick = false;
+    private giornoClick = false;
+    private oraInizioClick = false;
+    private oraFineClick = false;
+    private hoursInizio = [];
+    private hoursFine = [];
+    public prenotazioneFormModel: FormGroup;
 
     constructor(
-        private storage: Storage,
-        private route: ActivatedRoute,
         public alertController: AlertController,
+        public formBuilder: FormBuilder,
+        private route: ActivatedRoute,
+        private navController: NavController,
         private userService: UserService,
         private lessonService: LessonService,
         private bookingService: BookingService,
         private planningService: PlanningService,
         private datePipe: DatePipe,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private chatService: ChatService,
+        private createService: CreateService,
+        private messageService: MessageService,
+        private loadingController: LoadingController
     ) {
-        this.userType = this.userService.getTypeUser();
-        if (this.userType === 'student') {
+        this.user$ = this.userService.getUser();
+        const tipoU = this.userService.getTypeUser();
+        console.log(tipoU);
+        if (tipoU === 'student') {
             this.student$ = this.userService.getUser();
-        } else if (this.userType === 'teacher') {
-            this.teacher$ = this.userService.getUser();
         }
     }
 
 
     ngOnInit() {
-        // this.storage.set(STORAGE.BOOKING, this.jsonStorico).then((ciao) => {
-        //     if (ciao) {
-        //         this.controlloProvenienzaForfettario();
-        //     }
-        // });
-        // this.controlloProvenienzaForfettario();
-        this.controlloProvenienza();
-    }
-
-    controlloProvenienzaForfettario() {
-        this.provenienza = 'history';
-        this.id = '8';
-        // this.getPlanningsFromRest();
-        // this.getBookingFromStorage(STORAGE.BOOKING);
-        this.getBookingFromStorage(STORAGE.HISTORY);
-    }
-
-    controlloProvenienza() {
-        // this.id = this.activatedRoute.snapshot.paramMap.get('id');
-
         this.activatedRoute.paramMap.subscribe((params: ParamMap) => {
             this.provenienza = params.get('prov');
-            this.id = params.get('idPlanning');
+            this.id = params.get('id');
             if (params.get('prov') === 'booking') {
-                console.log('booking');
-                this.getBookingFromStorage(STORAGE.BOOKING);
-            } else if (params.get('prov') === 'history') {
-                console.log('history');
-                this.getBookingFromStorage(STORAGE.HISTORY);
-            } else if (params.get('prov') === 'risric') {
-                console.log('risultati ricerca');
-                this.getPlanningsFromRest();
+                this.isBooking = true;
+                this.isLesson = false;
+                this.loadingPresent().then(() => {
+                    this.bookings$ = this.bookingService.getBookings();
+                    this.bookings$.subscribe((bookings) => {
+                        this.booking$ = new Observable<Booking>(subscriber => {
+                            subscriber.next(bookings.find(x => x.planning.idPlanning === +this.id));
+                        });
+                        this.lesson$ = new Observable<Lesson>(subscriber => {
+                            subscriber.next(bookings.find(x => x.planning.idPlanning === +this.id).planning.lesson);
+                        });
+                    });
+                    this.lesson$.subscribe((lesson) => {
+                        this.calcolaDataTeacher(lesson);
+                    });
+                    this.booking$.subscribe((booking) => {
+                        console.log(booking);
+                        if (this.user$.value.roles === 2) {
+                            this.chatService.getRestCountChatUser2(booking.student.idUser).subscribe((data) => {
+                                console.log(data);
+                                if (data === 1) {
+                                    console.log('esiste chat');
+                                    this.existsChat = true;
+                                    this.createService.getListCreates(booking.planning.lesson.teacher.idUser).subscribe((creates) => {
+                                        console.log(creates);
+                                        this.idChat = creates.find(x => x.userListser[0].idUser === booking.student.idUser).chat.idChat;
+                                        this.disLoading();
+                                    });
+                                } else if (data < 1) {
+                                    this.disLoading();
+                                    this.existsChat = false;
+                                }
+                            });
+                        } else if (this.user$.value.roles === 1) {
+                            this.chatService.getRestCountChatUser2(booking.planning.lesson.teacher.idUser).subscribe((data) => {
+                                console.log(data);
+                                if (data === 1) {
+                                    console.log('esiste chat');
+                                    this.existsChat = true;
+                                    this.createService.getListCreates(booking.student.idUser).subscribe((creates) => {
+                                        console.log(creates);
+                                        // tslint:disable-next-line:max-line-length
+                                        this.idChat = creates.find(x => x.userListser[1].idUser === booking.planning.lesson.teacher.idUser).chat.idChat;
+                                        this.disLoading();
+                                    });
+                                } else {
+                                    this.disLoading();
+                                    this.existsChat = false;
+                                }
+                            });
+                        }
+                    });
+                });
+            } else if (params.get('prov') === 'lesson') {
+                console.log('da lesson');
+                // Aggiungere logica del form model PRIMA DI SETTARE I BOOLEANI
+                this.prenotazioneFormModel = this.formBuilder.group({
+                    annoDataLezione: ['', Validators.required],
+                    meseDataLezione: ['', Validators.required],
+                    giornoDataLezione: ['', Validators.required],
+                    oraInizio: ['', Validators.required],
+                    oraFine: ['', Validators.required],
+                });
+                this.prenotazioneFormModel.controls.meseDataLezione.disable();
+                this.prenotazioneFormModel.controls.giornoDataLezione.disable();
+                this.prenotazioneFormModel.controls.oraInizio.disable();
+                this.prenotazioneFormModel.controls.oraFine.disable();
+                this.isBooking = false;
+                this.isLesson = true;
+                this.plannings$ = this.planningService.getPlannings();
+                this.planningService.getRestPlanningByIdLesson(this.id).subscribe((plannings) => {
+                    console.log(plannings);
+                    this.plannings$.next(plannings);
+                    this.lesson$ = new Observable<Lesson>(subscriber => {
+                        subscriber.next(plannings[0].lesson);
+                    });
+                    this.lesson$.subscribe((lesson) => {
+                        this.calcolaDataTeacher(lesson);
+                        if (this.user$.value.roles === 1) {
+                            this.chatService.getRestCountChatUser2(lesson.teacher.idUser).subscribe((data) => {
+                                console.log(data);
+                                if (data === 1) {
+                                    console.log('esiste chat');
+                                    this.existsChat = true;
+                                    this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                                        console.log(creates);
+                                        // tslint:disable-next-line:max-line-length
+                                        this.idChat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat.idChat;
+                                    });
+                                } else {
+                                    this.existsChat = false;
+                                }
+                            });
+                            console.log('eseguire codice student');
+                            // Aggiungere logica per spedire i booking creati
+
+                            console.log('plannings');
+                            console.log(plannings);
+                            this.plans = plannings;
+                            const listaDateAppo: string[] = [];
+                            plannings.forEach((pianificazione) => {
+                                const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
+                                const dataAppo1 = new Date(datAppo).toLocaleDateString();
+                                listaDateAppo.push(dataAppo1);
+                            });
+                            const uniqueDateSet = new Set(listaDateAppo);
+                            const listaDate = Array.from(uniqueDateSet);
+                            listaDate.forEach((date) => {
+                                let inizioFine: [string[]] = [[]];
+                                plannings.forEach((pianificazione) => {
+                                    const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
+                                    const dataAppo1 = new Date(datAppo).toLocaleDateString();
+                                    if (dataAppo1 === date) {
+                                        const startAndEnd = [];
+                                        startAndEnd[0] = pianificazione.startTime;
+                                        startAndEnd[1] = pianificazione.endTime;
+                                        inizioFine.push(startAndEnd);
+                                    }
+                                });
+                                inizioFine.splice(0, 1);
+                                this.mappaStartEnd.set(date, inizioFine);
+                                inizioFine = [[]];
+                            });
+                            console.log('this.mappaStartEnd');
+                            console.log(this.mappaStartEnd);
+
+                            const listaAnniAppo = [];
+                            plannings.forEach((pianificazione) => {
+                                listaAnniAppo.push(new Date(pianificazione.date).getFullYear());
+                            });
+                            const uniqueSet = new Set(listaAnniAppo);
+                            const listaAnni = Array.from(uniqueSet);
+                            listaAnni.forEach((anno) => {
+                                const listaMesiPerAnnoAppo: number[] = [];
+                                plannings.forEach((pianificazione) => {
+                                    const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
+                                    const dataAppo1 = new Date(datAppo).toLocaleString();
+                                    const dataAppoArray = dataAppo1.split('/');
+                                    if (new Date(pianificazione.date).getFullYear() === anno) {
+                                        listaMesiPerAnnoAppo.push(parseInt(dataAppoArray[1], 0));
+                                    }
+                                });
+                                const uniqueSetMesi = new Set(listaMesiPerAnnoAppo);
+                                const listaMesiPerAnno = Array.from(uniqueSetMesi);
+                                console.log('listaMesiPerAnno');
+                                console.log(listaMesiPerAnno);
+                                listaMesiPerAnno.forEach((mese) => {
+                                    const listaGiorniPerMeseAppo: number[] = [];
+                                    plannings.forEach((pianificazione) => {
+                                        const datAppo = new Date(pianificazione.date).getTime() + (1000 * 60 * 60);
+                                        const dataAppo1 = new Date(datAppo).toLocaleString();
+                                        const dataAppoArray = dataAppo1.split('/');
+                                        // tslint:disable-next-line:max-line-length
+                                        if (new Date(pianificazione.date).getFullYear() === anno && parseInt(dataAppoArray[1], 0) === mese) {
+                                            listaGiorniPerMeseAppo.push(parseInt(dataAppoArray[0], 0));
+                                        }
+                                    });
+                                    const uniqueSetGiorni = new Set(listaGiorniPerMeseAppo);
+                                    const listaGiorniPerMese = Array.from(uniqueSetGiorni);
+                                    this.mappaMesiGiorni.set(mese, listaGiorniPerMese);
+                                });
+                                this.mappaAnnoMessiGiorno.set(anno, this.mappaMesiGiorni);
+                                this.mappaMesiGiorni = new Map<number, number[]>();
+                            });
+                            this.listaAnni = Array.from(this.mappaAnnoMessiGiorno.keys());
+                            console.log(this.listaAnni);
+
+                            console.log('this.mappaAnnoMessiGiorno');
+                            console.log(this.mappaAnnoMessiGiorno);
+                        }
+                    });
+                });
             }
         });
     }
 
-    getPlanningsFromRest() {
-        this.plannings$ = this.planningService.getRestPlanningByIdLesson(this.id);
-        this.plannings$.subscribe((plannings1) => {
-            this.lesson = plannings1.find(x => x !== undefined).lesson;
-            this.teacher = this.lesson.teacher;
+
+    clickAnno() {
+        this.annoClick = true;
+        this.meseClick = false;
+        this.giornoClick = false;
+        this.oraInizioClick = false;
+        this.oraFineClick = false;
+    }
+
+    clickMese() {
+        this.annoClick = false;
+        this.meseClick = true;
+        this.giornoClick = false;
+        this.oraInizioClick = false;
+        this.oraFineClick = false;
+    }
+
+    clickGiorno() {
+        this.annoClick = false;
+        this.meseClick = false;
+        this.giornoClick = true;
+        this.oraInizioClick = false;
+        this.oraFineClick = false;
+    }
+
+    clickOraInizio() {
+        this.annoClick = false;
+        this.meseClick = false;
+        this.giornoClick = false;
+        this.oraInizioClick = true;
+        this.oraFineClick = false;
+    }
+
+    clickOraFine() {
+        this.annoClick = false;
+        this.meseClick = false;
+        this.giornoClick = false;
+        this.oraInizioClick = false;
+        this.oraFineClick = true;
+    }
+
+
+    cambioAnno() {
+        if (this.annoClick) {
+            console.log('cambio Anno');
+            this.prenotazioneFormModel.controls.meseDataLezione.reset();
+            this.prenotazioneFormModel.controls.giornoDataLezione.reset();
+            this.prenotazioneFormModel.controls.oraInizio.reset();
+            this.prenotazioneFormModel.controls.oraFine.reset();
+            this.prenotazioneFormModel.controls.meseDataLezione.enable();
+            const ritorno: string = this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4);
+            const mappaRitorno: Map<number, number[]> = this.mappaAnnoMessiGiorno.get(parseInt(ritorno, 0));
+            this.listaMesi = Array.from(mappaRitorno.keys());
+        }
+    }
+
+    cambioMese() {
+        if (this.meseClick) {
+            console.log('cambio Mese');
+            this.prenotazioneFormModel.controls.giornoDataLezione.reset();
+            this.prenotazioneFormModel.controls.oraInizio.reset();
+            this.prenotazioneFormModel.controls.oraFine.reset();
+            this.prenotazioneFormModel.controls.giornoDataLezione.enable();
+            const ritorno: string = this.prenotazioneFormModel.controls.meseDataLezione.value.slice(5, 7);
+            // tslint:disable-next-line:max-line-length
+            const mappaRitorno: Map<number, number[]> = this.mappaAnnoMessiGiorno.get(parseInt(this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4), 0));
+            this.listaGiorni = mappaRitorno.get(parseInt(ritorno, 0));
+            console.log('this.listaGiorni');
+            console.log(this.listaGiorni);
+        }
+    }
+
+    cambioGiorno() {
+        if (this.giornoClick) {
+            this.hoursInizio = [];
+            console.log('cambio Giorno');
+            this.prenotazioneFormModel.controls.oraInizio.reset();
+            this.prenotazioneFormModel.controls.oraFine.reset();
+            this.prenotazioneFormModel.controls.oraInizio.enable();
+            const ritornoAnno: number = parseInt(this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4), 0);
+            const ritornoMese: number = parseInt(this.prenotazioneFormModel.controls.meseDataLezione.value.slice(5, 7), 0);
+            const ritornoGiorno: number = parseInt(this.prenotazioneFormModel.controls.giornoDataLezione.value.slice(8, 10), 0);
+            console.log('data composta');
+            console.log(ritornoGiorno + '/' + ritornoMese + '/' + ritornoAnno);
+            const listaInizioEFine = this.mappaStartEnd.get(ritornoGiorno + '/' + ritornoMese + '/' + ritornoAnno);
+            console.log('listaInizioEFine');
+            console.log(listaInizioEFine);
+            listaInizioEFine.forEach((oraIn) => {
+                this.hoursInizio.push(oraIn[0]);
+            });
+        }
+    }
+
+    cambioDataInizio() {
+        if (this.oraInizioClick) {
+            this.hoursFine = [];
+            this.prenotazioneFormModel.controls.oraFine.reset();
+            this.prenotazioneFormModel.controls.oraFine.enable();
+            const ritornoAnno: number = parseInt(this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4), 0);
+            const ritornoMese: number = parseInt(this.prenotazioneFormModel.controls.meseDataLezione.value.slice(5, 7), 0);
+            const ritornoGiorno: number = parseInt(this.prenotazioneFormModel.controls.giornoDataLezione.value.slice(8, 10), 0);
+            console.log('this.prenotazioneFormModel.controls.oraInizio.value');
+            console.log(this.prenotazioneFormModel.controls.oraInizio.value);
+            const listaInizioEFine = this.mappaStartEnd.get(ritornoGiorno + '/' + ritornoMese + '/' + ritornoAnno);
+            listaInizioEFine.forEach((ora) => {
+                const dataAppoggio = new Date(this.prenotazioneFormModel.controls.oraInizio.value);
+                console.log('dataAppoggio.getHours().toString()');
+                console.log(dataAppoggio.getHours().toString());
+                if (ora[0].slice(0, 2) === dataAppoggio.getHours().toString()) {
+                    console.log('siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
+                    let oraAddOne = parseInt(ora[0].slice(0, 2), 0) + 1;
+                    for (let i = 0; i < 24; i++) {
+                        let controllo = false;
+                        oraAddOne = parseInt(ora[0].slice(0, 2), 0) + i;
+                        listaInizioEFine.forEach((hourAddOne) => {
+                            console.log('confronto');
+                            console.log(hourAddOne[0].slice(0, 2));
+                            console.log(oraAddOne.toString());
+                            if (hourAddOne[0].slice(0, 2) === oraAddOne.toString()) {
+                                this.hoursFine.push(hourAddOne[1]);
+                                controllo = true;
+                            }
+                        });
+                        if (!controllo) {
+                            console.log('break');
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+
+    caricaPrenotazione() {
+        const ritornoAnno: number = parseInt(this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4), 0);
+        const ritornoMese: number = parseInt(this.prenotazioneFormModel.controls.meseDataLezione.value.slice(5, 7), 0);
+        const ritornoGiorno: number = parseInt(this.prenotazioneFormModel.controls.giornoDataLezione.value.slice(8, 10), 0);
+        console.log('this.prenotazioneFormModel.controls.oraInizio.value');
+        console.log(this.prenotazioneFormModel.controls.oraInizio.value);
+        const pren = ritornoMese + '/' + ritornoGiorno + '/' + ritornoAnno;
+        console.log('pren');
+        console.log(pren);
+        const dataPren = new Date(pren);
+        console.log('dataPren');
+        console.log(dataPren);
+        const dataAttuale = new Date();
+        const prenotazione = {
+            idBooking: undefined,
+            date: dataAttuale.getTime(),
+            lessonState: 1
+        };
+        let pAppoggio: Planning;
+        this.plans.forEach((p: Planning) => {
+            // tslint:disable-next-line:max-line-length
+            if ( new Date(p.date).getTime() === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
+                console.log('planning uguale');
+                console.log(p);
+                pAppoggio = p;
+            }
+        });
+        const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
+        console.log('bookingDaInviare');
+        console.log(bookingDaInviare);
+        const bookList: Booking[] = [bookingDaInviare];
+        console.log('bookList');
+        console.log(bookList);
+        this.loadingPresent().then(() => {
+            this.bookingService.createRestBooking(bookList).subscribe((response) => {
+                this.disLoading();
+                this.presentAlertAccettaLezione();
+            });
         });
     }
 
-    getBookingFromStorage(storageKey: string) {
-        this.booking$ = this.bookingService.getStorageBookingById(parseInt((this.id), 0), storageKey);
-        this.booking$.subscribe((booking) => {
-            this.lesson = booking.planning.lesson;
+    async presentAlertAccettaLezione() {
+        const alert = await this.alertController.create({
+            header: 'Lezione Prenotata',
+            subHeader: 'Vuoi prenotarne un\'altra',
+            message: 'Clicca su PRENOTA per prenotarne un\'altra altrimenti clicca su FATTO',
+            buttons: [
+                {
+                    text: 'PRENOTA',
+                    handler: () => {
+                        this.navController.navigateRoot('/ricerca-lezioni');
+                        // this.resetta();
+                    }
+                }, {
+                    text: 'FATTO',
+                    handler: () => {
+                        this.navController.navigateRoot('home');
+                    }
+                }]
+        });
 
-            this.data = new Date(this.lesson.teacher.birthday);
-            this.timeDiff = Math.abs(Date.now() - this.data.getTime());
-            this.age = Math.floor((this.timeDiff / (1000 * 3600 * 24)) / 365.25);
+        await alert.present();
+    }
 
-            this.dataBooking = this.datePipe.transform(new Date(booking.planning.date), 'dd-MM-yyyy');
-            this.startTime = booking.planning.startTime.substring(0, 5);
-            this.endTime = booking.planning.endTime.substring(0, 5);
-            console.log(this.lesson);
+    resetta() {
+        this.annoClick = false;
+        this.meseClick = false;
+        this.giornoClick = false;
+        this.oraInizioClick = false;
+        this.oraFineClick = false;
+        this.prenotazioneFormModel.controls.annoDataLezione.reset();
+        this.prenotazioneFormModel.controls.meseDataLezione.reset();
+        this.prenotazioneFormModel.controls.giornoDataLezione.reset();
+        this.prenotazioneFormModel.controls.oraInizio.reset();
+        this.prenotazioneFormModel.controls.oraFine.reset();
+        this.prenotazioneFormModel.controls.meseDataLezione.disable();
+        this.prenotazioneFormModel.controls.giornoDataLezione.disable();
+        this.prenotazioneFormModel.controls.oraInizio.disable();
+        this.prenotazioneFormModel.controls.oraFine.disable();
+        this.listaAnni = [];
+        this.plans = [];
+        this.listaGiorni = [];
+        this.listaMesi = [];
+        this.listaAnni = [];
+        this.hoursInizio = [];
+        this.hoursFine = [];
+    }
+
+    calcolaDataTeacher(lesson: Lesson) {
+        console.log(lesson);
+        const data = new Date(lesson.teacher.birthday);
+        const timeDiff = Math.abs(Date.now() - data.getTime());
+        this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+    }
+
+    creaChatTeacher() {
+        this.loadingPresent().then(() => {
+            this.booking$.subscribe((booking) => {
+                console.log('secondo sub');
+                console.log(booking);
+                // tslint:disable-next-line:max-line-length
+                this.createService.postSigleCreates(booking.student.idUser, booking.planning.lesson.teacher.name + ' ' + booking.planning.lesson.teacher.surname)
+                    .subscribe((resp) => {
+                        console.log('creato');
+                        console.log(resp);
+                        this.createService.getListCreates(booking.planning.lesson.teacher.idUser).subscribe((creates) => {
+                            console.log(creates);
+                            let chat = new Chat(undefined);
+                            chat = creates.find(x => x.userListser[0].idUser === booking.student.idUser).chat;
+                            const message = new Message(undefined, chat, this.user$.value);
+                            // tslint:disable-next-line:max-line-length
+                            message.text = 'System: ' + booking.planning.lesson.teacher.name + ' ' + booking.planning.lesson.teacher.surname + ' ha aggiunto ' + booking.student.name + ' ' + booking.student.surname + ' alla chat';
+                            this.messageService.createRestMessage(message).subscribe((respMes) => {
+                                console.log(respMes);
+                                this.messageService.getLastMessageOfChat(chat.idChat, 0).subscribe((lastMes) => {
+                                    console.log(lastMes);
+                                    this.disLoading();
+                                    const url = '/chat/' + chat.idChat.toString();
+                                    this.navController.navigateForward(url);
+                                });
+                            });
+                        });
+                    });
+            });
         });
     }
 
-    /*  }
-      getPlanningsFromRest() {
-        this.lessonService.getRestLesson().subscribe((planningList) => {
-          this.plannings$ = planningList;
-          this.lesson = this.plannings.get(0).lesson;
+    creaChatStudent() {
+        this.loadingPresent().then(() => {
+            this.booking$.subscribe((booking) => {
+                console.log(booking);
+                // tslint:disable-next-line:max-line-length
+                this.createService.postSigleCreates(booking.planning.lesson.teacher.idUser, booking.student.name + ' ' + booking.student.surname)
+                    .subscribe((resp) => {
+                        console.log('creato');
+                        console.log(resp);
+                        this.createService.getListCreates(booking.student.idUser).subscribe((creates) => {
+                            console.log(creates);
+                            let chat = new Chat(undefined);
+                            chat = creates.find(x => x.userListser[1].idUser === booking.planning.lesson.teacher.idUser).chat;
+                            const message = new Message(undefined, chat, this.user$.value);
+                            // tslint:disable-next-line:max-line-length
+                            message.text = 'System: ' + booking.student.name + ' ' + booking.student.surname + ' ha aggiunto ' + booking.planning.lesson.teacher.name + ' ' + booking.planning.lesson.teacher.surname + ' alla chat';
+                            this.messageService.createRestMessage(message).subscribe((respMes) => {
+                                console.log(respMes);
+                                this.messageService.getLastMessageOfChat(chat.idChat, 0).subscribe((lastMes) => {
+                                    console.log(lastMes);
+                                    this.disLoading();
+                                    const url = '/chat/' + chat.idChat.toString();
+                                    this.navController.navigateForward(url);
+                                });
+                            });
+                        });
+                    });
+            });
         });
-      }*/
+    }
+
+    creaChatStudentLesson() {
+        this.loadingPresent().then(() => {
+            this.lesson$.subscribe((lesson) => {
+                console.log(lesson);
+                this.createService.postSigleCreates(lesson.teacher.idUser, this.user$.value.name + ' ' + this.user$.value.name)
+                    .subscribe((resp) => {
+                        console.log('creato');
+                        console.log(resp);
+                        this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                            console.log(creates);
+                            let chat = new Chat(undefined);
+                            chat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat;
+                            const message = new Message(undefined, chat, this.user$.value);
+                            // tslint:disable-next-line:max-line-length
+                            message.text = 'System: ' + this.user$.value.name + ' ' + this.user$.value.surname + ' ha aggiunto ' + lesson.teacher.name + ' ' + lesson.teacher.surname + ' alla chat';
+                            this.messageService.createRestMessage(message).subscribe((respMes) => {
+                                console.log(respMes);
+                                this.messageService.getLastMessageOfChat(chat.idChat, 0).subscribe((lastMes) => {
+                                    console.log(lastMes);
+                                    this.disLoading();
+                                    const url = '/chat/' + chat.idChat.toString();
+                                    this.navController.navigateForward(url);
+                                });
+                            });
+                        });
+                    });
+            });
+        });
+    }
+
+    async loadingPresent() {
+        this.loading = await this.loadingController.create({
+            message: 'Please wait...',
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async disLoading() {
+        await this.loading.dismiss();
+    }
 }

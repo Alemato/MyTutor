@@ -25,6 +25,7 @@ import {ModificaProfiloPageModule} from './pages/modifica-profilo/modifica-profi
 import {MenuRefresh} from './services/menuRefresh';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {InserimentoLezioniModalPageModule} from './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module';
+import {UserService} from './services/user.service';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -59,6 +60,7 @@ export function createTranslateLoader(http: HttpClient) {
         // Array,
         ChatMessage,
         ChatService,
+        UserService,
         Map,
         StatusBar,
         SplashScreen,

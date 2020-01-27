@@ -3,34 +3,32 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <div *ngIf="(booking$ | async)">
-            <ion-title class="ml--56">{{lesson.name}}</ion-title>
-        </div>
+        <ion-title class="ml--56">Lezione</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content>
-    <div *ngIf="(booking$ | async)">
-        <ion-item>
-            <ion-grid style="padding: 0;">
-                <ion-row>
 
-                    <ion-col size="auto" class="px-0" style="padding-left: 0 !important; margin-right: 10px">
+<ion-content>
+    <div *ngIf="(lesson$ |async) as lesson">
+        <ion-item class="px-0" lines="none">
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="auto" class="px-0 mt-15">
+                        <!--"-->
                         <ion-icon
                                 *ngIf="lesson.teacher.image === null || lesson.teacher.image === '' || lesson.teacher.image ===' '; else imgBlock"
-                                name="contact" class="fs-62"></ion-icon>
+                                name="contact" class="fs-62 c-primary"></ion-icon>
                         <ng-template #imgBlock>
                             <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                                <img [src]="lesson.teacher.image" alt="img"
-                                     style="width: 65px; height: 65px; margin-top: 18px">
+                                <img [src]="lesson.teacher.image" alt="img" class="w-51 h-51">
                             </ion-avatar>
                         </ng-template>
                     </ion-col>
                     <ion-col class="pr-0">
-                        <h1 class="nome">{{lesson.teacher.user.name}} {{lesson.teacher.user.surname}}</h1>
+                        <h1 class="nome">{{lesson.teacher.name}} {{lesson.teacher.surname}}</h1>
                         <h2 class="anni">{{age}} anni</h2>
                         <ion-row class="ion-justify-content-between">
                             <h2 class="tariffa pt-2">Tariffa Oraria:</h2>
-                            <h1 class="euro ion-no-margin">{{lesson.price}} €/h</h1>
+                            <h1 class="euro ion-no-margin">{{lesson.price}}€/h</h1>
                         </ion-row>
                     </ion-col>
                 </ion-row>
@@ -71,91 +69,149 @@
                     <h2 class="ion-margin-left pt-2"> {{lesson.teacher.postCode}}</h2></ion-row>
                 <ion-row class="mb-10">
                     <ion-text color="dark"><h2 class="text-bolder pr-3">Via:</h2></ion-text>
-                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.street}}, {{lesson.teacher.streetNumber}}</h2>
+                    <h2 class="ion-margin-left pt-2"> {{lesson.teacher.street}} {{lesson.teacher.streetNumber}}</h2>
                 </ion-row>
             </ion-card-content>
         </ion-card>
-    </div>
-    <!--TODO da modificare teacher in user.rules-->
-    <!-- aggiungere il nome del ragazzo che ha prenotato la lezione-->
-    <div *ngIf="(this.teacher$ | async)">
-        <div *ngIf="(this.provenienza === 'booking')">
-            <div *ngIf="(this.booking$ | async)">
-                <ion-grid class="box-materia ion-margin-bottom">
-                    <ion-row>
-                        <ion-col>
-                            <ion-text color="dark" class="ion-text-center"><h3 class="mt-0"
-                                                                               style="margin-bottom: 0">Lezione
-                                Prenotata</h3>
-                            </ion-text>
-                        </ion-col>
-                    </ion-row>
-                    <ion-col>
-                        <ion-row>
-                            <div class="text-bolder mr-5">
-                                il
-                            </div>
-                            <ion-col size="4" class="p-0">
-                                {{this.dataBooking}}
-                            </ion-col>
-                            <div class="text-bolder mr-5">
-                                dalle
-                            </div>
-                            <ion-col size="2" class="p-0">
-                                {{this.startTime}}
-                            </ion-col>
-                            <div class="text-bolder mr-5">
-                                alle
-                            </div>
-                            <ion-col size="2" class="p-0">
-                                {{this.endTime}}
-                            </ion-col>
-                        </ion-row>
-                        <ion-button type="button" size="small" class="avvia-chat">Avvia Chat</ion-button>
-                    </ion-col>
-                </ion-grid>
-            </div>
-        </div>
-        <!--TODO aggiungere il nome del ragazzo che ha prenotato la lezione-->
-        <div *ngIf="(this.provenienza === 'history')">
-            <ion-grid class="box-materia ion-margin-bottom">
+        <ion-grid *ngIf="(user$ | async) as user" class="box-materia ion-margin-bottom">
+            <div *ngIf="user.roles === 2 && isBooking && !isLesson">
                 <ion-row>
                     <ion-col>
-                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0"
-                                                                           style="margin-bottom: 0">Storico
-                            Lezione</h3>
+                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">Prenotazione Effetuata da:</h3>
                         </ion-text>
                     </ion-col>
                 </ion-row>
-                <ion-col>
-                    <ion-row>
-                        <div class="text-bolder mr-5">
-                            il
-                        </div>
-                        <ion-col size="4" class="p-0">
-                            {{this.dataBooking}}
+                <div *ngIf="(booking$ |async) as booking">
+                    <ion-row class="ion-justify-content-center">
+                        <ion-col size="auto" class="px-0">
+                            <ion-icon
+                                    *ngIf="booking.student.image === null || booking.student.image === '' || booking.student.image ===' '; else imgBlock"
+                                    name="contact" class="fs-62 c-primary"></ion-icon>
+                            <ng-template #imgBlock>
+                                <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+                                    <img [src]="booking.student.image" alt="img" class="w-51 h-51">
+                                </ion-avatar>
+                            </ng-template>
                         </ion-col>
-                        <div class="text-bolder mr-5">
-                            dalle
-                        </div>
-                        <ion-col size="2" class="p-0">
-                            {{this.startTime}}
-                        </ion-col>
-                        <div class="text-bolder mr-5">
-                            alle
-                        </div>
-                        <ion-col size="2" class="p-0">
-                            {{this.endTime}}
+                        <ion-col size="auto" class="pr-0">
+                            <h1 class="nome mt-0 fit-content">{{booking.student.name}} {{booking.student.surname}}</h1>
+                            <h2 class="anni fit-content">{{booking.student.studyGrade}}</h2>
                         </ion-col>
                     </ion-row>
-                    <div >
-<!--                        TODO nella dif di sopra serve l'if della creates -->
-                        <ion-button type="button" size="small" class="avvia-chat">Avvia Chat</ion-button>
-                    </div>
-                </ion-col>
-            </ion-grid>
-        </div>
+                    <ion-row class="ion-justify-content-center ion-margin-top">
+                        <h2 class="ion-no-margin">Per il {{booking.planning.date | date: "dd/MM/yyyy"}}
+                            alle {{booking.planning.startTime | slice:0:5}}</h2>
+                    </ion-row>
+                    <ion-button *ngIf="existsChat" expand="full" class="avvia-chat ion-margin-top"
+                                [routerLink]="['/chat', idChat]">Avvia Chat
+                    </ion-button>
+                    <ion-button *ngIf="!existsChat" expand="full" class="avvia-chat ion-margin-top"
+                                (click)="creaChatTeacher()">Avvia Chat
+                    </ion-button>
+                </div>
+            </div>
+            <div *ngIf="user.roles === 1 && isBooking && !isLesson">
+                <div *ngIf="(booking$ |async) as booking">
+                    <ion-col>
+                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">Prenotazione:</h3></ion-text>
+                    </ion-col>
+                    <ion-row class="ion-justify-content-center ion-margin-top">
+                        <h2 class="ion-no-margin">Per il {{booking.planning.date | date: "dd/MM/yyyy"}}
+                            alle {{booking.planning.startTime | slice:0:5}}</h2>
+                    </ion-row>
+                    <ion-button *ngIf="existsChat" expand="full" class="avvia-chat ion-margin-top"
+                                [routerLink]="['/chat', idChat]" routerDirection="forward">Avvia Chat
+                    </ion-button>
+                    <ion-button *ngIf="!existsChat" expand="full" class="avvia-chat ion-margin-top"
+                                (click)="creaChatStudent()">Avvia Chat
+                    </ion-button>
+                </div>
+            </div>
+            <div *ngIf="user.roles=== 1 && isLesson && !isBooking">
+                <ion-row>
+                    <ion-col>
+                        <ion-text color="dark" class="ion-text-center"><h3 class="mt-0">Effettua Prenotazione:</h3>
+                        </ion-text>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col>
+                        <form [formGroup]="prenotazioneFormModel">
+                            <ion-item class="ion-no-padding">
+                                <ion-col size="auto">
+                                    <!-- form model Data Anno
+                                     Ricordarsi che se si setta day-values si deve usare in forma angulare cioè con [day-values]="" -->
+                                    <ion-datetime (click)="clickAnno()" (ionChange)="cambioAnno()" displayFormat="YYYY" pickerFormat="YYYY"
+                                                  formControlName="annoDataLezione"
+                                                  [yearValues]="listaAnni"
+                                                  placeholder="AAAA"
+                                                  class="ion-no-padding fit-content"
+                                    ></ion-datetime>
+                                </ion-col>
+                                /
+                                <ion-col size="auto">
+                                    <!-- form model Data Mese
+                                     Ricordarsi che se si setta day-values si deve usare in forma angulare cioè con [day-values]="" -->
+                                    <ion-datetime (click)="clickMese()" (ionChange)="cambioMese()" displayFormat="MM" pickerFormat="MM"
+                                                  formControlName="meseDataLezione"
+                                                  monthValues="{{listaMesi}}"
+                                                  placeholder="MM"
+                                                  class="ion-no-padding fit-content"
+                                    ></ion-datetime>
+                                </ion-col>
+                                /
+                                <ion-col size="auto">
+                                    <!-- form model Data Giorno
+                                     Ricordarsi che se si setta day-values si deve usare in forma angulare cioè con [day-values]="" -->
+                                    <ion-datetime (click)="clickGiorno()" (ionChange)="cambioGiorno()" displayFormat="DD" pickerFormat="DD"
+                                                  formControlName="giornoDataLezione"
+                                                  dayValues="{{listaGiorni}}"
+                                                  placeholder="GG"
+                                                  class="ion-no-padding"
+                                    ></ion-datetime>
+                                </ion-col>
+                                dalle
+                                <!-- form model inizio lezione
+                                     Ricordarsi che se si setta hour-values si deve usare in forma angulare cioè con [hour-values]="" -->
+                                <ion-col size="2">
+                                    <ion-datetime (click)="clickOraInizio()" (ionChange)="cambioDataInizio()" displayFormat="HH:mm" pickerFormat="HH:mm"
+                                                  formControlName="oraInizio"
+                                                  [hourValues]="hoursInizio"
+                                                  minute-values="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
+                                                  placeholder="inizio"
+                                                  class="ion-no-padding fit-content"
+                                    ></ion-datetime>
+                                </ion-col>
+                                alle
+                                <ion-col size="2">
+                                    <ion-datetime (click)="clickOraFine()" displayFormat="HH:mm" pickerFormat="HH:mm"
+                                                  formControlName="oraFine"
+                                                  [hourValues]="hoursFine"
+                                                  minute-values="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
+                                                  placeholder="inizio"
+                                                  class="ion-no-padding"
+                                    ></ion-datetime>
+                                </ion-col>
+                            </ion-item>
+                            <ion-row class="ion-justify-content-between ion-margin-top">
+                                <ion-button *ngIf="existsChat" type="button" size="small" class="avvia-chat"
+                                            [routerLink]="['/chat', idChat]" routerDirection="forward">Avvia Chat
+                                </ion-button>
+                                <ion-button *ngIf="!existsChat" type="button" size="small" class="avvia-chat"
+                                            (click)="creaChatStudentLesson()">Avvia Chat
+                                </ion-button>
+                                <ion-button (click)="caricaPrenotazione()" type="submit" size="small" class="prenotazione">Prenotati</ion-button>
+                            </ion-row>
+                        </form>
+                    </ion-col>
+                </ion-row>
+            </div>
+            <div *ngIf="user.roles === 2 && isLesson && !isBooking">
+                <ion-button type="button" expand="full" class="avvia-chat ion-margin-top"
+                            [routerLink]="['/inserimento-lezioni', lesson.idLesson]" routerDirection="forward">Modifica
+                    inserzione
+                </ion-button>
+            </div>
+        </ion-grid>
     </div>
-
-
 </ion-content>

@@ -1,4 +1,4 @@
-import {Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from '../../model/message.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
@@ -8,6 +8,8 @@ import {BehaviorSubject} from 'rxjs';
 import {User} from '../../model/user.model';
 import {MessageService} from '../../services/message.service';
 import {IonContent, LoadingController} from '@ionic/angular';
+import {CreateService} from '../../services/create.service';
+import {CreatesChat} from '../../model/creates.model';
 
 @Component({
     selector: 'page-chat',
@@ -30,6 +32,7 @@ export class ChatPage implements OnInit {
     constructor(public formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private chatService: ChatService,
+                private createService: CreateService,
                 private userService: UserService,
                 private messageService: MessageService,
                 private loadingController: LoadingController) {
@@ -41,10 +44,14 @@ export class ChatPage implements OnInit {
             this.messages$ = this.messageService.getBehaviorMessages();
             this.messages$.next([]);
             this.idChat = parseInt(params.get('id'), 0);
-            this.chatService.getCurrentChat(this.idChat).subscribe((chat) => {
-                this.chtn = chat.chatName;
-            });
             console.log(this.idChat);
+            this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                console.log(creates);
+                const c = creates.find(x => x.chat.idChat === this.idChat);
+                const usr2 = c.userListser.find(x => x.idUser !== this.user$.value.idUser);
+                this.chtn = usr2.name + ' ' + usr2.surname;
+                console.log(this.chtn);
+            });
             this.scritturaMessaggio = this.formBuilder.group({
                 text: ['', Validators.required]
             });
@@ -102,18 +109,40 @@ export class ChatPage implements OnInit {
 
     inviaMessagio() {
         this.chatService.getCurrentChat(this.idChat).subscribe((chat) => {
-            this.sendStatus = 'pending';
-            this.messaggio = new Message(undefined, undefined, undefined);
-            this.messaggio.text = this.scritturaMessaggio.controls.text.value;
-            this.scritturaMessaggio.reset();
-            this.messaggio.chat = chat;
-            this.messaggio.user = this.user$.value;
-            console.log(this.messaggio);
-            this.messageService.createRestMessage(this.messaggio).subscribe((data) => {
-                console.log(data);
-                // tslint:disable-next-line:max-line-length
-                this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => this.sendStatus = '');
-            });
+            if (chat) {
+                this.sendStatus = 'pending';
+                this.messaggio = new Message(undefined, undefined, undefined);
+                this.messaggio.text = this.scritturaMessaggio.controls.text.value;
+                this.scritturaMessaggio.reset();
+                this.messaggio.chat = chat;
+                this.messaggio.user = this.user$.value;
+                console.log(this.messaggio);
+                this.messageService.createRestMessage(this.messaggio).subscribe((data) => {
+                    console.log(data);
+                    // tslint:disable-next-line:max-line-length
+                    this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => this.sendStatus = '');
+                });
+            } else {
+                this.chatService.getRestChatList().subscribe((resp) => {
+                    console.log(resp);
+                    const creates: CreatesChat[] = resp[1];
+                    console.log(creates);
+                    console.log(this.idChat);
+                    const newChat = creates.find(x => x.chat.idChat === this.idChat).chat;
+                    this.sendStatus = 'pending';
+                    this.messaggio = new Message(undefined, undefined, undefined);
+                    this.messaggio.text = this.scritturaMessaggio.controls.text.value;
+                    this.scritturaMessaggio.reset();
+                    this.messaggio.chat = newChat;
+                    this.messaggio.user = this.user$.value;
+                    console.log(this.messaggio);
+                    this.messageService.createRestMessage(this.messaggio).subscribe((data) => {
+                        console.log(data);
+                        // tslint:disable-next-line:max-line-length
+                        this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => this.sendStatus = '');
+                    });
+                });
+            }
         });
     }
 
