@@ -6,6 +6,7 @@ import {AlertController, LoadingController} from '@ionic/angular';
 import {UserService} from '../../services/user.service';
 import {BookingService, Lez} from '../../services/booking.service';
 import {Booking} from '../../model/booking.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home-richieste',
@@ -20,13 +21,22 @@ export class HomeRichiestePage implements OnInit {
   private listLez$: BehaviorSubject<Lez[]>;
   private student$: BehaviorSubject<Student>;
   private teacher$: BehaviorSubject<Teacher>;
-
   public lezioni = [];
+  private confirmLessonHeader: string;
+  private confirmSubHeader: string;
+  private confirmLessonMessage: string;
+  private cancelButton: string;
+  private declineLessonHeader: string;
+  private declineLessonMessage: string;
+  private cancelLessonHeader: string;
+  private cancelLessonMessage: string;
+  private pleaseWaitMessage: string;
 
   constructor(public alertController: AlertController,
               private userService: UserService,
               private bookingService: BookingService,
-              public loadingController: LoadingController) {
+              public loadingController: LoadingController,
+              public translateService: TranslateService) {
   }
 
   ngOnInit() {
@@ -48,6 +58,7 @@ export class HomeRichiestePage implements OnInit {
         }
       });
     });
+    this.initTranslate();
   }
 
   accettaLezione(idBok: number) {
@@ -99,12 +110,12 @@ export class HomeRichiestePage implements OnInit {
 
   async presentAlertAccettaLezione(idbook) {
     const alert = await this.alertController.create({
-      header: 'Conferma la Lezzione',
-      subHeader: 'Conferma',
-      message: 'Sei sicuro di voler accettare la lezione?',
+      header: this.confirmLessonHeader,
+      subHeader: this.confirmSubHeader,
+      message: this.confirmLessonMessage,
       buttons: [
         {
-          text: 'Annulla',
+          text: this.cancelButton,
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
@@ -123,12 +134,12 @@ export class HomeRichiestePage implements OnInit {
 
   async presentAlertRifiutaLezione(idbook) {
     const alert = await this.alertController.create({
-      header: 'Rifiuta la Lezzione',
-      subHeader: 'Conferma',
-      message: 'Sei sicuro di voler rifiutare la lezione?',
+      header: this.declineLessonHeader,
+      subHeader: this.confirmSubHeader ,
+      message: this.declineLessonMessage,
       buttons: [
         {
-          text: 'Annulla',
+          text: this.cancelButton,
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
@@ -147,12 +158,12 @@ export class HomeRichiestePage implements OnInit {
 
   async presentAlert(item, id) {
     const alert = await this.alertController.create({
-      header: 'Annullare la Lezzione',
-      subHeader: 'Conferma',
-      message: 'Sei sicuro di voler annullare la lezione?',
+      header: this.cancelLessonHeader,
+      subHeader: this.confirmSubHeader,
+      message: this.cancelLessonMessage,
       buttons: [
         {
-          text: 'Annulla',
+          text: this.cancelButton,
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
@@ -187,7 +198,7 @@ export class HomeRichiestePage implements OnInit {
 
   async loadingPresent() {
     this.loading = await this.loadingController.create({
-      message: 'Please wait...',
+      message: this.pleaseWaitMessage,
       translucent: true
     });
     return await this.loading.present();
@@ -195,6 +206,36 @@ export class HomeRichiestePage implements OnInit {
 
   async disLoading() {
     await this.loading.dismiss();
+  }
+
+  private initTranslate() {
+    this.translateService.get('CONFIRM_LESSON_HEADER').subscribe((data) => {
+      this.confirmLessonHeader = data;
+    });
+    this.translateService.get('CONFIRM_SUBHEADER').subscribe((data) => {
+      this.confirmSubHeader = data;
+    });
+    this.translateService.get('CONFIRM_LESSON_MESSAGE').subscribe((data) => {
+      this.confirmLessonMessage = data;
+    });
+    this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+      this.cancelButton = data;
+    });
+    this.translateService.get('DECLINE_LESSON_HEADER').subscribe((data) => {
+      this.declineLessonHeader = data;
+    });
+    this.translateService.get('DECLINE_LESSON_MESSAGE').subscribe((data) => {
+      this.declineLessonMessage = data;
+    });
+    this.translateService.get('CANCEL_LESSON_HEADER').subscribe((data) => {
+      this.cancelLessonHeader = data;
+    });
+    this.translateService.get('CANCEL_LESSON_MESSAGE').subscribe((data) => {
+      this.cancelLessonMessage = data;
+    });
+    this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+      this.pleaseWaitMessage = data;
+    });
   }
 
 }

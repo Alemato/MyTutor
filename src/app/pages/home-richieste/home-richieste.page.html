@@ -2,7 +2,7 @@
   <div *ngIf="(this.teacher$ | async) as teacher; then teacherBlock else studentBlock"></div>
   <ng-template #studentBlock>
     <ion-list *ngIf="(this.student$ | async) as student;" style="margin-bottom: 100px">
-      <ion-list-header class="mb--14">Lista Lezioni Prenotate Da Accettare</ion-list-header>
+      <ion-list-header class="mb--14">{{"lIST_LESSONS_BOOKED_ACCEPT"|translate}}</ion-list-header>
       <div *ngFor="let lez of lezioni">
         <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 0">
           <ion-item lines="full" class="py-10">
@@ -33,7 +33,7 @@
             </ion-col>
           </ion-item>
           <ion-item-options side="end">
-            <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">Annulla</ion-item-option>
+            <ion-item-option color="danger" (click)="presentAlert(itemSliding, lez.idbook)">{{"CANCEL_BUTTON"|translate}}</ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
       </div>
@@ -41,10 +41,10 @@
   </ng-template>
   <ng-template #teacherBlock>
     <ion-list>
-      <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">Lista Lezioni Prenotate Da Accettare {{lezioni.length}}</ion-list-header>
+      <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">{{"lIST_LESSONS_BOOKED_ACCEPT"|translate}} {{lezioni.length}}</ion-list-header>
       <ng-template #notLesT>
         <div class="mx-auto fit-content">
-          <h5 class="fit-content font-weight-300 ls-1">Nessuna richiesta di lezione in vista!</h5>
+          <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
         </div>
       </ng-template>
       <div *ngFor="let lez of lezioni">
@@ -71,18 +71,18 @@
                        style="font-size: medium; font-weight: 300; letter-spacing: 0.1em;">{{lez.price}}€/h</div>
                 </ion-col>
               </ion-row>
-              <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">Per
-                il {{lez.date | date:'short'}}</div>
+              <div class="ion-no-margin" style="font-size: small; font-weight: 300; padding-top: 5px;">{{"DIV_FOR_THE"|translate}}
+                 {{lez.date | date:'short'}}</div>
               <ion-row class="ion-margin-top ion-no-padding ">
                 <ion-col class="ion-no-padding ion-align-self-start">
                   <div>
-                    <ion-button color="primary" size="default" class="ion-float-start" (click)="presentAlertAccettaLezione(lez.idbook)" >Accetta
+                    <ion-button color="primary" size="default" class="ion-float-start" (click)="presentAlertAccettaLezione(lez.idbook)" >{{"ACCEPT_BUTTON"|translate}}
                     </ion-button>
                   </div>
                 </ion-col>
                 <ion-col class="ion-no-padding">
                   <div>
-                    <ion-button color="danger" size="default" class="ion-float-end" (click)="presentAlertRifiutaLezione(lez.idbook)">Rifiuta
+                    <ion-button color="danger" size="default" class="ion-float-end" (click)="presentAlertRifiutaLezione(lez.idbook)">{{"REFUSE_BUTTON"|translate}}
                     </ion-button>
                   </div>
                 </ion-col>
