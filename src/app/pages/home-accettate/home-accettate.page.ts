@@ -37,6 +37,7 @@ export class HomeAccettatePage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.tipo = this.userService.getTypeUser();
         console.log(this.tipo);
         if (this.tipo === 'student') {
@@ -56,7 +57,6 @@ export class HomeAccettatePage implements OnInit {
                 }
             });
         });
-        this.initTranslate();
     }
 
     ionViewWillEnter() {
