@@ -43,11 +43,11 @@ export class LoginPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.loginFormModel = this.formBuilder.group({
             username: ['', Validators.compose([Validators.required])],
             password: ['', Validators.compose([Validators.required])]
         });
-        this.initTranslate();
     }
 
     ionViewDidLeave() {
