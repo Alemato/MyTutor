@@ -105,6 +105,7 @@ export class RegistrazionePage implements OnInit {
 
 // vuole tutti i campi perchè si deve aspettare qualcosa
     ngOnInit() {
+        this.initTranslate();
         this.registrazioneFormModel = this.formBuilder.group({
             // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
             email: ['', Validators.compose(
@@ -131,7 +132,6 @@ export class RegistrazionePage implements OnInit {
             languageNumber: ['true', Validators.required]
             // image: [''],
         });
-        this.initTranslate();
     }
 
     // PER IMAGINI DALLA FOTOCAMERA O GALLERIA
@@ -399,7 +399,7 @@ export class RegistrazionePage implements OnInit {
         });
         //
         this.translateService.get('EMAIL_REQUIRED_MESSAGE').subscribe((data) => {
-            this.emailRequiredMessage = data;
+            this.validationMessages.email[0].message = data;
         });
         this.translateService.get('EMAIL_MIN_LENGTH_MESSAGE').subscribe((data) => {
             this.emailMinLengthMessage = data;
