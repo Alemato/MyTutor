@@ -102,7 +102,7 @@
                             && booking.student.studyGrade !== ''
                             && booking.student.studyGrade !== ' '; else nonstudyGrade" class="anni fit-content">{{booking.student.studyGrade}}</h2>
                             <ng-template #nonstudyGrade>
-                                <h2 class="anni fit-content">Non Disponibile</h2>
+                                <h2 class="anni fit-content">{{"NOT_AVAILABLE"|translate}}</h2>
                             </ng-template>
                         </ion-col>
                     </ion-row>
@@ -150,7 +150,7 @@
                                     <ion-datetime (click)="clickGiorno()" (ionChange)="cambioGiorno()" displayFormat="DD" pickerFormat="DD"
                                                   formControlName="giornoDataLezione"
                                                   dayValues="{{listaGiorni}}"
-                                                  placeholder="{{'DIV_DAYS'|translate}}"
+                                                  placeholder="{{'DAY'|translate}}"
                                                   class="ion-no-padding"
                                     ></ion-datetime>
                                 </ion-col>
@@ -159,7 +159,7 @@
                                     <ion-datetime (click)="clickMese()" (ionChange)="cambioMese()" displayFormat="MM" pickerFormat="MM"
                                                   formControlName="meseDataLezione"
                                                   monthValues="{{listaMesi}}"
-                                                  placeholder="{{'MONTH'|translate}}"
+                                                  placeholder="MM"
                                                   class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>
