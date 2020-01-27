@@ -3,6 +3,7 @@ import {LoadingController, ModalController} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
 import {PlanningService} from '../../services/planning.service';
 import {Planning} from '../../model/planning.model';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-inserimento-lezioni-modal',
@@ -21,6 +22,7 @@ export class InserimentoLezioniModalPage implements OnInit {
     public planningsCompattati: Planning[] = [];
     minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
     hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+    private pleaseWaitMessage: string;
 
     // returns all form groups under contacts
     // prende l'oggetto
@@ -32,7 +34,8 @@ export class InserimentoLezioniModalPage implements OnInit {
         public formBuilder: FormBuilder,
         public modalController: ModalController,
         private planningService: PlanningService,
-        public loadingController: LoadingController
+        public loadingController: LoadingController,
+        private translateService: TranslateService
     ) {
     }
 
@@ -62,6 +65,7 @@ export class InserimentoLezioniModalPage implements OnInit {
             });
             this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
         }
+        this.initTranslate();
     }
 
     planingCompat() {
@@ -175,7 +179,7 @@ export class InserimentoLezioniModalPage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -183,5 +187,11 @@ export class InserimentoLezioniModalPage implements OnInit {
 
     async disLoading() {
         await this.loading.dismiss();
+    }
+
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
     }
 }

@@ -2,9 +2,9 @@
     <ion-toolbar>
         <ion-buttons slot="start">
         </ion-buttons>
-        <ion-title *ngIf="modifica; else titoloinserisci" class="ml--56">Modifica Data e Ora</ion-title>
+        <ion-title *ngIf="modifica; else titoloinserisci" class="ml--56">{{"MODIFIED_DATE_TIME_TITLE"|translate}}</ion-title>
         <ng-template #titoloinserisci>
-            <ion-title class="ml--56">Inserimento Data e Ora</ion-title>
+            <ion-title class="ml--56">{{"INSERTION_DATE_TIME_TITLE"|translate}}</ion-title>
         </ng-template>
     </ion-toolbar>
 </ion-header>
@@ -17,16 +17,16 @@
                     <ion-icon *ngIf="arrayDymension > 1" name="remove-circle-outline" (click)="rimuoviCampo(i)"></ion-icon>
                     <ion-col size="5">
                         <ion-datetime displayFormat="DD MMMM YYYY"
-                                      placeholder="Data"
-                                      monthNames="Gen, Feb, Mar, Apr, Mag, Giu, Lug, Ago, Set, Ott, Nov, Dic"
+                                      placeholder="{{'DATE'|translate}}"
+                                      monthNames="{{'MONTHS_DATETIME'|translate}}"
                                       formControlName="dataLezione" required class="plr-0"></ion-datetime>
                     </ion-col>
                     <ion-col size="3">
-                        <ion-datetime (ionChange)="changeInizioLezione(i)" displayFormat="HH : mm" placeholder="Ora inizio" formControlName="oraInizio" hour-values="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22,23"
+                        <ion-datetime (ionChange)="changeInizioLezione(i)" displayFormat="HH : mm" placeholder="{{'START_TIME'|translate}}" formControlName="oraInizio" hour-values="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22"
                                       required class="plr-0" minute-values="0,05,10,15,20,25,30,35,40,45,50,55"></ion-datetime>
                     </ion-col>
                     <ion-col size="3">
-                    <ion-datetime displayFormat="HH : mm" placeholder="Ora fine" formControlName="oraFine" [hourValues]="hours" [minuteValues]="minutes"
+                    <ion-datetime displayFormat="HH : mm" placeholder="{{'END_TIME'|translate}}" formControlName="oraFine" [hourValues]="hours" [minuteValues]="minutes"
                                   required class="plr-0"></ion-datetime>
                     </ion-col>
                 </ion-item>
@@ -37,7 +37,7 @@
     <ion-row>
         <ion-col class="ion-text-center">
             <ion-button (click)="chiudiModale()"
-                        [disabled]="!dataLezioneFormModel.valid">Chiudi
+                        [disabled]="!dataLezioneFormModel.valid">{{"CLOSE_BUTTON"|translate}}
             </ion-button>
         </ion-col>
     </ion-row>
