@@ -33,6 +33,7 @@ export class HomePage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         const tipo = this.userService.getTypeUser();
         if (tipo === 'student') {
             this.student$ = this.userService.getUser();
@@ -45,7 +46,6 @@ export class HomePage implements OnInit {
             this.lezioni = [];
             this.setArrayLezioni();
         });
-        this.initTranslate();
     }
 
     setArrayLezioni() {
