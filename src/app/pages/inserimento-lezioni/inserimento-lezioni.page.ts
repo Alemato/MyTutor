@@ -12,6 +12,7 @@ import {Lesson} from '../../model/lesson.model';
 import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
 import {PlanningService} from '../../services/planning.service';
+import { TranslateService } from '@ngx-translate/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
 
 @Component({
@@ -36,6 +37,9 @@ export class InserimentoLezioniPage implements OnInit {
     private loading;
     public modifica = false;
     public booleanSottomateria = false;
+    private cancelButton: string;
+    private doneButton: string;
+    private pleaseWaitMessage: string;
 
     constructor(
         private pickerCtrl: PickerController,
@@ -48,6 +52,7 @@ export class InserimentoLezioniPage implements OnInit {
         private navController: NavController,
         public loadingController: LoadingController,
         private activatedRoute: ActivatedRoute,
+        public translateService: TranslateService
     ) {
     }
 
@@ -120,6 +125,7 @@ export class InserimentoLezioniPage implements OnInit {
                 });
             });
         });
+        this.initTranslate();
     }
 
     onChanges() {
@@ -214,7 +220,7 @@ export class InserimentoLezioniPage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -305,11 +311,11 @@ export class InserimentoLezioniPage implements OnInit {
         const opts: PickerOptions = {
             buttons: [
                 {
-                    text: 'cancella',
+                    text: this.cancelButton,
                     role: 'cancell'
                 },
                 {
-                    text: 'done'
+                    text: this.doneButton
                 }
             ],
             columns: [{
@@ -331,5 +337,16 @@ export class InserimentoLezioniPage implements OnInit {
     changeSelectElents() {
         console.log('cambio');
         this.lezioneFormModel.controls.sottoMateria.reset();
+    }
+    private initTranslate() {
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
+        this.translateService.get('DONE_BUTTON').subscribe((data) => {
+            this.doneButton = data;
+        });
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
     }
 }
