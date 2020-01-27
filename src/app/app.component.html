@@ -29,10 +29,10 @@
                 <ion-col size="8" class="ion-align-self-center">
                     <h1 *ngIf="(this.teacher$ | async) as teacher"
                         class="ion-no-margin font-weight-400">{{teacher.name}} {{teacher.surname}}</h1>
-                    <h5 *ngIf="(this.teacher$ | async) as teacher;" class="ion-no-margin font-weight-400">Docente</h5>
+                    <h5 *ngIf="(this.teacher$ | async) as teacher;" class="ion-no-margin font-weight-400">{{"TEACHER"|translate}}</h5>
                       <div *ngIf="(this.student$ | async) as student">
                         <h1 class="ion-no-margin font-weight-400">{{student.name}} {{student.surname}}</h1>
-                        <h5 class="ion-no-margin font-weight-400">Studente</h5>
+                        <h5 class="ion-no-margin font-weight-400">{{"STUDENT"|translate}}</h5>
                       </div>
                 </ion-col>
             </ion-row>
@@ -43,7 +43,7 @@
                         <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <h4 class="ion-no-margin font-weight-400">{{p.title}}</h4>
+                        <h4 class="ion-no-margin font-weight-400">{{p.title|translate}}</h4>
                     </ion-col>
                 </ion-row>
 
@@ -56,7 +56,7 @@
                             <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                         </ion-col>
                         <ion-col class="ion-align-self-center">
-                            <h4 class="ion-no-margin font-weight-400">{{p.title}}</h4>
+                            <h4 class="ion-no-margin font-weight-400">{{p.title|translate}}</h4>
                         </ion-col>
                     </ion-row>
                 </ion-col>
@@ -67,7 +67,7 @@
                         <ion-icon name="exit" class="menu-icon"></ion-icon>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <h4 class="ion-no-margin font-weight-400">Sign Out</h4>
+                        <h4 class="ion-no-margin font-weight-400">{{"SING_OUT"|translate}}</h4>
                     </ion-col>
                 </ion-row>
             </ion-col>

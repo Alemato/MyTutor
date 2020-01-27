@@ -1,8 +1,8 @@
 export const USE_PROXY = true;
 
 
-// export const URL_BASE = USE_PROXY ? 'api' : 'http://192.168.0.201:8080/api';     // SERVER NOSTRO
-export const URL_BASE = USE_PROXY ? 'api' : 'http://localhost:8080/api';
+export const URL_BASE = USE_PROXY ? 'api' : 'http://192.168.0.203:8080/api';     // SERVER NOSTRO
+// export const URL_BASE = USE_PROXY ? 'api' : 'http://localhost:8080/api';
 
 export const URL = {
     LOGIN: URL_BASE + '/auth',

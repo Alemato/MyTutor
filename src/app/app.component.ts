@@ -73,13 +73,13 @@ export class AppComponent implements OnInit {
             click: false
         },
         {
-            title: 'Storico',
+            title: 'HISTORIC_SIDE_MENU',
             url: '/storico-lezioni',
             icon: 'time',
             click: false
         },
         {
-            title: 'Cerca Lezioni Disponibili',
+            title: 'SEARCH_LESSONS_SIDE_MENU',
             url: '/ricerca-lezioni',
             icon: 'search',
             click: false
@@ -100,19 +100,19 @@ export class AppComponent implements OnInit {
             click: false
         },
         {
-            title: 'Storico',
+            title: 'HISTORIC_SIDE_MENU',
             url: '/storico-lezioni',
             icon: 'time',
             click: false
         },
         {
-            title: 'Inserisci Annuncio',
+            title: 'INSERT_AD_SIDE_MENU',
             url: '/inserimento-lezioni',
             icon: 'create',
             click: false
         },
         {
-            title: 'Annunci Publicati',
+            title: 'ADVERTISEMENTS_PLACED_TITLE',
             url: '/lista-annunci-publicati',
             icon: 'filing',
             click: false
