@@ -18,7 +18,6 @@ export class ListaChatPage implements OnInit {
     private lastMessageFromChats$: BehaviorSubject<Message[]>;
     private chatCount$: BehaviorSubject<number>;
     private loading;
-    private agg = true;
 
     constructor(private userService: UserService,
                 private chatService: ChatService,
