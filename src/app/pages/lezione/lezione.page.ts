@@ -17,7 +17,7 @@ import {MessageService} from '../../services/message.service';
 import {Message} from '../../model/message.model';
 import {Chat} from '../../model/chat.model';
 import {AlertController, LoadingController, NavController} from '@ionic/angular';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Student} from '../../model/student.model';
 
 
@@ -423,19 +423,19 @@ export class LezionePage implements OnInit {
                 console.log('planning uguale');
                 console.log(p);
                 pAppoggio = p;
+                const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
+                console.log('bookingDaInviare');
+                console.log(bookingDaInviare);
+                const bookList: Booking[] = [bookingDaInviare];
+                console.log('bookList');
+                console.log(bookList);
+                this.loadingPresent().then(() => {
+                    this.bookingService.createRestBooking(bookList).subscribe(() => {
+                        this.disLoading();
+                        this.presentAlertAccettaLezione();
+                    });
+                });
             }
-        });
-        const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
-        console.log('bookingDaInviare');
-        console.log(bookingDaInviare);
-        const bookList: Booking[] = [bookingDaInviare];
-        console.log('bookList');
-        console.log(bookList);
-        this.loadingPresent().then(() => {
-            this.bookingService.createRestBooking(bookList).subscribe((response) => {
-                this.disLoading();
-                this.presentAlertAccettaLezione();
-            });
         });
     }
 
@@ -460,30 +460,6 @@ export class LezionePage implements OnInit {
         });
 
         await alert.present();
-    }
-
-    resetta() {
-        this.annoClick = false;
-        this.meseClick = false;
-        this.giornoClick = false;
-        this.oraInizioClick = false;
-        this.oraFineClick = false;
-        this.prenotazioneFormModel.controls.annoDataLezione.reset();
-        this.prenotazioneFormModel.controls.meseDataLezione.reset();
-        this.prenotazioneFormModel.controls.giornoDataLezione.reset();
-        this.prenotazioneFormModel.controls.oraInizio.reset();
-        this.prenotazioneFormModel.controls.oraFine.reset();
-        this.prenotazioneFormModel.controls.meseDataLezione.disable();
-        this.prenotazioneFormModel.controls.giornoDataLezione.disable();
-        this.prenotazioneFormModel.controls.oraInizio.disable();
-        this.prenotazioneFormModel.controls.oraFine.disable();
-        this.listaAnni = [];
-        this.plans = [];
-        this.listaGiorni = [];
-        this.listaMesi = [];
-        this.listaAnni = [];
-        this.hoursInizio = [];
-        this.hoursFine = [];
     }
 
     calcolaDataTeacher(lesson: Lesson) {
