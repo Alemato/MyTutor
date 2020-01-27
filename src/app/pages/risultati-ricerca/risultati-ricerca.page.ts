@@ -32,6 +32,7 @@ export class RisultatiRicercaPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.planning$ = this.planningService.getPlannings();
         this.loadingPresent().then(() => {
             this.planning$.subscribe((pianificazioni: Planning[]) => {
@@ -167,7 +168,6 @@ export class RisultatiRicercaPage implements OnInit {
                 this.disLoading();
             });
         });
-        this.initTranslate();
     }
 
     async loadingPresent() {
