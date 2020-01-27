@@ -31,7 +31,7 @@ export class SubjectService {
         }
     }
 
-    getListSubjet() {
+    getListSubjet(): BehaviorSubject<Subject[]> {
         return this.listSubject$;
     }
 
