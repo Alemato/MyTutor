@@ -40,6 +40,7 @@ export class HomeRichiestePage implements OnInit {
   }
 
   ngOnInit() {
+    this.initTranslate();
     this.tipo = this.userService.getTypeUser();
     console.log(this.tipo);
     if (this.tipo === 'student') {
@@ -58,7 +59,6 @@ export class HomeRichiestePage implements OnInit {
         }
       });
     });
-    this.initTranslate();
   }
 
   accettaLezione(idBok: number) {
