@@ -8,6 +8,7 @@ import {BehaviorSubject} from 'rxjs';
 import {User} from '../../model/user.model';
 import {MessageService} from '../../services/message.service';
 import {IonContent, LoadingController} from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import {CreateService} from '../../services/create.service';
 import {CreatesChat} from '../../model/creates.model';
 
@@ -28,6 +29,7 @@ export class ChatPage implements OnInit {
     private loading;
     private user$: BehaviorSubject<User>;
     private messages$: BehaviorSubject<Message[]>;
+    private pleaseWaitMessage: string;
 
     constructor(public formBuilder: FormBuilder,
                 private route: ActivatedRoute,
@@ -35,7 +37,8 @@ export class ChatPage implements OnInit {
                 private createService: CreateService,
                 private userService: UserService,
                 private messageService: MessageService,
-                private loadingController: LoadingController) {
+                private loadingController: LoadingController,
+                public translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -105,6 +108,7 @@ export class ChatPage implements OnInit {
                 });
             });
         });
+        this.initTranslate();
     }
 
     inviaMessagio() {
@@ -157,7 +161,7 @@ export class ChatPage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -165,5 +169,11 @@ export class ChatPage implements OnInit {
 
     async disLoading() {
         await this.loading.dismiss();
+    }
+
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
     }
 }

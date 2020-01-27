@@ -21,8 +21,7 @@
                 <div class="msg-detail">
                     <div class="msg-info">
                         <p>
-                            {{message.user.name}} {{message.user.surname}} inviato
-                            alle {{message.sendDate | date: "HH:mm"}}</p>
+                            {{message.user.name}} {{message.user.surname}} {{"SENT TO"|translate}} {{message.sendDate | date: "HH:mm"}}</p>
                     </div>
                     <div class="msg-content">
                         <span class="triangle"></span>
@@ -42,8 +41,7 @@
                 <div class="msg-detail">
                     <div class="msg-info">
                         <p>
-                            {{message.user.name}} {{message.user.surname}} inviato
-                            alle {{message.sendDate | date: "HH:mm"}}</p>
+                            {{message.user.name}} {{message.user.surname}} {{"SENT TO"|translate}} {{message.sendDate | date: "HH:mm"}}</p>
                     </div>
                     <div class="msg-content">
                         <span class="triangle"></span>
@@ -63,7 +61,7 @@
     <div class="input-wrap">
         <form [formGroup]="scritturaMessaggio" style="width: 100%;" (ngSubmit)="inviaMessagio()" (click)="scrolla()">
             <label>
-                <textarea style="width: 84%;" formControlName="text" placeholder="Text Input"></textarea>
+                <textarea style="width: 84%;" formControlName="text" placeholder="{{'WRITE_MESSAGE_TEXT'|translate}}"></textarea>
             </label>
             <ion-button fill="clear" slot="icon-only" [disabled]="!scritturaMessaggio.valid" type="submit"
                         style="margin-top: -38px;">
