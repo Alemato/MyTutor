@@ -96,22 +96,22 @@ export class RegistrazioneDocenteModalPage implements OnInit {
 
     private initTranslate() {
         this.translateService.get('POST_CODE_REQUIRED_MESSAGE').subscribe((data) => {
-            this.postCodeRequiredMessage = data;
+            this.validationMessages.postCode[0].message = data;
         });
         this.translateService.get('POST_CODE_PATTERN_MESSAGE').subscribe((data) => {
-            this.postCodePatternMessage = data;
+            this.validationMessages.postCode[1].message = data;
         });
         this.translateService.get('REGION_REQUIRED_MESSAGE').subscribe((data) => {
-            this.regionRequiredMessage = data;
+            this.validationMessages.region[0].message = data;
         });
         this.translateService.get('CITY_REQUIRED_MESSAGE').subscribe((data) => {
-            this.cityRequiredMessage = data;
+            this.validationMessages.city[0].message = data;
         });
         this.translateService.get('STREET_REQUIRED_MESSAGE').subscribe((data) => {
-            this.streetRequiredMessage = data;
+            this.validationMessages.street[0].message = data;
         });
         this.translateService.get('STREET_NUMBER_REQUIRED_MESSAGE').subscribe((data) => {
-            this.streetNumberRequiredMessage = data;
+            this.validationMessages.streetNumber[0].message = data;
         });
     }
 
