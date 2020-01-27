@@ -3,6 +3,7 @@ import {LessonService} from '../../services/lesson.service';
 import {BehaviorSubject} from 'rxjs';
 import {Lesson} from '../../model/lesson.model';
 import {LoadingController} from '@ionic/angular';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-lista-annunci-publicati',
@@ -12,9 +13,11 @@ import {LoadingController} from '@ionic/angular';
 export class ListaAnnunciPublicatiPage implements OnInit {
     public lessons$: BehaviorSubject<Lesson[]>;
     private loading;
+    private pleaseWaitMessage: string;
 
     constructor(private lessonService: LessonService,
-                public loadingController: LoadingController) {
+                public loadingController: LoadingController,
+                private translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -26,10 +29,11 @@ export class ListaAnnunciPublicatiPage implements OnInit {
                 this.disLoading();
             });
         });
+        this.initTranslate();
     }
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -39,4 +43,9 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         await this.loading.dismiss();
     }
 
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
+    }
 }
