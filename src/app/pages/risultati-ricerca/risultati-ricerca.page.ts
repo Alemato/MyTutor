@@ -5,6 +5,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Planning} from '../../model/planning.model';
 import {PlanningService} from '../../services/planning.service';
 import {Lesson} from '../../model/lesson.model';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-risultati-ricerca',
@@ -22,10 +23,12 @@ export class RisultatiRicercaPage implements OnInit {
     public listaChiaveMappaFin = [];
     public listaValoriMappaFin = [];
     public vuotaLista = false;
+    private pleaseWaitMessage: string;
 
     constructor(public popoverController: PopoverController,
                 private planningService: PlanningService,
-                public loadingController: LoadingController) {
+                public loadingController: LoadingController,
+                private translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -164,11 +167,12 @@ export class RisultatiRicercaPage implements OnInit {
                 this.disLoading();
             });
         });
+        this.initTranslate();
     }
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -186,6 +190,11 @@ export class RisultatiRicercaPage implements OnInit {
             componentProps: {giorno: day, dati: data}
         });
         return await popover.present();
+    }
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
     }
 
 }

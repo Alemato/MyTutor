@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { RisultatiRicercaPage } from './risultati-ricerca.page';
 import {PopoverRisultatiRicercaComponent} from '../../popovers/popover-risultati-ricerca/popover-risultati-ricerca.component';
+import {TranslateModule} from '@ngx-translate/core';
 
 const routes: Routes = [
   {
@@ -16,12 +17,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        TranslateModule
+    ],
   entryComponents: [PopoverRisultatiRicercaComponent],
   declarations: [RisultatiRicercaPage, PopoverRisultatiRicercaComponent]
 })

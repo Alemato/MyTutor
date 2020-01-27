@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">Risultati Ricerca</ion-title>
+        <ion-title class="ml--56">{{"SEARCH_RESULTS_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -46,25 +46,25 @@
                                                     (click)="presentPopover($event, listaValoriMappaFin[y][k], giorno)"
                                                     class="">
                                                 <div *ngIf="giorno === 1">
-                                                    lunedi
+                                                    {{"MONDAY"|translate}}
                                                 </div>
                                                 <div *ngIf="giorno === 2">
-                                                    martedi
+                                                    {{"TUESDAY"|translate}}
                                                 </div>
                                                 <div *ngIf="giorno === 3">
-                                                    mercoledi
+                                                    {{"WEDNESDAY"|translate}}
                                                 </div>
                                                 <div *ngIf="giorno === 4">
-                                                    giovedi
+                                                    {{"THURSDAY"|translate}}
                                                 </div>
                                                 <div *ngIf="giorno === 5">
-                                                    venerdi
+                                                    {{"FRIDAY"|translate}}
                                                 </div>
                                                 <div *ngIf="giorno === 6">
-                                                    sabato
+                                                    {{"SATURDAY"|translate}}
                                                 </div>
                                                 <div *ngIf="giorno === 0">
-                                                    domenica
+                                                    {{"SUNDAY"|translate}}
                                                 </div>
                                             </ion-label>
                                         </ion-chip>
@@ -73,8 +73,7 @@
                             </ion-col>
                             <ng-template #nessunSlot>
                                 <ion-col class="px-0 pt-13">
-                                    <div class="ion-no-margin fs-medium fw-normal ion-float-right"> Non
-                                        disponibili!!
+                                    <div class="ion-no-margin fs-medium fw-normal ion-float-right">{{"NOT_AVAILABLE"|translate}}!!
                                     </div>
                                 </ion-col>
                             </ng-template>
@@ -87,7 +86,7 @@
     <ng-template #listaVuota>
         <ion-list>
             <div class="mx-auto fit-content" *ngIf="!vuotaLista">
-                <h5 class="fit-content font-weight-300 ls-1">Nessuna lezione trovata</h5>
+                <h5 class="fit-content font-weight-300 ls-1">{{"LESSON_NOT_FOUND"|translate}}</h5>
             </div>
         </ion-list>
     </ng-template>
