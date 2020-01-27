@@ -91,12 +91,4 @@ export class User {
             return 0;
         }
     }
-
-    public setRules(n: number) {
-        if (n === 0) {
-            this.language = false;
-        } else {
-            this.language = true;
-        }
-    }
 }
