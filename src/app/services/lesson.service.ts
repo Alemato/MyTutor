@@ -1,12 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {AUTH_TOKEN, STORAGE, URL} from '../constants';
+import {STORAGE, URL} from '../constants';
 import {map} from 'rxjs/operators';
-import {fromPromise} from 'rxjs/internal-compatibility';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Lesson} from '../model/lesson.model';
-import {Booking} from '../model/booking.model';
 
 @Injectable({
     providedIn: 'root'
@@ -32,10 +30,6 @@ export class LessonService {
                 return resp.body;
             })
         );
-    }
-
-    modifyRestLesson(lesson: Lesson): Observable<any> {
-        return this.http.put(URL.LESSON_MODIFY, lesson);
     }
 
     setStorageLesson(lessons: Lesson[]) {
