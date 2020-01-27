@@ -557,30 +557,32 @@ export class LezionePage implements OnInit {
     }
 
     creaChatStudentLesson() {
-        this.lesson$.subscribe((lesson) => {
-            console.log(lesson);
-            this.createService.postSigleCreates(lesson.teacher.idUser, this.user$.value.name + ' ' + this.user$.value.name)
-                .subscribe((resp) => {
-                    console.log('creato');
-                    console.log(resp);
-                    this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
-                        console.log(creates);
-                        let chat = new Chat(undefined);
-                        chat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat;
-                        const message = new Message(undefined, chat, this.user$.value);
-                        // tslint:disable-next-line:max-line-length
-                        message.text = 'System: ' + this.user$.value.name + ' ' + this.user$.value.surname + ' ha aggiunto ' + lesson.teacher.name + ' ' + lesson.teacher.surname + ' alla chat';
-                        this.messageService.createRestMessage(message).subscribe((respMes) => {
-                            console.log(respMes);
-                            this.messageService.getLastMessageOfChat(chat.idChat, 0).subscribe((lastMes) => {
-                                console.log(lastMes);
-                                this.disLoading();
-                                const url = '/chat/' + chat.idChat.toString();
-                                this.navController.navigateForward(url);
+        this.loadingPresent().then(() => {
+            this.lesson$.subscribe((lesson) => {
+                console.log(lesson);
+                this.createService.postSigleCreates(lesson.teacher.idUser, this.user$.value.name + ' ' + this.user$.value.name)
+                    .subscribe((resp) => {
+                        console.log('creato');
+                        console.log(resp);
+                        this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                            console.log(creates);
+                            let chat = new Chat(undefined);
+                            chat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat;
+                            const message = new Message(undefined, chat, this.user$.value);
+                            // tslint:disable-next-line:max-line-length
+                            message.text = 'System: ' + this.user$.value.name + ' ' + this.user$.value.surname + ' ha aggiunto ' + lesson.teacher.name + ' ' + lesson.teacher.surname + ' alla chat';
+                            this.messageService.createRestMessage(message).subscribe((respMes) => {
+                                console.log(respMes);
+                                this.messageService.getLastMessageOfChat(chat.idChat, 0).subscribe((lastMes) => {
+                                    console.log(lastMes);
+                                    this.disLoading();
+                                    const url = '/chat/' + chat.idChat.toString();
+                                    this.navController.navigateForward(url);
+                                });
                             });
                         });
                     });
-                });
+            });
         });
     }
 

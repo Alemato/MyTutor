@@ -138,29 +138,29 @@
                     <ion-col>
                         <form [formGroup]="prenotazioneFormModel">
                             <ion-item class="ion-no-padding">
-                                <ion-col size="2">
+                                <ion-col size="auto">
                                     <!-- form model Data Anno
                                      Ricordarsi che se si setta day-values si deve usare in forma angulare cioè con [day-values]="" -->
                                     <ion-datetime (click)="clickAnno()" (ionChange)="cambioAnno()" displayFormat="YYYY" pickerFormat="YYYY"
                                                   formControlName="annoDataLezione"
                                                   [yearValues]="listaAnni"
-                                                  placeholder="AA"
-                                                  class="ion-no-padding"
+                                                  placeholder="AAAA"
+                                                  class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>
-
-                                <ion-col size="2">
+                                /
+                                <ion-col size="auto">
                                     <!-- form model Data Mese
                                      Ricordarsi che se si setta day-values si deve usare in forma angulare cioè con [day-values]="" -->
                                     <ion-datetime (click)="clickMese()" (ionChange)="cambioMese()" displayFormat="MM" pickerFormat="MM"
                                                   formControlName="meseDataLezione"
                                                   monthValues="{{listaMesi}}"
                                                   placeholder="MM"
-                                                  class="ion-no-padding"
+                                                  class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>
-
-                                <ion-col size="2">
+                                /
+                                <ion-col size="auto">
                                     <!-- form model Data Giorno
                                      Ricordarsi che se si setta day-values si deve usare in forma angulare cioè con [day-values]="" -->
                                     <ion-datetime (click)="clickGiorno()" (ionChange)="cambioGiorno()" displayFormat="DD" pickerFormat="DD"
@@ -179,7 +179,7 @@
                                                   [hourValues]="hoursInizio"
                                                   minute-values="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
                                                   placeholder="inizio"
-                                                  class="ion-no-padding"
+                                                  class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>
                                 alle
