@@ -1,63 +1,63 @@
 <form [formGroup]="filtroFormModel">
 <ion-list>
-  <ion-list-header class="px-0"><span class="ion-text-center" style="width: 100%">Filtra le lezioni</span></ion-list-header>
+  <ion-list-header class="px-0"><span class="ion-text-center" style="width: 100%">{{"FILTER_LESSONS_LD"|translate}}</span></ion-list-header>
   <ion-item-divider style="min-height: 1px !important;"></ion-item-divider>
   <ion-item>
-    <ion-label>Nome Lezione:</ion-label>
+    <ion-label>{{"NAME_LESSON"|translate}}:</ion-label>
     <ion-input formControlName="nomeLezione" type="text"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-label>Materia:</ion-label>
-    <ion-select (ionChange)="setSotto()"  ok-text="Seleziona" formControlName="selectMateria" cancel-text="Cancella" style="width: 65%; max-width: 65%; padding-top: 14px;">
+    <ion-label>{{"SUBJECT"|translate}}:</ion-label>
+    <ion-select (ionChange)="setSotto()"  okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectMateria" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%; padding-top: 14px;">
       <ion-select-option *ngFor="let mat of materie"
                          value="{{mat.value}}">{{mat.text}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item *ngIf="materia!==null; else selctDisabilited">
-    <ion-label>Sotto Materia:</ion-label>
-    <ion-select ok-text="Seleziona" formControlName="selectSotto" cancel-text="Cancella" style="width: 50%; max-width: 50%; padding-top: 14px">
+    <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
+    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectSotto" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 50%; max-width: 50%; padding-top: 14px">
       <ion-select-option *ngFor="let sot of sottoMaterie[materia]"
                          value="{{sot.value}}">{{sot.text}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ng-template #selctDisabilited>
     <ion-item>
-      <ion-label>Sotto Materia:</ion-label>
-      <ion-select ok-text="Seleziona" cancel-text="Cancella" style="width: 50%; max-width: 50%; padding-top: 14px;" disabled
-                  placeholder="Seleziona Sotto Materie">
-        <ion-select-option value="0">Tutte</ion-select-option>
+      <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
+      <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 50%; max-width: 50%; padding-top: 14px;" disabled
+                  placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
+        <ion-select-option value="0">{{"ALL"|translate}}</ion-select-option>
       </ion-select>
     </ion-item>
   </ng-template>
   <ion-item>
-    <ion-label>Utente:</ion-label>
-    <ion-select ok-text="Seleziona" formControlName="selectUtente" cancel-text="Cancella" style="width: 65%; max-width: 65%;">
+    <ion-label>{{"USER"|translate}}:</ion-label>
+    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectUtente" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%;">
       <ion-select-option *ngFor="let usr of users"
                          value="{{usr.idUser}}">{{usr.name}} {{usr.surname}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
-    <ion-label>Stato Lezione:</ion-label>
-    <ion-select ok-text="Seleziona" formControlName="statoLezione" cancel-text="Cancella" style="width: 45%; max-width: 45%;">
-      <ion-select-option selected="" value="">Tutte</ion-select-option>
-      <ion-select-option value="0">Prenotate</ion-select-option>
-      <ion-select-option value="1">Accettate</ion-select-option>
-      <ion-select-option value="2">Rifiutate</ion-select-option>
-      <ion-select-option value="3">Annullate</ion-select-option>
-      <ion-select-option value="4">Eseguite</ion-select-option>
+    <ion-label>{{"STATUS_LESSON"|translate}}:</ion-label>
+    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="statoLezione" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 45%; max-width: 45%;">
+      <ion-select-option selected="" value="">{{"ALL"|translate}}</ion-select-option>
+      <ion-select-option value="0">{{"BOOKED"|translate}}</ion-select-option>
+      <ion-select-option value="1">{{"ACCEPTED"|translate}}</ion-select-option>
+      <ion-select-option value="2">{{"REJECTED"|translate}}</ion-select-option>
+      <ion-select-option value="3">{{"CANCELED"|translate}}</ion-select-option>
+      <ion-select-option value="4">{{"CARRIED"|translate}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
-    <ion-label>Data Lezione</ion-label>
-    <ion-datetime displayFormat="DD/MM/YYYY" placeholder="Data" formControlName="dataLezione"></ion-datetime>
+    <ion-label>{{"DATE_LESSON"|translate}}</ion-label>
+    <ion-datetime displayFormat="DD/MM/YYYY" placeholder="{{'DATE'|translate}}" formControlName="dataLezione"></ion-datetime>
   </ion-item>
 </ion-list>
   <ion-row>
     <div style="margin-right: auto; margin-left: auto">
-      <ion-button class="ion-margin-top ion-margin-bottom" color="success" (click)="subFiltro()">Filtra</ion-button>
+      <ion-button class="ion-margin-top ion-margin-bottom" color="success" (click)="subFiltro()">{{"FILTER_BUTTON"|translate}}</ion-button>
     </div>
     <div style="margin-right: auto; margin-left: auto">
-      <ion-button class="ion-margin-top ion-margin-bottom" color="primary"  (click)="resetFiltro()">Reset</ion-button>
+      <ion-button class="ion-margin-top ion-margin-bottom" color="primary"  (click)="resetFiltro()">{{"RESET_BUTTON"|translate}}</ion-button>
     </div>
   </ion-row>
 </form>
