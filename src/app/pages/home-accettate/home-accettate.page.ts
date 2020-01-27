@@ -55,7 +55,6 @@ export class HomeAccettatePage implements OnInit {
         console.log('ionViewWillEnter home/accetta');
         if (this.agg) {
             this.loadingPresent().then(() => {
-                // this.getlezioni();
                 this.bookingService.getRestBooking().subscribe(() => {
                     this.disLoading();
                 });
@@ -90,7 +89,7 @@ export class HomeAccettatePage implements OnInit {
                         console.log('Conferma annullamento lezione');
                         console.log(id);
                         const booking = this.bookings$.value.find(x => x.idBooking === id);
-                        booking.lessonState = 4;
+                        booking.lessonState = 3;
                         console.log(booking);
                         this.loadingPresent().then(() => {
                             this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
