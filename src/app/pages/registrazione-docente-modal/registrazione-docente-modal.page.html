@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Registrazione</ion-title>
+        <ion-title>{{"REGISTRATION_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -11,8 +11,8 @@
                 <ion-col size="12">
                     <ion-list inset="true" class="ion-no-padding">
                         <ion-item class="item-lines-inset">
-                            <ion-select formControlName="region" ok-text="Seleziona" cancel-text="Cancella"
-                                        placeholder="Seleziona una Regione" required="true">
+                            <ion-select formControlName="region" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                                        placeholder="{{'REGION_SELECT'|translate}}" required="true">
                                 <ion-select-option value="Abruzzo">Abruzzo</ion-select-option>
                                 <ion-select-option value="Basilicata">Basilicata</ion-select-option>
                                 <ion-select-option value="Calabria">Calabria</ion-select-option>
@@ -36,35 +36,80 @@
                                 <ion-select-option value="Veneto">Veneto</ion-select-option>
                             </ion-select>
                         </ion-item>
+                        <ng-container *ngFor="let validation of validationMessages.region">
+                            <div class="text08 pl-15"
+                                 *ngIf="registrazioneModelDocente.get('region').hasError(validation.type) && (registrazioneModelDocente.get('region').dirty || registrazioneModelDocente.get('region').touched)">
+                                <ion-icon color="danger" name="information-circle-outline"
+                                          class="vertical-middle"></ion-icon>
+                                <ion-text color="danger"
+                                          class="vertical-middle"> {{ validation.message }}</ion-text>
+                            </div>
+                        </ng-container>
                         <ion-item lines="inset">
-                            <ion-input class="pa16" type="text" formControlName="city" placeholder="Città" required="true"></ion-input>
+                            <ion-input class="pa16" type="text" formControlName="city" placeholder="{{'CITY_TEXT'|translate}}" required="true"></ion-input>
                         </ion-item>
+                        <ng-container *ngFor="let validation of validationMessages.city">
+                            <div class="text08 pl-15"
+                                 *ngIf="registrazioneModelDocente.get('city').hasError(validation.type) && (registrazioneModelDocente.get('city').dirty || registrazioneModelDocente.get('city').touched)">
+                                <ion-icon color="danger" name="information-circle-outline"
+                                          class="vertical-middle"></ion-icon>
+                                <ion-text color="danger"
+                                          class="vertical-middle"> {{ validation.message }}</ion-text>
+                            </div>
+                        </ng-container>
                         <ion-row>
                             <ion-col class="ion-no-padding" size="8">
                                 <ion-item lines="inset">
                                     <ion-input class="pa16" type="text" formControlName="street"
-                                               placeholder="indirizzo" required="true"></ion-input>
+                                               placeholder="{{'STREET_TEXT'|translate}}" required="true"></ion-input>
                                 </ion-item>
+                                <ng-container *ngFor="let validation of validationMessages.street">
+                                    <div class="text08 pl-15"
+                                         *ngIf="registrazioneModelDocente.get('street').hasError(validation.type) && (registrazioneModelDocente.get('street').dirty || registrazioneModelDocente.get('street').touched)">
+                                        <ion-icon color="danger" name="information-circle-outline"
+                                                  class="vertical-middle"></ion-icon>
+                                        <ion-text color="danger"
+                                                  class="vertical-middle"> {{ validation.message }}</ion-text>
+                                    </div>
+                                </ng-container>
                             </ion-col>
                             <ion-col class="ion-no-padding" size="4">
                                 <ion-item lines="inset">
                                     <ion-input class="pa16" type="text" formControlName="streetNumber"
-                                               placeholder="Civico" required="true"></ion-input>
+                                               placeholder="{{'NUMBER_TEXT'|translate}}" required="true"></ion-input>
                                 </ion-item>
+                                <ng-container *ngFor="let validation of validationMessages.streetNumber">
+                                    <div class="text08 pl-15"
+                                         *ngIf="registrazioneModelDocente.get('streetNumber').hasError(validation.type) && (registrazioneModelDocente.get('streetNumber').dirty || registrazioneModelDocente.get('streetNumber').touched)">
+                                        <ion-icon color="danger" name="information-circle-outline"
+                                                  class="vertical-middle"></ion-icon>
+                                        <ion-text color="danger"
+                                                  class="vertical-middle"> {{ validation.message }}</ion-text>
+                                    </div>
+                                </ng-container>
                             </ion-col>
                         </ion-row>
                         <ion-item lines="inset">
                             <ion-input class="pa16" type="text" pattern="[0-9]*" formControlName="postCode"
-                                       placeholder="CAP" required="true"></ion-input>
+                                       placeholder="{{'ZIP_CODE_TEXT'|translate}}" required="true"></ion-input>
                         </ion-item>
+                        <ng-container *ngFor="let validation of validationMessages.postCode">
+                            <div class="text08 pl-15"
+                                 *ngIf="registrazioneModelDocente.get('postCode').hasError(validation.type) && (registrazioneModelDocente.get('postCode').dirty || registrazioneModelDocente.get('postCode').touched)">
+                                <ion-icon color="danger" name="information-circle-outline"
+                                          class="vertical-middle"></ion-icon>
+                                <ion-text color="danger"
+                                          class="vertical-middle"> {{ validation.message }}</ion-text>
+                            </div>
+                        </ng-container>
                     </ion-list>
                 </ion-col>
               <ion-col size="12" class="ion-margin-top">
                 <ion-list inset="true" class="ion-no-padding">
                 <ion-item class="pa16">
-                  <ion-label class="bio" position="stacked">Biografia</ion-label>
+                  <ion-label class="bio" position="stacked">{{"BIOGRAPHY_LABEL"|translate}}</ion-label>
                   <ion-textarea rows="3" formControlName="byography"
-                                placeholder="Inserisci una breve descrizione di te..."></ion-textarea>
+                                placeholder="{{'BIOGRAPHY_TEXT'|translate}}"></ion-textarea>
                 </ion-item>
                 </ion-list>
               </ion-col>
@@ -74,7 +119,7 @@
     <ion-grid>
         <ion-row>
             <ion-col class="ion-text-center">
-                <ion-button (click)="closeModal()" [disabled]="!registrazioneModelDocente.valid">Close Modal</ion-button>
+                <ion-button (click)="closeModal()" [disabled]="!registrazioneModelDocente.valid">{{"CLOSE_BUTTON"|translate}}</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>

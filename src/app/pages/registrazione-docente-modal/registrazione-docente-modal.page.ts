@@ -3,6 +3,7 @@ import {ModalController, NavParams} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Teacher} from '../../model/teacher.model';
 import {User} from '../../model/user.model';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface UserTeacher {
     postCode: number;
@@ -24,23 +25,29 @@ export class RegistrazioneDocenteModalPage implements OnInit {
     private registrazioneModelDocente: FormGroup;
     private interfaceTeacher: UserTeacher;
     private teacher: Teacher;
+    private postCodeRequiredMessage: string;
+    private postCodePatternMessage: string;
+    private regionRequiredMessage: string;
+    private cityRequiredMessage: string;
+    private streetRequiredMessage: string;
+    private streetNumberRequiredMessage: string;
 
     validationMessages = {
         postCode: [
-            {type: 'required', message: 'campo richiesto'},
-            {type: 'patten', message: 'campo non valido, inserire solo numeri'}
+            {type: 'required', message: this.postCodeRequiredMessage},
+            {type: 'patten', message: this.postCodePatternMessage}
         ],
         region: [
-            {type: 'required', message: 'campo richiesto'}
+            {type: 'required', message: this.regionRequiredMessage}
         ],
         city: [
-            {type: 'required', message: 'campo richiesto'}
+            {type: 'required', message: this.cityRequiredMessage}
         ],
         street: [
-            {type: 'required', message: 'campo richiesto'}
+            {type: 'required', message: this.streetRequiredMessage}
         ],
         streetNumber: [
-            {type: 'required', message: 'campo richiesto'}
+            {type: 'required', message: this.streetNumberRequiredMessage}
         ]
     };
 
@@ -49,7 +56,8 @@ export class RegistrazioneDocenteModalPage implements OnInit {
     constructor(
         private modalController: ModalController,
         public formBuilder: FormBuilder,
-        navParams: NavParams) {
+        navParams: NavParams,
+        public translateService: TranslateService) {
         this.teacher = new Teacher(undefined);
         console.log(navParams.get('utente1'));
         console.log(this.teacher);
@@ -78,11 +86,33 @@ export class RegistrazioneDocenteModalPage implements OnInit {
             streetNumber: [this.teacher.streetNumber, Validators.required],
             byography: [this.teacher.byography]
         });
+        this.initTranslate();
     }
 
     async closeModal() {
         this.teacher.setRegistrazione(this.registrazioneModelDocente.value);
         await this.modalController.dismiss([this.teacher, true]);
+    }
+
+    private initTranslate() {
+        this.translateService.get('POST_CODE_REQUIRED_MESSAGE').subscribe((data) => {
+            this.postCodeRequiredMessage = data;
+        });
+        this.translateService.get('POST_CODE_PATTERN_MESSAGE').subscribe((data) => {
+            this.postCodePatternMessage = data;
+        });
+        this.translateService.get('REGION_REQUIRED_MESSAGE').subscribe((data) => {
+            this.regionRequiredMessage = data;
+        });
+        this.translateService.get('CITY_REQUIRED_MESSAGE').subscribe((data) => {
+            this.cityRequiredMessage = data;
+        });
+        this.translateService.get('STREET_REQUIRED_MESSAGE').subscribe((data) => {
+            this.streetRequiredMessage = data;
+        });
+        this.translateService.get('STREET_NUMBER_REQUIRED_MESSAGE').subscribe((data) => {
+            this.streetNumberRequiredMessage = data;
+        });
     }
 
 }
