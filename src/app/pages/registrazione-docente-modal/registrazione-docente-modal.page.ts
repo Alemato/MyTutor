@@ -73,6 +73,7 @@ export class RegistrazioneDocenteModalPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.registrazioneModelDocente = this.formBuilder.group({
             postCode: [this.teacher.postCode, Validators.compose([
                 Validators.required,
@@ -86,7 +87,6 @@ export class RegistrazioneDocenteModalPage implements OnInit {
             streetNumber: [this.teacher.streetNumber, Validators.required],
             byography: [this.teacher.byography]
         });
-        this.initTranslate();
     }
 
     async closeModal() {
