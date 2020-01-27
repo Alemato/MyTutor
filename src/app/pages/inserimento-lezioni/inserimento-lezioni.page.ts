@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Lezione} from '../../model/old/lezione.model';
 import {Storage} from '@ionic/storage';
 import {BehaviorSubject} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -14,8 +13,6 @@ import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
 import {PlanningService} from '../../services/planning.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {LessonService} from '../../services/lesson.service';
-import {delay} from 'rxjs/operators';
 
 @Component({
     selector: 'app-inserimento-lezioni',
@@ -28,8 +25,6 @@ export class InserimentoLezioniPage implements OnInit {
     public materie = [];
     public sottoMaterie = [];
     private lezioneFormModel: FormGroup;
-    public lezioni: Lezione[];
-    // public planning: Planning;
     public plannings: Planning[] = [];
     public planningAppoggio = [];
     public planningVisualizzazione = [];
@@ -37,7 +32,6 @@ export class InserimentoLezioniPage implements OnInit {
     private ok = false;
     uscitaValue = null;
     private lesson: Lesson;
-    private subject: Subject;
     private loading;
     public modifica = false;
     public booleanSottomateria = false;
@@ -145,18 +139,6 @@ export class InserimentoLezioniPage implements OnInit {
         }
     }
 
-    public findInvalidControls() {
-        const invalid = [];
-        const controls = this.lezioneFormModel.controls;
-        for (const name in controls) {
-            if (controls[name].invalid) {
-                invalid.push(name);
-            }
-        }
-        console.log('invalid');
-        console.log(invalid);
-    }
-
     inserisciLezione() {
         this.planningAppoggio.forEach((pianificazione) => {
             let subject;
@@ -184,7 +166,7 @@ export class InserimentoLezioniPage implements OnInit {
         });
         console.log(this.plannings);
         this.loadingPresent().then(() => {
-            this.planningService.createRestPlannings(this.plannings).subscribe((data) => {
+            this.planningService.createRestPlannings(this.plannings).subscribe(() => {
                 this.disLoading();
                 this.navController.navigateRoot('lista-annunci-publicati');
             });
@@ -219,7 +201,7 @@ export class InserimentoLezioniPage implements OnInit {
         });
         console.log(this.plannings);
         this.loadingPresent().then(() => {
-            this.planningService.modifyRestPlannings(this.plannings).subscribe((data) => {
+            this.planningService.modifyRestPlannings(this.plannings).subscribe(() => {
                 this.disLoading();
                 this.navController.navigateRoot('lista-annunci-publicati');
             });
@@ -279,13 +261,6 @@ export class InserimentoLezioniPage implements OnInit {
         }
     }
 
-    reverse(value: string): string {
-        return value
-            .split('')
-            .reverse()
-            .join('');
-    }
-
     fillPlannings(datasReturned: any) {
         datasReturned.forEach((planning) => {
             const inizioAppo = new Date(new Date(planning.oraInizio).getTime() + (1000 * 60 * 60)).toISOString();
@@ -341,7 +316,7 @@ export class InserimentoLezioniPage implements OnInit {
         };
         const picker = await this.pickerCtrl.create(opts);
         await picker.present();
-        picker.onDidDismiss().then(async data => {
+        picker.onDidDismiss().then(async () => {
             const col = await picker.getColumn('nome');
             this.materia = col.options[col.selectedIndex].text;
             this.uscitaValue = col.options[col.selectedIndex].value;
