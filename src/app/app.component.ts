@@ -42,16 +42,17 @@ export class AppComponent implements OnInit {
             this.initTranslate();
             this.userType = this.userService.getTypeUser();
             console.log(this.userType);
-            if (this.userType === 'student' ) {
+            if (this.userType === 'student') {
                 this.student$ = this.userService.getUser();
                 this.teacher$ = null;
+                console.log(this.appPagesStudent);
                 this.appPagesStudent.find(x => x.click === true).click = false;
-                this.appPagesStudent.find(x => x.title === 'Home' ).click = true;
+                this.appPagesStudent.find(x => x.title === 'Home').click = true;
             } else if (this.userType === 'teacher') {
                 this.teacher$ = this.userService.getUser();
                 this.student$ = null;
                 this.appPagesTeacher.find(x => x.click === true).click = false;
-                this.appPagesTeacher.find(x => x.title === 'Home' ).click = true;
+                this.appPagesTeacher.find(x => x.title === 'Home').click = true;
             }
             this.userService.loggedIn$.subscribe(value => {
                 this.loggedIn = value;
@@ -144,7 +145,9 @@ export class AppComponent implements OnInit {
     }
 
     profilo() {
-        this.navController.navigateForward('profilo').finally(() => {this.menu.close(); });
+        this.navController.navigateForward('profilo').finally(() => {
+            this.menu.close();
+        });
     }
 
     openPage(url: string) {
@@ -177,9 +180,37 @@ export class AppComponent implements OnInit {
         this.linguaService.getLinguaAttuale().subscribe((lingua: string) => {
             if (lingua != null) {
                 this.translate.use(lingua);
+                this.translateService.get('HISTORIC_SIDE_MENU').subscribe((history) => {
+                    this.appPagesTeacher[2].title = history;
+                    this.appPagesStudent[2].title = history;
+                });
+                this.translateService.get('INSERT_AD_SIDE_MENU').subscribe((insert) => {
+                    this.appPagesTeacher[3].title = insert;
+                });
+                this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
+                    this.appPagesTeacher[4].title = adv;
+                    console.log(this.appPagesTeacher);
+                });
+                this.translateService.get('SEARCH_LESSONS_SIDE_MENU').subscribe((searc) => {
+                    this.appPagesStudent[3].title = searc;
+                });
             } else {
                 this.translate.use(linguaPreferita);
                 this.linguaService.updateLingua(linguaPreferita);
+                // this.translateService.get('HISTORIC_SIDE_MENU').subscribe((history) => {
+                //     this.appPagesTeacher[2].title = history;
+                //     this.appPagesStudent[2].title = history;
+                // });
+                // this.translateService.get('INSERT_AD_SIDE_MENU').subscribe((insert) => {
+                //     this.appPagesTeacher[3].title = insert;
+                // });
+                // this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
+                //     this.appPagesTeacher[4].title = adv;
+                //     console.log(this.appPagesTeacher);
+                // });
+                // this.translateService.get('SEARCH_LESSONS_SIDE_MENU').subscribe((searc) => {
+                //     this.appPagesStudent[3].title = searc;
+                // });
                 // salva nello storage
             }
         });

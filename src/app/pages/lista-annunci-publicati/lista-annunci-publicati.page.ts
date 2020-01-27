@@ -21,6 +21,7 @@ export class ListaAnnunciPublicatiPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.lessons$ = this.lessonService.getLessons();
         this.loadingPresent().then(() => {
             // this.getlezioni();
@@ -29,7 +30,6 @@ export class ListaAnnunciPublicatiPage implements OnInit {
                 this.disLoading();
             });
         });
-        this.initTranslate();
     }
     async loadingPresent() {
         this.loading = await this.loadingController.create({

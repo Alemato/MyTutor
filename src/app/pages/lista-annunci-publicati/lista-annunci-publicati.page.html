@@ -13,20 +13,20 @@
             <ion-list-header *ngIf="lessons.length > 0 ; else noLessons">{{"ADVERTISEMENTS_PLACED_LD"|translate}}</ion-list-header>
             <ion-item *ngFor="let l of lessons" lines="full" class="py-10">
                 <ion-grid>
-                    <ion-row>
+                    <ion-row [routerLink]="['/lezione', 'lesson', l.idLesson]">
                         <ion-text class="ion-no-margin fs-large fw-normal">{{l.name}}</ion-text>
                     </ion-row>
-                    <ion-row>
+                    <ion-row [routerLink]="['/lezione', 'lesson', l.idLesson]">
                         <ion-text class="ion-no-margin pt-5 fs-medium font-weight-300 ls-01em"><b>{{"SUBJECT"|translate}}:</b> {{l.subject.macroSubject}}
                         </ion-text>
                     </ion-row>
-                    <ion-row class="mb-10">
+                    <ion-row class="mb-10" [routerLink]="['/lezione', 'lesson', l.idLesson]">
                         <ion-text class="ion-no-margin pt-5 fs-medium font-weight-300 ls-01em"><b>{{"SUB_SUBJECT"|translate}}:</b>
                             {{l.subject.microSubject}}
                         </ion-text>
                     </ion-row>
                     <ion-row class="ion-justify-content-between">
-                        <ion-col size="auto" class="pt-15 pl-0">
+                        <ion-col size="auto" class="pt-15 pl-0" [routerLink]="['/lezione', 'lesson', l.idLesson]">
                             <ion-text class="fs-medium ls-01em">{{"PRICE"|translate}}:</ion-text>
                             <ion-text class="c-primary ion-padding-start fs-medium font-weight-300 ls-01em">{{l.price}}€/h</ion-text>
                         </ion-col>
