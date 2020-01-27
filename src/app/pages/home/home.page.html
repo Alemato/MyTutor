@@ -14,12 +14,12 @@
         <ion-tab-bar slot="bottom">
             <ion-tab-button tab="accettate">
                 <ion-icon name="checkmark-circle-outline"></ion-icon>
-                <ion-label>Accettate</ion-label>
+                <ion-label>{{'BUTTON_TAB_ACCEPTED'| translate}}</ion-label>
             </ion-tab-button>
             <ion-tab-button tab="richieste">
                 <ion-badge *ngIf="(this.teacher$ | async) as teacher;">{{this.num}}</ion-badge>
                 <ion-icon name="calendar"></ion-icon>
-                <ion-label>richieste</ion-label>
+                <ion-label>{{"BUTTON_TAB_REQUESTS"| translate}}</ion-label>
             </ion-tab-button>
         </ion-tab-bar>
     </ion-tabs>

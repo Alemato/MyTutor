@@ -7,6 +7,9 @@ import {Lez, BookingService} from '../../services/booking.service';
 import {Booking} from '../../model/booking.model';
 import {LoadingController} from '@ionic/angular';
 
+import { TranslateService } from '@ngx-translate/core';
+
+
 
 @Component({
     selector: 'app-home',
@@ -20,10 +23,13 @@ export class HomePage implements OnInit {
     private student$: BehaviorSubject<Student>;
     private teacher$: BehaviorSubject<Teacher>;
     private bookings$: BehaviorSubject<Booking[]>;
+    private pleaseWaitMessage: string;
 
     constructor(private userService: UserService,
                 private bookingService: BookingService,
-                public loadingController: LoadingController) {
+                public loadingController: LoadingController,
+                public translateService: TranslateService,   // mi serve per la lingua
+    ) {
     }
 
     ngOnInit() {
@@ -39,6 +45,7 @@ export class HomePage implements OnInit {
             this.lezioni = [];
             this.setArrayLezioni();
         });
+        this.initTranslate();
     }
 
     setArrayLezioni() {
@@ -79,7 +86,7 @@ export class HomePage implements OnInit {
 
     async loadingPresent() {
         this.loading = await this.loadingController.create({
-            message: 'Please wait...',
+            message: this.pleaseWaitMessage,
             translucent: true
         });
         return await this.loading.present();
@@ -100,6 +107,12 @@ export class HomePage implements OnInit {
         console.log('ionViewDidLeave home');
         this.bookingService.stopCoundown();
         this.bookingService.stopPeriodicGet();
+    }
+
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
     }
 
 }
