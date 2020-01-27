@@ -176,7 +176,15 @@ export class LezionePage implements OnInit {
                         console.log(plannings);
                         this.plannings$.next(plannings);
                         this.lesson$ = new Observable<Lesson>(subscriber => {
-                            subscriber.next(plannings[0].lesson);
+                            if (plannings[0] !== undefined) {
+                                subscriber.next(plannings[0].lesson);
+                            } else {
+                                this.lessonService.getRestLessons().subscribe((l) => {
+                                    subscriber.next(l.find(x => x.idLesson === parseInt(this.id, 0)));
+                                    console.log('l.find(x => x.idLesson === parseInt(this.id, 0))');
+                                    console.log(l.find(x => x.idLesson === parseInt(this.id, 0)));
+                                });
+                            }
                         });
                         this.lesson$.subscribe((lesson) => {
                             this.nameLesson = lesson.name;
