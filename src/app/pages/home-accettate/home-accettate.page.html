@@ -11,13 +11,13 @@
              <div *ngFor="let lez of lezioni let i = index">
                  <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 1">
 
-                     <ion-item lines="full" class="py-10" [routerLink]="['/lezione', 'accettate', lez.idPlanning]" routerDirection="forward">
-                         <ion-col size="auto">
-                           <ion-icon *ngIf="lez.imgProf === null || lez.imgProf === '' || lez.imgProf ===' '; else imgBlock"
-                                     name="contact" class="fs-62"></ion-icon>
-                           <ng-template #imgBlock>
+                     <ion-item lines="full" class="py-10">
+                         <ion-col size="auto" [routerLink]="['/profilo-singolo', lez.emailProf]" routerDirection="forward">
+                           <ion-icon *ngIf="lez.imgProf === null || lez.imgProf === '' || lez.imgProf ===' '; else imgBlockS"
+                                     name="contact" class="fs-62 c-primary"></ion-icon>
+                           <ng-template #imgBlockS>
                              <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                               <img [src]="lez.imgStudent" alt="img" class="w-51 h-51">
+                               <img [src]="lez.imgProf" alt="img" class="w-51 h-51">
                              </ion-avatar>
                            </ng-template>
                          </ion-col>
@@ -25,15 +25,15 @@
                              <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{lez.nomeLezione}}</div>
                            <ion-row>
                              <ion-col class="ion-no-padding">
-                             <div class="ion-no-margin fs-medium font-weight-300 ls-01em">{{lez.nomeProf}}</div>
+                             <div class="ion-no-margin fs-medium font-weight-300 ls-01em" [routerLink]="['/profilo-singolo', lez.emailProf]" routerDirection="forward">{{lez.nomeProf}}</div>
                              </ion-col>
                              <ion-col class="ion-no-padding">
-                               <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{lez.price}}€/h</div>
+                               <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em"  [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{lez.price}}€/h</div>
                              </ion-col>
                            </ion-row>
-                           <div class="ion-no-margin fs-small font-weight-300 pt-5">{{"DIV_FOR_THE"|translate}}
-                              {{lez.date | date:'short'}}</div>
-                             <div class="ion-no-margin fs-small font-weight-300 pt-5">
+                           <div class="ion-no-margin fs-small font-weight-300 pt-5"  [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{"DIV_FOR_THE"|translate}}
+                              {{lez.date | date:'dd/MM/yyyy'}}</div>
+                             <div class="ion-no-margin fs-small font-weight-300 pt-5"  [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">
                                  {{"DIV_BETWEEN"|translate}} {{lez.days}} {{"DIV_DAYS"|translate}}, {{lez.hours}} {{"DIV_HOURS"|translate}}, {{lez.minutes}} min, {{lez.seconds}} sec
                              </div>
                          </ion-col>
@@ -60,10 +60,10 @@
              </ng-template>
            <div *ngFor="let lez of lezioni">
              <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 1">
-                 <ion-item lines="full" class="py-10" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">
-                     <ion-col size="auto">
+                 <ion-item lines="full" class="py-10">
+                     <ion-col size="auto"  [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">
                        <ion-icon *ngIf="lez.imgStudent === null || lez.imgStudent === '' || lez.imgStudent ===' '; else imgBlock"
-                                 name="contact" class="fs-62"></ion-icon>
+                                 name="contact" class="fs-62 c-primary"></ion-icon>
                        <ng-template #imgBlock>
                          <ion-avatar class="ion-text-center h-62 w-62 pt-3">
                            <img [src]="lez.imgStudent" alt="img" class="h-51 w-51">
@@ -71,19 +71,19 @@
                        </ng-template>
                      </ion-col>
                      <ion-col size="10">
-                         <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{lez.nomeLezione}}</div>
+                         <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/profilo-singolo', lez.emailStudent]" routerDirection="forward">{{lez.nomeLezione}}</div>
                        <ion-row>
                          <ion-col class="ion-no-padding">
                            <div class="ion-no-margin fs-medium font-weight-300 ls-01em"
-                                [routerLink]="['/profilo-singolo', lez.emailStudent]" >{{lez.nomeStudent}}</div>
+                                [routerLink]="['/profilo-singolo', lez.emailStudent]" routerDirection="forward">{{lez.nomeStudent}}</div>
                          </ion-col>
                          <ion-col class="ion-no-padding">
-                           <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{lez.price}}€/h</div>
+                           <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{lez.price}}€/h</div>
                          </ion-col>
                        </ion-row>
-                       <div class="ion-no-margin fs-small font-weight-300 ls-01em">{{"DIV_FOR_THE"|translate}}
-                          {{lez.date | date:'short'}}</div>
-                         <div class="ion-no-margin fs-small font-weight-300 pt-5">
+                       <div class="ion-no-margin fs-small font-weight-300 ls-01em" [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">{{"DIV_FOR_THE"|translate}}
+                          {{lez.date | date:'dd/MM/yyyy'}}</div>
+                         <div class="ion-no-margin fs-small font-weight-300 pt-5"  [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">
                              {{"DIV_BETWEEN"|translate}} {{lez.days}} {{"DIV_DAYS"|translate}}, {{lez.hours}} {{"DIV_HOURS"|translate}}, {{lez.minutes}} min, {{lez.seconds}} sec
                          </div>
                      </ion-col>
