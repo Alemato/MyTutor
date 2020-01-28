@@ -20,7 +20,7 @@
                 <ion-button slot="end" fill="clear" (click)="showPicker()">{{"SELECT_BUTTON"|translate}}</ion-button>
             </ion-item>
             <div *ngIf="materia !== 'Creane una'">
-                <ion-item *ngIf="uscitaValue!==null; else selctDisabilited">
+                <ion-item *ngIf="uscitaValue!==null; else selctDisabilitedOrModifica">
                     <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
                     <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="sottoMateria" cancelText="{{'CANCEL_BUTTON'|translate}}"
                                  class="w-65 max-w-65">
@@ -89,14 +89,18 @@
         <div *ngIf="planningVisualizzazione.length > 0; else modificaLessonOrNoPlannings">
             <ion-list  *ngFor="let planning of planningVisualizzazione; let i = index;">
                 <ion-item>
-                    <ion-icon name="remove-circle-outline" (click)="rimuoviPlanning(i)"></ion-icon>
-                    <ion-col size="5">
-                        {{planning.date}}
+                    <ion-col size="auto">
+                        <ion-icon name="remove-circle-outline" (click)="rimuoviPlanning(i)"></ion-icon>
                     </ion-col>
-                    <ion-col size="3">
+                    <ion-col size="4">
+                        {{planning.date | date}}
+                    </ion-col>
+                    {{"DATETIME_FROM"|translate}}
+                    <ion-col size="auto">
                         {{planning.startTime}}
                     </ion-col>
-                    <ion-col size="3">
+                    {{"DATETIME_TO"|translate}}
+                    <ion-col size="auto">
                         {{planning.endTime}}
                     </ion-col>
                 </ion-item>
@@ -117,7 +121,7 @@
     </div>
     <div class="bottone-inserisci" *ngIf="modifica; else bottoneInserisci">
         <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="modificaLezione()"
-                    [disabled]="!lezioneFormModel.valid || !this.ok">{{"MODIFIED"}}
+                    [disabled]="!lezioneFormModel.valid">{{"MODIFIED"|translate}}
         </ion-button>
     </div>
     <ng-template #bottoneInserisci>

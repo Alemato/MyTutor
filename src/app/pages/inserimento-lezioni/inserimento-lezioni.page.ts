@@ -12,8 +12,9 @@ import {Lesson} from '../../model/lesson.model';
 import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
 import {PlanningService} from '../../services/planning.service';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {LessonService} from '../../services/lesson.service';
 
 @Component({
     selector: 'app-inserimento-lezioni',
@@ -23,6 +24,7 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 export class InserimentoLezioniPage implements OnInit {
     private teacher$: BehaviorSubject<Teacher>;
     public listSubject$: BehaviorSubject<Subject[]>;
+    private plannings$: BehaviorSubject<Planning[]>;
     public materia = '';
     public materie = [];
     public sottoMaterie = [];
@@ -40,6 +42,7 @@ export class InserimentoLezioniPage implements OnInit {
     private cancelButton: string;
     private doneButton: string;
     private pleaseWaitMessage: string;
+    private noPlanning = false;
 
     constructor(
         private pickerCtrl: PickerController,
@@ -47,6 +50,7 @@ export class InserimentoLezioniPage implements OnInit {
         private userService: UserService,
         public formBuilder: FormBuilder,
         private subjectService: SubjectService,
+        private lessonService: LessonService,
         public modalController: ModalController,
         private planningService: PlanningService,
         private navController: NavController,
@@ -71,21 +75,54 @@ export class InserimentoLezioniPage implements OnInit {
                 if (params.get('idLesson') !== 'null') {
                     this.modifica = true;
                     this.planningService.getRestPlanningByIdLesson(params.get('idLesson')).subscribe((pList) => {
-                        this.lesson = pList.find(x => x !== undefined).lesson;
-                        this.materia = this.lesson.subject.macroSubject;
-                        const obj = {
-                            sottoMateria: this.lesson.subject.microSubject,
-                            nuovaMateria: '',
-                            nuovaSottoMateria: '',
-                            nomeLezione: this.lesson.name,
-                            prezzoOrario: this.lesson.price.toString(),
-                            descrizione: this.lesson.description
-                        };
-                        this.lezioneFormModel.get('sottoMateria').enable();
-                        this.lezioneFormModel.setValue(obj);
-                        this.booleanSottomateria = true;
-                        this.onChanges();
-                        this.disLoading();
+                        if (pList[0] !== undefined) {
+                            this.plannings$ = this.planningService.getPlannings();
+                            this.plannings$.subscribe((p) => {
+                                if (pList.length > 0) {
+                                    this.planingCompat(p);
+                                }
+                                this.lesson = pList.find(x => x !== undefined).lesson;
+                                this.materia = this.lesson.subject.macroSubject;
+                                console.log('this.lesson.subject.microSubject');
+                                console.log(this.lesson.subject.microSubject);
+                                this.booleanSottomateria = true;
+                                const obj = {
+                                    sottoMateria: this.lesson.subject.microSubject,
+                                    nuovaMateria: '',
+                                    nuovaSottoMateria: '',
+                                    nomeLezione: this.lesson.name,
+                                    prezzoOrario: this.lesson.price.toString(),
+                                    descrizione: this.lesson.description
+                                };
+                                this.lezioneFormModel.controls.sottoMateria.enable();
+                                this.lezioneFormModel.setValue(obj);
+                                this.onChanges();
+                                this.disLoading();
+                            });
+                        } else {
+                            this.lessonService.getRestLessons().subscribe((l) => {
+                                this.lesson = l.find(x => x.idLesson === parseInt(params.get('idLesson'), 0));
+                                console.log('l.find(x => x.idLesson === parseInt(this.id, 0))');
+                                console.log(l.find(x => x.idLesson === parseInt(params.get('idLesson'), 0)));
+                                this.lezioneFormModel.controls.sottoMateria.enable();
+                                this.booleanSottomateria = true;
+                                this.materia = this.lesson.subject.macroSubject;
+                                console.log('this.lesson.subject.microSubject');
+                                console.log(this.lesson.subject.microSubject);
+                                const obj = {
+                                    sottoMateria: this.lesson.subject.microSubject,
+                                    nuovaMateria: '',
+                                    nuovaSottoMateria: '',
+                                    nomeLezione: this.lesson.name,
+                                    prezzoOrario: this.lesson.price.toString(),
+                                    descrizione: this.lesson.description
+                                };
+                                this.lezioneFormModel.setValue(obj);
+                                this.onChanges();
+                                this.disLoading();
+                            });
+                            this.noPlanning = true;
+                        }
                     });
                 }
             });
@@ -127,14 +164,43 @@ export class InserimentoLezioniPage implements OnInit {
             });
         });
     }
+    planingCompat(p: Planning[]) {
+        for (let i = p.length - 1; i >= 0; i--) {
+            let flag = false;
+            for (let j = i - 1; j >= 0; j--) {
+                if (new Date(p[i].date).getDay() === new Date(p[j].date).getDay() &&
+                   p[i].startTime === p[j].startTime &&
+                    p[i].endTime === p[j].endTime) {
+                    flag = false;
+                    break;
+                } else {
+                    flag = true;
+                }
+            }
+            if (flag) {
+                p[i].startTime = p[i].startTime.slice(0, 5);
+                p[i].endTime = p[i].endTime.slice(0, 5);
+                this.planningAppoggio.push(p[i]);
+                this.planningVisualizzazione.push(p[i]);
+            }
+        }
+        p[0].startTime = p[0].startTime.slice(0, 5);
+        p[0].endTime = p[0].endTime.slice(0, 5);
+        this.planningAppoggio.push(p[0]);
+        this.planningAppoggio.reverse();
+        this.planningVisualizzazione.push(p[0]);
+        this.planningVisualizzazione.reverse();
+        console.log('this.planningsCompattati');
+        console.log(this.planningAppoggio);
+    }
 
     onChanges() {
         console.log('onChanges');
         console.log('this.materia');
         console.log(this.materia);
         if (this.materia === 'Creane una') {
-            this.lezioneFormModel.get('sottoMateria').reset();
-            this.lezioneFormModel.get('sottoMateria').disable();
+            this.lezioneFormModel.controls.sottoMateria.reset();
+            this.lezioneFormModel.controls.sottoMateria.disable();
             this.lezioneFormModel.get('nuovaMateria').enable();
             this.lezioneFormModel.get('nuovaSottoMateria').enable();
 
@@ -144,7 +210,7 @@ export class InserimentoLezioniPage implements OnInit {
             this.lezioneFormModel.get('nuovaMateria').disable();
             this.lezioneFormModel.get('nuovaSottoMateria').reset();
             this.lezioneFormModel.get('nuovaSottoMateria').disable();
-            this.lezioneFormModel.get('sottoMateria').enable();
+            this.lezioneFormModel.controls.sottoMateria.enable();
         }
     }
 
@@ -184,37 +250,46 @@ export class InserimentoLezioniPage implements OnInit {
     }
 
     modificaLezione() {
-        this.planningAppoggio.forEach((pianificazione) => {
-            let subject;
-            if (this.materia === 'Creane una') {
-                subject = new Subject({
-                    idSubject: undefined, macroSubject: this.lezioneFormModel.controls.nuovaMateria.value,
-                    microSubject: this.lezioneFormModel.controls.nuovaSottoMateria.value
-                });
-            } else {
-                subject = new Subject({
-                    idSubject: undefined, macroSubject: this.materia,
-                    microSubject: this.lezioneFormModel.controls.sottoMateria.value
-                });
-            }
-            const lesson = new Lesson({
-                idLesson: this.lesson.idLesson, name: this.lezioneFormModel.controls.nomeLezione.value,
-                price: this.lezioneFormModel.controls.prezzoOrario.value, description: this.lezioneFormModel.controls.descrizione.value,
-                publicationDate: this.lesson.publicationDate
-            }, subject, this.teacher$.value);
-            const planning = new Planning({
-                idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime,
-                endTime: pianificazione.endTime, available: true
-            }, lesson);
-            this.plannings.push(planning);
-        });
-        console.log(this.plannings);
-        this.loadingPresent().then(() => {
-            this.planningService.modifyRestPlannings(this.plannings).subscribe(() => {
-                this.disLoading();
-                this.navController.navigateRoot('lista-annunci-publicati');
+        if (this.planningAppoggio.length > 0) {
+            this.planningAppoggio.forEach((pianificazione) => {
+                let subject;
+                if (this.materia === 'Creane una') {
+                    subject = new Subject({
+                        idSubject: undefined, macroSubject: this.lezioneFormModel.controls.nuovaMateria.value,
+                        microSubject: this.lezioneFormModel.controls.nuovaSottoMateria.value
+                    });
+                } else {
+                    subject = new Subject({
+                        idSubject: undefined, macroSubject: this.materia,
+                        microSubject: this.lezioneFormModel.controls.sottoMateria.value
+                    });
+                }
+                const lesson = new Lesson({
+                    idLesson: this.lesson.idLesson, name: this.lezioneFormModel.controls.nomeLezione.value,
+                    price: this.lezioneFormModel.controls.prezzoOrario.value, description: this.lezioneFormModel.controls.descrizione.value,
+                    publicationDate: this.lesson.publicationDate
+                }, subject, this.teacher$.value);
+                const planning = new Planning({
+                    idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime,
+                    endTime: pianificazione.endTime, available: true
+                }, lesson);
+                this.plannings.push(planning);
             });
-        });
+            console.log(this.plannings);
+            this.loadingPresent().then(() => {
+                this.planningService.modifyRestPlannings(this.plannings, this.lesson.idLesson).subscribe(() => {
+                    this.disLoading();
+                    this.navController.navigateRoot('lista-annunci-publicati');
+                });
+            });
+        } else {
+            this.loadingPresent().then(() => {
+                this.lessonService.modifyRestLesson(this.lesson).subscribe(() => {
+                    this.disLoading();
+                    this.navController.navigateRoot('lista-annunci-publicati');
+                });
+            });
+        }
     }
 
 
@@ -273,18 +348,13 @@ export class InserimentoLezioniPage implements OnInit {
     fillPlannings(datasReturned: any) {
         datasReturned.forEach((planning) => {
             const inizioAppo = new Date(new Date(planning.oraInizio).getTime() + (1000 * 60 * 60)).toISOString();
-            console.log('inizioAppo');
-            console.log(inizioAppo);
             const fineAppo = new Date(new Date(planning.oraFine).getTime() + (1000 * 60 * 60)).toISOString();
-            console.log('fineAppo');
-            console.log(fineAppo);
 
             const planningSingolo: any = {
                 date: new Date(planning.dataLezione).getTime() + (1000 * 60 * 60),
                 startTime: inizioAppo.slice(11, 16) + ':00', endTime: fineAppo.slice(11, 16) + ':00'
             };
-            const dataAppo = new Date(new Date(planning.dataLezione).getTime() + (1000 * 60 * 60));
-            const data: string = dataAppo.toLocaleDateString();
+            const data = new Date(new Date(planning.dataLezione).getTime() + (1000 * 60 * 60)).getTime();
             const planningPreVisual: any = {
                 date: data,
                 startTime: inizioAppo.slice(11, 16), endTime: fineAppo.slice(11, 16)
@@ -292,19 +362,11 @@ export class InserimentoLezioniPage implements OnInit {
             this.planningAppoggio.push(planningSingolo);
             this.planningVisualizzazione.push(planningPreVisual);
         });
-        console.log('this.planningAppoggio');
-        console.log(this.planningAppoggio);
-        console.log('this.planningVisualizzazione');
-        console.log(this.planningVisualizzazione);
     }
 
     rimuoviPlanning(index: number) {
         this.planningAppoggio.splice(index, 1);
         this.planningVisualizzazione.splice(index, 1);
-        console.log('this.planningAppoggio');
-        console.log(this.planningAppoggio);
-        console.log('this.planningVisualizzazione');
-        console.log(this.planningVisualizzazione);
     }
 
     async showPicker() {
@@ -338,6 +400,7 @@ export class InserimentoLezioniPage implements OnInit {
         console.log('cambio');
         this.lezioneFormModel.controls.sottoMateria.reset();
     }
+
     private initTranslate() {
         this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
             this.cancelButton = data;
