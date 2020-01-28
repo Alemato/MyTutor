@@ -2,7 +2,12 @@
   <div *ngIf="(this.teacher$ | async) as teacher; then teacherBlock else studentBlock"></div>
   <ng-template #studentBlock>
     <ion-list *ngIf="(this.student$ | async) as student;" class="mb-100">
-      <ion-list-header class="mb--14">{{"lIST_LESSONS_BOOKED_ACCEPT"|translate}}</ion-list-header>
+      <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesS">{{"LIST_LESSONS_ACCEPTED"|translate}}</ion-list-header>
+      <ng-template #notLesS>
+        <div class="mx-auto fit-content">
+          <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
+        </div>
+      </ng-template>
       <div *ngFor="let lez of lezioni">
         <ion-item-sliding #itemSliding *ngIf="lez.lessonState === 0">
           <ion-item lines="full" class="py-10">
@@ -11,12 +16,12 @@
                         name="contact" class="fs-62"></ion-icon>
               <ng-template #imgBlock>
                 <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                  <img [src]="lez.imgStudent" alt="img" class="w-51 h-51">
+                  <img [src]="lez.imgProf" alt="img" class="w-51 h-51">
                 </ion-avatar>
               </ng-template>
             </ion-col>
             <ion-col size="10">
-              <div class="ion-no-margin fs-large fw-normal">{{lez.nomeLezione}}</div>
+              <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/lezione', 'booking', lez.idPlanning]">{{lez.nomeLezione}}</div>
               <ion-row>
                 <ion-col class="ion-no-padding">
                   <div class="ion-no-margin fs-medium font-weight-400 ls-01em" [routerLink]="['/profilo-singolo', lez.emailProf]">{{lez.nomeProf}}</div>
@@ -25,7 +30,7 @@
                   <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{lez.price}}€/h</div>
                 </ion-col>
               </ion-row>
-              <div class="ion-no-margin fs-small font-weight-300 pt-5">{{"DIV_FOR_THE"|translate}} {{lez.date | date:'short'}}</div>
+              <div class="ion-no-margin fs-small font-weight-300 pt-5">{{"DIV_FOR_THE"|translate}} {{lez.date | date:'dd/MM/yyyy'}}</div>
             </ion-col>
           </ion-item>
           <ion-item-options side="end">
@@ -37,7 +42,7 @@
   </ng-template>
   <ng-template #teacherBlock>
     <ion-list>
-      <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">{{"lIST_LESSONS_BOOKED_ACCEPT"|translate}} {{lezioni.length}}</ion-list-header>
+      <ion-list-header class="mb--14" *ngIf="lezioni.length > 0; else notLesT">{{"lIST_LESSONS_BOOKED_ACCEPT"|translate}}</ion-list-header>
       <ng-template #notLesT>
         <div class="mx-auto fit-content">
           <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
@@ -48,10 +53,15 @@
         <ion-grid class="w-100">
           <ion-row>
             <ion-col size="2" class="mr-15">
-              <ion-icon *ngIf="true" name="contact" class="fs-62 c-029db4"></ion-icon>
-              <ion-avatar *ngIf="false" class="ion-text-center m-auto-imp pb-15 h-62 w-62">
-                <img [src]="" alt="img">
-              </ion-avatar>
+              <ion-col size="auto"  [routerLink]="['/lezione', 'booking', lez.idPlanning]" routerDirection="forward">
+                <ion-icon *ngIf="lez.imgStudent === null || lez.imgStudent === '' || lez.imgStudent ===' '; else imgBlockT"
+                          name="contact" class="fs-62 c-primary"></ion-icon>
+                <ng-template #imgBlockT>
+                  <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+                    <img [src]="lez.imgStudent" alt="img" class="h-51 w-51">
+                  </ion-avatar>
+                </ng-template>
+              </ion-col>
             </ion-col>
             <ion-col>
               <div class="ion-no-margin fs-large fw-normal">{{lez.nomeLezione}}</div>
@@ -64,7 +74,7 @@
                 </ion-col>
               </ion-row>
               <div class="ion-no-margin fs-small font-weight-300 pt-5">{{"DIV_FOR_THE"|translate}}
-                 {{lez.date | date:'short'}}</div>
+                 {{lez.date | date:'dd/MM/yyyy'}}</div>
               <ion-row class="ion-margin-top ion-no-padding ">
                 <ion-col class="ion-no-padding ion-align-self-start">
                   <div>
