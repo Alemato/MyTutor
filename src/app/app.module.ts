@@ -38,7 +38,7 @@ export function createTranslateLoader(http: HttpClient) {
         IonicModule.forRoot(),
         FontAwesomeModule,  // per le icone
         IonicStorageModule.forRoot({
-            name: '__mydb',
+            name: 'myTutor',
             driverOrder: ['indexeddb', 'sqlite', 'websql']
         }),
         TranslateModule.forRoot({
