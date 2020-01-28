@@ -242,8 +242,21 @@ export class InserimentoLezioniPage implements OnInit {
         console.log(this.plannings);
         this.loadingPresent().then(() => {
             this.planningService.createRestPlannings(this.plannings).subscribe(() => {
-                this.disLoading();
-                this.navController.navigateRoot('lista-annunci-publicati');
+                this.lessonService.getRestLessons().subscribe((le: Lesson[]) => {
+                    let idL = -1;
+                    le.forEach((l) => {
+                        if (l.name === this.lezioneFormModel.controls.nomeLezione.value &&
+                        l.description === this.lezioneFormModel.controls.descrizione.value) {
+                            idL = l.idLesson;
+                        }
+                    });
+                    this.disLoading();
+                    if (idL < 0) {
+                        this.navController.navigateRoot('lista-annunci-publicati');
+                    }
+                    const url: string = '/lezione/lesson/' + idL.toString();
+                    this.navController.navigateRoot(url);
+                });
             });
         });
 
@@ -286,7 +299,8 @@ export class InserimentoLezioniPage implements OnInit {
             this.loadingPresent().then(() => {
                 this.lessonService.modifyRestLesson(this.lesson).subscribe(() => {
                     this.disLoading();
-                    this.navController.navigateRoot('lista-annunci-publicati');
+                    const url: string = '/lezione/lesson/' + this.lesson.idLesson.toString();
+                    this.navController.navigateRoot(url);
                 });
             });
         }
