@@ -20,6 +20,7 @@ export class PlanningService {
     getRestPlanningByIdLesson(idLesson: string): Observable<Planning[]> {
         return this.http.get<Planning[]>(URL.PLANNING + '/' + idLesson, {observe: 'response'}).pipe(
             map((resp: HttpResponse<Planning[]>) => {
+                this.plannings$.next(resp.body);
                 return resp.body;
             })
         );
@@ -53,12 +54,20 @@ export class PlanningService {
             })
         );
     }
+
     createRestPlannings(plannings: Planning[]): Observable<any> {
         return this.http.post<any>(URL.PLANNING_CREATE, plannings, {observe: 'response'});
     }
-    modifyRestPlannings(plannings: Planning[]): Observable<any> {
-        return this.http.put<any>(URL.PLANNING_MODIFY, plannings, {observe: 'response'});
+
+    modifyRestPlannings(plannings: Planning[], idLesson: number): Observable<any> {
+        return this.http.put<any>(URL.PLANNING_MODIFY, plannings, {
+            observe: 'response',
+            params: {
+                'id-lesson': idLesson.toString()
+            }
+        });
     }
+
     getPlannings(): BehaviorSubject<Planning[]> {
         return this.plannings$;
     }
