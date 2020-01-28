@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>app-mobili</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <name>My Tutor</name>
+    <description>L'applicazione offre un ponte di comunicazione tra uno studente in difficoltà per una o più materie e un docente che offre un servizio di formazione di quelle materie.</description>
+    <author email="" href="https://gitlab.com/Alesmatte/app-mobili.git">My Tutor Team</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
