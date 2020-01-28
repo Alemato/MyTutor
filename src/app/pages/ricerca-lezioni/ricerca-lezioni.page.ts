@@ -86,7 +86,7 @@ export class RicercaLezioniPage implements OnInit {
 
     changeInizioLezione() {
         this.minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-        this.hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+        this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
         this.ricercaFormModel.controls.fine.reset();
         console.log('cambio o setto orario lezione');
         const oraInizio = new Date(this.ricercaFormModel.controls.inizio.value);
@@ -114,27 +114,28 @@ export class RicercaLezioniPage implements OnInit {
     }
 
     predi() {
+        console.log(this.ricercaFormModel.controls.giorni.value);
         this.ricercaFormModel.controls.giorni.value.forEach((item) => {
             if (item === '1') {
-                this.giorniSettimana[1] = 1;
+                this.giorniSettimana[0] = 1;
             }
             if (item === '2') {
-                this.giorniSettimana[2] = 1;
+                this.giorniSettimana[1] = 1;
             }
             if (item === '3') {
-                this.giorniSettimana[3] = 1;
+                this.giorniSettimana[2] = 1;
             }
             if (item === '4') {
-                this.giorniSettimana[4] = 1;
+                this.giorniSettimana[3] = 1;
             }
             if (item === '5') {
-                this.giorniSettimana[5] = 1;
+                this.giorniSettimana[4] = 1;
             }
             if (item === '6') {
-                this.giorniSettimana[6] = 1;
+                this.giorniSettimana[5] = 1;
             }
             if (item === '7') {
-                this.giorniSettimana[0] = 1;
+                this.giorniSettimana[6] = 1;
             }
         });
         this.oraInizio = this.ricercaFormModel.controls.inizio.value;
@@ -165,7 +166,20 @@ export class RicercaLezioniPage implements OnInit {
             });
         });
     }
-
+    ionViewDidLeave() {
+        this.ricercaFormModel.reset();
+        this.materia = '';
+        this.giorniSettimana = [1, 1, 1, 1, 1, 1, 1];
+        const obj = {
+            sottoMateria: '',
+            nomeLezione: '',
+            nomeCitta: '',
+            inizio: '',
+            fine: '',
+            giorni: ['1', '2', '3', '4', '5', '6', '7']
+        };
+        this.ricercaFormModel.setValue(obj);
+    }
     async loadingPresent() {
         this.loading = await this.loadingController.create({
             message: this.pleaseWaitMessage,
