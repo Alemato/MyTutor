@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-    <form [formGroup]="ricercaFormModel">
+    <form [formGroup]="ricercaFormModel" (ngSubmit)="predi()">
         <ion-list>
             <ion-list-header class="ion-text-uppercase">
                 {{"AVAILABLE_SUBJECTS"|translate}} :
@@ -71,9 +71,17 @@
                               [minuteValues]="minutes" placeholder="Ora"></ion-datetime>
             </ion-item>
         </ion-list>
-        <div class="mt-25 ml-auto mr-auto fit-content">
-            <ion-button class="" type="submit" (click)="predi()"> {{"SEARCH_LESSONS_BUTTON"|translate}}
-            </ion-button>
-        </div>
+        <ion-row>
+            <div class="mt-25 ml-auto mr-auto">
+                <ion-button color="success" type="submit"> {{"SEARCH_LESSONS_BUTTON"|translate}}
+                </ion-button>
+            </div>
+            <div class="mt-15 ml-auto mr-auto">
+                <ion-button  (click)="resetto()" > {{"RESET_BUTTON" | translate}}
+                </ion-button>
+            </div>
+
+
+        </ion-row>
     </form>
 </ion-content>

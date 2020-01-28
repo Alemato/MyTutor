@@ -43,7 +43,7 @@ export class RicercaLezioniPage implements OnInit {
     ngOnInit() {
         this.initTranslate();
         this.ricercaFormModel = this.formBuilder.group({
-            sottoMateria: ['', Validators.required],
+            sottoMateria: [''],
             nomeLezione: [''],
             nomeCitta: [''],
             inizio: [''],
@@ -111,6 +111,20 @@ export class RicercaLezioniPage implements OnInit {
     changeSelectElents() {
         console.log('cambio');
         this.ricercaFormModel.controls.sottoMateria.reset();
+    }
+
+    resetto() {
+        this.materia = '';
+        this.giorniSettimana = [1, 1, 1, 1, 1, 1, 1];
+        const obj = {
+            sottoMateria: '',
+            nomeLezione: '',
+            nomeCitta: '',
+            inizio: '',
+            fine: '',
+            giorni: ['1', '2', '3', '4', '5', '6', '7']
+        };
+        this.ricercaFormModel.setValue(obj);
     }
 
     predi() {
