@@ -13,14 +13,15 @@
             <ion-list-header class="ion-text-uppercase">
                 {{"AVAILABLE_SUBJECTS"|translate}} :
             </ion-list-header>
-            <ion-item class="ion-no-padding" style="margin-top: -10px">
+            <ion-item class="ion-no-padding mt-neg-10">
                 <ion-label class="ion-padding-start">{{"SUBJECT"|translate}}:</ion-label>
                 <ion-label color="primary"> {{materia}}</ion-label>
                 <ion-button slot="end" fill="clear" (click)="showPicker()" >{{"SELECT_BUTTON"|translate}}</ion-button>
             </ion-item>
             <ion-item *ngIf="uscitaValue!==null; else selctDisabilited">
                 <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-                <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="sottoMateria" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%;">
+                <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="sottoMateria" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                            class="w-65 max-w-65">
                     <ion-select-option *ngFor="let sot of sottoMaterie[uscitaValue]"
                                        value="{{sot.value}}">{{sot.text}}</ion-select-option>
                 </ion-select>
@@ -28,7 +29,8 @@
             <ng-template #selctDisabilited>
                 <ion-item>
                     <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%;" disabled
+                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                                class="w-65 max-w-65" disabled
                                 placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
                         <ion-select-option value="0">{{"ALL"|translate}}</ion-select-option>
                     </ion-select>
@@ -45,10 +47,10 @@
             <ion-list-header class="ion-text-uppercase ion-margin-top">
                 {{"DAY_HOUR"|translate}} :
             </ion-list-header>
-            <ion-item style="margin-top: -10px">
+            <ion-item class="mt-neg-10">
                 <ion-label>{{"DIV_DAYS"|translate}}:</ion-label>
-                <ion-select multiple="true" formControlName="giorni" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 85%;
-  max-width: 85%;">
+                <ion-select multiple="true" formControlName="giorni" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                            class="w-85 max-w-85">
                     <ion-select-option value="1">{{"MONDAY"|translate}}</ion-select-option>/
                     <ion-select-option value="2">{{"TUESDAY"|translate}}</ion-select-option>
                     <ion-select-option value="3">{{"WEDNESDAY"|translate}}</ion-select-option>
@@ -69,7 +71,7 @@
                               [minuteValues]="minutes" placeholder="Ora"></ion-datetime>
             </ion-item>
         </ion-list>
-        <div style="margin-top: 25px; margin-left: auto; margin-right: auto; width: fit-content;">
+        <div class="mt-25 ml-auto mr-auto fit-content">
             <ion-button class="" type="submit" (click)="predi()"> {{"SEARCH_LESSONS_BUTTON"|translate}}
             </ion-button>
         </div>
