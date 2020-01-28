@@ -241,8 +241,6 @@ export class LezionePage implements OnInit {
                                 const uniqueSetGiorni = new Set(listaGiorni1);
                                 const listaGiorniPer1 = Array.from(uniqueSetGiorni);
                                 const listaGiorniPer1Sorted = listaGiorniPer1.sort((n1, n2) => n1 - n2);
-                                console.log('listaGiorniPer1Sorted');
-                                console.log(listaGiorniPer1Sorted);
 
                                 listaGiorniPer1Sorted.forEach((giorno) => {
                                     const listaMesiPerGiornoAppo: number[] = [];
@@ -257,8 +255,6 @@ export class LezionePage implements OnInit {
                                     const uniqueSetMesi = new Set(listaMesiPerGiornoAppo);
                                     const listaMesiPerGiorno = Array.from(uniqueSetMesi);
                                     const listaMesiPerGiornoSorted = listaMesiPerGiorno.sort((n1, n2) => n1 - n2);
-                                    console.log('listaMesiPerGiornoSorted');
-                                    console.log(listaMesiPerGiornoSorted);
                                     listaMesiPerGiornoSorted.forEach((mese) => {
                                         const listaAnniPerMeseAppo: number[] = [];
                                         plannings.forEach((pianificazione) => {
@@ -273,13 +269,9 @@ export class LezionePage implements OnInit {
                                         const uniqueSetAnni = new Set(listaAnniPerMeseAppo);
                                         const listaAnniPerMese = Array.from(uniqueSetAnni);
                                         const listaAnniPerMeseSorted = listaAnniPerMese.sort((n1, n2) => n1 - n2);
-                                        console.log('listaAnniPerMeseSorted');
-                                        console.log(listaAnniPerMeseSorted);
                                         this.mappaMesiAnni.set(mese, listaAnniPerMeseSorted);
                                     });
                                     this.mappaGiornoMesiAnni.set(giorno, this.mappaMesiAnni);
-                                    console.log('this.mappaGiornoMesiAnni');
-                                    console.log(this.mappaGiornoMesiAnni);
                                     this.mappaMesiAnni = new Map<number, number[]>();
                                 });
                                 this.listaGiorni = Array.from(this.mappaGiornoMesiAnni.keys());
@@ -398,13 +390,19 @@ export class LezionePage implements OnInit {
             const listaInizioEFine = this.mappaStartEnd.get(ritornoGiorno + '/' + ritornoMese + '/' + ritornoAnno);
             listaInizioEFine.forEach((ora) => {
                 const dataAppoggio = new Date(this.prenotazioneFormModel.controls.oraInizio.value);
-                if (ora[0].slice(0, 2) === dataAppoggio.getHours().toString()) {
+                if (ora[0].slice(0, 2) === dataAppoggio.toString().slice(16, 18)) {
                     let oraAddOne = parseInt(ora[0].slice(0, 2), 0) + 1;
                     for (let h = 0; h < 24; h++) {
                         let controllo = false;
                         oraAddOne = parseInt(ora[0].slice(0, 2), 0) + h;
+                        let oraAddOneStr = '';
+                        if (oraAddOne < 10) {
+                            oraAddOneStr = '0' + oraAddOne.toString();
+                        } else {
+                            oraAddOneStr = oraAddOne.toString();
+                        }
                         listaInizioEFine.forEach((hourAddOne) => {
-                            if (hourAddOne[0].slice(0, 2) === oraAddOne.toString()) {
+                            if (hourAddOne[0].slice(0, 2) === oraAddOneStr) {
                                 this.hoursFine.push(hourAddOne[1]);
                                 controllo = true;
                             }
