@@ -14,7 +14,7 @@
 <ion-content>
     <div>
         <form [formGroup]="lezioneFormModel">
-            <ion-item class="ion-no-padding" style="margin-top: 5px">
+            <ion-item class="ion-no-padding mt-5">
                 <ion-label class="ion-padding-start">{{"SUBJECT"|translate}}:</ion-label>
                 <ion-label color="primary"> {{materia}}</ion-label>
                 <ion-button slot="end" fill="clear" (click)="showPicker()">{{"SELECT_BUTTON"|translate}}</ion-button>
@@ -23,7 +23,7 @@
                 <ion-item *ngIf="uscitaValue!==null; else selctDisabilited">
                     <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
                     <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="sottoMateria" cancelText="{{'CANCEL_BUTTON'|translate}}"
-                                style="width: 65%; max-width: 65%;">
+                                 class="w-65 max-w-65">
                         <ion-select-option *ngFor="let sot of sottoMaterie[uscitaValue]"
                                            value="{{sot.value}}">{{sot.text}}</ion-select-option>
                     </ion-select>
@@ -31,21 +31,22 @@
             </div>
             <div *ngIf="materia === 'Creane una'">
                 <ion-item class="ion-no-padding">
-                    <ion-label style="padding-left: 18px!important;">{{"NEW_SUBJECT"|translate}}</ion-label>
+                    <ion-label class="pl-18-important">{{"NEW_SUBJECT"|translate}}</ion-label>
                     <ion-input type="text" formControlName="nuovaMateria"
-                               required style="padding-left: 18px!important;"></ion-input>
+                               required class="pl-18-important"></ion-input>
                 </ion-item>
                 <ion-item class="ion-no-padding">
-                    <ion-label style="padding-left: 18px!important;">{{"NEW_SUB_SUBJECT"|translate}}</ion-label>
+                    <ion-label class="pl-18-important">{{"NEW_SUB_SUBJECT"|translate}}</ion-label>
                     <ion-input type="text" formControlName="nuovaSottoMateria"
-                               required style="padding-left: 18px!important;"></ion-input>
+                               required class="pl-18-important"></ion-input>
                 </ion-item>
             </div>
             <ng-template #selctDisabilitedOrModifica>
                 <div *ngIf="booleanSottomateria; else selctDisabilited">
                 <ion-item>
                     <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" formControlName="sottoMateria" style="width: 65%; max-width: 65%;"
+                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" formControlName="sottoMateria"
+                                class="w-65 max-w-65"
                                 placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
                         <ion-select-option value="{{this.lesson.subject.microSubject}}">{{this.lesson.subject.microSubject}}</ion-select-option>
                     </ion-select>
@@ -55,29 +56,30 @@
             <ng-template #selctDisabilited>
                 <ion-item>
                     <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%;" disabled
+                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                                class="w-65 max-w-65" disabled
                                 placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
                         <ion-select-option value="0">{{"ALL"|translate}}</ion-select-option>
                     </ion-select>
                 </ion-item>
             </ng-template>
             <ion-item class="ion-no-padding">
-                <ion-label style="padding-left: 18px!important;">{{"NAME_LESSON"|translate}}</ion-label>
+                <ion-label class="pl-18-important">{{"NAME_LESSON"|translate}}</ion-label>
                 <ion-input type="text" formControlName="nomeLezione"
-                           required style="padding-left: 18px!important; "></ion-input>
+                           required class="pl-18-important"></ion-input>
             </ion-item>
             <ion-item class="ion-no-padding">
-                <ion-label style="padding-left: 18px!important;">{{"PRICE_HOUR"|translate}}:</ion-label>
+                <ion-label class="pl-18-important">{{"PRICE_HOUR"|translate}}:</ion-label>
                 <ion-input formControlName="prezzoOrario" type="number" placeholder="00,00"
-                           required style="padding-left: 18px!important;"></ion-input>
+                           required class="pl-18-important"></ion-input>
             </ion-item>
             <ion-item class="ion-no-padding">
-                <ion-button style="margin-left: auto!important; margin-right: auto!important;"
+                <ion-button class="ml-auto-important mr-auto-important"
                             (click)="notificaCondizione()">{{"DATE_TIME_BUTTON"|translate}}
                 </ion-button>
             </ion-item>
             <ion-item class="ion-no-padding">
-                <ion-textarea style="padding-left: 18px!important;" formControlName="descrizione"
+                <ion-textarea class="pl-18-important" formControlName="descrizione"
                               placeholder="{{'DESCRIPTION_LESSON_TEXTAREA'|translate}}" required></ion-textarea>
             </ion-item>
         </form>

@@ -388,31 +388,31 @@ export class ModificaProfiloPage implements OnInit {
         });
         //
         this.translateService.get('EMAIL_REQUIRED_MESSAGE').subscribe((data) => {
-            this.emailRequiredMessage = data;
+            this.validationMessages.email[0].message = data;
         });
         this.translateService.get('EMAIL_MIN_LENGTH_MESSAGE').subscribe((data) => {
-            this.emailMinLengthMessage = data;
+            this.validationMessages.email[1].message = data;
         });
         this.translateService.get('EMAIL_PATTERN_MESSAGE').subscribe((data) => {
-            this.emailPatternMessage = data;
+            this.validationMessages.email[2].message = data;
         });
         this.translateService.get('EMAIL_VALID_EMAIL_MESSAGE').subscribe((data) => {
-            this.emailValidEmailMessage = data;
+            this.validationMessages.email[3].message = data;
         });
         this.translateService.get('PASSWORD_REQUIRED_MESSAGE').subscribe((data) => {
-            this.passwordRequiredMessage = data;
+            this.validationMessages.password[0].message = data;
         });
         this.translateService.get('NAME_REQUIRED_MESSAGE').subscribe((data) => {
-            this.nameRequiredMessage = data;
+            this.validationMessages.name[0].message = data;
         });
         this.translateService.get('SURNAME_REQUIRED_MESSAGE').subscribe((data) => {
-            this.surnameRequiredMessage = data;
+            this.validationMessages.surname[0].message = data;
         });
         this.translateService.get('BIRTHDAY_REQUIRED_MESSAGE').subscribe((data) => {
-            this.birthdayRequiredMessage = data;
+            this.validationMessages.birthday[0].message = data;
         });
         this.translateService.get('BIRTHDAY_VALID_AGE_MESSAGE').subscribe((data) => {
-            this.birthdayValidAgeMessage = data;
+            this.validationMessages.birthday[1].message = data;
         });
     }
 }

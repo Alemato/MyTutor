@@ -11,7 +11,7 @@
                             name="contact" class="fs-62"></ion-icon>
                     <ng-template #imgBlock>
                         <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                            <img [src]="teacher.image" alt="img" style="width: 51px; height: 51px;">
+                            <img [src]="teacher.image" alt="img" class="w-51 h-51">
                         </ion-avatar>
                     </ng-template>
                 </ion-col>
@@ -22,7 +22,7 @@
                         <ng-template #imgBlock>
                             <ion-avatar class="ion-text-center h-62 w-62 pt-3">
                                 <img [src]="(this.student$ | async).image" alt="img"
-                                     style="width: 51px; height: 51px;">
+                                     class="w-51 h-51">
                             </ion-avatar>
                         </ng-template>
                     </div>
@@ -36,7 +36,7 @@
                       </div>
                 </ion-col>
             </ion-row>
-            <ion-col *ngIf="(this.teacher$ | async)" style="padding-left: 0; padding-right: 0;">
+            <ion-col *ngIf="(this.teacher$ | async)" class="pl-0 pr-0">
                 <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click"
                          (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesTeacher" >
                     <ion-col size="auto" class="ion-align-self-center">
@@ -49,7 +49,7 @@
 
             </ion-col>
               <div *ngIf="(this.student$ | async) as student">
-                <ion-col style="padding-left: 0; padding-right: 0;">
+                <ion-col class="pl-0 pr-0">
                     <ion-row class="menu-item-margin ion-padding-start" *ngFor="let p of appPagesStudent" [class.menu-item-clicked]="p.click"
                               (click)="closeMenu($event, p.url)">
                         <ion-col size="auto" class="ion-align-self-center">

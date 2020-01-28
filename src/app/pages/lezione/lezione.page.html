@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">Lezione</ion-title>
+        <ion-title class="ml--56">{{"LESSON_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -28,7 +28,7 @@
                     </ion-col>
                     <ion-col class="pr-0">
                         <h1 class="nome">{{lesson.teacher.name}} {{lesson.teacher.surname}}</h1>
-                        <h2 class="anni">{{age}} anni</h2>
+                        <h2 class="anni">{{age}} {{"AGE"|translate}}</h2>
                         <ion-row class="ion-justify-content-between">
                             <h2 class="tariffa pt-2">{{"PRICE_HOUR"|translate}}:</h2>
                             <h1 class="euro ion-no-margin">{{lesson.price}} €/h</h1>
@@ -102,7 +102,7 @@
                             && booking.student.studyGrade !== ''
                             && booking.student.studyGrade !== ' '; else nonstudyGrade" class="anni fit-content">{{booking.student.studyGrade}}</h2>
                             <ng-template #nonstudyGrade>
-                                <h2 class="anni fit-content">Non Disponibile</h2>
+                                <h2 class="anni fit-content">{{"NOT_AVAILABLE"|translate}}</h2>
                             </ng-template>
                         </ion-col>
                     </ion-row>
@@ -150,7 +150,7 @@
                                     <ion-datetime (click)="clickGiorno()" (ionChange)="cambioGiorno()" displayFormat="DD" pickerFormat="DD"
                                                   formControlName="giornoDataLezione"
                                                   dayValues="{{listaGiorni}}"
-                                                  placeholder="{{'DIV_DAYS'|translate}}"
+                                                  placeholder="{{'DAY'|translate}}"
                                                   class="ion-no-padding"
                                     ></ion-datetime>
                                 </ion-col>
@@ -159,7 +159,7 @@
                                     <ion-datetime (click)="clickMese()" (ionChange)="cambioMese()" displayFormat="MM" pickerFormat="MM"
                                                   formControlName="meseDataLezione"
                                                   monthValues="{{listaMesi}}"
-                                                  placeholder="{{'MONTH'|translate}}"
+                                                  placeholder="MM"
                                                   class="ion-no-padding fit-content"
                                     ></ion-datetime>
                                 </ion-col>

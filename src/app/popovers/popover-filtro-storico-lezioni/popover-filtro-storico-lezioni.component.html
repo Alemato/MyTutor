@@ -1,21 +1,23 @@
 <form [formGroup]="filtroFormModel">
 <ion-list>
-  <ion-list-header class="px-0"><span class="ion-text-center" style="width: 100%">{{"FILTER_LESSONS_LD"|translate}}</span></ion-list-header>
-  <ion-item-divider style="min-height: 1px !important;"></ion-item-divider>
+  <ion-list-header class="px-0"><span class="ion-text-center w-100">{{"FILTER_LESSONS_LD"|translate}}</span></ion-list-header>
+  <ion-item-divider class="mh-1-important"></ion-item-divider>
   <ion-item>
     <ion-label>{{"NAME_LESSON"|translate}}:</ion-label>
     <ion-input formControlName="nomeLezione" type="text"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>{{"SUBJECT"|translate}}:</ion-label>
-    <ion-select (ionChange)="setSotto()"  okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectMateria" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%; padding-top: 14px;">
+    <ion-select (ionChange)="setSotto()"  okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectMateria" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                class="w-65 max-w-65 pt-14">
       <ion-select-option *ngFor="let mat of materie"
                          value="{{mat.value}}">{{mat.text}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item *ngIf="materia!==null; else selctDisabilited">
     <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectSotto" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 50%; max-width: 50%; padding-top: 14px">
+    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectSotto" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                class="w-50 max-w-50 pt-14">
       <ion-select-option *ngFor="let sot of sottoMaterie[materia]"
                          value="{{sot.value}}">{{sot.text}}</ion-select-option>
     </ion-select>
@@ -23,7 +25,8 @@
   <ng-template #selctDisabilited>
     <ion-item>
       <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-      <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 50%; max-width: 50%; padding-top: 14px;" disabled
+      <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                  class="w-50 max-w-50 pt-14" disabled
                   placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
         <ion-select-option value="0">{{"ALL"|translate}}</ion-select-option>
       </ion-select>
@@ -31,14 +34,16 @@
   </ng-template>
   <ion-item>
     <ion-label>{{"USER"|translate}}:</ion-label>
-    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectUtente" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 65%; max-width: 65%;">
+    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectUtente" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                class="w-65 max-w-65">
       <ion-select-option *ngFor="let usr of users"
                          value="{{usr.idUser}}">{{usr.name}} {{usr.surname}}</ion-select-option>
     </ion-select>
   </ion-item>
   <ion-item>
     <ion-label>{{"STATUS_LESSON"|translate}}:</ion-label>
-    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="statoLezione" cancelText="{{'CANCEL_BUTTON'|translate}}" style="width: 45%; max-width: 45%;">
+    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="statoLezione" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                class="w-45 max-w-45">
       <ion-select-option selected="" value="">{{"ALL"|translate}}</ion-select-option>
       <ion-select-option value="0">{{"BOOKED"|translate}}</ion-select-option>
       <ion-select-option value="1">{{"ACCEPTED"|translate}}</ion-select-option>
@@ -53,10 +58,10 @@
   </ion-item>
 </ion-list>
   <ion-row>
-    <div style="margin-right: auto; margin-left: auto">
+    <div class="mr-auto ml-auto">
       <ion-button class="ion-margin-top ion-margin-bottom" color="success" (click)="subFiltro()">{{"FILTER_BUTTON"|translate}}</ion-button>
     </div>
-    <div style="margin-right: auto; margin-left: auto">
+    <div class="mr-auto ml-auto">
       <ion-button class="ion-margin-top ion-margin-bottom" color="primary"  (click)="resetFiltro()">{{"RESET_BUTTON"|translate}}</ion-button>
     </div>
   </ion-row>
