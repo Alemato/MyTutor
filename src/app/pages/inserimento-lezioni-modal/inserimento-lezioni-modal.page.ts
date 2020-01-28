@@ -52,11 +52,14 @@ export class InserimentoLezioniModalPage implements OnInit {
             this.loadingPresent().then(() => {
                 this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
                 this.planningService.getRestPlanningByIdLesson(this.idLesson.toString()).subscribe((planningList) => {
-                    this.plannings = planningList;
-                    console.log('this.plannings');
-                    console.log(this.plannings);
-                    this.planingCompat();
-                    this.aggiungiPlanning();
+                    if (planningList[0] !== undefined) {
+                        this.plannings = planningList;
+                        console.log('this.plannings');
+                        console.log(this.plannings);
+                        this.planingCompat();
+                        this.aggiungiPlanning();
+                        this.disLoading();
+                    }
                     this.disLoading();
                 });
             });

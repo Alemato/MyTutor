@@ -14,18 +14,22 @@
         <form [formGroup]="dataLezioneFormModel" (submit)="submit()">
             <ion-list formArrayName="dataOraIF" *ngFor="let contact of dataOraIFFormGroup.controls; let i = index;">
                 <ion-item [formGroupName]="i">
+                    <ion-col size="auto">
                     <ion-icon *ngIf="arrayDymension > 1" name="remove-circle-outline" (click)="rimuoviCampo(i)"></ion-icon>
-                    <ion-col size="5">
-                        <ion-datetime displayFormat="DD MMMM YYYY"
+                    </ion-col>
+                    <ion-col size="4">
+                    <ion-datetime displayFormat="DD MMM YYYY"
                                       placeholder="{{'DATE'|translate}}"
                                       monthNames="{{'MONTHS_DATETIME'|translate}}"
                                       formControlName="dataLezione" required class="plr-0"></ion-datetime>
                     </ion-col>
-                    <ion-col size="3">
+                    {{"DATETIME_FROM"|translate}}
+                    <ion-col size="auto">
                         <ion-datetime (ionChange)="changeInizioLezione(i)" displayFormat="HH : mm" placeholder="{{'START_TIME'|translate}}" formControlName="oraInizio" hour-values="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22"
                                       required class="plr-0" minute-values="0,05,10,15,20,25,30,35,40,45,50,55"></ion-datetime>
                     </ion-col>
-                    <ion-col size="3">
+                    {{"DATETIME_TO"|translate}}
+                    <ion-col size="auto">
                     <ion-datetime displayFormat="HH : mm" placeholder="{{'END_TIME'|translate}}" formControlName="oraFine" [hourValues]="hours" [minuteValues]="minutes"
                                   required class="plr-0"></ion-datetime>
                     </ion-col>
