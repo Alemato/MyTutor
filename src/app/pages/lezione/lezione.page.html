@@ -144,7 +144,7 @@
                 </ion-row>
                 <ion-row>
                     <ion-col>
-                        <form [formGroup]="prenotazioneFormModel">
+                        <form [formGroup]="prenotazioneFormModel" (ngSubmit)="caricaPrenotazione()">
                             <ion-item class="ion-no-padding">
                                 <ion-col size="auto">
                                     <ion-datetime (click)="clickGiorno()" (ionChange)="cambioGiorno()" displayFormat="DD" pickerFormat="DD"
@@ -177,7 +177,7 @@
                                     <ion-datetime (click)="clickOraInizio()" (ionChange)="cambioDataInizio()" displayFormat="HH:mm" pickerFormat="HH:mm"
                                                   formControlName="oraInizio"
                                                   [hourValues]="hoursInizio"
-                                                  minute-values="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
+                                                  minute-values="0"
                                                   placeholder="{{'START'|translate}}"
                                                   class="ion-no-padding fit-content"
                                     ></ion-datetime>
@@ -187,7 +187,7 @@
                                     <ion-datetime (click)="clickOraFine()" displayFormat="HH:mm" pickerFormat="HH:mm"
                                                   formControlName="oraFine"
                                                   [hourValues]="hoursFine"
-                                                  [minuteValues]="minutes"
+                                                  minute-values = "0"
                                                   placeholder="{{'END'|translate}}"
                                                   class="ion-no-padding"
                                     ></ion-datetime>
@@ -200,7 +200,7 @@
                                 <ion-button *ngIf="!existsChat" type="button" size="small" class="avvia-chat"
                                             (click)="creaChatStudentLesson()">{{"START_CHAT_BUTTON"|translate}}
                                 </ion-button>
-                                <ion-button (click)="caricaPrenotazione()" type="submit" size="small" class="prenotazione">{{"BOOKING"|translate}}</ion-button>
+                                <ion-button type="submit" size="small" class="prenotazione">{{"BOOKING"|translate}}</ion-button>
                             </ion-row>
                         </form>
                     </ion-col>

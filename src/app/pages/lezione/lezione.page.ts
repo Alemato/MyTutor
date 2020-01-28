@@ -431,22 +431,22 @@ export class LezionePage implements OnInit {
             date: dataAttuale.getTime(),
             lessonState: 1
         };
-        let pAppoggio: Planning;
-        this.plans.forEach((p: Planning) => {
-            // tslint:disable-next-line:max-line-length
-            if (new Date(p.date).getTime() === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
-                pAppoggio = p;
-                const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
-                const bookList: Booking[] = [bookingDaInviare];
-                console.log('bookList');
-                console.log(bookList);
-                this.loadingPresent().then(() => {
-                    // this.bookingService.createRestBooking(bookList).subscribe(() => {
-                    this.disLoading();
-                    this.presentAlertAccettaLezione();
-                    // });
-                });
-            }
+        this.loadingPresent().then(() => {
+            let bookList: Booking[];
+            let pAppoggio: Planning;
+            this.plans.forEach((p: Planning) => {
+                // tslint:disable-next-line:max-line-length
+                if (new Date(p.date).getTime() === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
+                    pAppoggio = p;
+                    const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
+                    bookList = [bookingDaInviare];
+                }
+            });
+            console.log('bookList');
+            this.bookingService.createRestBooking(bookList).subscribe(() => {
+                this.disLoading();
+                this.presentAlertAccettaLezione();
+            });
         });
     }
 
