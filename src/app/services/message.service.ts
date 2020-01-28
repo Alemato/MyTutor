@@ -92,7 +92,13 @@ export class MessageService {
             if (messageList) {
                 if (messageList.has(messages[0].chat.idChat.toString())) {
                     const oldMessages: Message[] = messageList.get(messages[0].chat.idChat.toString());
-                    const newMessage = oldMessages.concat(messages.reverse());
+                    const newMessageAr: Message[] = [];
+                    messages.forEach((message) => {
+                        if (!oldMessages.some( x => x.idMessage === message.idMessage)) {
+                            newMessageAr.push(message);
+                        }
+                    });
+                    const newMessage = oldMessages.concat(newMessageAr.reverse());
                     const mex: Map<string, Message[]> = messageList;
                     this.messages$.next(newMessage);
                     mex.set(messages[0].chat.idChat.toString(), newMessage);
