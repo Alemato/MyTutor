@@ -283,8 +283,8 @@ export class InserimentoLezioniPage implements OnInit {
                     publicationDate: this.lesson.publicationDate
                 }, subject, this.teacher$.value);
                 const planning = new Planning({
-                    idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime,
-                    endTime: pianificazione.endTime, available: true
+                    idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime + ':00',
+                    endTime: pianificazione.endTime + ':00', available: true
                 }, lesson);
                 this.plannings.push(planning);
             });
