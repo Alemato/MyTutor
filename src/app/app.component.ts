@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-
 import {MenuController, NavController, Platform} from '@ionic/angular';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
@@ -158,11 +157,15 @@ export class AppComponent implements OnInit {
         await this.menu.close();
         this.openPage(url);
         if (this.userType === 'student') {
-            this.appPagesStudent.find(x => x.click === true).click = false;
-            this.appPagesStudent.find(x => x.title === event.path[0].innerText).click = true;
+            if (event.path[0].innerText !== undefined) {
+                this.appPagesStudent.find(x => x.click === true).click = false;
+                this.appPagesStudent.find(x => x.title === event.path[0].innerText).click = true;
+            }
         } else if (this.userType === 'teacher') {
-            this.appPagesTeacher.find(x => x.click === true).click = false;
-            this.appPagesTeacher.find(x => x.title === event.path[0].innerText).click = true;
+            if (event.path[0].innerText !== undefined) {
+                this.appPagesTeacher.find(x => x.click === true).click = false;
+                this.appPagesTeacher.find(x => x.title === event.path[0].innerText).click = true;
+            }
         }
     }
 
@@ -197,20 +200,20 @@ export class AppComponent implements OnInit {
             } else {
                 this.translate.use(linguaPreferita);
                 this.linguaService.updateLingua(linguaPreferita);
-                // this.translateService.get('HISTORIC_SIDE_MENU').subscribe((history) => {
-                //     this.appPagesTeacher[2].title = history;
-                //     this.appPagesStudent[2].title = history;
-                // });
-                // this.translateService.get('INSERT_AD_SIDE_MENU').subscribe((insert) => {
-                //     this.appPagesTeacher[3].title = insert;
-                // });
-                // this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
-                //     this.appPagesTeacher[4].title = adv;
-                //     console.log(this.appPagesTeacher);
-                // });
-                // this.translateService.get('SEARCH_LESSONS_SIDE_MENU').subscribe((searc) => {
-                //     this.appPagesStudent[3].title = searc;
-                // });
+                this.translateService.get('HISTORIC_SIDE_MENU').subscribe((history) => {
+                    this.appPagesTeacher[2].title = history;
+                    this.appPagesStudent[2].title = history;
+                });
+                this.translateService.get('INSERT_AD_SIDE_MENU').subscribe((insert) => {
+                    this.appPagesTeacher[3].title = insert;
+                });
+                this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
+                    this.appPagesTeacher[4].title = adv;
+                    console.log(this.appPagesTeacher);
+                });
+                this.translateService.get('SEARCH_LESSONS_SIDE_MENU').subscribe((searc) => {
+                    this.appPagesStudent[3].title = searc;
+                });
                 // salva nello storage
             }
         });
