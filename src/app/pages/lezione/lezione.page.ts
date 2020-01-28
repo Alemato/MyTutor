@@ -46,9 +46,7 @@ export class LezionePage implements OnInit {
     private plans: Planning[];
     private listaAnni: number[] = [];
     private listaMesi = [];
-    private mappaMesiGiorni: Map<number, number[]> = new Map<number, number[]>();
     private listaGiorni = [];
-    private mappaAnnoMessiGiorno: Map<number, Map<number, number[]>> = new Map<number, Map<number, number[]>>();
     private mappaStartEnd: Map<string, [string[]]> = new Map<string, [string[]]>();
     private annoClick = false;
     private meseClick = false;
@@ -64,6 +62,7 @@ export class LezionePage implements OnInit {
     private lessonBookedMessage: string;
     private book: string;
     private doneButton: string;
+    private minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
     private mappaGiornoMesiAnni: Map<number, Map<number, number[]>> = new Map<number, Map<number, number[]>>();
     private mappaMesiAnni: Map<number, number[]> = new Map<number, number[]>();
@@ -183,6 +182,7 @@ export class LezionePage implements OnInit {
                                     subscriber.next(l.find(x => x.idLesson === parseInt(this.id, 0)));
                                     console.log('l.find(x => x.idLesson === parseInt(this.id, 0))');
                                     console.log(l.find(x => x.idLesson === parseInt(this.id, 0)));
+
                                 });
                             }
                         });
@@ -377,50 +377,18 @@ export class LezionePage implements OnInit {
         }
     }
 
-    // cambioAnno() {
-    //     if (this.annoClick) {
-    //         this.prenotazioneFormModel.controls.meseDataLezione.reset();
-    //         this.prenotazioneFormModel.controls.giornoDataLezione.reset();
-    //         this.prenotazioneFormModel.controls.oraInizio.reset();
-    //         this.prenotazioneFormModel.controls.oraFine.reset();
-    //         this.prenotazioneFormModel.controls.meseDataLezione.enable();
-    //         const ritorno: string = this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4);
-    //         const mappaRitorno: Map<number, number[]> = this.mappaAnnoMessiGiorno.get(parseInt(ritorno, 0));
-    //         this.listaMesi = Array.from(mappaRitorno.keys());
-    //     }
-    // }
-    //
-    // cambioMese() {
-    //     if (this.meseClick) {
-    //         this.prenotazioneFormModel.controls.giornoDataLezione.reset();
-    //         this.prenotazioneFormModel.controls.oraInizio.reset();
-    //         this.prenotazioneFormModel.controls.oraFine.reset();
-    //         this.prenotazioneFormModel.controls.giornoDataLezione.enable();
-    //         const ritorno: string = this.prenotazioneFormModel.controls.meseDataLezione.value.slice(5, 7);
-    // tslint:disable-next-line:max-line-length
-    //         const mappaRitorno: Map<number, number[]> = this.mappaAnnoMessiGiorno.get(parseInt(this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4), 0));
-    //         this.listaGiorni = mappaRitorno.get(parseInt(ritorno, 0));
-    //     }
-    // }
-    //
-    // cambioGiorno() {
-    //     if (this.giornoClick) {
-    //         this.hoursInizio = [];
-    //         this.prenotazioneFormModel.controls.oraInizio.reset();
-    //         this.prenotazioneFormModel.controls.oraFine.reset();
-    //         this.prenotazioneFormModel.controls.oraInizio.enable();
-    //         const ritornoAnno: number = parseInt(this.prenotazioneFormModel.controls.annoDataLezione.value.slice(0, 4), 0);
-    //         const ritornoMese: number = parseInt(this.prenotazioneFormModel.controls.meseDataLezione.value.slice(5, 7), 0);
-    //         const ritornoGiorno: number = parseInt(this.prenotazioneFormModel.controls.giornoDataLezione.value.slice(8, 10), 0);
-    //         const listaInizioEFine = this.mappaStartEnd.get(ritornoGiorno + '/' + ritornoMese + '/' + ritornoAnno);
-    //         listaInizioEFine.forEach((oraIn) => {
-    //             this.hoursInizio.push(oraIn[0]);
-    //         });
-    //     }
-    // }
-
     cambioDataInizio() {
         if (this.oraInizioClick) {
+            const oraInizio = new Date(this.prenotazioneFormModel.controls.oraInizio.value);
+            let i;
+            let e = 0;
+            for (i = 0; i < this.minutes.length; i++) {
+                if (this.minutes[i] < oraInizio.getMinutes()) {
+                    e++;
+                }
+            }
+            this.minutes = this.minutes.slice(e, this.minutes.length);
+
             this.hoursFine = [];
             this.prenotazioneFormModel.controls.oraFine.reset();
             this.prenotazioneFormModel.controls.oraFine.enable();
@@ -432,9 +400,9 @@ export class LezionePage implements OnInit {
                 const dataAppoggio = new Date(this.prenotazioneFormModel.controls.oraInizio.value);
                 if (ora[0].slice(0, 2) === dataAppoggio.getHours().toString()) {
                     let oraAddOne = parseInt(ora[0].slice(0, 2), 0) + 1;
-                    for (let i = 0; i < 24; i++) {
+                    for (let h = 0; h < 24; h++) {
                         let controllo = false;
-                        oraAddOne = parseInt(ora[0].slice(0, 2), 0) + i;
+                        oraAddOne = parseInt(ora[0].slice(0, 2), 0) + h;
                         listaInizioEFine.forEach((hourAddOne) => {
                             if (hourAddOne[0].slice(0, 2) === oraAddOne.toString()) {
                                 this.hoursFine.push(hourAddOne[1]);

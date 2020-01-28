@@ -187,7 +187,7 @@
                                     <ion-datetime (click)="clickOraFine()" displayFormat="HH:mm" pickerFormat="HH:mm"
                                                   formControlName="oraFine"
                                                   [hourValues]="hoursFine"
-                                                  minute-values="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
+                                                  [minuteValues]="minutes"
                                                   placeholder="{{'END'|translate}}"
                                                   class="ion-no-padding"
                                     ></ion-datetime>
