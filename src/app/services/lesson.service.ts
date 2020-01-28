@@ -5,6 +5,7 @@ import {STORAGE, URL} from '../constants';
 import {map} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Lesson} from '../model/lesson.model';
+import {Planning} from '../model/planning.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,6 +20,12 @@ export class LessonService {
         this.getRestLessons();
         this.storage.get(STORAGE.LESSON).then((item: Lesson[]) => {
             this.lessons$.next(item);
+        });
+    }
+
+    modifyRestLesson(lesson: Lesson): Observable<any> {
+        return this.http.put<any>(URL.LESSON_MODIFY, lesson, {
+            observe: 'response'
         });
     }
 
