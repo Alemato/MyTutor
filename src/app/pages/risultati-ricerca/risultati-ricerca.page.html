@@ -23,7 +23,7 @@
                     </ion-col>
                     <ion-col size="9">
                         <div class="ion-no-margin fs-large fw-normal" [routerLink]="['/lezione', 'lesson', less.idLesson]" >{{less.name}}</div>
-                        <div class="ion-no-margin fs-large font-weight-300 ls-01em c-primary" [routerLink]="['/lezione', 'lesson', less.idLesson]" >{{less.teacher.name}} {{less.teacher.surname}}</div>
+                        <div class="ion-no-margin fs-large font-weight-300 ls-01em c-primary" [routerLink]="['/profilo-singolo', less.teacher.email]" >{{less.teacher.name}} {{less.teacher.surname}}</div>
                         <ion-row [routerLink]="['/lezione', 'lesson', less.idLesson]">
                             <ion-col class="ion-no-padding">
                                 <div class="ion-no-margin px-0 fs-medium font-weight-300">{{less.subject.microSubject}}</div>
