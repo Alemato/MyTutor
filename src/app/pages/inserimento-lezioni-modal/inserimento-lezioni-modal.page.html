@@ -26,11 +26,11 @@
                     {{"DATETIME_FROM"|translate}}
                     <ion-col size="auto">
                         <ion-datetime (ionChange)="changeInizioLezione(i)" displayFormat="HH : mm" placeholder="{{'START_TIME'|translate}}" formControlName="oraInizio" hour-values="01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,17,18,19,20,21,22"
-                                      required class="plr-0" minute-values="0,05,10,15,20,25,30,35,40,45,50,55"></ion-datetime>
+                                      required class="plr-0" minute-values="0"></ion-datetime>
                     </ion-col>
                     {{"DATETIME_TO"|translate}}
                     <ion-col size="auto">
-                    <ion-datetime displayFormat="HH : mm" placeholder="{{'END_TIME'|translate}}" formControlName="oraFine" [hourValues]="hours" [minuteValues]="minutes"
+                    <ion-datetime displayFormat="HH : mm" placeholder="{{'END_TIME'|translate}}" formControlName="oraFine" [hourValues]="hours" minute-values="0"
                                   required class="plr-0"></ion-datetime>
                     </ion-col>
                 </ion-item>
