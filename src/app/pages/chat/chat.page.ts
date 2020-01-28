@@ -54,7 +54,6 @@ export class ChatPage implements OnInit {
                 const c = creates.find(x => x.chat.idChat === this.idChat);
                 const usr2 = c.userListser.find(x => x.idUser !== this.user$.value.idUser);
                 this.chtn = usr2.name + ' ' + usr2.surname;
-                console.log(this.chtn);
             });
             this.scritturaMessaggio = this.formBuilder.group({
                 text: ['', Validators.required]
@@ -71,7 +70,6 @@ export class ChatPage implements OnInit {
                         this.messages$.subscribe((value) => {
                             if (value[value.length - 1] !== undefined) {
                                 if (!this.isStardted) {
-                                    // tslint:disable-next-line:max-line-length
                                     this.messageService.startPeriodicGetMessageForChat(this.idChat);
                                     this.isStardted = true;
                                 }
