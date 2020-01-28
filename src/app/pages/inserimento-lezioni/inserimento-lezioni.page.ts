@@ -62,6 +62,7 @@ export class InserimentoLezioniPage implements OnInit {
 
     ngOnInit() {
         this.initTranslate();
+        this.materia = '';
         this.lezioneFormModel = this.formBuilder.group({
             sottoMateria: ['', Validators.required],
             nuovaMateria: ['', Validators.required],
@@ -198,14 +199,14 @@ export class InserimentoLezioniPage implements OnInit {
         console.log('onChanges');
         console.log('this.materia');
         console.log(this.materia);
-        if (this.materia === 'Creane una') {
+        if (this.materia === 'Creane una' || this.materia === 'Create One') {
             this.lezioneFormModel.controls.sottoMateria.reset();
             this.lezioneFormModel.controls.sottoMateria.disable();
             this.lezioneFormModel.get('nuovaMateria').enable();
             this.lezioneFormModel.get('nuovaSottoMateria').enable();
 
 
-        } else if (this.materia !== 'Creane una') {
+        } else if (this.materia !== 'Creane una' && this.materia !== 'Create One') {
             this.lezioneFormModel.get('nuovaMateria').reset();
             this.lezioneFormModel.get('nuovaMateria').disable();
             this.lezioneFormModel.get('nuovaSottoMateria').reset();
@@ -217,7 +218,7 @@ export class InserimentoLezioniPage implements OnInit {
     inserisciLezione() {
         this.planningAppoggio.forEach((pianificazione) => {
             let subject;
-            if (this.materia === 'Creane una') {
+            if (this.materia === 'Creane una' || this.materia === 'Create One') {
                 subject = new Subject({
                     idSubject: undefined, macroSubject: this.lezioneFormModel.controls.nuovaMateria.value,
                     microSubject: this.lezioneFormModel.controls.nuovaSottoMateria.value
@@ -266,7 +267,7 @@ export class InserimentoLezioniPage implements OnInit {
         if (this.planningAppoggio.length > 0) {
             this.planningAppoggio.forEach((pianificazione) => {
                 let subject;
-                if (this.materia === 'Creane una') {
+                if (this.materia === 'Creane una' || this.materia === 'Create One') {
                     subject = new Subject({
                         idSubject: undefined, macroSubject: this.lezioneFormModel.controls.nuovaMateria.value,
                         microSubject: this.lezioneFormModel.controls.nuovaSottoMateria.value
@@ -424,6 +425,9 @@ export class InserimentoLezioniPage implements OnInit {
         });
         this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
             this.pleaseWaitMessage = data;
+        });
+        this.translateService.get('CREATE_ONE').subscribe((data) => {
+            this.materia = data;
         });
     }
 }
