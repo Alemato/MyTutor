@@ -27,7 +27,7 @@
                                 <ion-icon
                                         *ngIf="s.planning.lesson.teacher.image === null || s.planning.lesson.teacher.image === '' || s.planning.lesson.teacher.image ===' '; else imgBlock"
                                         name="contact" class="fs-62 c-primary"
-                                        [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]"></ion-icon>
+                                        [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]" routerDirection="forward"></ion-icon>
                                 <ng-template #imgBlock>
                                     <ion-avatar class="ion-text-center h-62 w-62 pt-3 vertical-middle"
                                                 [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]"
@@ -40,8 +40,7 @@
                             <ion-col size="6">
                                 <ion-row>
                                     <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
-                                             [routerLink]="['/']"
-                                             routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
+                                             [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col
@@ -51,14 +50,14 @@
                                 </ion-row>
                                 <ion-row *ngIf="s.lessonState === 0; else lessonState1">
                                     <ion-col class="ion-no-padding pt-5">
-                                        <ion-text class="fs-medium fw-normal ls-1" color="warning">{{"STATUS_REQUIRED"|translate}}
+                                        <ion-text class="fs-medium fw-normal ls-1" color="warning" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_REQUIRED"|translate}}
                                         </ion-text>
                                     </ion-col>
                                 </ion-row>
                                 <ng-template #lessonState1>
                                     <ion-row *ngIf="s.lessonState === 1; else lessonState2">
                                         <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">{{"STATUS_ACCEPTED"|translate}}
+                                            <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_ACCEPTED"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
@@ -66,7 +65,7 @@
                                 <ng-template #lessonState2>
                                     <ion-row *ngIf="s.lessonState === 2; else lessonState3">
                                         <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger">
+                                            <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">
                                                 {{"STATUS_REJECTED"|translate}}
                                             </ion-text>
                                         </ion-col>
@@ -76,7 +75,7 @@
                                     <ion-row *ngIf="s.lessonState === 3; else lessonState4">
                                         <ion-col class="ion-no-padding pt-5">
                                             <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
-                                                      color="danger">{{"STATUS_CANCELLED"|translate}}
+                                                      color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_CANCELLED"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
@@ -84,7 +83,7 @@
                                 <ng-template #lessonState4>
                                     <ion-row>
                                         <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1" color="success">{{"STATUS_DONE"|translate}}
+                                            <ion-text class="fs-medium fw-normal ls-1" color="success" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_DONE"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
@@ -93,11 +92,11 @@
                             <ion-col size="auto">
                                 <ion-row>
                                     <ion-col
-                                            class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
+                                            class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col
-                                            class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.startTime}}</ion-col>
+                                            class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.startTime}}</ion-col>
                                 </ion-row>
                             </ion-col>
                         </ion-row>
@@ -125,8 +124,7 @@
                                 <ion-col size="6">
                                     <ion-row>
                                         <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
-                                                 [routerLink]="['/']"
-                                                 routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
+                                                 [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
                                     </ion-row>
                                     <ion-row>
                                         <ion-col
@@ -136,14 +134,14 @@
                                     </ion-row>
                                     <ion-row *ngIf="s.lessonState === 0; else lessonState1">
                                         <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1" color="warning">{{"STATUS_REQUIRED"|translate}}
+                                            <ion-text class="fs-medium fw-normal ls-1" color="warning" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_REQUIRED"|translate}}
                                             </ion-text>
                                         </ion-col>
                                     </ion-row>
                                     <ng-template #lessonState1>
                                         <ion-row *ngIf="s.lessonState === 1; else lessonState2">
                                             <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary">{{"STATUS_ACCEPTED"|translate}}
+                                                <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_ACCEPTED"|translate}}
                                                 </ion-text>
                                             </ion-col>
                                         </ion-row>
@@ -151,7 +149,7 @@
                                     <ng-template #lessonState2>
                                         <ion-row *ngIf="s.lessonState === 2; else lessonState3">
                                             <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger">
+                                                <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">
                                                    {{"STATUS_REJECTED"|translate}}
                                                 </ion-text>
                                             </ion-col>
@@ -161,7 +159,7 @@
                                         <ion-row *ngIf="s.lessonState === 3; else lessonState4">
                                             <ion-col class="ion-no-padding pt-5">
                                                 <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
-                                                          color="danger">{{"STATUS_CANCELLED"|translate}}
+                                                          color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_CANCELLED"|translate}}
                                                 </ion-text>
                                             </ion-col>
                                         </ion-row>
@@ -169,7 +167,7 @@
                                     <ng-template #lessonState4>
                                         <ion-row>
                                             <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="fs-medium fw-normal ls-1" color="success">{{"STATUS_DONE"|translate}}
+                                                <ion-text class="fs-medium fw-normal ls-1" color="success" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_DONE"|translate}}
                                                 </ion-text>
                                             </ion-col>
                                         </ion-row>
@@ -178,11 +176,11 @@
                                 <ion-col size="auto">
                                     <ion-row>
                                         <ion-col
-                                                class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
+                                                class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
                                     </ion-row>
                                     <ion-row>
                                         <ion-col
-                                                class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right">{{s.planning.startTime}}</ion-col>
+                                                class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.startTime}}</ion-col>
                                     </ion-row>
                                 </ion-col>
                             </ion-row>

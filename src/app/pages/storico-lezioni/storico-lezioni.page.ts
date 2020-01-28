@@ -63,12 +63,14 @@ export class StoricoLezioniPage implements OnInit {
         });
         popover.onDidDismiss().then((data) => {
             console.log(data);
+            if (data.data !== undefined) {
             this.loadingPresent();
             // tslint:disable-next-line:max-line-length
             this.bookingService.getRestHistoricalBookingFilter(data.data.selectMateria, data.data.selectSotto, data.data.nomeLezione, data.data.dataLezione, data.data.selectUtente, data.data.statoLezione).subscribe((item) => {
                 console.log(item);
                 this.disLoading();
             });
+            }
         });
         await popover.present();
     }
