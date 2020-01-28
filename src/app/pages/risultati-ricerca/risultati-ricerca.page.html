@@ -14,10 +14,11 @@
             <ion-grid style="width: 100%">
                 <ion-row>
                     <ion-col size="auto">
-                        <ion-icon *ngIf="true; else imgBlock" name="contact" class="fs-62 c-primary"></ion-icon>
+                        <ion-icon *ngIf="less.teacher.image === null || less.teacher.image === '' || less.teacher.image ===' '; else imgBlock"
+                                  name="contact" class="fs-62"></ion-icon>
                         <ng-template #imgBlock>
                             <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                                <img [src]="" alt="img" class="w-51 h-51">
+                                <img [src]="less.teacher.image" alt="img" class="w-51 h-51">
                             </ion-avatar>
                         </ng-template>
                     </ion-col>
