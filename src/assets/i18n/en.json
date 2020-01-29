@@ -83,7 +83,7 @@
   "PLANNING_TEXT": "For planning click on button",
   "BOOKING_MADE_BY_TEXT": "Booking Made by",
   "LESSON_PLAN_HEADER": "Message",
-  "LESSON_PLAN_MESSAGE": "A scheduled lesson will be created for each week for the selected days and times",
+  "LESSON_PLAN_MESSAGE": "A scheduled lesson will be created from the selected date for each week for the selected days and times",
 
   "BIOGRAPHY_LABEL": "Biography",
   "STUDY_GRADE_INPUT": "Study grade",
