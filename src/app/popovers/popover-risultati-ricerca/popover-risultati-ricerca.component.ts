@@ -18,7 +18,6 @@ export class PopoverRisultatiRicercaComponent implements OnInit {
     ngOnInit() {
         this.slot = this.navParams.get('dati');
 
-        console.log(this.slot);
         if (this.navParams.get('giorno') === 1) {
             this.day = 'lunedi';
         }
