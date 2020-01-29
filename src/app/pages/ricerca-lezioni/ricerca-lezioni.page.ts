@@ -55,7 +55,6 @@ export class RicercaLezioniPage implements OnInit {
             this.subjectService.getRestList(false).subscribe(() => {
                 this.listSubject$.subscribe((data: Subject[]) => {
                     this.subject = data;
-                    console.log(this.subject);
                     this.materie = [];
                     let n = 0;
                     this.subject.forEach((item) => {
@@ -88,9 +87,7 @@ export class RicercaLezioniPage implements OnInit {
         this.minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
         this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
         this.ricercaFormModel.controls.fine.reset();
-        console.log('cambio o setto orario lezione');
         const oraInizio = new Date(this.ricercaFormModel.controls.inizio.value);
-        console.log(oraInizio);
         let i;
         let e = 0;
         for (i = 0; i < this.hours.length; i++) {
@@ -109,7 +106,6 @@ export class RicercaLezioniPage implements OnInit {
     }
 
     changeSelectElents() {
-        console.log('cambio');
         this.ricercaFormModel.controls.sottoMateria.reset();
     }
 
@@ -128,7 +124,6 @@ export class RicercaLezioniPage implements OnInit {
     }
 
     predi() {
-        console.log(this.ricercaFormModel.controls.giorni.value);
         this.ricercaFormModel.controls.giorni.value.forEach((item) => {
             if (item === '1') {
                 this.giorniSettimana[0] = 1;
@@ -153,8 +148,6 @@ export class RicercaLezioniPage implements OnInit {
             }
         });
         this.oraInizio = this.ricercaFormModel.controls.inizio.value;
-        console.log('this.oraInizio');
-        console.log(this.oraInizio);
 
         if (this.oraInizio !== undefined && this.oraInizio !== '' && this.oraInizio !== null) {
             this.oraInizio = this.oraInizio.substring(11, 16);
@@ -162,8 +155,6 @@ export class RicercaLezioniPage implements OnInit {
             this.oraInizio = '';
         }
         this.oraFine = this.ricercaFormModel.controls.fine.value;
-        console.log('this.oraFine');
-        console.log(this.oraFine);
         if (this.oraFine !== undefined && this.oraFine !== '' && this.oraFine !== null) {
             this.oraFine = this.oraFine.substring(11, 16);
         } else {
