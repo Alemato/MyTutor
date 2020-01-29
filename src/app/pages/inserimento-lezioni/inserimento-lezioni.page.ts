@@ -176,22 +176,22 @@ export class InserimentoLezioniPage implements OnInit {
             }
             if (flag) {
                 this.giornoSettimana.push(this.giorni[new Date(p[i].date).getDay()]);
-                const p3: Planning = p[i];
-                this.planningAppoggio.push(p3);
-                const p1: Planning = p[i];
-                p1.startTime = p1.startTime.slice(0, 5);
-                p1.endTime = p1.endTime.slice(0, 5);
-                this.planningVisualizzazione.push(p1);
+                const planningPerCaricareI: Planning = p[i];
+                this.planningAppoggio.push(planningPerCaricareI);
+                const planningPerVisualizzareI: Planning = p[i];
+                planningPerVisualizzareI.startTime = planningPerVisualizzareI.startTime.slice(0, 5);
+                planningPerVisualizzareI.endTime = planningPerVisualizzareI.endTime.slice(0, 5);
+                this.planningVisualizzazione.push(planningPerVisualizzareI);
             }
         }
-        const p4: Planning = p[0];
+        const planningPerCaricareZero: Planning = p[0];
         this.giornoSettimana.push(this.giorni[new Date(p[0].date).getDay()]);
-        this.planningAppoggio.push(p4);
+        this.planningAppoggio.push(planningPerCaricareZero);
         this.planningAppoggio.reverse();
-        const p2: Planning = p[0];
-        p2.startTime = p2.startTime.slice(0, 5);
-        p2.endTime = p2.endTime.slice(0, 5);
-        this.planningVisualizzazione.push(p2);
+        const planningPerVisualizzareZero: Planning = p[0];
+        planningPerVisualizzareZero.startTime = planningPerVisualizzareZero.startTime.slice(0, 5);
+        planningPerVisualizzareZero.endTime = planningPerVisualizzareZero.endTime.slice(0, 5);
+        this.planningVisualizzazione.push(planningPerVisualizzareZero);
         this.planningVisualizzazione.reverse();
         this.giornoSettimana.reverse();
     }
