@@ -24,7 +24,6 @@ export class InserimentoLezioniModalPage implements OnInit {
     hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
     private pleaseWaitMessage: string;
     private lessonPlanHeader: string;
-    private lessonPlanSubHeader: string;
     private lessonPlanMessage: string;
     private cancelButton: string;
     private doneButton: string;
@@ -175,6 +174,7 @@ export class InserimentoLezioniModalPage implements OnInit {
     async disLoading() {
         await this.loading.dismiss();
     }
+
     async presentAlertPlan() {
         const alert = await this.alertController.create({
             header: this.lessonPlanHeader,

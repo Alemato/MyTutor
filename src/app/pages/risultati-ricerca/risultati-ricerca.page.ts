@@ -64,8 +64,6 @@ export class RisultatiRicercaPage implements OnInit {
                 if (pianificazioni.length > 0) {
 
 
-
-
                     const pnanningList1 = [];
                     this.lessonList.forEach((les, index) => {
                         const planningArray = [];
@@ -169,6 +167,7 @@ export class RisultatiRicercaPage implements OnInit {
         });
         return await popover.present();
     }
+
     private initTranslate() {
         this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
             this.pleaseWaitMessage = data;

@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Subject} from '../../model/subject.model';
 import {SubjectService} from '../../services/subject.service';
 import {PlanningService} from '../../services/planning.service';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject} from 'rxjs';
 
 @Component({
@@ -171,6 +171,7 @@ export class RicercaLezioniPage implements OnInit {
             });
         });
     }
+
     ionViewDidLeave() {
         this.ricercaFormModel.reset();
         this.materia = '';
@@ -185,6 +186,7 @@ export class RicercaLezioniPage implements OnInit {
         };
         this.ricercaFormModel.setValue(obj);
     }
+
     async loadingPresent() {
         this.loading = await this.loadingController.create({
             message: this.pleaseWaitMessage,
@@ -222,6 +224,7 @@ export class RicercaLezioniPage implements OnInit {
         });
         this.changeSelectElents();
     }
+
     private initTranslate() {
         this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
             this.cancelButton = data;
