@@ -43,6 +43,8 @@ export class InserimentoLezioniPage implements OnInit {
     private doneButton: string;
     private pleaseWaitMessage: string;
     private noPlanning = false;
+    private giornoSettimana: string[] = [];
+    private giorni = ['', '', '', '', '', '', ''];
 
     constructor(
         private pickerCtrl: PickerController,
@@ -84,8 +86,6 @@ export class InserimentoLezioniPage implements OnInit {
                                 }
                                 this.lesson = pList.find(x => x !== undefined).lesson;
                                 this.materia = this.lesson.subject.macroSubject;
-                                console.log('this.lesson.subject.microSubject');
-                                console.log(this.lesson.subject.microSubject);
                                 this.booleanSottomateria = true;
                                 const obj = {
                                     sottoMateria: this.lesson.subject.microSubject,
@@ -103,13 +103,9 @@ export class InserimentoLezioniPage implements OnInit {
                         } else {
                             this.lessonService.getRestLessons().subscribe((l) => {
                                 this.lesson = l.find(x => x.idLesson === parseInt(params.get('idLesson'), 0));
-                                console.log('l.find(x => x.idLesson === parseInt(this.id, 0))');
-                                console.log(l.find(x => x.idLesson === parseInt(params.get('idLesson'), 0)));
                                 this.lezioneFormModel.controls.sottoMateria.enable();
                                 this.booleanSottomateria = true;
                                 this.materia = this.lesson.subject.macroSubject;
-                                console.log('this.lesson.subject.microSubject');
-                                console.log(this.lesson.subject.microSubject);
                                 const obj = {
                                     sottoMateria: this.lesson.subject.microSubject,
                                     nuovaMateria: '',
@@ -132,7 +128,6 @@ export class InserimentoLezioniPage implements OnInit {
             this.subjectService.getRestList(false).subscribe(() => {
                 this.listSubject$.subscribe((data: Subject[]) => {
                     this.subjects = data;
-                    console.log(this.subjects);
                     this.materie = [];
                     let n = 0;
                     this.materie.push();
@@ -165,13 +160,14 @@ export class InserimentoLezioniPage implements OnInit {
             });
         });
     }
+
     planingCompat(p: Planning[]) {
         for (let i = p.length - 1; i >= 0; i--) {
             let flag = false;
             for (let j = i - 1; j >= 0; j--) {
                 if (new Date(p[i].date).getDay() === new Date(p[j].date).getDay() &&
-                   p[i].startTime === p[j].startTime &&
-                    p[i].endTime === p[j].endTime) {
+                    p[i].startTime.slice(0, 4) === p[j].startTime.slice(0, 4) &&
+                    p[i].endTime.slice(0, 4) === p[j].endTime.slice(0, 4)) {
                     flag = false;
                     break;
                 } else {
@@ -179,26 +175,28 @@ export class InserimentoLezioniPage implements OnInit {
                 }
             }
             if (flag) {
-                p[i].startTime = p[i].startTime.slice(0, 5);
-                p[i].endTime = p[i].endTime.slice(0, 5);
-                this.planningAppoggio.push(p[i]);
-                this.planningVisualizzazione.push(p[i]);
+                this.giornoSettimana.push(this.giorni[new Date(p[i].date).getDay()]);
+                const p3: Planning = p[i];
+                this.planningAppoggio.push(p3);
+                const p1: Planning = p[i];
+                p1.startTime = p1.startTime.slice(0, 5);
+                p1.endTime = p1.endTime.slice(0, 5);
+                this.planningVisualizzazione.push(p1);
             }
         }
-        p[0].startTime = p[0].startTime.slice(0, 5);
-        p[0].endTime = p[0].endTime.slice(0, 5);
-        this.planningAppoggio.push(p[0]);
+        const p4: Planning = p[0];
+        this.giornoSettimana.push(this.giorni[new Date(p[0].date).getDay()]);
+        this.planningAppoggio.push(p4);
         this.planningAppoggio.reverse();
-        this.planningVisualizzazione.push(p[0]);
+        const p2: Planning = p[0];
+        p2.startTime = p2.startTime.slice(0, 5);
+        p2.endTime = p2.endTime.slice(0, 5);
+        this.planningVisualizzazione.push(p2);
         this.planningVisualizzazione.reverse();
-        console.log('this.planningsCompattati');
-        console.log(this.planningAppoggio);
+        this.giornoSettimana.reverse();
     }
 
     onChanges() {
-        console.log('onChanges');
-        console.log('this.materia');
-        console.log(this.materia);
         if (this.materia === 'Creane una' || this.materia === 'Create One') {
             this.lezioneFormModel.controls.sottoMateria.reset();
             this.lezioneFormModel.controls.sottoMateria.disable();
@@ -247,7 +245,7 @@ export class InserimentoLezioniPage implements OnInit {
                     let idL = -1;
                     le.forEach((l) => {
                         if (l.name === this.lezioneFormModel.controls.nomeLezione.value &&
-                        l.description === this.lezioneFormModel.controls.descrizione.value) {
+                            l.description === this.lezioneFormModel.controls.descrizione.value) {
                             idL = l.idLesson;
                         }
                     });
@@ -265,7 +263,7 @@ export class InserimentoLezioniPage implements OnInit {
 
     modificaLezione() {
         if (this.planningAppoggio.length > 0) {
-            this.planningAppoggio.forEach((pianificazione) => {
+            this.planningAppoggio.forEach((pianificazione1) => {
                 let subject;
                 if (this.materia === 'Creane una' || this.materia === 'Create One') {
                     subject = new Subject({
@@ -283,13 +281,24 @@ export class InserimentoLezioniPage implements OnInit {
                     price: this.lezioneFormModel.controls.prezzoOrario.value, description: this.lezioneFormModel.controls.descrizione.value,
                     publicationDate: this.lesson.publicationDate
                 }, subject, this.teacher$.value);
+                let star = pianificazione1.startTime;
+                if (pianificazione1.startTime.length < 6) {
+                    star = pianificazione1.startTime + ':00';
+                }
+                let en = pianificazione1.endTime;
+                if (pianificazione1.endTime.length < 6) {
+                    en = pianificazione1.endTime + ':00';
+                }
+
                 const planning = new Planning({
-                    idPlanning: undefined, date: pianificazione.date, startTime: pianificazione.startTime + ':00',
-                    endTime: pianificazione.endTime + ':00', available: true
+                    idPlanning: undefined, date: pianificazione1.date, startTime: star,
+                    endTime: en, available: true
                 }, lesson);
                 this.plannings.push(planning);
             });
+            console.log('modifica dei planning');
             console.log(this.plannings);
+
             this.loadingPresent().then(() => {
                 this.planningService.modifyRestPlannings(this.plannings, this.lesson.idLesson).subscribe(() => {
                     this.disLoading();
@@ -338,6 +347,7 @@ export class InserimentoLezioniPage implements OnInit {
                 console.log(dataReturned.data[0]);
                 this.planningVisualizzazione = [];
                 this.planningAppoggio = [];
+                this.giornoSettimana = [];
                 this.fillPlannings(dataReturned.data[0].dataOraIF);
                 this.ok = dataReturned.data[1];
                 console.log(this.ok);
@@ -352,6 +362,7 @@ export class InserimentoLezioniPage implements OnInit {
                 console.log(dataReturned.data[0]);
                 this.planningVisualizzazione = [];
                 this.planningAppoggio = [];
+                this.giornoSettimana = [];
                 this.fillPlannings(dataReturned.data[0].dataOraIF);
                 this.ok = dataReturned.data[1];
                 console.log(this.ok);
@@ -375,6 +386,7 @@ export class InserimentoLezioniPage implements OnInit {
                 startTime: inizioAppo.slice(11, 16), endTime: fineAppo.slice(11, 16)
             };
             this.planningAppoggio.push(planningSingolo);
+            this.giornoSettimana.push(this.giorni[new Date(data).getDay()]);
             this.planningVisualizzazione.push(planningPreVisual);
         });
     }
@@ -382,6 +394,10 @@ export class InserimentoLezioniPage implements OnInit {
     rimuoviPlanning(index: number) {
         this.planningAppoggio.splice(index, 1);
         this.planningVisualizzazione.splice(index, 1);
+        this.giornoSettimana = [];
+        this.planningAppoggio.forEach((pA) => {
+            this.giornoSettimana.push(this.giorni[new Date(pA.date).getDay()]);
+        });
     }
 
     async showPicker() {
@@ -412,7 +428,6 @@ export class InserimentoLezioniPage implements OnInit {
     }
 
     changeSelectElents() {
-        console.log('cambio');
         this.lezioneFormModel.controls.sottoMateria.reset();
     }
 
@@ -428,6 +443,30 @@ export class InserimentoLezioniPage implements OnInit {
         });
         this.translateService.get('CREATE_ONE').subscribe((data) => {
             this.materia = data;
+        });
+        this.translateService.get('CREATE_ONE').subscribe((data) => {
+            this.materia = data;
+        });
+        this.translateService.get('SUNDAY').subscribe((data) => {
+            this.giorni[0] = data;
+        });
+        this.translateService.get('MONDAY').subscribe((data) => {
+            this.giorni[1] = data;
+        });
+        this.translateService.get('TUESDAY').subscribe((data) => {
+            this.giorni[2] = data;
+        });
+        this.translateService.get('WEDNESDAY').subscribe((data) => {
+            this.giorni[3] = data;
+        });
+        this.translateService.get('THURSDAY').subscribe((data) => {
+            this.giorni[4] = data;
+        });
+        this.translateService.get('FRIDAY').subscribe((data) => {
+            this.giorni[5] = data;
+        });
+        this.translateService.get('SATURDAY').subscribe((data) => {
+            this.giorni[6] = data;
         });
     }
 }
