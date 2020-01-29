@@ -59,8 +59,6 @@ export class RisultatiRicercaPage implements OnInit {
                 if (this.lessonList[0] !== undefined) {
                     this.vuotaLista = true;
                 }
-                console.log(this.lessonList[0]);
-                console.log(this.lessonList.length);
 
 
                 if (pianificazioni.length > 0) {
@@ -92,10 +90,6 @@ export class RisultatiRicercaPage implements OnInit {
                         });
                         pnanningList1.push(planningArray);
                     });
-                    console.log('this.arrayMappe');
-                    console.log(this.arrayMappe);
-                    console.log('this.lessonList');
-                    console.log(this.lessonList);
 
                     this.arrayMappe.forEach((mappa: Map<number, [[string, string]]>) => {
                         const listaChiaveperLez = [];
@@ -128,9 +122,6 @@ export class RisultatiRicercaPage implements OnInit {
                         lista2.push(lista1[lista1.length - 1]);
                         this.listaChiaveMappaFin.push(lista2);
                     });
-                    console.log('this.listaChiaveMappaFin');
-                    console.log(this.listaChiaveMappaFin);
-                    console.log(this.listaChiaveMappaFin[0][0]);
 
                     this.listaValoriMappa.forEach((lista1) => {
                         const lista2 = [];
@@ -151,19 +142,6 @@ export class RisultatiRicercaPage implements OnInit {
                         lista2.push(lista1[lista1.length - 1]);
                         this.listaValoriMappaFin.push(lista2);
                     });
-                    console.log('this.listaValoriMappaFin');
-                    console.log(this.listaValoriMappaFin);
-                    console.log(this.listaValoriMappaFin[0][0]);
-
-
-
-
-                    console.log('this.listaValoriMappa');
-                    // this.listaValoriMappa.reverse();
-                    console.log(this.listaValoriMappa);
-                    console.log('this.listaChiaveMappa');
-                    // this.listaChiaveMappa.reverse();
-                    console.log(this.listaChiaveMappa);
                 }
                 this.disLoading();
             });
