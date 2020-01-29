@@ -39,7 +39,6 @@ export class HomeAccettatePage implements OnInit {
     ngOnInit() {
         this.initTranslate();
         this.tipo = this.userService.getTypeUser();
-        console.log(this.tipo);
         if (this.tipo === 'student') {
             this.student$ = this.userService.getUser();
             // fa la get con un periodo di 1 minuto
@@ -95,10 +94,8 @@ export class HomeAccettatePage implements OnInit {
                     text: 'OK',
                     handler: () => {
                         console.log('Conferma annullamento lezione');
-                        console.log(id);
                         const booking = this.bookings$.value.find(x => x.idBooking === id);
                         booking.lessonState = 3;
-                        console.log(booking);
                         this.loadingPresent().then(() => {
                             this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
                                 console.log(data);

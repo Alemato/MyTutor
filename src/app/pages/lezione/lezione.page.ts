@@ -86,7 +86,6 @@ export class LezionePage implements OnInit {
     ) {
         this.user$ = this.userService.getUser();
         const tipoU = this.userService.getTypeUser();
-        console.log(tipoU);
         if (tipoU === 'student') {
             this.student$ = this.userService.getUser();
         }

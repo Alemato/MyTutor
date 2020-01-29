@@ -42,7 +42,6 @@ export class HomeRichiestePage implements OnInit {
   ngOnInit() {
     this.initTranslate();
     this.tipo = this.userService.getTypeUser();
-    console.log(this.tipo);
     if (this.tipo === 'student') {
       this.student$ = this.userService.getUser();
       // fa la get con un periodo di 1 minuto
@@ -64,7 +63,6 @@ export class HomeRichiestePage implements OnInit {
   accettaLezione(idBok: number) {
     const booking = this.bookings$.value.find(x => x.idBooking === idBok);
     booking.lessonState = 1;
-    console.log(booking);
     this.loadingPresent().then(() => {
       this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
         console.log(data);
@@ -174,10 +172,8 @@ export class HomeRichiestePage implements OnInit {
           text: 'OK',
           handler: () => {
             console.log('Conferma annullamento lezione');
-            console.log(id);
             const booking = this.bookings$.value.find(x => x.idBooking === id);
             booking.lessonState = 4;
-            console.log(booking);
             this.loadingPresent().then(() => {
               this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
                 console.log(data);

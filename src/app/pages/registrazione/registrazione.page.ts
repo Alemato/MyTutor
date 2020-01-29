@@ -14,12 +14,11 @@ import {Camera, CameraOptions} from '@ionic-native/camera/ngx';
 import {File} from '@ionic-native/file/ngx';
 import {Teacher} from '../../model/teacher.model';
 import {User} from '../../model/user.model';
-import {RegisterEmailValidator} from '../../validators/registerEmail.validator';
 import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
 import {Student} from '../../model/student.model';
 import {RegistrationService} from '../../services/registration.service';
 import {HttpErrorResponse} from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-registrazione',
@@ -49,16 +48,6 @@ export class RegistrazionePage implements OnInit {
     private imageShowingError: string;
     private pleaseWaitMessage: string;
     private error: string;
-    //
-    private emailRequiredMessage: string;
-    private emailMinLengthMessage: string;
-    private emailPatternMessage: string;
-    private emailValidEmailMessage: string;
-    private passwordRequiredMessage: string;
-    private nameRequiredMessage: string;
-    private surnameRequiredMessage: string;
-    private birthdayRequiredMessage: string;
-    private birthdayValidAgeMessage: string;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -83,23 +72,23 @@ export class RegistrazionePage implements OnInit {
 
     validationMessages = {
         email: [
-            {type: 'required', message: this.emailRequiredMessage},
-            {type: 'minlength', message: this.emailMinLengthMessage},
-            {type: 'pattern', message: this.emailPatternMessage},
-            {type: 'validEmail', message: this.emailValidEmailMessage}
+            {type: 'required', message: 'email is required.'},
+            {type: 'minlength', message: 'email must be at least 5 characters long.'},
+            {type: 'pattern', message: 'Your email is invalid'},
+            {type: 'validEmail', message: 'Your email has already been taken.'}
         ],
         password: [
-            {type: 'required', message: this.passwordRequiredMessage}
+            {type: 'required', message: 'Password is required'}
         ],
         name: [
-            {type: 'required', message: this.nameRequiredMessage}
+            {type: 'required', message: 'Name is required'}
         ],
         surname: [
-            {type: 'required', message: this.surnameRequiredMessage}
+            {type: 'required', message: 'Surname is required'}
         ],
         birthday: [
-            {type: 'required', message: this.birthdayRequiredMessage},
-            {type: 'validAge', message: this.birthdayValidAgeMessage}
+            {type: 'required', message: 'birthday is required'},
+            {type: 'validAge', message: 'You must be 18 years old'}
         ]
     };
 
@@ -109,8 +98,7 @@ export class RegistrazionePage implements OnInit {
         this.registrazioneFormModel = this.formBuilder.group({
             // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
             email: ['', Validators.compose(
-                [RegisterEmailValidator.emailIsValid,
-                    Validators.required
+                [Validators.required
                 ])
             ],
             // roles: [''],
@@ -152,7 +140,7 @@ export class RegistrazionePage implements OnInit {
             // If it's base64 (DATA_URL):
             // let base64Image = 'data:image/jpeg;base64,' + imageData;
             this.cropImage(imageData);
-        }, (err) => {
+        }, () => {
             // Handle error
         });
     }
@@ -195,8 +183,7 @@ export class RegistrazionePage implements OnInit {
 
     showCroppedImage(ImagePath) {
         this.isLoading = true;
-        const copyPath = ImagePath;
-        const splitPath = copyPath.split('/');
+        const splitPath = ImagePath.split('/');
         const imageName = splitPath[splitPath.length - 1];
         const filePath = ImagePath.split(imageName)[0];
 
@@ -252,15 +239,11 @@ export class RegistrazionePage implements OnInit {
             this.utente.idUser = 0;
             this.utente.roles = 1;
             this.utente.birthday = new Date(this.utente.birthday).getTime();
-            if (this.registrazioneFormModel.value.languageNumber === '0') {
-                this.utente.language = false;
-            } else {
-                this.utente.language = true;
-            }
+            this.utente.language = this.registrazioneFormModel.value.languageNumber !== '0';
             this.utente.image = this.croppedImagepath;
             this.student.set(this.utente);
             this.Loading();
-            this.registrationService.registrationStudent(this.student).subscribe((data) => {
+            this.registrationService.registrationStudent(this.student).subscribe(() => {
                     this.Diss();
                     this.registrazioneFormModel.reset();
                     this.navController.navigateRoot('login');
@@ -272,20 +255,15 @@ export class RegistrazionePage implements OnInit {
                     }
                 });
             console.log(this.student);
-            console.log(JSON.stringify(this.student));
         } else {
             console.log('utenza di tipo docente');
             this.teacher.idUser = 0;
             this.teacher.roles = 2;
             this.teacher.birthday = new Date(this.utente.birthday).getTime();
-            if (this.registrazioneFormModel.value.languageNumber === '0') {
-                this.teacher.language = false;
-            } else {
-                this.teacher.language = true;
-            }
+            this.teacher.language = this.registrazioneFormModel.value.languageNumber !== '0';
             this.teacher.image = this.croppedImagepath;
             this.Loading();
-            this.registrationService.registrationTeacher(this.teacher).subscribe((data) => {
+            this.registrationService.registrationTeacher(this.teacher).subscribe(() => {
                     this.Diss();
                     this.registrazioneFormModel.reset();
                     this.navController.navigateRoot('login');
@@ -297,7 +275,6 @@ export class RegistrazionePage implements OnInit {
                     }
                 });
             console.log(this.teacher);
-            console.log(JSON.stringify(this.teacher));
         }
     }
 

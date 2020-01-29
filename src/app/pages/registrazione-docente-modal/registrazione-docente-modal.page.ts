@@ -4,17 +4,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Teacher} from '../../model/teacher.model';
 import {User} from '../../model/user.model';
 import { TranslateService } from '@ngx-translate/core';
-
-export interface UserTeacher {
-    postCode: number;
-    city: string;
-    region: string;
-    street: string;
-    streetNumber: string;
-    byography: string;
-}
-
-
 @Component({
     selector: 'app-registrazione-docente-modal',
     templateUrl: './registrazione-docente-modal.page.html',
@@ -23,31 +12,24 @@ export interface UserTeacher {
 
 export class RegistrazioneDocenteModalPage implements OnInit {
     private registrazioneModelDocente: FormGroup;
-    private interfaceTeacher: UserTeacher;
     private teacher: Teacher;
-    private postCodeRequiredMessage: string;
-    private postCodePatternMessage: string;
-    private regionRequiredMessage: string;
-    private cityRequiredMessage: string;
-    private streetRequiredMessage: string;
-    private streetNumberRequiredMessage: string;
 
     validationMessages = {
         postCode: [
-            {type: 'required', message: this.postCodeRequiredMessage},
-            {type: 'patten', message: this.postCodePatternMessage}
+            {type: 'required', message: 'Zip Code is required'},
+            {type: 'patten', message: 'invalid field, enter only numbers'}
         ],
         region: [
-            {type: 'required', message: this.regionRequiredMessage}
+            {type: 'required', message: 'Region is required'}
         ],
         city: [
-            {type: 'required', message: this.cityRequiredMessage}
+            {type: 'required', message: 'City is required'}
         ],
         street: [
-            {type: 'required', message: this.streetRequiredMessage}
+            {type: 'required', message: 'Street is required'}
         ],
         streetNumber: [
-            {type: 'required', message: this.streetNumberRequiredMessage}
+            {type: 'required', message: 'Street Number is required'}
         ]
     };
 
@@ -59,15 +41,10 @@ export class RegistrazioneDocenteModalPage implements OnInit {
         navParams: NavParams,
         public translateService: TranslateService) {
         this.teacher = new Teacher(undefined);
-        console.log(navParams.get('utente1'));
-        console.log(this.teacher);
         this.teacher.set(navParams.get('utente1'));
-        console.log(this.teacher);
         if (navParams.get('teacher1') == null || typeof navParams.get('teacher1') === 'undefined') {
             console.log('indefinito');
         } else {
-            console.log('teacher 1');
-            console.log(navParams.get('teacher1'));
             this.teacher.set(navParams.get('teacher1'));
         }
     }

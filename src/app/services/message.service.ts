@@ -122,19 +122,16 @@ export class MessageService {
                     const mex: Map<string, Message[]> = messageList;
                     mex.set(messages.find(x => x !== undefined).chat.idChat.toString(), messageChatX);
                     this.storage.set(STORAGE.MESSAGE, mex);
-                    console.log('la if è vera');
                 } else {
                     this.messages$.next(messages.reverse());
                     const mex: Map<string, Message[]> = messageList;
                     mex.set(messages.find(x => x !== undefined).chat.idChat.toString(), messages);
                     this.storage.set(STORAGE.MESSAGE, mex);
-                    console.log('la if è falsa');
                 }
             } else {
                 this.messages$.next(messages.reverse());
                 const mex = new Map<string, Message[]>();
                 mex.set(messages[0].chat.idChat.toString(), messages);
-                console.log(mex);
                 this.storage.set(STORAGE.MESSAGE, mex);
             }
         });

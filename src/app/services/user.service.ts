@@ -60,7 +60,6 @@ export class UserService {
                 }
             }
         });
-        console.log('costruttore service');
     }
 
     getProfiloEmail(emailProfilo: string, saveUser: boolean): Observable<any> {

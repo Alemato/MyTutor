@@ -12,7 +12,7 @@ import {Crop} from '@ionic-native/crop/ngx';
 import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
 import {SuperTabs} from '@ionic-super-tabs/angular';
 import {HttpErrorResponse} from '@angular/common/http';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'modifica-profilo',
@@ -34,7 +34,6 @@ export class ModificaProfiloPage implements OnInit {
     croppedImagepath = '';
     img = false;
     isLoading = false;
-    private loading;
     private errorTitle: string;
     private errorSubTitle: string;
     private imageSourceHeader: string;
@@ -43,16 +42,6 @@ export class ModificaProfiloPage implements OnInit {
     private cancelButton: string;
     private imageCroppingError: string;
     private imageShowingError: string;
-    //
-    private emailRequiredMessage: string;
-    private emailMinLengthMessage: string;
-    private emailPatternMessage: string;
-    private emailValidEmailMessage: string;
-    private passwordRequiredMessage: string;
-    private nameRequiredMessage: string;
-    private surnameRequiredMessage: string;
-    private birthdayRequiredMessage: string;
-    private birthdayValidAgeMessage: string;
 
     imagePickerOptions = {
         maximumImagesCount: 1,
@@ -61,23 +50,23 @@ export class ModificaProfiloPage implements OnInit {
 
     validationMessages = {
         email: [
-            {type: 'required', message: this.emailRequiredMessage},
-            {type: 'minlength', message: this.emailMinLengthMessage},
-            {type: 'pattern', message: this.emailPatternMessage},
-            {type: 'validEmail', message: this.emailValidEmailMessage}
+            {type: 'required', message: 'email is required.'},
+            {type: 'minlength', message: 'email must be at least 5 characters long.'},
+            {type: 'pattern', message: 'Your email is invalid'},
+            {type: 'validEmail', message: 'Your email has already been taken.'}
         ],
         password: [
-            {type: 'required', message: this.passwordRequiredMessage}
+            {type: 'required', message: 'Password is required'}
         ],
         name: [
-            {type: 'required', message: this.nameRequiredMessage}
+            {type: 'required', message: 'Name is required'}
         ],
         surname: [
-            {type: 'required', message: this.surnameRequiredMessage}
+            {type: 'required', message: 'Surname is required'}
         ],
         birthday: [
-            {type: 'required', message: this.birthdayRequiredMessage},
-            {type: 'validAge', message: this.birthdayValidAgeMessage}
+            {type: 'required', message: 'birthday is required'},
+            {type: 'validAge', message: 'You must be 18 years old'}
         ]
     };
 
@@ -221,7 +210,7 @@ export class ModificaProfiloPage implements OnInit {
             // If it's base64 (DATA_URL):
             // let base64Image = 'data:image/jpeg;base64,' + imageData;
             this.cropImage(imageData);
-        }, (err) => {
+        }, () => {
             // Handle error
         });
     }
@@ -264,8 +253,7 @@ export class ModificaProfiloPage implements OnInit {
 
     showCroppedImage(ImagePath) {
         this.isLoading = true;
-        const copyPath = ImagePath;
-        const splitPath = copyPath.split('/');
+        const splitPath = ImagePath.split('/');
         const imageName = splitPath[splitPath.length - 1];
         const filePath = ImagePath.split(imageName)[0];
         this.file.readAsDataURL(filePath, imageName).then(base64 => {

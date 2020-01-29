@@ -45,7 +45,6 @@ export class StoricoLezioniPage implements OnInit {
                 this.listUser = users;
                 console.log(this.listUser);
                 this.bookingService.getRestBooking().subscribe();
-                console.log('subscribe');
                 this.disLoading();
             });
         });

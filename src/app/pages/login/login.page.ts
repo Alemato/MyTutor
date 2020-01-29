@@ -68,16 +68,13 @@ export class LoginPage implements OnInit {
     }
 
     onLogin() {
-        console.log('sto su on login');
         const account: Account = this.loginFormModel.value;
         console.log(account);
-        console.log('eseguo la chiamata');
         this.Loading();
         this.userService.login(account).subscribe(() => {
                 this.Diss();
                 this.loginFormModel.reset();
                 this.navController.navigateRoot('home');
-                console.log('vado in home');
             },
             (err: HttpErrorResponse) => {
                 console.log(err);

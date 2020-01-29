@@ -40,11 +40,9 @@ export class AppComponent implements OnInit {
         this.menuSource.menuRefreshSource$.subscribe(() => {
             this.initTranslate();
             this.userType = this.userService.getTypeUser();
-            console.log(this.userType);
             if (this.userType === 'student') {
                 this.student$ = this.userService.getUser();
                 this.teacher$ = null;
-                console.log(this.appPagesStudent);
                 this.appPagesStudent.find(x => x.click === true).click = false;
                 this.appPagesStudent.find(x => x.title === 'Home').click = true;
             } else if (this.userType === 'teacher') {
@@ -124,7 +122,6 @@ export class AppComponent implements OnInit {
             this.initTranslate();
             this.userService.ifExistKey('auth-token').then((condiction) => {
                 if (!condiction) {
-                    console.log('setto falso ');
                     this.userService.setLoggeIn(false);
                 } else {
                     this.menuSource.publishMenuRefresh();
