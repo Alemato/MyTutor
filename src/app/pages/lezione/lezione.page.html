@@ -200,7 +200,7 @@
                                 <ion-button *ngIf="!existsChat" type="button" size="small" class="avvia-chat"
                                             (click)="creaChatStudentLesson()">{{"START_CHAT_BUTTON"|translate}}
                                 </ion-button>
-                                <ion-button type="submit" size="small" class="prenotazione">{{"BOOKING"|translate}}</ion-button>
+                                <ion-button [disabled]="!prenotazioneFormModel.valid" type="submit" size="small" class="prenotazione">{{"BOOKING"|translate}}</ion-button>
                             </ion-row>
                         </form>
                     </ion-col>
