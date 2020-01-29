@@ -11,7 +11,7 @@
 
 <ion-content>
     <div>
-        <form [formGroup]="dataLezioneFormModel" (submit)="submit()">
+        <form [formGroup]="dataLezioneFormModel">
             <ion-list formArrayName="dataOraIF" *ngFor="let contact of dataOraIFFormGroup.controls; let i = index;">
                 <ion-item [formGroupName]="i">
                     <ion-col size="auto">
@@ -40,7 +40,7 @@
 
     <ion-row>
         <ion-col class="ion-text-center">
-            <ion-button (click)="chiudiModale()"
+            <ion-button (click)="presentAlertPlan()"
                         [disabled]="!dataLezioneFormModel.valid">{{"CLOSE_BUTTON"|translate}}
             </ion-button>
         </ion-col>

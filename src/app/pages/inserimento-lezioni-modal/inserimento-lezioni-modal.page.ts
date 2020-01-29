@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {LoadingController, ModalController} from '@ionic/angular';
+import {AlertController, LoadingController, ModalController} from '@ionic/angular';
 import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
 import {PlanningService} from '../../services/planning.service';
 import {Planning} from '../../model/planning.model';
@@ -23,6 +23,11 @@ export class InserimentoLezioniModalPage implements OnInit {
     minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
     hours = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
     private pleaseWaitMessage: string;
+    private lessonPlanHeader: string;
+    private lessonPlanSubHeader: string;
+    private lessonPlanMessage: string;
+    private cancelButton: string;
+    private doneButton: string;
 
     // returns all form groups under contacts
     // prende l'oggetto
@@ -31,6 +36,7 @@ export class InserimentoLezioniModalPage implements OnInit {
     }
 
     constructor(
+        public alertController: AlertController,
         public formBuilder: FormBuilder,
         public modalController: ModalController,
         private planningService: PlanningService,
@@ -52,10 +58,8 @@ export class InserimentoLezioniModalPage implements OnInit {
             this.loadingPresent().then(() => {
                 this.listaDataOraIF = this.dataLezioneFormModel.get('dataOraIF') as FormArray;
                 this.planningService.getRestPlanningByIdLesson(this.idLesson.toString()).subscribe((planningList) => {
-                    if (planningList[0] !== undefined) {
+                    if (planningList.length > 0) {
                         this.plannings = planningList;
-                        console.log('this.plannings');
-                        console.log(this.plannings);
                         this.planingCompat();
                         this.aggiungiPlanning();
                         this.disLoading();
@@ -73,19 +77,11 @@ export class InserimentoLezioniModalPage implements OnInit {
 
     planingCompat() {
         for (let i = this.plannings.length - 1; i >= 0; i--) {
-            console.log('i');
-            console.log(i);
             let flag = false;
             for (let j = i - 1; j >= 0; j--) {
-                console.log('j');
-                console.log(j);
-                console.log('this.plannings[i]');
-                console.log(this.plannings[i]);
-                console.log('this.plannings[j]');
-                console.log(this.plannings[j]);
                 if (new Date(this.plannings[i].date).getDay() === new Date(this.plannings[j].date).getDay() &&
-                    this.plannings[i].startTime === this.plannings[j].startTime &&
-                    this.plannings[i].endTime === this.plannings[j].endTime) {
+                    this.plannings[i].startTime.slice(0, 4) === this.plannings[j].startTime.slice(0, 4) &&
+                    this.plannings[i].endTime.slice(0, 4) === this.plannings[j].endTime.slice(0, 4)) {
                     flag = false;
                     break;
                 } else {
@@ -98,18 +94,13 @@ export class InserimentoLezioniModalPage implements OnInit {
         }
         this.planningsCompattati.push(this.plannings[0]);
         this.planningsCompattati.reverse();
-        console.log('this.planningsCompattati');
-        console.log(this.planningsCompattati);
     }
 
     changeInizioLezione(index) {
         this.minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
         this.hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-        console.log(((this.dataLezioneFormModel.get('dataOraIF') as FormArray).controls[index] as FormGroup).controls.oraFine.reset());
-        console.log('cambio o setto orario lezione');
         // tslint:disable-next-line:max-line-length
         const oraInizio = new Date(((this.dataLezioneFormModel.get('dataOraIF') as FormArray).controls[index] as FormGroup).controls.oraInizio.value);
-        console.log(oraInizio);
         let i;
         let e = 0;
         for (i = 0; i < this.hours.length; i++) {
@@ -140,8 +131,6 @@ export class InserimentoLezioniModalPage implements OnInit {
                 oraInizio: new Date('2020-01-25T' + piani.startTime).toISOString(),
                 oraFine: new Date('2020-01-25T' + piani.endTime).toISOString()
             };
-            console.log('obj');
-            console.log(obj);
             this.listaDataOraIF.controls[index].setValue(obj);
             this.arrayDymension = (this.dataLezioneFormModel.get('dataOraIF') as FormArray).length;
         });
@@ -168,16 +157,11 @@ export class InserimentoLezioniModalPage implements OnInit {
         if ((this.dataLezioneFormModel.get('dataOraIF') as FormArray).length > 1) {
             this.listaDataOraIF.removeAt(index);
         }
-        this.arrayDymension = (this.dataLezioneFormModel.get('dataOraIF') as FormArray).length ;
+        this.arrayDymension = (this.dataLezioneFormModel.get('dataOraIF') as FormArray).length;
     }
 
     async chiudiModale() {
         await this.modalController.dismiss([this.dataLezioneFormModel.value, true]);
-    }
-
-    // method triggered when form is submitted
-    submit() {
-        console.log(this.dataLezioneFormModel.value);
     }
 
     async loadingPresent() {
@@ -191,10 +175,43 @@ export class InserimentoLezioniModalPage implements OnInit {
     async disLoading() {
         await this.loading.dismiss();
     }
+    async presentAlertPlan() {
+        const alert = await this.alertController.create({
+            header: this.lessonPlanHeader,
+            message: this.lessonPlanMessage,
+            buttons: [
+                {
+                    text: this.cancelButton,
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                    }
+                }, {
+                    text: this.doneButton,
+                    handler: () => {
+                        this.chiudiModale();
+                    }
+                }]
+        });
+
+        await alert.present();
+    }
 
     private initTranslate() {
         this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
             this.pleaseWaitMessage = data;
+        });
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
+        this.translateService.get('DONE_BUTTON').subscribe((data) => {
+            this.doneButton = data;
+        });
+        this.translateService.get('LESSON_PLAN_HEADER').subscribe((data) => {
+            this.lessonPlanHeader = data;
+        });
+        this.translateService.get('LESSON_PLAN_MESSAGE').subscribe((data) => {
+            this.lessonPlanMessage = data;
         });
     }
 }
