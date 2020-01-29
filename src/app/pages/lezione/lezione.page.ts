@@ -180,8 +180,6 @@ export class LezionePage implements OnInit {
                             } else {
                                 this.lessonService.getRestLessons().subscribe((l) => {
                                     subscriber.next(l.find(x => x.idLesson === parseInt(this.id, 0)));
-                                    console.log('l.find(x => x.idLesson === parseInt(this.id, 0))');
-                                    console.log(l.find(x => x.idLesson === parseInt(this.id, 0)));
 
                                 });
                             }
@@ -430,17 +428,20 @@ export class LezionePage implements OnInit {
             lessonState: 1
         };
         this.loadingPresent().then(() => {
-            let bookList: Booking[];
+            const bookList: Booking[] = [];
             let pAppoggio: Planning;
+            let startTimeAppoggio = parseInt(this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 13), 0);
             this.plans.forEach((p: Planning) => {
                 // tslint:disable-next-line:max-line-length
-                if (new Date(p.date).getTime() === dataPren.getTime() && (this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 16) + ':00') === p.startTime) {
+                if (new Date(p.date).getTime() === dataPren.getTime() && startTimeAppoggio.toString() + ':00:00' === p.startTime) {
                     pAppoggio = p;
+                    startTimeAppoggio++;
                     const bookingDaInviare = new Booking(prenotazione, this.student$.value, pAppoggio);
-                    bookList = [bookingDaInviare];
+                    bookList.push(bookingDaInviare);
                 }
             });
-            console.log('bookList');
+            console.log('caricamento prenotazione');
+            console.log(bookList);
             this.bookingService.createRestBooking(bookList).subscribe(() => {
                 this.disLoading();
                 this.presentAlertAccettaLezione();
