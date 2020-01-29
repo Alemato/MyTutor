@@ -13,7 +13,7 @@
     <div>
         <form [formGroup]="dataLezioneFormModel">
             <ion-list formArrayName="dataOraIF" *ngFor="let contact of dataOraIFFormGroup.controls; let i = index;">
-                <ion-item [formGroupName]="i">
+                <ion-item [formGroupName]="i.toString()">
                     <ion-col size="auto">
                     <ion-icon *ngIf="arrayDymension > 1" name="remove-circle-outline" (click)="rimuoviCampo(i)"></ion-icon>
                     </ion-col>
