@@ -9,7 +9,7 @@
         <div class="m-auto-imp" *ngIf="isLoading && img">{{"LOADING"|translate}}
             <ion-spinner></ion-spinner>
         </div>
-        <ion-icon *ngIf="!img" name="contact" class="fs-200 c-029db4"></ion-icon>
+        <ion-icon *ngIf="!img" name="contact" class="fs-150 c-029db4"></ion-icon>
         <ion-avatar *ngIf="img" class="ion-text-center m-auto-imp pb-15 h-200 w-200">
             <img [src]="croppedImagepath" alt="img">
         </ion-avatar>
@@ -18,112 +18,227 @@
                 <div>{{"PHOTO_BUTTON"|translate}}</div>
             </ion-col>
         </ion-row>
-
     </div>
-    <div class="registrati-box">
-        <form [formGroup]="registrazioneFormModel" class="list-form" (ngSubmit)="prendiRegistrazione()">
-            <ion-row>
-                <ion-col>
-                    <ion-list inset="true" class="ion-no-padding">
-                        <ion-row>
-                            <ion-col size="6" class="ion-no-padding">
-                                <ion-item lines="inset">
-                                    <ion-input class="pa16" type="text" formControlName="name" placeholder="{{'NAME'|translate}}"
-                                               required="true"></ion-input>
-                                </ion-item>
-                                <ng-container *ngFor="let validation of validationMessages.name">
-                                    <div class="text08 pl-15"
-                                         *ngIf="registrazioneFormModel.get('name').hasError(validation.type) && (registrazioneFormModel.get('name').dirty || registrazioneFormModel.get('name').touched)">
-                                        <ion-icon color="danger" name="information-circle-outline"
-                                                  class="vertical-middle"></ion-icon>
-                                        <ion-text color="danger"
-                                                  class="vertical-middle"> {{ validation.message }}</ion-text>
-                                    </div>
-                                </ng-container>
-                            </ion-col>
 
-                            <ion-col class="ion-no-padding">
-                                <ion-item lines="inset">
-                                    <ion-input type="text" formControlName="surname" placeholder="{{'SURNAME'|translate}}"
-                                               required="true"></ion-input>
-                                </ion-item>
-                                <ng-container *ngFor="let validation of validationMessages.surname">
-                                    <div class="text08 pl-15"
-                                         *ngIf="registrazioneFormModel.get('surname').hasError(validation.type) && (registrazioneFormModel.get('surname').dirty || registrazioneFormModel.get('surname').touched)">
-                                        <ion-icon color="danger" name="information-circle-outline"
-                                                  class="vertical-middle"></ion-icon>
-                                        <ion-text color="danger"
-                                                  class="vertical-middle"> {{ validation.message }}</ion-text>
-                                    </div>
-                                </ng-container>
-                            </ion-col>
-                        </ion-row>
+<!--    <div class="registrati-box">-->
+<!--        <form [formGroup]="registrazioneFormModel" class="list-form" (ngSubmit)="prendiRegistrazione()">-->
+<!--            <ion-row>-->
+<!--                <ion-col>-->
+<!--                    <ion-list inset="true" class="ion-no-padding">-->
+<!--                        <ion-row>-->
+<!--                            <ion-col size="6" class="ion-no-padding">-->
+<!--                                <ion-item lines="inset">-->
+<!--                                    <ion-input class="pa16" type="text" formControlName="name" placeholder="{{'NAME'|translate}}"-->
+<!--                                               required="true"></ion-input>-->
+<!--                                </ion-item>-->
+<!--                                <ng-container *ngFor="let validation of validationMessages.name">-->
+<!--                                    <div class="text08 pl-15"-->
+<!--                                         *ngIf="registrazioneFormModel.get('name').hasError(validation.type) && (registrazioneFormModel.get('name').dirty || registrazioneFormModel.get('name').touched)">-->
+<!--                                        <ion-icon color="danger" name="information-circle-outline"-->
+<!--                                                  class="vertical-middle"></ion-icon>-->
+<!--                                        <ion-text color="danger"-->
+<!--                                                  class="vertical-middle"> {{ validation.message }}</ion-text>-->
+<!--                                    </div>-->
+<!--                                </ng-container>-->
+<!--                            </ion-col>-->
 
-                        <ion-item lines="inset">
-                            <ion-input class="pa16" type="email" formControlName="email"
-                                       placeholder="Email"></ion-input>
-                        </ion-item>
-                        <ng-container *ngFor="let validation of validationMessages.email">
-                            <div class="text08 pl-15"
-                                 *ngIf="registrazioneFormModel.get('email').hasError(validation.type) && (registrazioneFormModel.get('email').dirty || registrazioneFormModel.get('email').touched)">
-                                <ion-icon color="danger" name="information-circle-outline"
-                                          class="vertical-middle"></ion-icon>
-                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                            </div>
-                        </ng-container>
-                        <ion-item lines="inset">
-                            <ion-input class="pa16" [type]="passwordType" placeholder="password"
-                                       formControlName="password" required="true"></ion-input>
-                            <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
-                                      color="gray"
-                                      class="z-index-1"></ion-icon>
-                        </ion-item>
-                        <ng-container *ngFor="let validation of validationMessages.password">
-                            <div class="text08 pl-15"
-                                 *ngIf="registrazioneFormModel.get('password').hasError(validation.type) && (registrazioneFormModel.get('password').dirty || registrazioneFormModel.get('password').touched)">
-                                <ion-icon color="danger" name="information-circle-outline"
-                                          class="vertical-middle"></ion-icon>
-                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                            </div>
-                        </ng-container>
+<!--                            <ion-col class="ion-no-padding">-->
+<!--                                <ion-item lines="inset">-->
+<!--                                    <ion-input type="text" formControlName="surname" placeholder="{{'SURNAME'|translate}}"-->
+<!--                                               required="true"></ion-input>-->
+<!--                                </ion-item>-->
+<!--                                <ng-container *ngFor="let validation of validationMessages.surname">-->
+<!--                                    <div class="text08 pl-15"-->
+<!--                                         *ngIf="registrazioneFormModel.get('surname').hasError(validation.type) && (registrazioneFormModel.get('surname').dirty || registrazioneFormModel.get('surname').touched)">-->
+<!--                                        <ion-icon color="danger" name="information-circle-outline"-->
+<!--                                                  class="vertical-middle"></ion-icon>-->
+<!--                                        <ion-text color="danger"-->
+<!--                                                  class="vertical-middle"> {{ validation.message }}</ion-text>-->
+<!--                                    </div>-->
+<!--                                </ng-container>-->
+<!--                            </ion-col>-->
+<!--                        </ion-row>-->
 
-                        <ion-item lines="inset">
-                            <ion-datetime class="pa16 m-auto" displayFormat="DD MMMM YYYY"
-                                          placeholder="{{'BIRTHDAY'|translate}}"
-                                          monthNames="{{'MONTHS_DATETIME'|translate}}"
-                                          max="2001" formControlName="birthday" required="true"></ion-datetime>
-                        </ion-item>
-                        <ng-container *ngFor="let validation of validationMessages.birthday">
-                            <div class="text08 pl-15 mb-10"
-                                 *ngIf="registrazioneFormModel.get('birthday').hasError(validation.type) && (registrazioneFormModel.get('birthday').dirty || registrazioneFormModel.get('birthday').touched)">
-                                <ion-icon color="danger" name="information-circle-outline"
-                                          class="vertical-middle"></ion-icon>
-                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                            </div>
-                        </ng-container>
-                        <ion-item class="item-lines-inset">
-                            <ion-select class="select-full-width" formControlName="languageNumber" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
-                                        placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
-                                <ion-select-option selected value="0">Italiano</ion-select-option>
-                                <ion-select-option value="1">English</ion-select-option>
-                            </ion-select>
-                        </ion-item>
-                    </ion-list>
+<!--                        <ion-item lines="inset">-->
+<!--                            <ion-input class="pa16" type="email" formControlName="email"-->
+<!--                                       placeholder="Email"></ion-input>-->
+<!--                        </ion-item>-->
+<!--                        <ng-container *ngFor="let validation of validationMessages.email">-->
+<!--                            <div class="text08 pl-15"-->
+<!--                                 *ngIf="registrazioneFormModel.get('email').hasError(validation.type) && (registrazioneFormModel.get('email').dirty || registrazioneFormModel.get('email').touched)">-->
+<!--                                <ion-icon color="danger" name="information-circle-outline"-->
+<!--                                          class="vertical-middle"></ion-icon>-->
+<!--                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>-->
+<!--                            </div>-->
+<!--                        </ng-container>-->
+<!--                        <ion-item lines="inset">-->
+<!--                            <ion-input class="pa16" [type]="passwordType" placeholder="password"-->
+<!--                                       formControlName="password" required="true"></ion-input>-->
+<!--                            <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"-->
+<!--                                      color="gray"-->
+<!--                                      class="z-index-1"></ion-icon>-->
+<!--                        </ion-item>-->
+<!--                        <ng-container *ngFor="let validation of validationMessages.password">-->
+<!--                            <div class="text08 pl-15"-->
+<!--                                 *ngIf="registrazioneFormModel.get('password').hasError(validation.type) && (registrazioneFormModel.get('password').dirty || registrazioneFormModel.get('password').touched)">-->
+<!--                                <ion-icon color="danger" name="information-circle-outline"-->
+<!--                                          class="vertical-middle"></ion-icon>-->
+<!--                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>-->
+<!--                            </div>-->
+<!--                        </ng-container>-->
 
-                    <ion-item class="pr-15 pl-15 br-2">
-                        <ion-label (click)="notifyCondition()">{{"TEACHER"|translate}}</ion-label>
-                        <ion-toggle (ionChange)="notify()" color="secondary" [checked]="this.toogle"
-                                    [disabled]="!registrazioneFormModel.valid"></ion-toggle>
+<!--                        <ion-item lines="inset">-->
+<!--                            <ion-datetime class="pa16 m-auto" displayFormat="DD MMMM YYYY"-->
+<!--                                          placeholder="{{'BIRTHDAY'|translate}}"-->
+<!--                                          monthNames="{{'MONTHS_DATETIME'|translate}}"-->
+<!--                                          max="2001" formControlName="birthday" required="true"></ion-datetime>-->
+<!--                        </ion-item>-->
+<!--                        <ng-container *ngFor="let validation of validationMessages.birthday">-->
+<!--                            <div class="text08 pl-15 mb-10"-->
+<!--                                 *ngIf="registrazioneFormModel.get('birthday').hasError(validation.type) && (registrazioneFormModel.get('birthday').dirty || registrazioneFormModel.get('birthday').touched)">-->
+<!--                                <ion-icon color="danger" name="information-circle-outline"-->
+<!--                                          class="vertical-middle"></ion-icon>-->
+<!--                                <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>-->
+<!--                            </div>-->
+<!--                        </ng-container>-->
+<!--                        <ion-item class="item-lines-inset">-->
+<!--                            <ion-select class="select-full-width" formControlName="languageNumber" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"-->
+<!--                                        placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">-->
+<!--                                <ion-select-option selected value="0">Italiano</ion-select-option>-->
+<!--                                <ion-select-option value="1">English</ion-select-option>-->
+<!--                            </ion-select>-->
+<!--                        </ion-item>-->
+<!--                    </ion-list>-->
+
+<!--                    <ion-item class="pr-15 pl-15 br-2">-->
+<!--                        <ion-label (click)="notifyCondition()">{{"TEACHER"|translate}}</ion-label>-->
+<!--                        <ion-toggle (ionChange)="notify()" color="secondary" [checked]="this.toogle"-->
+<!--                                    [disabled]="!registrazioneFormModel.valid"></ion-toggle>-->
+<!--                    </ion-item>-->
+
+<!--                </ion-col>-->
+<!--            </ion-row>-->
+<!--            <ion-col class="signup-col">-->
+<!--                <ion-button class="submit-btn" type="submit" expand="block"-->
+<!--                            [disabled]="!registrazioneFormModel.valid || !registra">{{"SIGN_UP_BUTTON"|translate}}-->
+<!--                </ion-button>-->
+<!--            </ion-col>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</ion-content>-->
+
+<!-- NUOVA PAGINA -->
+
+<div>
+    <form [formGroup]="registrazioneFormModel" class="list-form" (ngSubmit)="prendiRegistrazione()">
+        <ion-row>
+            <ion-col>
+                <ion-list lines="none" class="ion-no-padding">
+
+                            <ion-item lines="inset">
+                                <ion-label position="floating" class="label-prova">{{'NAME'|translate}}</ion-label>
+                                <ion-input class="input-prova" type="text" formControlName="name" placeholder="aaaaaaaa"
+                                           required="true">
+                                </ion-input>
+                            </ion-item>
+                            <ng-container *ngFor="let validation of validationMessages.name">
+                                <div class="text08 pl-15"
+                                     *ngIf="registrazioneFormModel.get('name').hasError(validation.type) && (registrazioneFormModel.get('name').dirty || registrazioneFormModel.get('name').touched)">
+                                    <ion-icon color="danger" name="information-circle-outline"
+                                              class="vertical-middle"></ion-icon>
+                                    <ion-text color="danger"
+                                              class="vertical-middle"> {{ validation.message }}</ion-text>
+                                </div>
+                            </ng-container>
+
+                            <ion-item lines="inset">
+                                <ion-label position="floating" class="label-prova">{{'SURNAME'|translate}}</ion-label>
+                                <ion-input class="input-prova" type="text" formControlName="surname" placeholder="bbbb"
+                                           required="true"></ion-input>
+                            </ion-item>
+                            <ng-container *ngFor="let validation of validationMessages.surname">
+                                <div class="text08 pl-15"
+                                     *ngIf="registrazioneFormModel.get('surname').hasError(validation.type) && (registrazioneFormModel.get('surname').dirty || registrazioneFormModel.get('surname').touched)">
+                                    <ion-icon color="danger" name="information-circle-outline"
+                                              class="vertical-middle"></ion-icon>
+                                    <ion-text color="danger"
+                                              class="vertical-middle"> {{ validation.message }}</ion-text>
+                                </div>
+                            </ng-container>
+
+                    <ion-item lines="inset">
+                        <ion-label position="floating" class="label-prova">Email</ion-label>
+                        <ion-input class="input-prova" type="email" formControlName="email"
+                                   placeholder="Email"></ion-input>
                     </ion-item>
+                    <ng-container *ngFor="let validation of validationMessages.email">
+                        <div class="text08 pl-15"
+                             *ngIf="registrazioneFormModel.get('email').hasError(validation.type) && (registrazioneFormModel.get('email').dirty || registrazioneFormModel.get('email').touched)">
+                            <ion-icon color="danger" name="information-circle-outline"
+                                      class="vertical-middle"></ion-icon>
+                            <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                        </div>
+                    </ng-container>
 
-                </ion-col>
-            </ion-row>
-            <ion-col class="signup-col">
-                <ion-button class="submit-btn" type="submit" expand="block"
-                            [disabled]="!registrazioneFormModel.valid || !registra">{{"SIGN_UP_BUTTON"|translate}}
-                </ion-button>
+                    <ion-item lines="inset">
+                        <ion-label position="floating" class="label-prova">Password</ion-label>
+                            <ion-row>
+                        <ion-input class="input-prova" [type]="passwordType" placeholder="password"
+                                   formControlName="password" required="true"></ion-input>
+                        <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                                  color="gray"
+                                  class="z-index-1"></ion-icon>
+                            </ion-row>
+                    </ion-item>
+                    <ng-container *ngFor="let validation of validationMessages.password">
+                        <div class="text08 pl-15"
+                             *ngIf="registrazioneFormModel.get('password').hasError(validation.type) && (registrazioneFormModel.get('password').dirty || registrazioneFormModel.get('password').touched)">
+                            <ion-icon color="danger" name="information-circle-outline"
+                                      class="vertical-middle"></ion-icon>
+                            <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                        </div>
+                    </ng-container>
+
+                    <ion-item lines="inset">
+                        <ion-label position="floating" class="label-prova">{{'BIRTHDAY'|translate}}</ion-label>
+                        <ion-datetime class="m-auto" displayFormat="DD MMMM YYYY"
+                                      placeholder="{{'BIRTHDAY'|translate}}"
+                                      monthNames="{{'MONTHS_DATETIME'|translate}}"
+                                      max="2001" formControlName="birthday" required="true"></ion-datetime>
+                    </ion-item>
+                    <ng-container *ngFor="let validation of validationMessages.birthday">
+                        <div class="text08 pl-15 mb-10"
+                             *ngIf="registrazioneFormModel.get('birthday').hasError(validation.type) && (registrazioneFormModel.get('birthday').dirty || registrazioneFormModel.get('birthday').touched)">
+                            <ion-icon color="danger" name="information-circle-outline"
+                                      class="vertical-middle"></ion-icon>
+                            <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                        </div>
+                    </ng-container>
+
+                    <ion-item class="item-lines-inset">
+                        <ion-label position="floating" class="label-prova">{{'LANGUAGE'|translate}}</ion-label>
+                        <ion-select class="select-full-width-2" formControlName="languageNumber" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                                    placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
+                            <ion-select-option selected value="0">Italiano</ion-select-option>
+                            <ion-select-option value="1">English</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                </ion-list>
+
+<!--                <ion-item class="pr-15 pl-15 br-2">-->
+                <ion-item>
+                    <ion-label class="pl-0-2" (click)="notifyCondition()">{{"TEACHER"|translate}}</ion-label>
+                    <ion-toggle (ionChange)="notify()" color="secondary" [checked]="this.toogle"
+                                [disabled]="!registrazioneFormModel.valid"></ion-toggle>
+                </ion-item>
+
             </ion-col>
-        </form>
-    </div>
-
+        </ion-row>
+        <ion-col class="signup-col">
+            <ion-button class="submit-btn-2" type="submit" expand="block"
+                        [disabled]="!registrazioneFormModel.valid || !registra">{{"SIGN_UP_BUTTON"|translate}}
+            </ion-button>
+        </ion-col>
+    </form>
+</div>
 </ion-content>
