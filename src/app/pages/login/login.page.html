@@ -4,19 +4,59 @@
 <!--  </ion-toolbar>-->
 <!--</ion-header>-->
 
+<!--<ion-content class="login-content ion-padding ion-text-center">-->
+<!--    <img class="logo-row w-200" src="../../../assets/imgs/logo1.png" alt=""/>-->
+<!--    <div class="login-box">-->
+<!--        <form [formGroup]="loginFormModel" class="list-form">-->
+<!--            <ion-row>-->
+<!--                <ion-col>-->
+<!--                    <ion-list class="ion-no-padding" inset="">-->
+<!--                        <ion-item class="emailpwd">-->
+<!--                            <ion-input type="email" formControlName="username" placeholder="Email"></ion-input>-->
+<!--                        </ion-item>-->
+
+<!--                        <ion-item class="emailpwd">-->
+
+<!--                            <ion-input [type]="passwordType" placeholder="Password"-->
+<!--                                       formControlName="password"></ion-input>-->
+<!--                            <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"-->
+<!--                                      color="gray"-->
+<!--                                      class="z-index-1"></ion-icon>-->
+<!--                        </ion-item>-->
+<!--                    </ion-list>-->
+<!--                </ion-col>-->
+<!--            </ion-row>-->
+
+
+<!--            <ion-row class="ion-align-self-center">-->
+<!--                <ion-col class="signup-col">-->
+<!--                    <ion-button class="submit-btn" (click)="onLogin()"  expand="block" type="submit">{{"LOGIN_BUTTON"|translate}}</ion-button>-->
+<!--                </ion-col>-->
+<!--            </ion-row>-->
+<!--            <ion-row class="ion-align-self-center">-->
+<!--                <ion-col class="registration-content">-->
+<!--                    <a class="register-a" [routerLink]="['/registrazione']">{{"REGISTRATION_LINK"|translate}}</a>-->
+<!--                </ion-col>-->
+<!--            </ion-row>-->
+
+<!--        </form>-->
+<!--    </div>-->
+<!--</ion-content>-->
+
+<!-- NUOVA GRAFICA -->
+
 <ion-content class="login-content ion-padding ion-text-center">
     <img class="logo-row w-200" src="../../../assets/imgs/logo1.png" alt=""/>
-    <div class="login-box">
+    <div>
         <form [formGroup]="loginFormModel" class="list-form">
             <ion-row>
                 <ion-col>
-                    <ion-list class="ion-no-padding" inset="">
-                        <ion-item class="emailpwd">
+                    <ion-list class="ion-no-padding" lines="none">
+                        <ion-item class="">
                             <ion-input type="email" formControlName="username" placeholder="Email"></ion-input>
                         </ion-item>
 
-                        <ion-item class="emailpwd">
-
+                        <ion-item class="">
                             <ion-input [type]="passwordType" placeholder="Password"
                                        formControlName="password"></ion-input>
                             <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
@@ -30,7 +70,7 @@
 
             <ion-row class="ion-align-self-center">
                 <ion-col class="signup-col">
-                    <ion-button class="submit-btn" (click)="onLogin()"  expand="block" type="submit">{{"LOGIN_BUTTON"|translate}}</ion-button>
+                    <ion-button class="submit-btn-2" (click)="onLogin()"  expand="block" type="submit">{{"LOGIN_BUTTON"|translate}}</ion-button>
                 </ion-col>
             </ion-row>
             <ion-row class="ion-align-self-center">

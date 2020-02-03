@@ -19,21 +19,27 @@
   }
 
   ion-item {
+    border-bottom: 1px rgba(215,215,215,0.85) solid;
+    padding-left: 5px;
+    border-top: transparent;
+    border-right: transparent;
+    border-left: transparent;
     font-size: 16px;
-    border: 1px solid #e6e6e6;
-    border-bottom: 0 !important;
+
+    //border-bottom: 0 !important;
     box-shadow: none !important;
   }
 
   .signup-col {
     margin: 0 16px 0 16px;
     padding-bottom: 5px;
+    padding-top: 20px;
   }
 
-  .item-inner {
-    border-bottom-color: #ffffff !important;
-    box-shadow: none !important;
-  }
+  //.item-inner {
+  //  border-bottom-color: #ffffff !important;
+  //  box-shadow: none !important;
+  //}
 
   .md .emailpwd{
     padding-left: 15px;
@@ -50,11 +56,13 @@
     text-align: center;
     margin: 0 16px 0 16px;
     padding-bottom: 25px;
+    padding-top: 10px;
   }
 
 
   .register-a {
-    color: #ffffff;
+    //color: #ffffff;
+    color: #1e1e1e;
     font-size: 0.8em;
     text-decoration: none;
     font-weight: 500;
@@ -62,3 +70,16 @@
   }
 
 }
+
+.submit-btn-2 {
+  --border-width: 1px;
+  --border-style: solid;
+  --border-color: #029db4;
+  --background-hover: #5bb526;
+  --color: #ffffff;
+  --background: #029db4;
+  font-size: 16px;
+  --padding-bottom: 2px;
+  --padding-top: 2px;
+}
+
