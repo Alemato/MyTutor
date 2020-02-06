@@ -62,17 +62,22 @@ export class UserService {
         });
     }
 
-    getProfiloEmail(emailProfilo: string, saveUser: boolean): Observable<any> {
-        return this.http.get<any>(URL.GET_PROFILO, {observe: 'response', params: {email: emailProfilo}}).pipe(
+    /**
+     * Funzione che esegue la Rest per avere l'oggetto dell'utente da vedere, prende in input un id
+     * @param idUser id del user
+     */
+    getProfilobyID(idUser: number): Observable<any> {
+        return this.http.get<any>(URL.GET_PROFILO, {observe: 'response', params: {'id-user': idUser.toString()}}).pipe(
             map ( (resp: HttpResponse<any>) => {
-                if (saveUser) {
-                    this.storage.set(UTENTE_STORAGE, resp.body);
-                    this.user$.next(resp.body);
-                }
                 return resp.body;
             }));
     }
 
+    /**
+     * Funzione che esegue l'aggiornamento dei dati del Teacher
+     * @param teacher oggetto modificato da inviare
+     * @param password antecedente al cambiamento di essa (se non si chambia la pwd, è la stessa anche dopo)
+     */
     editProfiloTeacher(teacher: Teacher, password: string): Observable<any> {
         const pwdHash = sha512(password).toUpperCase();
         return this.http.put(URL.PUT_PROFILO_TEACHER, teacher, {observe: 'response', params: {hspwd: pwdHash}}).pipe(
@@ -81,6 +86,11 @@ export class UserService {
             } ));
     }
 
+    /**
+     * Funzione che esegue l'aggiornamento dei dati dello Student
+     * @param student oggetto modificato da inviare
+     * @param password antecedente al cambiamento di essa (se non si chambia la pwd, è la stessa anche dopo)
+     */
     editProfiloStudent(student: Student, password: string): Observable<any> {
         const pwdHash = sha512(password).toUpperCase();
         return this.http.put(URL.PUT_PROFILO_STUDENT, student, {observe: 'response', params: {hspwd: pwdHash}}).pipe(
@@ -89,6 +99,10 @@ export class UserService {
             } ));
     }
 
+    /**
+     * Funzione per l'esecuzione del login
+     * @param account Interfaccia che ha solo email e password
+     */
     login(account: Account): Observable<any> {
         return this.http.post<any>(URL.LOGIN, account, {observe: 'response'}).pipe(
             map((resp: HttpResponse<any>) => {
@@ -113,6 +127,11 @@ export class UserService {
             }));
     }
 
+    /**
+     * Funzione per cercare un oggetto salvato nello storage
+     * tritorna una promise booleana con lo stato true se esiste e false se non esiste
+     * @param value key nello storage
+     */
     ifExistKey(value: string): Promise<boolean> {
         return this.storage.get(value).then(data => {
                 return !!data;
@@ -120,11 +139,18 @@ export class UserService {
         );
     }
 
-    async setLoggeIn(value: boolean) {
-        await this.storage.set('loggedIn', value);
+    /**
+     * Funzione che setta nello storage, la variabile che ci dice se l'utente è loggato
+     * @param value true per l'utete loggatto e false per l'utete non loggato
+     */
+    setLoggeIn(value: boolean) {
+        this.storage.set('loggedIn', value);
     }
 
-    neodimio() {
+    /**
+     * Funzione che resetta tutta l'appicazione, usata per il logout dell'utenza.
+     */
+    logout() {
         this.storage.set('loggedIn', false);
         this.storage.remove('typeUser');
         this.storage.remove(UTENTE_STORAGE);
@@ -132,6 +158,7 @@ export class UserService {
         this.storage.remove(STORAGE.LESSON);
         this.userType = null;
         this.authToken = null;
+        this.loggedIn$.next(false);
         this.user$ = new BehaviorSubject<any>({} as any);
         this.bookingService.logout();
         this.chatService.logout();
@@ -141,24 +168,30 @@ export class UserService {
         this.subjectService.logout();
     }
 
-    logout() {
-        this.authToken = null;
-        this.loggedIn$.next(false);
-        this.neodimio();
-    }
-
+    /**
+     * Funzione che restituisce il tipo dell'Utenza (Teacher o Student)
+     */
     getTypeUser(): string {
         return this.userType;
     }
 
+    /**
+     * Funzione che restituisce il BehaviorSubject dell'oggetto dell'utenza (Teacher o Student)
+     */
     getUser(): BehaviorSubject<any> {
         return this.user$;
     }
 
+    /**
+     * Funzione che restituisce il token per autenticare le richieste Rest
+     */
     getToken(): string {
         return this.authToken;
     }
 
+    /**
+     * Funzione che ritorna Observable della variabile loggedIn che serve per vedere se l'utenza è loggata o meno
+     */
     isLogged(): Observable<boolean> {
         return this.loggedIn$.asObservable();
     }
