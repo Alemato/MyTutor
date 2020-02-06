@@ -9,7 +9,6 @@ import {User} from '../../model/user.model';
 import {MessageService} from '../../services/message.service';
 import {IonContent, LoadingController} from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import {CreateService} from '../../services/create.service';
 
 @Component({
     selector: 'page-chat',
@@ -33,7 +32,6 @@ export class ChatPage implements OnInit {
     constructor(public formBuilder: FormBuilder,
                 private route: ActivatedRoute,
                 private chatService: ChatService,
-                private createService: CreateService,
                 private userService: UserService,
                 private messageService: MessageService,
                 private loadingController: LoadingController,
@@ -48,12 +46,12 @@ export class ChatPage implements OnInit {
             this.messages$.next([]);
             this.idChat = parseInt(params.get('id'), 0);
             console.log(this.idChat);
-            this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+            /*this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
                 console.log(creates);
                 const c = creates.find(x => x.chat.idChat === this.idChat);
                 const usr2 = c.userListser.find(x => x.idUser !== this.user$.value.idUser);
                 this.chtn = usr2.name + ' ' + usr2.surname;
-            });
+            });*/
             this.scritturaMessaggio = this.formBuilder.group({
                 text: ['', Validators.required]
             });

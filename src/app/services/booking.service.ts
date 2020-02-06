@@ -35,7 +35,7 @@ export class BookingService {
     private countDowns: Subscription;
     private periodicGet: Subscription;
     private listaLezioni: Lez[];
-    private listUser: User[] = [new User(undefined)];
+   // private listUser: User[] = [new User(undefined)];
 
     constructor(
         private storage: Storage,
@@ -59,7 +59,7 @@ export class BookingService {
     }
 
     getRestUsersBooking(): Observable<User[]> {
-        return this.http.get<Booking[]>(URL.BOOKING_HOME, {observe: 'response'}).pipe(map((resp: HttpResponse<Booking[]>) => {
+    /*    return this.http.get<Booking[]>(URL.BOOKING_HOME, {observe: 'response'}).pipe(map((resp: HttpResponse<Booking[]>) => {
             this.listUser.pop();
             resp.body.forEach((item) => {
                 this.listUser.push(item.student);
@@ -82,7 +82,8 @@ export class BookingService {
             }
             newOb.push(this.listUser[this.listUser.length - 1]);
             return newOb;
-        }));
+        }));*/
+    return ;
     }
 
     // tslint:disable-next-line:max-line-length
@@ -180,6 +181,6 @@ export class BookingService {
         this.bookings$ = new BehaviorSubject<Booking[]>([] as Booking[]);
         this.listLez$ = new BehaviorSubject<Lez[]>([] as Lez[]);
         this.listaLezioni = [];
-        this.listUser = [new User(undefined)];
+        // this.listUser = [new User(undefined)];
     }
 }

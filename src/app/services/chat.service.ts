@@ -5,7 +5,6 @@ import {fromPromise} from 'rxjs/internal-compatibility';
 import {URL, STORAGE, AUTH_TOKEN} from '../constants';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../model/message.model';
-import {CreatesChat} from '../model/creates.model';
 import {map} from 'rxjs/operators';
 import {Chat} from '../model/chat.model';
 
@@ -15,7 +14,7 @@ import {Chat} from '../model/chat.model';
 })
 
 export class ChatService {
-    private creates$: BehaviorSubject<CreatesChat[]> = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
+   // private creates$: BehaviorSubject<CreatesChat[]> = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
     private lastMessageFromChats$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([] as Message[]);
     private chatCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private countChat = 0;
@@ -31,11 +30,11 @@ export class ChatService {
                 this.chatCount$.next(item.length);
             }
         });
-        this.storage.get(STORAGE.CREATES).then((item: CreatesChat[]) => {
+        /*this.storage.get(STORAGE.CREATES).then((item: CreatesChat[]) => {
             if (item) {
                 this.creates$.next(item);
             }
-        });
+        });*/
     }
 
     /*
@@ -51,7 +50,7 @@ export class ChatService {
                 this.storage.set(STORAGE.CHATLIST, resp.body[0]);
                 this.lastMessageFromChats$.next(resp.body[0]);
                 this.storage.set(STORAGE.CREATES, resp.body[1]);
-                this.creates$.next(resp.body[1]);
+                // this.creates$.next(resp.body[1]);
                 return resp.body;
             }));
     }
@@ -77,9 +76,9 @@ export class ChatService {
         return this.lastMessageFromChats$;
     }
 
-    getCreates(): BehaviorSubject<CreatesChat[]> {
+    /*getCreates(): BehaviorSubject<CreatesChat[]> {
         return this.creates$;
-    }
+    }*/
 
     getChatCount(): BehaviorSubject<number> {
         return this.chatCount$;
@@ -135,7 +134,7 @@ export class ChatService {
     logout() {
         this.storage.remove(STORAGE.CREATES);
         this.storage.remove(STORAGE.CHATLIST);
-        this.creates$ = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
+        // this.creates$ = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
         this.lastMessageFromChats$ = new BehaviorSubject<Message[]>([] as Message[]);
         this.chatCount$ = new BehaviorSubject<number>(0);
         this.countChat = 0;

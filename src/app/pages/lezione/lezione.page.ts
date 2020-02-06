@@ -11,7 +11,6 @@ import {BookingService} from '../../services/booking.service';
 import {PlanningService} from '../../services/planning.service';
 import {User} from '../../model/user.model';
 import {ChatService} from '../../services/chat.service';
-import {CreateService} from '../../services/create.service';
 import {MessageService} from '../../services/message.service';
 import {Message} from '../../model/message.model';
 import {Chat} from '../../model/chat.model';
@@ -79,7 +78,6 @@ export class LezionePage implements OnInit {
         private datePipe: DatePipe,
         private activatedRoute: ActivatedRoute,
         private chatService: ChatService,
-        private createService: CreateService,
         private messageService: MessageService,
         private loadingController: LoadingController,
         private translateService: TranslateService
@@ -122,11 +120,11 @@ export class LezionePage implements OnInit {
                                 if (data === 1) {
                                     console.log('esiste chat');
                                     this.existsChat = true;
-                                    this.createService.getListCreates(booking.planning.lesson.teacher.idUser).subscribe((creates) => {
+                                    /*this.createService.getListCreates(booking.planning.lesson.teacher.idUser).subscribe((creates) => {
                                         console.log(creates);
                                         this.idChat = creates.find(x => x.userListser[0].idUser === booking.student.idUser).chat.idChat;
                                         this.disLoading();
-                                    });
+                                    });*/
                                 } else if (data < 1) {
                                     this.disLoading();
                                     this.existsChat = false;
@@ -138,12 +136,12 @@ export class LezionePage implements OnInit {
                                 if (data === 1) {
                                     console.log('esiste chat');
                                     this.existsChat = true;
-                                    this.createService.getListCreates(booking.student.idUser).subscribe((creates) => {
+                                    /*this.createService.getListCreates(booking.student.idUser).subscribe((creates) => {
                                         console.log(creates);
                                         // tslint:disable-next-line:max-line-length
                                         this.idChat = creates.find(x => x.userListser[1].idUser === booking.planning.lesson.teacher.idUser).chat.idChat;
                                         this.disLoading();
-                                    });
+                                    });*/
                                 } else {
                                     this.disLoading();
                                     this.existsChat = false;
@@ -192,11 +190,11 @@ export class LezionePage implements OnInit {
                                     if (data === 1) {
                                         console.log('esiste chat');
                                         this.existsChat = true;
-                                        this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
+                                        /*this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
                                             console.log(creates);
                                             // tslint:disable-next-line:max-line-length
                                             this.idChat = creates.find(x => x.userListser[1].idUser === lesson.teacher.idUser).chat.idChat;
-                                        });
+                                        });*/
                                     } else {
                                         this.existsChat = false;
                                     }
@@ -426,7 +424,7 @@ export class LezionePage implements OnInit {
             date: dataAttuale.getTime(),
             lessonState: 1
         };
-        this.loadingPresent().then(() => {
+       /* this.loadingPresent().then(() => {
             const bookList: Booking[] = [];
             let pAppoggio: Planning;
             let startTimeAppoggio = parseInt(this.prenotazioneFormModel.controls.oraInizio.value.toString().slice(11, 13), 0);
@@ -445,7 +443,7 @@ export class LezionePage implements OnInit {
                 this.disLoading();
                 this.presentAlertAccettaLezione();
             });
-        });
+        });*/
     }
 
     async presentAlertAccettaLezione() {
@@ -479,7 +477,7 @@ export class LezionePage implements OnInit {
     }
 
     creaChatTeacher() {
-        this.loadingPresent().then(() => {
+        /*this.loadingPresent().then(() => {
             this.booking$.subscribe((booking) => {
                 console.log('secondo sub');
                 console.log(booking);
@@ -507,11 +505,11 @@ export class LezionePage implements OnInit {
                         });
                     });
             });
-        });
+        });*/
     }
 
     creaChatStudent() {
-        this.loadingPresent().then(() => {
+        /*this.loadingPresent().then(() => {
             this.booking$.subscribe((booking) => {
                 console.log(booking);
                 // tslint:disable-next-line:max-line-length
@@ -538,11 +536,11 @@ export class LezionePage implements OnInit {
                         });
                     });
             });
-        });
+        });*/
     }
 
     creaChatStudentLesson() {
-        this.loadingPresent().then(() => {
+        /*this.loadingPresent().then(() => {
             this.lesson$.subscribe((lesson) => {
                 console.log(lesson);
                 this.createService.postSigleCreates(lesson.teacher.idUser, this.user$.value.name + ' ' + this.user$.value.name)
@@ -568,7 +566,7 @@ export class LezionePage implements OnInit {
                         });
                     });
             });
-        });
+        });*/
     }
 
     async loadingPresent() {
