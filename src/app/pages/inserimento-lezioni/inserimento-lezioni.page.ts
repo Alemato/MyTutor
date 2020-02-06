@@ -214,6 +214,7 @@ export class InserimentoLezioniPage implements OnInit {
     }
 
     inserisciLezione() {
+        /*
         this.planningAppoggio.forEach((pianificazione) => {
             let subject;
             if (this.materia === 'Creane una' || this.materia === 'Create One') {
@@ -258,11 +259,11 @@ export class InserimentoLezioniPage implements OnInit {
                 });
             });
         });
-
+*/
     }
 
     modificaLezione() {
-        if (this.planningAppoggio.length > 0) {
+/*        if (this.planningAppoggio.length > 0) {
             this.planningAppoggio.forEach((pianificazione1) => {
                 let subject;
                 if (this.materia === 'Creane una' || this.materia === 'Create One') {
@@ -313,7 +314,7 @@ export class InserimentoLezioniPage implements OnInit {
                     this.navController.navigateRoot(url);
                 });
             });
-        }
+        }*/
     }
 
 

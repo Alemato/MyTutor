@@ -40,13 +40,13 @@ export class RegistrazioneDocenteModalPage implements OnInit {
         public formBuilder: FormBuilder,
         navParams: NavParams,
         public translateService: TranslateService) {
-        this.teacher = new Teacher(undefined);
+        /*this.teacher = new Teacher(undefined);
         this.teacher.set(navParams.get('utente1'));
         if (navParams.get('teacher1') == null || typeof navParams.get('teacher1') === 'undefined') {
             console.log('indefinito');
         } else {
             this.teacher.set(navParams.get('teacher1'));
-        }
+        }*/
     }
 
     ngOnInit() {
@@ -67,7 +67,7 @@ export class RegistrazioneDocenteModalPage implements OnInit {
     }
 
     async closeModal() {
-        this.teacher.setRegistrazione(this.registrazioneModelDocente.value);
+       // this.teacher.setRegistrazione(this.registrazioneModelDocente.value);
         await this.modalController.dismiss([this.teacher, true]);
     }
 

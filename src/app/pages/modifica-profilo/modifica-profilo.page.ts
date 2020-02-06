@@ -21,9 +21,9 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class ModificaProfiloPage implements OnInit {
     private student$: BehaviorSubject<Student>;
-    private student: Student = new Student(undefined);
+    // private student: Student = new Student(undefined);
     private teacher$: BehaviorSubject<Teacher>;
-    private teacher: Teacher = new Teacher(undefined);
+    // private teacher: Teacher = new Teacher(undefined);
     private type = 0;
     private userType: string;
     private teacherFormModel: FormGroup;
@@ -139,7 +139,7 @@ export class ModificaProfiloPage implements OnInit {
         }
     }
 
-    setValori() {
+    setValori() {/*
         if (this.type === 1) {
             this.student$.subscribe(data => {
                 this.student.set(data);
@@ -175,7 +175,7 @@ export class ModificaProfiloPage implements OnInit {
                 this.teacherFormModel.setValue(obj);
                 this.teacherFormModel.controls.password.clearValidators();
             });
-        }
+        }*/
     }
 
     public setPwdValidator() {
@@ -267,7 +267,7 @@ export class ModificaProfiloPage implements OnInit {
     }
 
     async salvaModifica() {
-        if (this.type === 1) {
+       /* if (this.type === 1) {
             this.student.set(this.studentFormModel.value);
             this.student.birthday = new Date(this.student.birthday).getTime();
             if (this.img) {
@@ -288,7 +288,7 @@ export class ModificaProfiloPage implements OnInit {
             } else {
                 this.student.password = this.studentFormModel.controls.password2.value;
                 this.userService.editProfiloStudent(this.student, this.studentFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.getProfiloEmail(this.student.email, true).subscribe(() => {
+                    this.userService.getProfilobyID(this.student.idUser).subscribe(() => {
                         this.superTab.selectTab(0);
                     });
                 }, (err: HttpErrorResponse) => {
@@ -321,7 +321,7 @@ export class ModificaProfiloPage implements OnInit {
             } else {
                 this.teacher.password = this.teacherFormModel.controls.password2.value;
                 this.userService.editProfiloTeacher(this.teacher, this.teacherFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.getProfiloEmail(this.teacher.email, true).subscribe(() => {
+                    this.userService.getProfilobyID(this.student.idUser).subscribe(() => {
                         this.superTab.selectTab(0);
                     });
                 }, (err: HttpErrorResponse) => {
@@ -333,7 +333,7 @@ export class ModificaProfiloPage implements OnInit {
                     }
                 });
             }
-        }
+        }*/
     }
 
     async showLoginError() {

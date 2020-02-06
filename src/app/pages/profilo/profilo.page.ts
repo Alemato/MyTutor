@@ -26,13 +26,13 @@ export class ProfiloPage implements OnInit {
         this.userType = this.userService.getTypeUser();
         if (this.userType === 'teacher') {
             this.teacher$ = this.userService.getUser();
-            this.userService.getProfiloEmail(this.teacher$.value.email, true).subscribe(() => {});
+            this.userService.getProfilobyID(this.teacher$.value.idUser).subscribe(() => {});
             this.data1 = new Date(this.teacher$.value.birthday);
             this.timeDiff = Math.abs(Date.now() - this.data1.getTime());
             this.age = Math.floor((this.timeDiff / (1000 * 3600 * 24)) / 365.25);
         } else if (this.userType === 'student') {
             this.student$ = this.userService.getUser();
-            this.userService.getProfiloEmail(this.student$.value.email, true).subscribe(() => {});
+            this.userService.getProfilobyID(this.student$.value.idUser).subscribe(() => {});
         }
     }
 }

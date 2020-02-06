@@ -22,8 +22,8 @@ export class ProfiloSingoloPage implements OnInit {
     }
 
     ngOnInit() {
-        this.route.paramMap.subscribe((params: ParamMap) => {
-            this.userService.getProfiloEmail(params.get('email'), false).subscribe((data) => {
+        /*this.route.paramMap.subscribe((params: ParamMap) => {
+            this.userService.getProfilobyID(parseInt(params.get('id'),0)).subscribe((data) => {
                 console.log(data);
                 if (data.roles === 2) {
                     this.student$ = null;
@@ -38,7 +38,7 @@ export class ProfiloSingoloPage implements OnInit {
                     this.student$.next(data);
                 }
             });
-        });
+        });*/
     }
 
 }

@@ -137,7 +137,7 @@ export class AppComponent implements OnInit {
         console.log('onInit');
         console.log(this.userType);
         this.chatService.startPeriodicGetCountChat();
-        this.navController.navigateRoot('home');
+        // this.navController.navigateRoot('home');
     }
 
     profilo() {

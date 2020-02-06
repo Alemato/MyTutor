@@ -10,7 +10,6 @@ import {MessageService} from '../../services/message.service';
 import {IonContent, LoadingController} from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import {CreateService} from '../../services/create.service';
-import {CreatesChat} from '../../model/creates.model';
 
 @Component({
     selector: 'page-chat',
@@ -110,7 +109,7 @@ export class ChatPage implements OnInit {
     }
 
     inviaMessagio() {
-        this.chatService.getCurrentChat(this.idChat).subscribe((chat) => {
+        /*this.chatService.getCurrentChat(this.idChat).subscribe((chat) => {
             if (chat) {
                 this.sendStatus = 'pending';
                 this.messaggio = new Message(undefined, undefined, undefined);
@@ -145,7 +144,7 @@ export class ChatPage implements OnInit {
                     });
                 });
             }
-        });
+        });*/
     }
 
     scrolla() {

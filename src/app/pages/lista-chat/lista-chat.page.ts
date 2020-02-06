@@ -3,7 +3,6 @@ import {UserService} from '../../services/user.service';
 import {ChatService} from '../../services/chat.service';
 import {BehaviorSubject} from 'rxjs';
 import {User} from '../../model/user.model';
-import {CreatesChat} from '../../model/creates.model';
 import {Message} from '../../model/message.model';
 import {LoadingController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
@@ -15,7 +14,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class ListaChatPage implements OnInit {
     private user$: BehaviorSubject<User>;
-    private creates$: BehaviorSubject<CreatesChat[]>;
+    // private creates$: BehaviorSubject<CreatesChat[]>;
     private lastMessageFromChats$: BehaviorSubject<Message[]>;
     private chatCount$: BehaviorSubject<number>;
     private loading;
@@ -27,7 +26,7 @@ export class ListaChatPage implements OnInit {
                 private translateService: TranslateService) {
         this.user$ = this.userService.getUser();
         this.lastMessageFromChats$ = this.chatService.getLastMessageFromChats();
-        this.creates$ = this.chatService.getCreates();
+        // this.creates$ = this.chatService.getCreates();
         this.chatCount$ = this.chatService.getChatCount();
     }
 
@@ -43,7 +42,7 @@ export class ListaChatPage implements OnInit {
             }
         });
         this.lastMessageFromChats$.subscribe();
-        this.creates$.subscribe();
+        // this.creates$.subscribe();
     }
 
     ionViewWillEnter() {

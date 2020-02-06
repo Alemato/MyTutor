@@ -28,9 +28,9 @@ import {TranslateService} from '@ngx-translate/core';
 export class RegistrazionePage implements OnInit {
     private registrazioneFormModel: FormGroup;
     registra = true;
-    utente: User = new User(undefined);
+    utente: User = new User();
     teacher: Teacher;
-    student: Student = new Student(undefined);
+    student: Student = new Student();
     passwordType = 'password';
     passwordShow = false;
     public toogle = false;
@@ -233,7 +233,7 @@ export class RegistrazionePage implements OnInit {
 
     prendiRegistrazione() {
         console.log('registro utenza:');
-        if (this.teacher == null || typeof this.teacher === 'undefined') {
+       /* if (this.teacher == null || typeof this.teacher === 'undefined') {
             console.log('utenza di tipo student');
             this.utente = this.registrazioneFormModel.value;
             this.utente.idUser = 0;
@@ -241,7 +241,7 @@ export class RegistrazionePage implements OnInit {
             this.utente.birthday = new Date(this.utente.birthday).getTime();
             this.utente.language = this.registrazioneFormModel.value.languageNumber !== '0';
             this.utente.image = this.croppedImagepath;
-            this.student.set(this.utente);
+            //this.student.set(this.utente);
             this.Loading();
             this.registrationService.registrationStudent(this.student).subscribe(() => {
                     this.Diss();
@@ -275,11 +275,11 @@ export class RegistrazionePage implements OnInit {
                     }
                 });
             console.log(this.teacher);
-        }
+        }*/
     }
 
     async openModal() {
-        this.utente = this.registrazioneFormModel.value;
+        /*this.utente = this.registrazioneFormModel.value;
         this.registra = false;
         const teacher1: Teacher = this.teacher;
         const utente1: User = this.utente;
@@ -317,7 +317,7 @@ export class RegistrazionePage implements OnInit {
             });
 
             await modal.present();
-        }
+        }*/
     }
 
     notify() {
