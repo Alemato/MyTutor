@@ -7,7 +7,7 @@ import {LoginGuard} from './guards/login.guard';
 const routes: Routes = [
     {
         path: '',
-        redirectTo: 'login',
+        redirectTo: 'tabs',
         pathMatch: 'full'
     },
     {
@@ -16,8 +16,8 @@ const routes: Routes = [
         canActivate: [LoginGuard]
     },
     {
-        path: 'home',
-        loadChildren: './pages/home/home.module#HomePageModule',
+        path: 'home-home',
+        loadChildren: './pages/home-home/home.module#HomePageModule',
         canActivate: [AuthGuard]
     },
     {
@@ -38,11 +38,11 @@ const routes: Routes = [
         loadChildren: './pages/profilo-modifica-profilo/profilo-modifica-profilo.module#ProfiloModificaProfiloPageModule',
         canActivate: [AuthGuard]
     },
-    {
+    /*{
         path: 'inserimento-lezioni/:idLesson',
         loadChildren: './pages/inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule',
         canActivate: [AuthGuard]
-    },
+    },*/
     // tslint:disable-next-line:max-line-length
     {
         path: 'inserimento-lezioni-modal',
@@ -55,8 +55,8 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'ricerca-lezioni',
-        loadChildren: './pages/ricerca-lezioni/ricerca-lezioni.module#RicercaLezioniPageModule',
+        path: 'ricerca-lezioni-old',
+        loadChildren: './pages/ricerca-lezioni-old/ricerca-lezioni.module#RicercaLezioniPageModule',
         canActivate: [AuthGuard]
     },
     {
@@ -84,10 +84,13 @@ const routes: Routes = [
         loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule',
         canActivate: [AuthGuard]
     },
-    {
+    /*{
         path: 'inserimento-lezioni',
         redirectTo: 'inserimento-lezioni/null'
-    }
+    },*/
+  { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule' },
+  { path: 'santo-dio', loadChildren: './pages/santo-dio/santo-dio.module#SantoDioPageModule', data: {entity: 'mario'}},
+  { path: 'santo-dio2', loadChildren: './pages/santo-dio2/santo-dio2.module#SantoDio2PageModule' },
 ];
 
 @NgModule({
@@ -99,3 +102,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule {
 }
+

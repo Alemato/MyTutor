@@ -1,26 +1,111 @@
 <ion-header>
     <ion-toolbar>
-        <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
-        </ion-buttons>
-        <ion-title class="pl--56">
-            Home
-        </ion-title>
+        <ion-title>home</ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-tabs>
-        <ion-tab-bar slot="bottom">
-            <ion-tab-button tab="accettate">
-                <ion-icon name="checkmark-circle-outline"></ion-icon>
-                <ion-label>{{'BUTTON_TAB_ACCEPTED'| translate}}</ion-label>
-            </ion-tab-button>
-            <ion-tab-button tab="richieste">
-                <ion-badge *ngIf="(this.teacher$ | async) as teacher;">{{this.num}}</ion-badge>
-                <ion-icon name="calendar"></ion-icon>
-                <ion-label>{{"BUTTON_TAB_REQUESTS"| translate}}</ion-label>
-            </ion-tab-button>
-        </ion-tab-bar>
-    </ion-tabs>
+<ion-content *ngIf="(user$ | async) as user">
+    <div *ngIf="(booking$ | async) as bookings">
+        <ion-list class="mb-100" *ngIf="user.roles === 1">
+            <ion-list-header class="mb--14"
+                             *ngIf="existbookings; else notExist">{{"LIST_LESSONS_ACCEPTED"|translate}}</ion-list-header>
+            <ng-template #notExist>
+                <div class="mx-auto fit-content">
+                    <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
+                </div>
+            </ng-template>
+
+            <div *ngFor="let booking of bookings let i = index">
+                <ion-item-sliding #itemSliding *ngIf="booking.lessonState === 1">
+                    <ion-item *ngIf="user.roles == 1" lines="full">
+                        <ion-col size="auto" [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]"
+                                 routerDirection="forward">
+                            <ion-icon
+                                    *ngIf="booking.planning.lesson.teacher.image === null || booking.planning.lesson.teacher.image === '' || booking.planning.lesson.teacher.image ===' '; else imgBlockS"
+                                    name="contact" class="fs-62 c-primary"></ion-icon>
+                            <ng-template #imgBlockS>
+                                <ion-avatar class="pt-3">
+                                    <img [src]="booking.planning.lesson.teacher.image" alt="img" class="w-62 h-62">
+                                </ion-avatar>
+                            </ng-template>
+                        </ion-col>
+                        <ion-col size="10">
+                            <div class="ion-no-margin fs-large fw-normal"
+                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 routerDirection="forward">{{booking.planning.lesson.name}}</div>
+                            <ion-row>
+                                <ion-col class="ion-no-padding">
+                                    <div class="ion-no-margin fs-medium font-weight-300 ls-01em"
+                                         [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]"
+                                         routerDirection="forward">{{booking.planning.lesson.teacher.name}} {{booking.planning.lesson.teacher.surname}}</div>
+                                </ion-col>
+                                <ion-col class="ion-no-padding">
+                                    <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em"
+                                         [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                         routerDirection="forward">{{booking.planning.lesson.price}}€/h
+                                    </div>
+                                </ion-col>
+                            </ion-row>
+                            <div class="ion-no-margin fs-small font-weight-300 pt-5"
+                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 routerDirection="forward">{{"DIV_FOR_THE"|translate}}
+                                {{booking.planning.date | date:'dd/MM/yyyy'}}</div>
+                            <div class="ion-no-margin fs-small font-weight-300 pt-5"
+                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 routerDirection="forward">
+                                {{"DIV_BETWEEN"|translate}} {{booking.days}} {{"DIV_DAYS"|translate}}
+                                , {{booking.hours}} {{"DIV_HOURS"|translate}}, {{booking.minutes}}
+                                min, {{booking.seconds}} sec
+                            </div>
+                        </ion-col>
+                    </ion-item>
+                    <ion-item *ngIf="user.roles == 2" lines="full">
+                        <ion-col size="auto" [routerLink]="['/profilo-singolo', booking.student.idUser]"
+                                 routerDirection="forward">
+                            <ion-icon
+                                    *ngIf="booking.student.image === null || booking.student.image === '' || booking.student.image ===' '; else imgBlockS"
+                                    name="contact" class="fs-62 c-primary"></ion-icon>
+                            <ng-template #imgBlockS>
+                                <ion-avatar class="pt-3">
+                                    <img [src]="booking.student.image" alt="img" class="w-62 h-62">
+                                </ion-avatar>
+                            </ng-template>
+                        </ion-col>
+                        <ion-col size="10">
+                            <div class="ion-no-margin fs-large fw-normal"
+                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 routerDirection="forward">{{booking.planning.lesson.name}}</div>
+                            <ion-row>
+                                <ion-col class="ion-no-padding">
+                                    <div class="ion-no-margin fs-medium font-weight-300 ls-01em"
+                                         [routerLink]="['/profilo-singolo', booking.student.idUser]"
+                                         routerDirection="forward">{{booking.student.name}} {{booking.student.surname}}</div>
+                                </ion-col>
+                                <ion-col class="ion-no-padding">
+                                    <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em"
+                                         [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                         routerDirection="forward">{{booking.planning.lesson.price}}€/h
+                                    </div>
+                                </ion-col>
+                            </ion-row>
+                            <div class="ion-no-margin fs-small font-weight-300 pt-5"
+                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 routerDirection="forward">{{"DIV_FOR_THE"|translate}}
+                                {{booking.planning.date | date:'dd/MM/yyyy'}}</div>
+                            <div class="ion-no-margin fs-small font-weight-300 pt-5"
+                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 routerDirection="forward">
+                                {{"DIV_BETWEEN"|translate}} {{booking.days}} {{"DIV_DAYS"|translate}}
+                                , {{booking.hours}} {{"DIV_HOURS"|translate}}, {{booking.minutes}}
+                                min, {{booking.seconds}} sec
+                            </div>
+                        </ion-col>
+                    </ion-item>
+                  <ion-item-options side="end">
+                    <ion-item-option color="danger" (click)="presentAlert(itemSliding, booking.idBooking)">{{"CANCEL_BUTTON"|translate}}</ion-item-option>
+                  </ion-item-options>
+                </ion-item-sliding>
+            </div>
+        </ion-list>
+    </div>
 </ion-content>
