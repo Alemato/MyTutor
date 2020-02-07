@@ -70,24 +70,25 @@ export class LoginPage implements OnInit {
     onLogin() {
         const account: Account = this.loginFormModel.value;
         console.log(account);
-        this.Loading();
-        this.userService.login(account).subscribe(() => {
-                this.Diss();
-                this.loginFormModel.reset();
-                this.navController.navigateRoot('home');
-            },
-            (err: HttpErrorResponse) => {
-                console.log(err);
-                if (err.status === 401) {
-                    console.error('login request error: ' + err.status);
-                    this.showLoginError();
-                    this.loginFormModel.controls.password.reset();
-                }
-                if (err.status === 500) {
-                    console.error('login request error: ' + err.status);
-                    this.showLoginError();
-                }
-            });
+        this.Loading().then(()=>{
+            this.userService.login(account).subscribe(() => {
+                    this.Diss();
+                    this.loginFormModel.reset();
+                    this.navController.navigateRoot('/');
+                },
+                (err: HttpErrorResponse) => {
+                    console.log(err);
+                    if (err.status === 401) {
+                        console.error('login request error: ' + err.status);
+                        this.showLoginError();
+                        this.loginFormModel.controls.password.reset();
+                    }
+                    if (err.status === 500) {
+                        console.error('login request error: ' + err.status);
+                        this.showLoginError();
+                    }
+                });
+        });
     }
 
     async showLoginError() {
