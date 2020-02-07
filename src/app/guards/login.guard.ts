@@ -21,7 +21,7 @@ export class LoginGuard implements CanActivate, CanActivateChild  {
               console.log('login è');
               console.log(isLoggedIn);
               if (isLoggedIn) {
-                this.navController.navigateRoot('home');
+                this.navController.navigateRoot('/tabs/home');
                 return false;
               }
               return true;
