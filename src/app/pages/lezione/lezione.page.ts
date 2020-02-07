@@ -455,7 +455,7 @@ export class LezionePage implements OnInit {
                 {
                     text: this.book,
                     handler: () => {
-                        this.navController.navigateRoot('/ricerca-lezioni');
+                        this.navController.navigateRoot('/ricerca-lezioni-old');
                         // this.resetta();
                     }
                 }, {

@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
     public appPagesStudent = [
         {
             title: 'Home',
-            url: '/home',
+            url: '/home-home',
             icon: 'home',
             click: true
         },
@@ -78,7 +78,7 @@ export class AppComponent implements OnInit {
         },
         {
             title: 'SEARCH_LESSONS_SIDE_MENU',
-            url: '/ricerca-lezioni',
+            url: '/ricerca-lezioni-old',
             icon: 'search',
             click: false
         }
@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
     public appPagesTeacher = [
         {
             title: 'Home',
-            url: '/home',
+            url: '/home-home',
             icon: 'home',
             click: true
         },
@@ -137,7 +137,7 @@ export class AppComponent implements OnInit {
         console.log('onInit');
         console.log(this.userType);
         this.chatService.startPeriodicGetCountChat();
-        // this.navController.navigateRoot('home');
+        // this.navController.navigateRoot('home-home');
     }
 
     profilo() {
