@@ -59,7 +59,7 @@ export class HomeAccettatePage implements OnInit {
     }
 
     ionViewWillEnter() {
-        console.log('ionViewWillEnter home/accetta');
+        console.log('ionViewWillEnter home-home/accetta');
         if (this.agg) {
             this.loadingPresent().then(() => {
                 this.bookingService.getRestBooking().subscribe(() => {
@@ -72,7 +72,7 @@ export class HomeAccettatePage implements OnInit {
 
 
     ionViewDidLeave() {
-        console.log('ionViewDidLeave home/accetta');
+        console.log('ionViewDidLeave home-home/accetta');
         this.agg = true;
     }
 
