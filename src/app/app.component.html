@@ -1,44 +1,44 @@
 <ion-app>
     <ion-split-pane contentId="menu-content">
-        <ion-menu *ngIf="loggedIn" class="menu" side="start" menuId="first" contentId="menu-content">
-
-            <!--<ion-title class="menu-title menu-toolbar">Start Menu</ion-title>-->
-            <ion-row (click)="profilo()">
-                <ion-col *ngIf="(this.teacher$ | async) as teacher" class="ion-align-self-center"
-                         size="auto">
-                    <ion-icon
-                            *ngIf="teacher.image === null || teacher.image === '' || teacher.image ===' '; else imgBlock"
-                            name="contact" class="fs-62"></ion-icon>
-                    <ng-template #imgBlock>
-                        <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                            <img [src]="teacher.image" alt="img" class="w-51 h-51">
-                        </ion-avatar>
-                    </ng-template>
-                </ion-col>
-                    <div *ngIf="(this.student$ | async) as student">
-                        <ion-icon
-                                *ngIf="(this.student$ | async).image === null || (this.student$ | async).image === '' || (this.student$ | async).image ===' '; else imgBlock"
-                                name="contact" class="fs-62"></ion-icon>
+        <ion-menu *ngIf="(user$ | async) as user" class="menu" side="start" menuId="first" contentId="menu-content">
+            <ion-header style="border-bottom: 1px rgba(255,255,255,0.35) solid;">
+                <ion-row (click)="profilo()">
+                    <ion-col class="ion-align-self-center" size="auto">
+                        <ion-icon *ngIf="user.image === null || user.image === '' || user.image ===' '; else imgBlock"
+                                  name="contact" class="fs-62"></ion-icon>
                         <ng-template #imgBlock>
                             <ion-avatar class="ion-text-center h-62 w-62 pt-3">
-                                <img [src]="(this.student$ | async).image" alt="img"
-                                     class="w-51 h-51">
+                                <img [src]="user.image" alt="img" class="w-62 h-62">
                             </ion-avatar>
                         </ng-template>
-                    </div>
-                <ion-col size="8" class="ion-align-self-center">
-                    <h1 *ngIf="(this.teacher$ | async) as teacher"
-                        class="ion-no-margin font-weight-400">{{teacher.name}} {{teacher.surname}}</h1>
-                    <h5 *ngIf="(this.teacher$ | async) as teacher;" class="ion-no-margin font-weight-400">{{"TEACHER"|translate}}</h5>
-                      <div *ngIf="(this.student$ | async) as student">
-                        <h1 class="ion-no-margin font-weight-400">{{student.name}} {{student.surname}}</h1>
-                        <h5 class="ion-no-margin font-weight-400">{{"STUDENT"|translate}}</h5>
-                      </div>
-                </ion-col>
-            </ion-row>
-            <ion-col *ngIf="(this.teacher$ | async)" class="pl-0 pr-0">
+                    </ion-col>
+                    <ion-col size="8" class="ion-align-self-center">
+                        <h1 class="ion-no-margin font-weight-400">{{user.name}} {{user.surname}}</h1>
+                        <h5 *ngIf="user.roles === 2" class="ion-no-margin font-weight-400">{{"TEACHER"|translate}}</h5>
+                        <h5 *ngIf="user.roles === 1" class="ion-no-margin font-weight-400">{{"STUDENT"|translate}}</h5>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-row class="ion-justify-content-around w-100">
+                        <ion-col size="auto">
+                            <ion-button fill="outline" color="light" [routerLink]="['/profilo-singolo', user.idUser]"
+                                        routerDirection="forward">
+                                <ion-icon name="contact" class="pr-3 fs-24"></ion-icon>
+                                <ion-text class="ion-no-margin font-weight-400">{{"PROFILE"|translate}}</ion-text>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <ion-button fill="outline" color="light" (click)="logout()">
+                                <ion-icon name="exit" class="pr-3 fs-24"></ion-icon>
+                                <ion-text class="ion-no-margin font-weight-400">{{"SING_OUT"|translate}}</ion-text>
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-row>
+            </ion-header>
+            <ion-col *ngIf="user.roles == 1" class="pl-0 pr-0">
                 <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click"
-                         (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesTeacher" >
+                         (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesStudent">
                     <ion-col size="auto" class="ion-align-self-center">
                         <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                     </ion-col>
@@ -46,28 +46,15 @@
                         <h4 class="ion-no-margin font-weight-400">{{p.title|translate}}</h4>
                     </ion-col>
                 </ion-row>
-
             </ion-col>
-              <div *ngIf="(this.student$ | async) as student">
-                <ion-col class="pl-0 pr-0">
-                    <ion-row class="menu-item-margin ion-padding-start" *ngFor="let p of appPagesStudent" [class.menu-item-clicked]="p.click"
-                              (click)="closeMenu($event, p.url)">
-                        <ion-col size="auto" class="ion-align-self-center">
-                            <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
-                        </ion-col>
-                        <ion-col class="ion-align-self-center">
-                            <h4 class="ion-no-margin font-weight-400">{{p.title|translate}}</h4>
-                        </ion-col>
-                    </ion-row>
-                </ion-col>
-              </div>
-            <ion-col class="ion-margin-top">
-                <ion-row class="ion-margin-top" (click)="logout()">
+            <ion-col *ngIf="user.roles == 2" class="pl-0 pr-0">
+                <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click"
+                         (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesTeacher">
                     <ion-col size="auto" class="ion-align-self-center">
-                        <ion-icon name="exit" class="menu-icon"></ion-icon>
+                        <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                     </ion-col>
                     <ion-col class="ion-align-self-center">
-                        <h4 class="ion-no-margin font-weight-400">{{"SING_OUT"|translate}}</h4>
+                        <h4 class="ion-no-margin font-weight-400">{{p.title|translate}}</h4>
                     </ion-col>
                 </ion-row>
             </ion-col>

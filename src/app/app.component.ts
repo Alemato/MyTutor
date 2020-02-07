@@ -6,10 +6,10 @@ import {TranslateService} from '@ngx-translate/core';
 import {LinguaService} from './services/lingua.service';
 import {UserService} from './services/user.service';
 import {BehaviorSubject} from 'rxjs';
-import {Student} from './model/student.model';
-import {Teacher} from './model/teacher.model';
 import {MenuRefresh} from './services/menuRefresh';
 import {ChatService} from './services/chat.service';
+import {User} from './model/user.model';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -18,10 +18,7 @@ import {ChatService} from './services/chat.service';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-    private userType: string;
-    private student$: BehaviorSubject<Student>;
-    private teacher$: BehaviorSubject<Teacher>;
-    private loggedIn: boolean;
+    private user$: BehaviorSubject<User>;
 
     constructor(
         private translateService: TranslateService,
@@ -34,52 +31,36 @@ export class AppComponent implements OnInit {
         private chatService: ChatService,
         private navController: NavController,
         private menuSource: MenuRefresh,
-        private menu: MenuController
+        private menu: MenuController,
+        private router: Router
     ) {
         this.initializeApp();
         this.menuSource.menuRefreshSource$.subscribe(() => {
             this.initTranslate();
-            this.userType = this.userService.getTypeUser();
-            if (this.userType === 'student') {
-                this.student$ = this.userService.getUser();
-                this.teacher$ = null;
+            this.user$ = this.userService.getUser();
+            console.log(this.router.url);
+            if (this.user$.value.roles === 1) {
                 this.appPagesStudent.find(x => x.click === true).click = false;
-                this.appPagesStudent.find(x => x.title === 'Home').click = true;
-            } else if (this.userType === 'teacher') {
-                this.teacher$ = this.userService.getUser();
-                this.student$ = null;
-                this.appPagesTeacher.find(x => x.click === true).click = false;
-                this.appPagesTeacher.find(x => x.title === 'Home').click = true;
+                this.appPagesStudent.find(x => x.url === this.router.url).click = true;
             }
-            this.userService.loggedIn$.subscribe(value => {
-                this.loggedIn = value;
-            });
+            if (this.user$.value.roles === 2) {
+                this.appPagesTeacher.find(x => x.click === true).click = false;
+                this.appPagesTeacher.find(x => x.url === this.router.url).click = true;
+            }
         });
     }
 
     public appPagesStudent = [
         {
             title: 'Home',
-            url: '/home-home',
+            url: '/',
             icon: 'home',
             click: true
-        },
-        {
-            title: 'Chat',
-            url: '/lista-chat',
-            icon: 'chatboxes',
-            click: false
         },
         {
             title: 'HISTORIC_SIDE_MENU',
             url: '/storico-lezioni',
             icon: 'time',
-            click: false
-        },
-        {
-            title: 'SEARCH_LESSONS_SIDE_MENU',
-            url: '/ricerca-lezioni-old',
-            icon: 'search',
             click: false
         }
     ];
@@ -87,26 +68,14 @@ export class AppComponent implements OnInit {
     public appPagesTeacher = [
         {
             title: 'Home',
-            url: '/home-home',
+            url: '/',
             icon: 'home',
             click: true
-        },
-        {
-            title: 'Chat',
-            url: '/lista-chat',
-            icon: 'chatboxes',
-            click: false
         },
         {
             title: 'HISTORIC_SIDE_MENU',
             url: '/storico-lezioni',
             icon: 'time',
-            click: false
-        },
-        {
-            title: 'INSERT_AD_SIDE_MENU',
-            url: '/inserimento-lezioni',
-            icon: 'create',
             click: false
         },
         {
@@ -133,11 +102,9 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.userType = this.userService.getTypeUser();
         console.log('onInit');
-        console.log(this.userType);
         this.chatService.startPeriodicGetCountChat();
-        // this.navController.navigateRoot('home-home');
+        this.navController.navigateRoot('/tabs/home');
     }
 
     profilo() {
@@ -153,17 +120,6 @@ export class AppComponent implements OnInit {
     async closeMenu(event: any, url: string) {
         await this.menu.close();
         this.openPage(url);
-        if (this.userType === 'student') {
-            if (event.path[0].innerText !== undefined) {
-                this.appPagesStudent.find(x => x.click === true).click = false;
-                this.appPagesStudent.find(x => x.title === event.path[0].innerText).click = true;
-            }
-        } else if (this.userType === 'teacher') {
-            if (event.path[0].innerText !== undefined) {
-                this.appPagesTeacher.find(x => x.click === true).click = false;
-                this.appPagesTeacher.find(x => x.title === event.path[0].innerText).click = true;
-            }
-        }
     }
 
     async logout() {
@@ -174,44 +130,30 @@ export class AppComponent implements OnInit {
     }
 
     initTranslate() {
-        // Set the default language for translation strings, and the current language.
         const linguaPreferita = this.linguaService.getLinguaPreferita();
         this.translate.setDefaultLang(linguaPreferita);
         this.linguaService.getLinguaAttuale().subscribe((lingua: string) => {
             if (lingua != null) {
                 this.translate.use(lingua);
                 this.translateService.get('HISTORIC_SIDE_MENU').subscribe((history) => {
-                    this.appPagesTeacher[2].title = history;
-                    this.appPagesStudent[2].title = history;
-                });
-                this.translateService.get('INSERT_AD_SIDE_MENU').subscribe((insert) => {
-                    this.appPagesTeacher[3].title = insert;
+                    this.appPagesTeacher[1].title = history;
+                    this.appPagesStudent[1].title = history;
                 });
                 this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
-                    this.appPagesTeacher[4].title = adv;
+                    this.appPagesTeacher[2].title = adv;
                     console.log(this.appPagesTeacher);
-                });
-                this.translateService.get('SEARCH_LESSONS_SIDE_MENU').subscribe((searc) => {
-                    this.appPagesStudent[3].title = searc;
                 });
             } else {
                 this.translate.use(linguaPreferita);
                 this.linguaService.updateLingua(linguaPreferita);
                 this.translateService.get('HISTORIC_SIDE_MENU').subscribe((history) => {
-                    this.appPagesTeacher[2].title = history;
-                    this.appPagesStudent[2].title = history;
-                });
-                this.translateService.get('INSERT_AD_SIDE_MENU').subscribe((insert) => {
-                    this.appPagesTeacher[3].title = insert;
+                    this.appPagesTeacher[1].title = history;
+                    this.appPagesStudent[1].title = history;
                 });
                 this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
-                    this.appPagesTeacher[4].title = adv;
+                    this.appPagesTeacher[2].title = adv;
                     console.log(this.appPagesTeacher);
                 });
-                this.translateService.get('SEARCH_LESSONS_SIDE_MENU').subscribe((searc) => {
-                    this.appPagesStudent[3].title = searc;
-                });
-                // salva nello storage
             }
         });
     }

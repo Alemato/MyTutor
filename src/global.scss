@@ -46,8 +46,8 @@ $apprimary-shade: #028a9e;
 
 $color-apprimary-tint: #1ba7bc;
 
-.menu{
-  --background:#029db4;
+.menu {
+  --background: #029db4;
   color: $apprimary-contrast;
 }
 
@@ -269,6 +269,10 @@ ion-toolbar ion-title{
 
 .fit-content{
   width: fit-content;
+}
+
+.fs-24{
+  font-size: 24px;
 }
 
 .fs-62{
