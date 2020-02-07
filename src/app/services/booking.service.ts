@@ -35,7 +35,6 @@ export class BookingService {
     private countDowns: Subscription;
     private periodicGet: Subscription;
     private listaLezioni: Lez[];
-   // private listUser: User[] = [new User(undefined)];
 
     constructor(
         private storage: Storage,
@@ -49,6 +48,11 @@ export class BookingService {
         });
     }
 
+    /**
+     * Funzione che effettua la rest che ritorna tutti i booking dell'utente, e li salva nello storage
+     * ritorna la lista di tutti i booking
+     * @return Observable<Booking[]>
+     */
     getRestBooking(): Observable<Booking[]> {
         return this.http.get<Booking[]>(URL.BOOKING_HOME, {observe: 'response'}).pipe(
             map((resp: HttpResponse<Booking[]>) => {
@@ -58,37 +62,44 @@ export class BookingService {
             }));
     }
 
+    /**
+     * Funzione che eseguel la rest che ritorna la lista di user che ci sono nei booking
+     * ritorna la lista degli user
+     * servirà per popolare la select user per il filtro dello storico
+     * @return Observable<User[]>
+     */
     getRestUsersBooking(): Observable<User[]> {
-    /*    return this.http.get<Booking[]>(URL.BOOKING_HOME, {observe: 'response'}).pipe(map((resp: HttpResponse<Booking[]>) => {
-            this.listUser.pop();
+        return this.http.get<Booking[]>(URL.BOOKING_HOME, {observe: 'response'}).pipe(map((resp: HttpResponse<Booking[]>) => {
+            const listUser: User[] = [];
             resp.body.forEach((item) => {
-                this.listUser.push(item.student);
-                this.listUser.push(item.planning.lesson.teacher);
+                const indexUserTeacher = listUser.findIndex(i => i === item.planning.lesson.teacher);
+                if (indexUserTeacher === -1) {
+                    listUser.push(item.planning.lesson.teacher);
+                }
+                const indexUserStudent = listUser.findIndex( i => i === item.student);
+                if (indexUserStudent === -1) {
+                    listUser.push(item.student);
+                }
             });
-            const newOb = [];
-            for (let i = 0; i < this.listUser.length; i++) {
-                let flag = false;
-                for (let j = i + 1; j < this.listUser.length; j++) {
-                    if (this.listUser[i].idUser === this.listUser[j].idUser) {
-                        flag = false;
-                        break;
-                    } else {
-                        flag = true;
-                    }
-                }
-                if (flag) {
-                    newOb.push(this.listUser[i]);
-                }
-            }
-            newOb.push(this.listUser[this.listUser.length - 1]);
-            return newOb;
-        }));*/
-    return ;
+            return listUser;
+        }));
     }
 
+    /**
+     * Funzione che effetua la rest per il filtro dello storico dei booking
+     * ritorna lista di booking filtrata
+     * @param macroMateria la macro materia (es. Matematica, Italiano)
+     * @param microMateria la sottomateria (es. Equazioni, Divina Commedia)
+     * @param nomeLezione il nome della lezione
+     * @param dataLezione la data della prenotazione
+     * @param utente l'user con i quale è stata fatta (lista di teacher per gli student e viceversa)
+     * @param statoLezione lo stato della singola lezione
+     *       (0 = Prenotata, 1 = Accettata, 2 = Rifiutata, 3 = Annullata, 4 = Eseguita)
+     * @return Observable<Booking[]>
+     */
     // tslint:disable-next-line:max-line-length
     getRestHistoricalBookingFilter(macroMateria: string, microMateria: string, nomeLezione: string, dataLezione: string, utente: string, statoLezione: string): Observable<Booking[]> {
-        return this.http.get<Booking[]>(URL.BOOKING_HISTORY_FILTER, {
+        return this.http.get<Booking[]>(URL.BOOKING_HISTORY, {
             observe: 'response',
             params: {
                 'macro-materia': macroMateria,
@@ -96,7 +107,6 @@ export class BookingService {
                 'id-utente': utente, stato: statoLezione
             }
         }).pipe(map((resp: HttpResponse<Booking[]>) => {
-            this.bookings$.next(resp.body);
             return resp.body;
         }));
     }
@@ -106,7 +116,6 @@ export class BookingService {
     }
 
     modifyRestLessonState(boking: Booking) {
-        // const url = `${}/${idBooking}`;
         return this.http.put(URL.BOOKING_MODIFY_LESSON_STATE, boking);
     }
 
@@ -131,7 +140,7 @@ export class BookingService {
     }
 
     startCoundown() {
-        this.countDowns = interval(800).subscribe(() => {
+        this.countDowns = interval(1000).subscribe(() => {
             this.runCountDown();
         });
     }
@@ -143,18 +152,18 @@ export class BookingService {
     }
 
     runCountDown() {
-        this.listaLezioni.forEach((item, index) => {
+        this.bookings$.value.forEach((item, index) => {
             const nowDate = new Date().getTime();
-            const distance = item.date - nowDate;
+            const distance = new Date(item.planning.date).getTime() - nowDate;
             item.days = Math.floor(distance / (1000 * 60 * 60 * 24));
             item.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             item.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             item.seconds = Math.floor((distance % (1000 * 60)) / 1000);
             if (item.days < 0 || item.hours < 0 || item.minutes < 0 || item.seconds < 0) {
                 this.listaLezioni.splice(index, 1);
-                const oldbook = this.bookings$.value.find(x => x.idBooking === item.idbook);
+                const oldbook = this.bookings$.value.find(x => x.idBooking === item.idBooking);
                 oldbook.lessonState = 4;
-                this.modifyRestLessonState(oldbook).subscribe();
+                this.modifyRestLessonState(oldbook).subscribe(() => {});
             }
         });
         this.setBehaviorSubjectLezioni();

@@ -42,11 +42,10 @@ export const URL = {
     BOOKING: URL_BASE + '/lessons/bookings',
     BOOKING_MODIFY_LESSON_STATE: URL_BASE + '/lessons/bookings',
 
-    BOOKING_RESEARCH: URL_BASE + '/bookings-lessons/research',
-    BOOKING_HOME: URL_BASE + '/bookings-lessons/home',
-    BOOKING_HISTORY: URL_BASE + '/bookings-lessons/history',
-    BOOKING_HISTORY_FILTER: URL_BASE + '/bookings-lessons/history/filter',
-    BOOKING_COUNT: URL_BASE + '/bookings-lessons/count'
+    BOOKING_RESEARCH: URL_BASE + '/lessons/bookings/research',
+    BOOKING_HOME: URL_BASE + '/lessons/bookings/home',
+    BOOKING_HISTORY: URL_BASE + '/lessons/bookings/history',
+    BOOKING_COUNT: URL_BASE + '/lessons/bookings/count'
 };
 
 export const X_AUTH = 'X-Auth';
