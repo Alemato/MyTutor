@@ -6,14 +6,24 @@
 
 <ion-content *ngIf="(user$ | async) as user">
     <div *ngIf="(booking$ | async) as bookings">
-        <ion-list class="mb-100" *ngIf="user.roles === 1">
+        <ion-list class="mb-100" >
+            <div *ngIf="user.roles == 1">
             <ion-list-header class="mb--14"
-                             *ngIf="existbookings; else notExist">{{"LIST_LESSONS_ACCEPTED"|translate}}</ion-list-header>
-            <ng-template #notExist>
+                             *ngIf="existbookings; else notExistS">{{"LIST_LESSONS_ACCEPTED"|translate}}</ion-list-header>
+            <ng-template #notExistS>
                 <div class="mx-auto fit-content">
                     <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
                 </div>
             </ng-template>
+            </div>
+            <div *ngIf="user.roles == 2">
+            <ion-list-header class="mb--14" *ngIf="existbookings > 0; else notExistT">{{"LIST_LESSON_BOOKED"|translate}}</ion-list-header>
+            <ng-template #notExistT>
+                <div class="mx-auto fit-content">
+                    <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
+                </div>
+            </ng-template>
+            </div>
 
             <div *ngFor="let booking of bookings let i = index">
                 <ion-item-sliding #itemSliding *ngIf="booking.lessonState === 1">
