@@ -41,11 +41,19 @@ export class AppComponent implements OnInit {
             console.log(this.router.url);
             if (this.user$.value.roles === 1) {
                 this.appPagesStudent.find(x => x.click === true).click = false;
-                this.appPagesStudent.find(x => x.url === this.router.url).click = true;
+                if (this.router.url === '/tabs/home') {
+                    this.appPagesStudent.find(x => x.url === '/').click = true;
+                } else {
+                    this.appPagesStudent.find(x => x.url === this.router.url).click = true;
+                }
             }
             if (this.user$.value.roles === 2) {
                 this.appPagesTeacher.find(x => x.click === true).click = false;
-                this.appPagesTeacher.find(x => x.url === this.router.url).click = true;
+                if (this.router.url === '/tabs/home') {
+                    this.appPagesTeacher.find(x => x.url === '/').click = true;
+                } else {
+                    this.appPagesTeacher.find(x => x.url === this.router.url).click = true;
+                }
             }
         });
     }
