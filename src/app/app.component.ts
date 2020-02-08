@@ -141,7 +141,6 @@ export class AppComponent implements OnInit {
                 });
                 this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
                     this.appPagesTeacher[2].title = adv;
-                    console.log(this.appPagesTeacher);
                 });
             } else {
                 this.translate.use(linguaPreferita);
@@ -152,7 +151,6 @@ export class AppComponent implements OnInit {
                 });
                 this.translateService.get('ADVERTISEMENTS_PLACED_TITLE').subscribe((adv) => {
                     this.appPagesTeacher[2].title = adv;
-                    console.log(this.appPagesTeacher);
                 });
             }
         });

@@ -4,7 +4,7 @@
             <ion-header style="border-bottom: 1px rgba(255,255,255,0.35) solid;">
                 <ion-row (click)="profilo()">
                     <ion-col class="ion-align-self-center" size="auto">
-                        <ion-icon *ngIf="user.image === null || user.image === '' || user.image ===' '; else imgBlock"
+                        <ion-icon *ngIf="user.image === null || user.image === '' || user.image ===' ' || user.image === undefined; else imgBlock"
                                   name="contact" class="fs-62"></ion-icon>
                         <ng-template #imgBlock>
                             <ion-avatar class="ion-text-center h-62 w-62 pt-3">
