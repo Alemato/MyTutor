@@ -4,6 +4,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Lesson} from '../../model/lesson.model';
 import {LoadingController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
+import {MenuRefresh} from "../../services/menuRefresh";
 
 @Component({
     selector: 'app-lista-annunci-publicati',
@@ -17,12 +18,14 @@ export class ListaAnnunciPublicatiPage implements OnInit {
 
     constructor(private lessonService: LessonService,
                 public loadingController: LoadingController,
-                private translateService: TranslateService) {
+                private translateService: TranslateService,
+                private menuRefresh: MenuRefresh) {
     }
 
     ngOnInit() {
         this.initTranslate();
         this.lessons$ = this.lessonService.getLessons();
+        this.menuRefresh.publishMenuRefresh();
         this.loadingPresent().then(() => {
             // this.getlezioni();
             this.lessonService.getRestLessons().subscribe((item) => {
