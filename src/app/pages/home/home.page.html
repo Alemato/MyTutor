@@ -1,9 +1,3 @@
-<ion-header>
-    <ion-toolbar>
-        <ion-title>home</ion-title>
-    </ion-toolbar>
-</ion-header>
-
 <ion-content *ngIf="(user$ | async) as user">
     <div *ngIf="(booking$ | async) as bookings">
         <ion-list class="mb-100" >

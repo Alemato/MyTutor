@@ -1,12 +1,21 @@
+<ion-header [hidden]="isSearch">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="ml--56">myTutor</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content>
-  <ion-tabs *ngIf="(user$ | async) as user">
+  <ion-tabs (ionTabsWillChange)="isInSearch()" *ngIf="(user$ | async) as user">
     <ion-tab-bar slot="bottom">
       <ion-tab-button tab="home">
         <ion-icon name="home"></ion-icon>
         <ion-label>Home</ion-label>
       </ion-tab-button>
       <ion-tab-button tab="inserisci-lezione" [hidden]="(user.roles === 1)">
-        <ion-icon name="search"></ion-icon>
+        <ion-icon name="create"></ion-icon>
         <ion-label>Inserisci Annuncio</ion-label>
       </ion-tab-button>
       <ion-tab-button tab="ricerca-lezioni" [hidden]="(user.roles === 2)">
