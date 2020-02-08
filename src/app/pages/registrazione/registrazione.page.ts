@@ -30,7 +30,7 @@ export class RegistrazionePage implements OnInit {
     registra = true;
     utente: User = new User();
     teacher: Teacher;
-    student: Student = new Student();
+    student: Student;
     passwordType = 'password';
     passwordShow = false;
     public toogle = false;
@@ -65,11 +65,6 @@ export class RegistrazionePage implements OnInit {
     ) {
     }
 
-    imagePickerOptions = {
-        maximumImagesCount: 1,
-        quality: 50
-    };
-
     validationMessages = {
         email: [
             {type: 'required', message: 'email is required.'},
@@ -92,16 +87,18 @@ export class RegistrazionePage implements OnInit {
         ]
     };
 
-// vuole tutti i campi perchè si deve aspettare qualcosa
+    imagePickerOptions = {
+        maximumImagesCount: 1,
+        quality: 50
+    };
+
     ngOnInit() {
         this.initTranslate();
         this.registrazioneFormModel = this.formBuilder.group({
-            // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
             email: ['', Validators.compose(
                 [Validators.required
                 ])
             ],
-            // roles: [''],
             password: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(5),
@@ -116,9 +113,8 @@ export class RegistrazionePage implements OnInit {
             birthday: ['', Validators.compose([
                 Validators.required,
                 RegisterBirthdayValidator.isAdult
-            ])],     // da verificare tipo
-            languageNumber: ['true', Validators.required]
-            // image: [''],
+            ])],
+            language: ['true', Validators.required]
         });
     }
 
@@ -233,52 +229,65 @@ export class RegistrazionePage implements OnInit {
 
     prendiRegistrazione() {
         console.log('registro utenza:');
-       /* if (this.teacher == null || typeof this.teacher === 'undefined') {
-            console.log('utenza di tipo student');
-            this.utente = this.registrazioneFormModel.value;
-            this.utente.idUser = 0;
-            this.utente.roles = 1;
-            this.utente.birthday = new Date(this.utente.birthday).getTime();
-            this.utente.language = this.registrazioneFormModel.value.languageNumber !== '0';
-            this.utente.image = this.croppedImagepath;
-            //this.student.set(this.utente);
-            this.Loading();
-            this.registrationService.registrationStudent(this.student).subscribe(() => {
-                    this.Diss();
-                    this.registrazioneFormModel.reset();
-                    this.navController.navigateRoot('login');
-                },
-                (err: HttpErrorResponse) => {
-                    if (err.status === 500) {
-                        console.error('login request error: ' + err.status);
-                        this.showLoginError(err.status, err.message);
-                    }
-                });
-            console.log(this.student);
-        } else {
-            console.log('utenza di tipo docente');
-            this.teacher.idUser = 0;
-            this.teacher.roles = 2;
-            this.teacher.birthday = new Date(this.utente.birthday).getTime();
-            this.teacher.language = this.registrazioneFormModel.value.languageNumber !== '0';
-            this.teacher.image = this.croppedImagepath;
-            this.Loading();
-            this.registrationService.registrationTeacher(this.teacher).subscribe(() => {
-                    this.Diss();
-                    this.registrazioneFormModel.reset();
-                    this.navController.navigateRoot('login');
-                },
-                (err: HttpErrorResponse) => {
-                    if (err.status === 500) {
-                        console.error('login request error: ' + err.status + ' message:' + err.message);
-                        this.showLoginError(err.status, err.message);
-                    }
-                });
-            console.log(this.teacher);
-        }*/
+        /* if (this.teacher == null || typeof this.teacher === 'undefined') {
+             console.log('utenza di tipo student');
+             this.utente = this.registrazioneFormModel.value;
+             this.utente.idUser = 0;
+             this.utente.roles = 1;
+             this.utente.birthday = new Date(this.utente.birthday).getTime();
+             this.utente.language = this.registrazioneFormModel.value.languageNumber !== '0';
+             this.utente.image = this.croppedImagepath;
+             //this.student.set(this.utente);
+             this.Loading();
+             this.registrationService.registrationStudent(this.student).subscribe(() => {
+                     this.Diss();
+                     this.registrazioneFormModel.reset();
+                     this.navController.navigateRoot('login');
+                 },
+                 (err: HttpErrorResponse) => {
+                     if (err.status === 500) {
+                         console.error('login request error: ' + err.status);
+                         this.showLoginError(err.status, err.message);
+                     }
+                 });
+             console.log(this.student);
+         } else {
+             console.log('utenza di tipo docente');
+             this.teacher.idUser = 0;
+             this.teacher.roles = 2;
+             this.teacher.birthday = new Date(this.utente.birthday).getTime();
+             this.teacher.language = this.registrazioneFormModel.value.languageNumber !== '0';
+             this.teacher.image = this.croppedImagepath;
+             this.Loading();
+             this.registrationService.registrationTeacher(this.teacher).subscribe(() => {
+                     this.Diss();
+                     this.registrazioneFormModel.reset();
+                     this.navController.navigateRoot('login');
+                 },
+                 (err: HttpErrorResponse) => {
+                     if (err.status === 500) {
+                         console.error('login request error: ' + err.status + ' message:' + err.message);
+                         this.showLoginError(err.status, err.message);
+                     }
+                 });
+             console.log(this.teacher);
+         }*/
     }
 
     async openModal() {
+        this.teacher = new Teacher();
+        this.teacher.setTeacherFromUser(this.utente);
+        console.log(this.teacher);
+        this.registra = false;
+        const modal = await this.modalController.create({
+            component: RegistrazioneDocenteModalPage,
+            componentProps: {teacher: this.teacher}
+        });
+        modal.onDidDismiss().then((data) => {
+            console.log(data);
+        });
+
+        await  modal.present();
         /*this.utente = this.registrazioneFormModel.value;
         this.registra = false;
         const teacher1: Teacher = this.teacher;
@@ -321,6 +330,7 @@ export class RegistrazionePage implements OnInit {
     }
 
     notify() {
+        console.log('notify');
         if (this.toogle) {
             this.toogle = false;
             this.teacher = null;
@@ -329,6 +339,8 @@ export class RegistrazionePage implements OnInit {
         } else {
             this.toogle = true;
             this.utente = this.registrazioneFormModel.value;
+            this.utente.idUser = 0;
+            this.utente.language = (this.registrazioneFormModel.controls.language.value === 'true');
             console.log('sto con il true, teacher');
             console.log(this.utente);
             this.utente.roles = 2;
@@ -337,6 +349,7 @@ export class RegistrazionePage implements OnInit {
     }
 
     onSubmit(bob: any) {
+        console.log('onSubmit');
         console.log(bob);
     }
 
@@ -349,6 +362,7 @@ export class RegistrazionePage implements OnInit {
             this.utente.roles = 1;
         }
     }
+
     private initTranslate() {
         this.translateService.get('IMAGE_SOURCE_HEADER').subscribe((data) => {
             this.imageSourceHeader = data;

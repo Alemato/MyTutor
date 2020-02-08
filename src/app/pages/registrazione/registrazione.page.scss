@@ -21,7 +21,7 @@
   }
 
   ion-item {
-    // padding-left: 16px !important;
+    padding-right: 16px;
     font-size: 16px;
     box-shadow: none !important;
   }
@@ -64,6 +64,13 @@
   color: rgba(30,30,30,0.85) !important;
   padding-bottom: 17px;
 }
+.name-field {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: rgba(30,30,30,0.85) !important;
+  padding-top: 16px;
+}
 .input-prova{
   font-size: 18px;
 }
@@ -84,7 +91,4 @@
   width: 100%;
   max-width: 100%;
   text-align: left;
-}
-.pl-0-2{
-  padding-left: 0 !important;
 }
