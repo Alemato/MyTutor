@@ -14,7 +14,6 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class ListaChatPage implements OnInit {
     private user$: BehaviorSubject<User>;
-    // private creates$: BehaviorSubject<CreatesChat[]>;
     private lastMessageFromChats$: BehaviorSubject<Message[]>;
     private chatCount$: BehaviorSubject<number>;
     private loading;
@@ -26,13 +25,15 @@ export class ListaChatPage implements OnInit {
                 private translateService: TranslateService) {
         this.user$ = this.userService.getUser();
         this.lastMessageFromChats$ = this.chatService.getLastMessageFromChats();
-        // this.creates$ = this.chatService.getCreates();
         this.chatCount$ = this.chatService.getChatCount();
     }
 
     ngOnInit() {
         this.initTranslate();
-        this.chatService.getRestCountChat().subscribe((n: number) => {
+        this.chatService.getRestChatList().subscribe((data) => {
+            console.log(data);
+        });
+        /*this.chatService.getRestCountChat().subscribe((n: number) => {
             if (n !== 0) {
                 this.chatService.countFromStorage().then((numb: number) => {
                     if (numb < n) {
@@ -41,16 +42,15 @@ export class ListaChatPage implements OnInit {
                 });
             }
         });
-        this.lastMessageFromChats$.subscribe();
-        // this.creates$.subscribe();
+        this.lastMessageFromChats$.subscribe();*/
     }
 
     ionViewWillEnter() {
-        this.loadingPresent().then(() => {
+        /*this.loadingPresent().then(() => {
             this.chatService.getRestChatList().subscribe(() => {
                 this.disLoading();
             });
-        });
+        });*/
     }
 
     async loadingPresent() {

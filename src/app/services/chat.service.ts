@@ -14,7 +14,6 @@ import {Chat} from '../model/chat.model';
 })
 
 export class ChatService {
-   // private creates$: BehaviorSubject<CreatesChat[]> = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
     private lastMessageFromChats$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([] as Message[]);
     private chatCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private countChat = 0;
@@ -30,31 +29,29 @@ export class ChatService {
                 this.chatCount$.next(item.length);
             }
         });
-        /*this.storage.get(STORAGE.CREATES).then((item: CreatesChat[]) => {
-            if (item) {
-                this.creates$.next(item);
-            }
-        });*/
     }
 
-    /*
-    * Questa funzione che si occupa della Query Rest della lista delle chat
-    * e del seguente salvataggio degli oggetti 'first' Message[] e CreateChat[] nello storage
-    * ritorna una lista di tipo any formata da
-    * un oggetto di tipo 'first' Message[] in posizione [0]
-    * e da un oggetto di tipo CreatesChat[] in posizione [1]
-    */
+    /**
+     * Questa funzione che si occupa della Query Rest della lista delle chat
+     * e del seguente salvataggio degli oggetti 'first' Message[] e CreateChat[] nello storage
+     * ritorna una lista di tipo any formata da
+     * un oggetto di tipo 'first' Message[] in posizione [0]
+     * e da un oggetto di tipo CreatesChat[] in posizione [1]
+     * @return Observable<any[]>
+     */
     getRestChatList(): Observable<any[]> {
         return this.http.get<any[]>(URL.CHATLIST, {observe: 'response'}).pipe(
             map((resp: HttpResponse<any[]>) => {
-                this.storage.set(STORAGE.CHATLIST, resp.body[0]);
-                this.lastMessageFromChats$.next(resp.body[0]);
-                this.storage.set(STORAGE.CREATES, resp.body[1]);
-                // this.creates$.next(resp.body[1]);
+                this.storage.set(STORAGE.CHATLIST, resp.body);
+                this.lastMessageFromChats$.next(resp.body);
                 return resp.body;
             }));
     }
 
+    /**
+     * Funzione che esegue la rest che ritona il numero di chat disponibili del utente
+     * viene usato per vedere se ci cono nuove chat disponibili
+     */
     getRestCountChat(): Observable<number> {
         return this.http.get(URL.CHAT_COUNT, {observe: 'response'}).pipe(
             map((resp: HttpResponse<number>) => {
@@ -64,6 +61,11 @@ export class ChatService {
         );
     }
 
+    /**
+     * Funzione che ritona il numero di chat attive con un determinato user
+     * serve per vedere se esiste una chat con quel user
+     * @param idUser id del altro user
+     */
     getRestCountChatUser2(idUser: number): Observable<number> {
         return this.http.get(URL.CHAT_COUNT, {observe: 'response', params: {idUser2: idUser.toString()}}).pipe(
             map((resp: HttpResponse<number>) => {
@@ -72,18 +74,27 @@ export class ChatService {
         );
     }
 
+    /**
+     * Ritona la lista dei ultimi messaggi,
+     * nei messaggi abbiamo la chat e la lista di user che interagiscono in essa
+     */
     getLastMessageFromChats(): BehaviorSubject<Message[]> {
         return this.lastMessageFromChats$;
     }
 
-    /*getCreates(): BehaviorSubject<CreatesChat[]> {
-        return this.creates$;
-    }*/
-
+    /**
+     * Ritona il numero di chat attive per utente
+     */
     getChatCount(): BehaviorSubject<number> {
         return this.chatCount$;
     }
 
+    /**
+     * Funzione che ritona il numero delle chat salvate nello storage,
+     * Quindi quelle che sappiamo essere attive Solo sul dispositivo
+     * Serve per sapere quante chat sono nel dispositivo contro il numero
+     * di chat sul server.
+     */
     async countFromStorage(): Promise<number> {
         return this.storage.get(STORAGE.CHATLIST).then((item: Message[]) => {
             if (item) {
@@ -94,6 +105,10 @@ export class ChatService {
         });
     }
 
+    /**
+     * funzione che ritona solo l'oggetto chat (da eliminare) da un specifico id
+     * @param id della chat che si vuole
+     */
     getCurrentChat(id: number): Observable<Chat> {
         return fromPromise(this.storage.get(STORAGE.CHATLIST).then((item: Message[]) => {
             console.log(item);
@@ -104,6 +119,10 @@ export class ChatService {
         }));
     }
 
+    /**
+     * AGGIORNAMENTO AUTOMATICO DELLE CHAT OGNI 1 MIN
+     * vede se ci sono nuove chat disponbili sul server
+     */
     startPeriodicGetCountChat() {
         console.log('startPeriodicGetCountChat');
         this.periodicGet = interval(60000).subscribe(() => {
@@ -124,6 +143,9 @@ export class ChatService {
         });
     }
 
+    /**
+     * STOP DELL AGGIORNAMENTO DELLE CHAT
+     */
     stopPeriodicGetCountChat() {
         console.log('stopPeriodicGet');
         if (!this.periodicGet.closed) {
@@ -131,10 +153,12 @@ export class ChatService {
         }
     }
 
+    /**
+     * Funzione di reset per il logout
+     */
     logout() {
         this.storage.remove(STORAGE.CREATES);
         this.storage.remove(STORAGE.CHATLIST);
-        // this.creates$ = new BehaviorSubject<CreatesChat[]>([] as CreatesChat[]);
         this.lastMessageFromChats$ = new BehaviorSubject<Message[]>([] as Message[]);
         this.chatCount$ = new BehaviorSubject<number>(0);
         this.countChat = 0;
