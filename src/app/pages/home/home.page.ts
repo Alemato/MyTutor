@@ -19,7 +19,6 @@ export class HomePage implements OnInit {
     private cancelButton: string;
     private pleaseWaitMessage: string;
     private user$: BehaviorSubject<User>;
-    // private booking$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
     private booking$: BehaviorSubject<Booking[]>;
     private existbookings = false;
 
@@ -36,6 +35,7 @@ export class HomePage implements OnInit {
         });
         this.booking$ = this.bookingService.getBookings();
         this.booking$.subscribe((bookings) => {
+            this.existbookings = false;
             for (const booking of bookings) {
                 if (booking.lessonState === 1) {
                     this.existbookings = true;
@@ -43,20 +43,16 @@ export class HomePage implements OnInit {
                 }
             }
         });
-        this.bookingService.getRestUsersBooking().subscribe((user) => {
-            console.log(user);
-        });
-        /*this.bookingService.getRestHistoricalBookingFilter('', '', '', '', '', '1').subscribe((bookings) => {
-            console.log(bookings);
-            this.booking$.next(bookings);
-        });*/
     }
 
     ionViewWillEnter() {
+        this.bookingService.getRestBooking();
+        this.bookingService.startPeriodicGet();
         this.bookingService.startCoundown();
     }
 
     ionViewWillLeave() {
+        this.bookingService.stopPeriodicGet();
         this.bookingService.stopCoundown();
     }
 
