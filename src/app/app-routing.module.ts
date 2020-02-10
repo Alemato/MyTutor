@@ -7,7 +7,7 @@ import {LoginGuard} from './guards/login.guard';
 const routes: Routes = [
     {
         path: '',
-        redirectTo: 'tabs',
+        redirectTo: '/tabs/home',
         pathMatch: 'full'
     },
     {
@@ -88,9 +88,7 @@ const routes: Routes = [
         path: 'inserimento-lezioni',
         redirectTo: 'inserimento-lezioni/null'
     },*/
-  { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule' },
-  { path: 'santo-dio', loadChildren: './pages/santo-dio/santo-dio.module#SantoDioPageModule', data: {entity: 'mario'}},
-  { path: 'santo-dio2', loadChildren: './pages/santo-dio2/santo-dio2.module#SantoDio2PageModule' },
+    { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule' }
 ];
 
 @NgModule({
