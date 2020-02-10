@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Message} from '../../model/message.model';
 import {ActivatedRoute, ParamMap} from '@angular/router';
@@ -8,7 +8,7 @@ import {BehaviorSubject} from 'rxjs';
 import {User} from '../../model/user.model';
 import {MessageService} from '../../services/message.service';
 import {IonContent, LoadingController} from '@ionic/angular';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'page-chat',
@@ -16,11 +16,9 @@ import { TranslateService } from '@ngx-translate/core';
     styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-    // @ts-ignore
-    @ViewChild(IonContent) content: IonContent;
+    @ViewChild(IonContent, {static: true}) content: IonContent;
     private chtn = 'Chat';
     private sendStatus = '';
-    private isStardted = false;
     private scritturaMessaggio: FormGroup;
     private messaggio: Message;
     private idChat: number;
@@ -40,109 +38,32 @@ export class ChatPage implements OnInit {
 
     ngOnInit() {
         this.initTranslate();
+        this.scritturaMessaggio = this.formBuilder.group({
+            text: ['', Validators.required]
+        });
         this.route.paramMap.subscribe((params: ParamMap) => {
-            this.user$ = this.userService.getUser();
-            this.messages$ = this.messageService.getBehaviorMessages();
-            this.messages$.next([]);
             this.idChat = parseInt(params.get('id'), 0);
-            console.log(this.idChat);
-            /*this.createService.getListCreates(this.user$.value.idUser).subscribe((creates) => {
-                console.log(creates);
-                const c = creates.find(x => x.chat.idChat === this.idChat);
-                const usr2 = c.userListser.find(x => x.idUser !== this.user$.value.idUser);
-                this.chtn = usr2.name + ' ' + usr2.surname;
-            });*/
-            this.scritturaMessaggio = this.formBuilder.group({
-                text: ['', Validators.required]
-            });
-            this.messageService.ifEmpty(this.idChat).subscribe((condition) => {
-                this.loadingPresent().then(() => {
-                    console.log(condition);
-                    if (condition) {
-                        console.log('è vuoto');
-                        this.messageService.getRestMessageOfChat(this.idChat).subscribe((messages) => {
-                            console.log(messages);
-                            this.disLoading();
-                        });
-                        this.messages$.subscribe((value) => {
-                            if (value[value.length - 1] !== undefined) {
-                                if (!this.isStardted) {
-                                    this.messageService.startPeriodicGetMessageForChat(this.idChat);
-                                    this.isStardted = true;
-                                }
-                            }
-                        });
-                    } else {
-                        console.log('esiste');
-                        this.messageService.getStorageMessagesOfChat(this.idChat);
-                        this.messageService.getCountMessageFromStorage(this.idChat).subscribe((countMessageStorage) => {
-                            this.messageService.getRestCountMessage(this.idChat).subscribe((countMessageRest) => {
-                                if (countMessageStorage < countMessageRest) {
-                                    console.log('inferiore storage' + countMessageStorage.toString() + ' ' + countMessageRest.toString());
-                                    // tslint:disable-next-line:max-line-length
-                                    this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe((newmessages) => {
-                                        console.log(newmessages);
-                                    });
-                                    this.messages$ = this.messageService.getBehaviorMessages();
-                                    if (!this.isStardted) {
-                                        // tslint:disable-next-line:max-line-length
-                                        this.messageService.startPeriodicGetMessageForChat(this.idChat);
-                                        this.isStardted = true;
-                                    }
-                                } else {
-                                    console.log('uguale storage' + countMessageStorage.toString() + ' ' + countMessageRest.toString());
-                                    if (!this.isStardted) {
-                                        // tslint:disable-next-line:max-line-length
-                                        this.messageService.startPeriodicGetMessageForChat(this.idChat);
-                                        this.isStardted = true;
-                                    }
-                                }
-                            });
-                        });
-                        this.disLoading();
-                    }
-                });
-            });
+            this.user$ = this.userService.getUser();
+            this.messages$ = this.messageService.getBehaviorMessages(this.idChat);
+            this.messageService.startPeriodicGetMessageForChat(this.idChat);
         });
     }
 
     inviaMessagio() {
-        /*this.chatService.getCurrentChat(this.idChat).subscribe((chat) => {
-            if (chat) {
-                this.sendStatus = 'pending';
-                this.messaggio = new Message(undefined, undefined, undefined);
-                this.messaggio.text = this.scritturaMessaggio.controls.text.value;
-                this.scritturaMessaggio.reset();
-                this.messaggio.chat = chat;
-                this.messaggio.user = this.user$.value;
-                console.log(this.messaggio);
-                this.messageService.createRestMessage(this.messaggio).subscribe((data) => {
-                    console.log(data);
-                    // tslint:disable-next-line:max-line-length
-                    this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => this.sendStatus = '');
-                });
-            } else {
-                this.chatService.getRestChatList().subscribe((resp) => {
-                    console.log(resp);
-                    const creates: CreatesChat[] = resp[1];
-                    console.log(creates);
-                    console.log(this.idChat);
-                    const newChat = creates.find(x => x.chat.idChat === this.idChat).chat;
-                    this.sendStatus = 'pending';
-                    this.messaggio = new Message(undefined, undefined, undefined);
-                    this.messaggio.text = this.scritturaMessaggio.controls.text.value;
-                    this.scritturaMessaggio.reset();
-                    this.messaggio.chat = newChat;
-                    this.messaggio.user = this.user$.value;
-                    console.log(this.messaggio);
-                    this.messageService.createRestMessage(this.messaggio).subscribe((data) => {
-                        console.log(data);
-                        // tslint:disable-next-line:max-line-length
-                        this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => this.sendStatus = '');
-                    });
-                });
-            }
-        });*/
+        this.sendStatus = 'pending';
+        this.messaggio = new Message();
+        this.messaggio.idMessage = 0;
+        this.messaggio.text = this.scritturaMessaggio.controls.text.value;
+        this.scritturaMessaggio.reset();
+        this.messaggio.sendDate = new Date().getTime();
+        this.messaggio.chat = this.messages$.value[0].chat;
+        this.messaggio.user = this.user$.value;
+        this.messageService.createRestMessage(this.messaggio).subscribe(() => {
+            // tslint:disable-next-line:max-line-length
+            this.messageService.getLastMessageOfChat(this.idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => {
+                this.sendStatus = '';
+            });
+        });
     }
 
     scrolla() {

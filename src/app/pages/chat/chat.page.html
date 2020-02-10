@@ -7,7 +7,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content #content>
     <div *ngIf="(user$|async) as user">
     <div class="message-wrap" *ngFor="let message of (messages$ | async); let bo = last;">
         <div  *ngIf="message.user.idUser !== user.idUser; else messageThisUserBlock">
