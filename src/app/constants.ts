@@ -11,10 +11,7 @@ export const URL = {
     PUT_PROFILO_TEACHER: URL_BASE + '/auth/profiles/teacher',
     REGISTRATION_STUDENT: URL_BASE + '/registration/student',
     REGISTRATION_TEACHER: URL_BASE + '/registration/teacher',
-    TEST: URL_BASE + '/test/aut',
-    CHATMESSAGE: URL_BASE + '/chatmessage',
     CHAT_POST: URL_BASE + '/chats/post',
-    MESSAGE: URL_BASE + '/chats/1/messaggi',
 
 
     CHATLIST: URL_BASE + '/chats',
@@ -23,9 +20,9 @@ export const URL = {
     CHAT_CREATES: URL_BASE + '/chats/creates/',
 
     MESSAGE_OF_CHAT_PT_1: URL_BASE + '/chats/',
-    MESSAGE_OF_CHAT_PT_2: '/messaggi',
+    MESSAGE_OF_CHAT_PT_2: '/messages',
     MESSAGE_COUNT: '/count',
-    LAST_MESSAGES: '/countmessage',
+    LAST_MESSAGES: '/last',
 
     SUBJECT: URL_BASE + '/subject',
 
