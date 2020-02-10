@@ -1,0 +1,114 @@
+<ion-content *ngIf="(user$ | async) as user">
+
+    <ion-list *ngIf="(this.bookings$ | async) as bookings;" class="mb-100">
+
+        <div *ngIf="user.roles == 1">
+            <ion-list-header class="mb--14"
+                             *ngIf="existBookings; else notExistS">{{"LIST_LESSONS_ACCEPTED"|translate}}</ion-list-header>
+            <ng-template #notExistS>
+                <div class="mx-auto fit-content">
+                    <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
+                </div>
+            </ng-template>
+        </div>
+
+        <div *ngIf="user.roles == 2">
+            <ion-list-header class="mb--14"
+                             *ngIf="existBookings; else notExistT">{{"lIST_LESSONS_BOOKED_ACCEPT"|translate}}</ion-list-header>
+            <ng-template #notExistT>
+                <div class="mx-auto fit-content">
+                    <h5 class="fit-content font-weight-300 ls-1">{{"EMPTY_LESSON_LIST_MESSAGE"|translate}}</h5>
+                </div>
+            </ng-template>
+        </div>
+
+        <div *ngFor="let booking of bookings let i = index">
+            <ion-item-sliding #itemSliding *ngIf="booking.lessonState === 0 && user.roles === 1">
+                <ion-item lines="full" detail="true">
+
+                    <ion-col size="auto">
+                        <ion-icon
+                                *ngIf="booking.planning.lesson.teacher.image === null || booking.planning.lesson.teacher.image === '' || booking.planning.lesson.teacher.image ===' '; else imgBlockStudet"
+                                name="contact" class="fs-62"></ion-icon>
+                        <ng-template #imgBlockStudet>
+                            <ion-avatar class="ion-text-center h-62 w-62 pt-3">
+                                <img [src]="booking.planning.lesson.teacher.image" alt="img" class="w-51 h-51">
+                            </ion-avatar>
+                        </ng-template>
+                    </ion-col>
+
+                    <ion-col size="10" class="pb-15 pt-15">
+                        <div class="ion-no-margin fs-large fw-normal"
+                             [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]">{{booking.planning.lesson.name}}</div>
+                        <ion-row>
+                            <ion-col class="ion-no-padding">
+                                <div class="ion-no-margin fs-medium font-weight-400 ls-01em"
+                                     [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]">{{booking.planning.lesson.teacher.name}} {{booking.planning.lesson.teacher.surname}}</div>
+                            </ion-col>
+                            <ion-col class="ion-no-padding pr-5">
+                                <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{booking.planning.lesson.price}}
+                                    €/h
+                                </div>
+                            </ion-col>
+                        </ion-row>
+                        <div class="ion-no-margin fs-small font-weight-300 pt-5">{{"DIV_FOR_THE"|translate}} {{booking.planning.date | date:'dd/MM/yyyy'}}</div>
+                    </ion-col>
+                </ion-item>
+                <ion-item-options side="end">
+                    <ion-item-option color="danger"
+                                     (click)="presentAlert(itemSliding, booking.idBooking)">{{"CANCEL_BUTTON"|translate}}</ion-item-option>
+                </ion-item-options>
+            </ion-item-sliding>
+
+
+            <ion-item *ngIf="booking.lessonState ===0 && user.roles === 2" lines="full">
+                <ion-row class="w-100">
+                <ion-col size="auto" class="pt-15">
+                    <ion-icon
+                            *ngIf="booking.student.image === null || booking.student.image === '' || booking.student.image ===' '; else imgBlockTeacher"
+                            name="contact" class="fs-62"></ion-icon>
+                    <ng-template #imgBlockTeacher>
+                        <ion-avatar class="h-62 w-62 pt-3">
+                            <img [src]="booking.student.image" alt="img" class="w-51 h-51">
+                        </ion-avatar>
+                    </ng-template>
+                </ion-col>
+
+                <ion-col class="pt-15">
+                    <div class="ion-no-margin fs-large fw-normal">{{booking.planning.lesson.name}}</div>
+                    <ion-row>
+                        <ion-col class="ion-no-padding">
+                            <div class="ion-no-margin fs-medium font-weight-300 ls-01em"
+                                 [routerLink]="['/profilo-singolo', booking.student.email]">{{booking.student.name}} {{booking.student.surname}}</div>
+                        </ion-col>
+                        <ion-col class="ion-no-padding">
+                            <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{booking.planning.lesson.price}}
+                                €/h
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                    <div class="ion-no-margin fs-small font-weight-300 pt-5">{{"DIV_FOR_THE"|translate}}
+                        {{booking.planning.date | date:'dd/MM/yyyy'}}</div>
+                </ion-col>
+                  <ion-row class="ion-no-padding w-100 pt-5 pb-15">
+                    <ion-col class="ion-no-padding ion-align-self-start">
+                      <div>
+                        <ion-button color="primary" size="default" class="ion-float-start"
+                                    (click)="presentAlertAccettaLezione(booking.idBooking)">{{"ACCEPT_BUTTON"|translate}}
+                        </ion-button>
+                      </div>
+                    </ion-col>
+                    <ion-col class="ion-no-padding">
+                      <div>
+                        <ion-button color="danger" size="default" class="ion-float-end"
+                                    (click)="presentAlertRifiutaLezione(booking.idBooking)">{{"REFUSE_BUTTON"|translate}}
+                        </ion-button>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-row>
+            </ion-item>
+
+        </div>
+    </ion-list>
+</ion-content>
