@@ -1,0 +1,128 @@
+.icona-foto-profilo {
+  color: #029db4;
+  font-size: 200px;
+}
+ion-item {
+  font-size: 16px;
+  box-shadow: none !important;
+}
+.pa16{
+  padding-left: 16px !important;
+}
+.icone {
+  padding-bottom: 5px;
+  color: #1e1e1e;
+}
+.icona-regalo {
+  font-size: 25px;
+}
+.icona-citta {
+  font-size: 20px;
+}
+.icona-strada {
+  font-size: 23px;
+}
+.icona-biografia {
+  font-size: 20px;
+}
+.testo-biografia {
+  --padding-start: 0px;
+  text-align: left;
+  --padding-top: 5px
+}
+.colonna-IdCard {
+  padding-left: 0px;
+  margin-top: 5px;
+}
+.bio {
+  font-size: 15px;
+  margin-top: 8px;
+  display: block;
+}
+.colonna-label-text {
+  padding-left: 16px;
+}
+
+ion-icon{
+  font-size: 30px;
+  //padding-left: 15px;
+}
+.label-prova {
+  padding-left: 0 !important;
+  font-size: large;
+  font-weight: bold;
+  //color: rgba(30, 30, 30, 0.85) !important;
+  color: rgba(0, 0, 0, 0.54) !important;
+  //padding-bottom: 17px;
+}
+//.input-prova{
+//  font-size: 18px;
+//}
+.submit-btn-2 {
+  --border-width: 1px;
+  --border-style: solid;
+  --border-color: #029db4;
+  --background-hover: #5bb526;
+  --color: #ffffff;
+  --background: #029db4;
+  font-size: 16px;
+  --padding-bottom: 2px;
+  --padding-top: 2px;
+  //margin-left: 60px !important;
+  //margin-right: 60px !important;
+}
+.colore{
+  color: #029db4;
+}
+.linea{
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+}
+.linea-2{
+  border-bottom: 1px solid black;
+  //border-top: 1px solid black;
+  //margin-top: 10px;
+}
+.mt-8{
+  margin-top: 8px !important;
+}
+.select-full-width-2{
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+}
+.pr-0-imp{
+  padding-right: 0 !important;
+}
+.pt-0{
+  padding-top: 0 !important;
+}
+ion-item.biografia-1{
+  --padding-inline-end: 0 !important;
+  --ion-safe-area-right: 0;
+}
+.colore-icona{
+  fill: rgba(0, 0, 0, 0.54) !important;
+}
+ion-col.a{
+  padding-left: 0 !important;
+}
+.foto-profilo {
+  margin-top: -10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #808080;
+  text-shadow: #111111 0 0 0;
+}
+ion-textarea.biografia{
+  --padding-top: 0 !important;
+}
+.marg-bot-0{
+  --border-width: 0 !important;
+}
+.h-150{
+  height: 150px;
+}
+.w-150{
+  width: 150px;
+}
