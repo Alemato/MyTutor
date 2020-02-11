@@ -16,11 +16,6 @@ const routes: Routes = [
         canActivate: [LoginGuard]
     },
     {
-        path: 'home-home',
-        loadChildren: './pages/home-home/home.module#HomePageModule',
-        canActivate: [AuthGuard]
-    },
-    {
         path: 'chat/:id',
         loadChildren: './pages/chat/chat.module#ChatPageModule',
         canActivate: [AuthGuard]
@@ -32,11 +27,6 @@ const routes: Routes = [
     {
         path: 'registrazione-docente-modal',
         loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule'
-    },
-    {
-        path: 'profilo',
-        loadChildren: './pages/profilo-modifica-profilo/profilo-modifica-profilo.module#ProfiloModificaProfiloPageModule',
-        canActivate: [AuthGuard]
     },
     /*{
         path: 'inserimento-lezioni/:idLesson',
@@ -88,7 +78,12 @@ const routes: Routes = [
         path: 'inserimento-lezioni',
         redirectTo: 'inserimento-lezioni/null'
     },*/
-    { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule' }
+    { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule' },
+    {
+        path: 'modifica-profilo',
+        loadChildren: './pages/modifica-profilo/modifica-profilo.module#ModificaProfiloPageModule',
+        canActivate: [AuthGuard]
+    },
 ];
 
 @NgModule({

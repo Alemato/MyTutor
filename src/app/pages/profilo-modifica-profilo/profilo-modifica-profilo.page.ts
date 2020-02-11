@@ -11,8 +11,7 @@ export class ProfiloModificaProfiloPage implements OnInit {
     constructor() {
     }
 
-    profilo = ProfiloPage;
-    modificaProfilo = ModificaProfiloPage;
+
 
     ngOnInit() {
     }
