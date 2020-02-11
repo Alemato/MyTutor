@@ -8,9 +8,10 @@ import {RegisterBirthdayValidator} from '../../validators/registerBirthday.valid
 import {Teacher} from '../../model/teacher.model';
 import {Camera, CameraOptions} from '@ionic-native/camera/ngx';
 import {Crop} from '@ionic-native/crop/ngx';
-import {ActionSheetController, AlertController} from '@ionic/angular';
+import {ActionSheetController, AlertController, NavController} from '@ionic/angular';
 import {File} from '@ionic-native/file/ngx';
 import {sha512} from 'js-sha512';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
     selector: 'app-modifica-profilo',
@@ -69,7 +70,8 @@ export class ModificaProfiloPage implements OnInit {
                 private camera: Camera,
                 private crop: Crop,
                 public actionSheetController: ActionSheetController,
-                private file: File) {
+                private file: File,
+                private navController: NavController) {
     }
 
     ngOnInit() {
@@ -84,11 +86,23 @@ export class ModificaProfiloPage implements OnInit {
         this.utente$.subscribe((user) => {
             if (user.roles === 1) {
                 this.setValuesFormStudent(user);
+                this.findInvalidControls();
             } else {
                 this.setValuesFormTeacher(user);
+                this.findInvalidControlsTea();
             }
         });
-        this.findInvalidControls();
+    }
+
+    public findInvalidControlsTea() {
+        const invalid = [];
+        const controls = this.teacherFormModel.controls;
+        for (const name in controls) {
+            if (controls[name].invalid) {
+                invalid.push(name);
+            }
+        }
+        return invalid;
     }
 
     public findInvalidControls() {
@@ -125,8 +139,8 @@ export class ModificaProfiloPage implements OnInit {
     setValuesFormStudent(student: Student) {
         this.studentFormModel.controls.name.setValue(student.name);
         this.studentFormModel.controls.surname.setValue(student.surname);
-        this.studentFormModel.controls.passwordVecchia.setValue('');
-        this.studentFormModel.controls.password.setValue('');
+        this.studentFormModel.controls.passwordVecchia.reset();
+        this.studentFormModel.controls.password.reset();
         this.studentFormModel.controls.birthday.setValue(new Date(student.birthday).toISOString());
         this.studentFormModel.controls.studyGrade.setValue(student.studyGrade);
         this.studentFormModel.controls.languageNumber.setValue((+student.language).toString());
@@ -160,16 +174,15 @@ export class ModificaProfiloPage implements OnInit {
     setValuesFormTeacher(teacher: Teacher) {
         this.teacherFormModel.controls.name.setValue(teacher.name);
         this.teacherFormModel.controls.surname.setValue(teacher.surname);
-        this.teacherFormModel.controls.passwordVecchia.setValue('');
-        this.teacherFormModel.controls.password.setValue('');
+        this.teacherFormModel.controls.passwordVecchia.reset();
+        this.teacherFormModel.controls.password.reset();
         this.teacherFormModel.controls.birthday.setValue(new Date(teacher.birthday).toISOString());
-        this.teacherFormModel.controls.studyGrade.setValue(teacher.region);
-        this.teacherFormModel.controls.studyGrade.setValue(teacher.region);
-        this.teacherFormModel.controls.studyGrade.setValue(teacher.city);
-        this.teacherFormModel.controls.studyGrade.setValue(teacher.postCode);
-        this.teacherFormModel.controls.studyGrade.setValue(teacher.street);
-        this.teacherFormModel.controls.studyGrade.setValue(teacher.streetNumber);
-        this.teacherFormModel.controls.studyGrade.setValue(teacher.byography);
+        this.teacherFormModel.controls.region.setValue(teacher.region);
+        this.teacherFormModel.controls.city.setValue(teacher.city);
+        this.teacherFormModel.controls.postCode.setValue(teacher.postCode);
+        this.teacherFormModel.controls.street.setValue(teacher.street);
+        this.teacherFormModel.controls.streetNumber.setValue(teacher.streetNumber);
+        this.teacherFormModel.controls.byography.setValue(teacher.byography);
         this.teacherFormModel.controls.languageNumber.setValue((+teacher.language).toString());
     }
 
@@ -187,8 +200,75 @@ export class ModificaProfiloPage implements OnInit {
         if (this.utente$.value.roles === 1) {
             let student: Student = new Student();
             student = this.utente$.getValue();
-            student.password = sha512(this.studentFormModel.controls.passwordVecchia.value).toUpperCase();
-            console.log(student);
+            if (this.studentFormModel.controls.password.value) {
+                student.password = sha512(this.studentFormModel.controls.password.value).toUpperCase();
+            } else {
+                student.password = sha512(this.studentFormModel.controls.passwordVecchia.value).toUpperCase();
+            }
+            student.name = this.studentFormModel.controls.name.value;
+            student.surname = this.studentFormModel.controls.surname.value;
+            student.birthday = new Date(this.studentFormModel.controls.birthday.value).getTime();
+            student.studyGrade = this.studentFormModel.controls.studyGrade.value;
+            student.language = Boolean(parseInt(this.studentFormModel.controls.languageNumber.value, 0));
+            if (this.img) {
+                student.image = this.croppedImagepath;
+            }
+            this.eseguiModifica(student);
+        } else {
+            let teacher: Teacher = new Teacher();
+            teacher = this.utente$.getValue();
+            if (this.teacherFormModel.controls.password.value) {
+                teacher.password = sha512(this.teacherFormModel.controls.password.value).toUpperCase();
+            } else {
+                teacher.password = sha512(this.teacherFormModel.controls.passwordVecchia.value).toUpperCase();
+            }
+            teacher.name = this.teacherFormModel.controls.name.value;
+            teacher.surname = this.teacherFormModel.controls.surname.value;
+            teacher.birthday = new Date(this.teacherFormModel.controls.birthday.value).getTime();
+            teacher.region = this.teacherFormModel.controls.region.value;
+            teacher.city = this.teacherFormModel.controls.city.value;
+            teacher.postCode = this.teacherFormModel.controls.postCode.value;
+            teacher.street = this.teacherFormModel.controls.street.value;
+            teacher.streetNumber = this.teacherFormModel.controls.streetNumber.value;
+            teacher.byography = this.teacherFormModel.controls.byography.value;
+            teacher.language = Boolean(parseInt(this.teacherFormModel.controls.languageNumber.value, 0));
+            if (this.img) {
+                teacher.image = this.croppedImagepath;
+            }
+            this.eseguiModifica(teacher);
+        }
+    }
+
+    eseguiModifica(user: Student | Teacher) {
+        if (user.roles === 1) {
+            // tslint:disable-next-line:max-line-length
+            this.userService.editProfiloStudent(user as Student, this.studentFormModel.controls.passwordVecchia.value).subscribe(() => {
+                if (this.studentFormModel.controls.password.value) {
+                    this.userService.logout();
+                    this.navController.navigateRoot('login');
+                } else {
+                    this.userService.login({
+                        username: user.email,
+                        password: this.studentFormModel.controls.passwordVecchia.value
+                    }).subscribe(() => {});
+                }
+
+            }, error => {});
+        } else {
+            // tslint:disable-next-line:max-line-length
+            this.userService.editProfiloTeacher(user as Teacher, this.teacherFormModel.controls.passwordVecchia.value).subscribe(() => {
+                if (this.teacherFormModel.controls.password.value) {
+                    this.userService.logout();
+                    this.navController.navigateRoot('login');
+                } else {
+                    this.userService.login({
+                        username: user.email,
+                        password: this.teacherFormModel.controls.passwordVecchia.value
+                    }).subscribe(() => {});
+                }
+            }, (error: HttpErrorResponse) => { if (error.status === 401) {
+                this.teacherFormModel.controls.passwordVecchia.reset();
+            }});
         }
     }
 
@@ -199,7 +279,7 @@ export class ModificaProfiloPage implements OnInit {
                 Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])
             );
         } else {
-            this.studentFormModel.controls.password.setValidators(Validators.compose([
+            this.teacherFormModel.controls.password.setValidators(Validators.compose([
                 Validators.minLength(5),
                 Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])
             );
