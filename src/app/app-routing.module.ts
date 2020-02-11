@@ -75,7 +75,7 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'profilo-singolo/:email',
+        path: 'profilo-singolo/:id',
         loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule',
         canActivate: [AuthGuard]
     },
