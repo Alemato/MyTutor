@@ -1,307 +1,302 @@
-<ion-content class="login-content ion-padding ion-text-center">
+<ion-content *ngIf="(this.utente$ | async) as user">
     <div class="m-auto fit-content" (click)="selectImage()">
         <div class="m-auto-imp" *ngIf="isLoading && img">{{"LOADING"|translate}}
             <ion-spinner></ion-spinner>
         </div>
-        <ion-icon *ngIf="!img" name="contact" class="fs-200 c-029db4"></ion-icon>
-        <ion-avatar *ngIf="img" class="ion-text-center m-auto-imp pb-15 h-200 w-200">
-            <img [src]="croppedImagepath" alt="img">
+        <ion-icon *ngIf="!user.image" name="contact" class="fs-150 c-029db4"></ion-icon>
+        <ion-avatar *ngIf="user.image" class="ion-text-center m-auto-imp pb-15 h-150 w-150">
+            <!--                    <img [src]="croppedImagepath" alt="img">-->
+            <img [src]="user.image" alt="img">
         </ion-avatar>
-        <ion-row class="ion-text-center ion-margin-bottom">
+        <ion-row class="ion-text-center">
             <ion-col class="foto-profilo">
-                <div>{{"PHOTO_BUTTON"|translate}}</div>
+                <div class="colore">{{"PHOTO_BUTTON"|translate}}</div>
             </ion-col>
         </ion-row>
-
     </div>
-    <div *ngIf="(this.teacher$ | async) as teacher; else studentBlock">
-        <form [formGroup]="teacherFormModel" (ngSubmit)="salvaModifica()"
-              class="bc-5a96ff pt-15">
-            <ion-list inset="true" class="ion-no-padding">
-                <ion-item lines="inset">
-                    <ion-icon name="lock"></ion-icon>
-                    <ion-input class="pa16" (ionInput)="setPwdValidator()" [type]="passwordType"
-                               placeholder="{{'NEW_PASSWORD'|translate}}"
-                               formControlName="password"></ion-input>
-                    <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
-                              color="gray"
-                              class="z-index-1"></ion-icon>
-                </ion-item>
-                <ng-container *ngFor="let validation of validationMessages.password">
-                    <div class="text08 pl-15"
-                         *ngIf="teacherFormModel.get('password').hasError(validation.type) && (teacherFormModel.get('password').dirty || teacherFormModel.get('password').touched)">
-                        <ion-icon color="danger" name="information-circle-outline"
-                                  class="vertical-middle"></ion-icon>
-                        <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                    </div>
-                </ng-container>
-                <ion-item lines="inset">
-                    <ion-icon name="key"></ion-icon>
-                    <ion-input class="pa16" [type]="passwordType" placeholder="{{'OLD_PASSWORD'|translate}}"
-                               formControlName="password2" required="true"></ion-input>
-                    <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
-                              color="gray"
-                              class="z-index-1"></ion-icon>
-                </ion-item>
-                <ng-container *ngFor="let validation of validationMessages.password">
-                    <div class="text08 pl-15"
-                         *ngIf="teacherFormModel.get('password2').hasError(validation.type) && (teacherFormModel.get('password2').dirty || teacherFormModel.get('password2').touched)">
-                        <ion-icon color="danger" name="information-circle-outline"
-                                  class="vertical-middle"></ion-icon>
-                        <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                    </div>
-                </ng-container>
-            </ion-list>
-            <ion-list inset="true" class="ion-no-padding">
-                <ion-row>
-                    <ion-col class="ion-no-padding">
-                        <ion-item lines="inset" class="ion-no-padding">
-                            <ion-icon name="person" class="pl-15 fs-30"></ion-icon>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col size="5" class="ion-no-padding">
-                        <ion-item lines="inset" class="ion-no-padding">
-                            <ion-input type="text" formControlName="name" placeholder="{{'NAME'|translate}}"
-                                       required="true"></ion-input>
-                        </ion-item>
-                        <ng-container *ngFor="let validation of validationMessages.name">
-                            <div class="text08 pl-15"
-                                 *ngIf="teacherFormModel.get('name').hasError(validation.type) && (teacherFormModel.get('name').dirty || teacherFormModel.get('name').touched)">
-                                <ion-icon color="danger" name="information-circle-outline"
-                                          class="vertical-middle"></ion-icon>
-                                <ion-text color="danger"
-                                          class="vertical-middle"> {{ validation.message }}</ion-text>
-                            </div>
-                        </ng-container>
-                    </ion-col>
+    <form *ngIf="user.roles === 1" [formGroup]="studentFormModel" (ngSubmit)="salvaModifica()" class="pt-15">
+        <ion-list inset="true" class="ion-no-padding mt-8">
+            <ion-item lines="inset" class="marg-bot-0">
+                <ion-icon name="lock"></ion-icon>
+                <ion-input class="pa16" (ionInput)="setPwdValidator()" [type]="passwordType"
+                           placeholder="{{'NEW_PASSWORD'|translate}}"
+                           formControlName="password"></ion-input>
+                <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                          color="gray"
+                          class="z-index-1"></ion-icon>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.password">
+                <div class="text08 pl-15"
+                     *ngIf="studentFormModel.get('password').hasError(validation.type) && (studentFormModel.get('password').dirty || studentFormModel.get('password').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
 
-                    <ion-col class="ion-no-padding">
-                        <ion-item lines="inset">
-                            <ion-input type="text" formControlName="surname" placeholder="{{'SURNAME'|translate}}"
-                                       required="true"></ion-input>
-                        </ion-item>
-                        <ng-container *ngFor="let validation of validationMessages.surname">
-                            <div class="text08 pl-15"
-                                 *ngIf="teacherFormModel.get('surname').hasError(validation.type) && (teacherFormModel.get('surname').dirty || teacherFormModel.get('surname').touched)">
-                                <ion-icon color="danger" name="information-circle-outline"
-                                          class="vertical-middle"></ion-icon>
-                                <ion-text color="danger"
-                                          class="vertical-middle"> {{ validation.message }}</ion-text>
-                            </div>
-                        </ng-container>
-                    </ion-col>
-                </ion-row>
-                <ion-item>
-                    <ion-icon name="calendar"></ion-icon>
-                    <ion-datetime class="pa16 m-auto" displayFormat="DD MMMM YYYY"
-                                  placeholder="{{'BIRTHDAY'|translate}}"
-                                  monthNames="{{'MONTHS_DATETIME'|translate}}"
-                                  max="2001" formControlName="birthday" required="true"></ion-datetime>
-                </ion-item>
-                <ng-container *ngFor="let validation of validationMessages.birthday">
-                    <div class="text08 pl-15 mb-10"
-                         *ngIf="teacherFormModel.get('birthday').hasError(validation.type) && (teacherFormModel.get('birthday').dirty || teacherFormModel.get('birthday').touched)">
-                        <ion-icon color="danger" name="information-circle-outline"
-                                  class="vertical-middle"></ion-icon>
-                        <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                    </div>
-                </ng-container>
-                <ion-item class="item-lines-inset">
-                    <ion-icon name="globe"></ion-icon>
-                    <ion-select class="select-full-width" formControlName="languageNumber" okText="{{'SELECT_BUTTON'|translate}}"
-                                cancelText="{{'CANCEL_BUTTON'|translate}}"
-                                placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
-                        <ion-select-option value="0">Italiano</ion-select-option>
-                        <ion-select-option value="1">English</ion-select-option>
-                    </ion-select>
-                </ion-item>
-                <ion-item class="item-lines-inset">
-                    <ion-icon name="map"></ion-icon>
-                    <ion-select class="select-full-width" formControlName="region" okText="{{'SELECT_BUTTON'|translate}}"
-                                cancelText="{{'CANCEL_BUTTON'|translate}}"
-                                placeholder="{{'REGION_SELECT'|translate}}" required="true">
-                        <ion-select-option value="Abruzzo">Abruzzo</ion-select-option>
-                        <ion-select-option value="Basilicata">Basilicata</ion-select-option>
-                        <ion-select-option value="Calabria">Calabria</ion-select-option>
-                        <ion-select-option value="Campania">Campania</ion-select-option>
-                        <ion-select-option value="Emilia Romagna">Emilia Romagna</ion-select-option>
-                        <ion-select-option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia
-                        </ion-select-option>
-                        <ion-select-option value="Lazio">Lazio</ion-select-option>
-                        <ion-select-option value="Liguria">Liguria</ion-select-option>
-                        <ion-select-option value="Lombardia">Lombardia</ion-select-option>
-                        <ion-select-option value="Marche">Marche</ion-select-option>
-                        <ion-select-option value="Molise">Molise</ion-select-option>
-                        <ion-select-option value="Piemonte">Piemonte</ion-select-option>
-                        <ion-select-option value="Puglia">Puglia</ion-select-option>
-                        <ion-select-option value="Sardegna">Sardegna</ion-select-option>
-                        <ion-select-option value="Sicilia">Sicilia</ion-select-option>
-                        <ion-select-option value="Toscana">Toscana</ion-select-option>
-                        <ion-select-option value="Trentino-Alto Adige">Trentino-Alto Adige</ion-select-option>
-                        <ion-select-option value="Umbria">Umbria</ion-select-option>
-                        <ion-select-option value="Val d'Aosta">Val d'Aosta</ion-select-option>
-                        <ion-select-option value="Veneto">Veneto</ion-select-option>
-                    </ion-select>
-                </ion-item>
-                <ion-item lines="inset">
-                    <ion-icon name="business"></ion-icon>
-                    <ion-input class="pa16" type="text" formControlName="city" placeholder="{{'CITY_TEXT'|translate}}"
-                               required="true"></ion-input>
-                </ion-item>
-                <ion-row>
-                    <ion-col class="ion-no-padding" size="8">
-                        <ion-item lines="inset">
-                            <ion-icon name="pin"></ion-icon>
-                            <ion-input class="pa16" type="text" formControlName="street"
-                                       placeholder="{{'STREET_TEXT'|translate}}" required="true"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col class="ion-no-padding" size="4">
-                        <ion-item lines="inset">
-                            <ion-input class="pa16" type="text" formControlName="streetNumber"
-                                       placeholder="{{'NUMBER_TEXT'|translate}}" required="true"></ion-input>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-                <ion-item lines="inset">
-                    <ion-icon name="at"></ion-icon>
-                    <ion-input class="pa16" type="text" pattern="[0-9]*" formControlName="postCode"
-                               placeholder="{{'ZIP_CODE_TEXT'|translate}}" required="true"></ion-input>
-                </ion-item>
-            </ion-list>
+            <ion-item lines="inset">
+                <ion-icon name="key"></ion-icon>
+                <ion-input class="pa16" [type]="passwordType"
+                           placeholder="{{'OLD_PASSWORD'|translate}}"
+                           formControlName="passwordVecchia" required="true"></ion-input>
+                <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                          color="gray"
+                          class="z-index-1"></ion-icon>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.password">
+                <div class="text08 pl-15"
+                     *ngIf="studentFormModel.get('passwordVecchia').hasError(validation.type) && (studentFormModel.get('passwordVecchia').dirty || studentFormModel.get('passwordVecchia').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item lines="inset" class="ion-no-padding">
+                <ion-icon name="person" class="fs-30"></ion-icon>
+                <ion-input class="pa16" type="text" formControlName="name" placeholder="{{'NAME'|translate}}"
+                           required="true"></ion-input>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.name">
+                <div class="text08 pl-15"
+                     *ngIf="studentFormModel.get('name').hasError(validation.type) && (studentFormModel.get('name').dirty || studentFormModel.get('name').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger"
+                              class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item lines="inset">
+                <ion-icon name="person" class="fs-30"></ion-icon>
+                <ion-input class="pa16" type="text" formControlName="surname"
+                           placeholder="{{'SURNAME'|translate}}"
+                           required="true"></ion-input>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.surname">
+                <div class="text08 pl-15"
+                     *ngIf="studentFormModel.get('surname').hasError(validation.type) && (studentFormModel.get('surname').dirty || studentFormModel.get('surname').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger"
+                              class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item>
+                <ion-icon name="calendar"></ion-icon>
+                <ion-datetime class="pa16" displayFormat="DD MMMM YYYY"
+                              placeholder="{{'BIRTHDAY'|translate}}"
+                              monthNames="{{'MONTHS_DATETIME'|translate}}"
+                              max="2001" formControlName="birthday" required="true"></ion-datetime>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.birthday">
+                <div class="text08 pl-15 mb-10"
+                     *ngIf="studentFormModel.get('birthday').hasError(validation.type) && (studentFormModel.get('birthday').dirty || studentFormModel.get('birthday').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item class="item-lines-inset">
+                <ion-icon name="globe"></ion-icon>
+                <ion-select class="select-full-width-2" formControlName="languageNumber"
+                            okText="{{'SELECT_BUTTON'|translate}}"
+                            cancelText="{{'CANCEL_BUTTON'|translate}}"
+                            placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
+                    <ion-select-option value="0">Italiano</ion-select-option>
+                    <ion-select-option value="1">English</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item lines="inset">
+                <ion-icon name="bookmarks"></ion-icon>
+                <ion-input class="pa16" type="text" formControlName="studyGrade"
+                           placeholder="{{'STUDY_GRADE_INPUT'|translate}}"></ion-input>
+            </ion-item>
+        </ion-list>
+
+        <ion-col class="signup-col">
+            <!--                    <ng-container *ngFor="let validation of validationMessages.password">-->
+            <ion-button class="submit-btn-2" type="submit"
+                        [disabled]="!studentFormModel.valid">{{"SAVE_BUTTON"|translate}}</ion-button>
+            <!--[routerLink]="['/profilo']-->
+            <!--                    </ng-container>-->
+        </ion-col>
+    </form>
+
+    <form *ngIf="user.roles === 2" [formGroup]="teacherFormModel" (ngSubmit)="salvaModifica()" class="pt-15">
+        <ion-list inset="true" class="ion-no-padding mt-8">
+            <ion-item lines="inset" class="marg-bot-0">
+                <ion-icon name="lock"></ion-icon>
+                <ion-input class="pa16" (ionInput)="setPwdValidator()" [type]="passwordType"
+                           placeholder="{{'NEW_PASSWORD'|translate}}"
+                           formControlName="password"></ion-input>
+                <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                          color="gray"
+                          class="z-index-1"></ion-icon>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.password">
+                <div class="text08 pl-15"
+                     *ngIf="teacherFormModel.get('password').hasError(validation.type) && (teacherFormModel.get('password').dirty || teacherFormModel.get('password').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item lines="inset">
+                <ion-icon name="key"></ion-icon>
+                <ion-input class="pa16" [type]="passwordType"
+                           placeholder="{{'OLD_PASSWORD'|translate}}"
+                           formControlName="passwordVecchia" required="true"></ion-input>
+                <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
+                          color="gray"
+                          class="z-index-1"></ion-icon>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.password">
+                <div class="text08 pl-15"
+                     *ngIf="teacherFormModel.get('passwordVecchia').hasError(validation.type) && (teacherFormModel.get('passwordVecchia').dirty || teacherFormModel.get('passwordVecchia').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item lines="inset" class="ion-no-padding">
+                <ion-icon name="person" class="fs-30"></ion-icon>
+                <ion-input class="pa16" type="text" formControlName="name" placeholder="{{'NAME'|translate}}"
+                           required="true"></ion-input>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.name">
+                <div class="text08 pl-15"
+                     *ngIf="teacherFormModel.get('name').hasError(validation.type) && (teacherFormModel.get('name').dirty || teacherFormModel.get('name').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger"
+                              class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item lines="inset">
+                <ion-icon name="person" class="fs-30"></ion-icon>
+                <ion-input class="pa16" type="text" formControlName="surname"
+                           placeholder="{{'SURNAME'|translate}}"
+                           required="true"></ion-input>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.surname">
+                <div class="text08 pl-15"
+                     *ngIf="teacherFormModel.get('surname').hasError(validation.type) && (teacherFormModel.get('surname').dirty || teacherFormModel.get('surname').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger"
+                              class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item>
+                <ion-icon name="calendar"></ion-icon>
+                <ion-datetime class="pa16" displayFormat="DD MMMM YYYY"
+                              placeholder="{{'BIRTHDAY'|translate}}"
+                              monthNames="{{'MONTHS_DATETIME'|translate}}"
+                              max="2001" formControlName="birthday" required="true"></ion-datetime>
+            </ion-item>
+            <ng-container *ngFor="let validation of validationMessages.birthday">
+                <div class="text08 pl-15 mb-10"
+                     *ngIf="teacherFormModel.get('birthday').hasError(validation.type) && (teacherFormModel.get('birthday').dirty || teacherFormModel.get('birthday').touched)">
+                    <ion-icon color="danger" name="information-circle-outline"
+                              class="vertical-middle"></ion-icon>
+                    <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
+                </div>
+            </ng-container>
+
+            <ion-item class="item-lines-inset">
+                <ion-icon name="globe"></ion-icon>
+                <ion-select class="select-full-width-2" formControlName="languageNumber"
+                            okText="{{'SELECT_BUTTON'|translate}}"
+                            cancelText="{{'CANCEL_BUTTON'|translate}}"
+                            placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
+                    <ion-select-option value="0">Italiano</ion-select-option>
+                    <ion-select-option value="1">English</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <ion-item class="item-lines-inset">
+                <ion-icon name="map"></ion-icon>
+                <ion-select class="select-full-width-2" formControlName="region"
+                            okText="{{'SELECT_BUTTON'|translate}}"
+                            cancelText="{{'CANCEL_BUTTON'|translate}}"
+                            placeholder="{{'REGION_SELECT'|translate}}" required="true">
+                    <ion-select-option value="Abruzzo">Abruzzo</ion-select-option>
+                    <ion-select-option value="Basilicata">Basilicata</ion-select-option>
+                    <ion-select-option value="Calabria">Calabria</ion-select-option>
+                    <ion-select-option value="Campania">Campania</ion-select-option>
+                    <ion-select-option value="Emilia Romagna">Emilia Romagna</ion-select-option>
+                    <ion-select-option value="Friuli-Venezia Giulia">Friuli-Venezia Giulia
+                    </ion-select-option>
+                    <ion-select-option value="Lazio">Lazio</ion-select-option>
+                    <ion-select-option value="Liguria">Liguria</ion-select-option>
+                    <ion-select-option value="Lombardia">Lombardia</ion-select-option>
+                    <ion-select-option value="Marche">Marche</ion-select-option>
+                    <ion-select-option value="Molise">Molise</ion-select-option>
+                    <ion-select-option value="Piemonte">Piemonte</ion-select-option>
+                    <ion-select-option value="Puglia">Puglia</ion-select-option>
+                    <ion-select-option value="Sardegna">Sardegna</ion-select-option>
+                    <ion-select-option value="Sicilia">Sicilia</ion-select-option>
+                    <ion-select-option value="Toscana">Toscana</ion-select-option>
+                    <ion-select-option value="Trentino-Alto Adige">Trentino-Alto Adige</ion-select-option>
+                    <ion-select-option value="Umbria">Umbria</ion-select-option>
+                    <ion-select-option value="Val d'Aosta">Val d'Aosta</ion-select-option>
+                    <ion-select-option value="Veneto">Veneto</ion-select-option>
+                </ion-select>
+            </ion-item>
+            <ion-item lines="inset">
+                <ion-icon name="business"></ion-icon>
+                <ion-input class="pa16" type="text" formControlName="city"
+                           placeholder="{{'CITY_TEXT'|translate}}"
+                           required="true"></ion-input>
+            </ion-item>
             <ion-row>
-                <ion-list inset="true" class="ion-no-padding w-100">
-                    <ion-item class="pa16">
-                        <ion-label class="bio" position="stacked">{{"BIOGRAPHY_LABEL"|translate}}</ion-label>
-                        <ion-textarea rows="3" formControlName="byography"
-                                      placeholder="{{'BIOGRAPHY_TEXT'|translate}}"></ion-textarea>
-                    </ion-item>
-                </ion-list>
-            </ion-row>
-            <ion-col class="signup-col">
-                <ion-button class="submit-btn" type="submit"
-                            [disabled]="!teacherFormModel.valid">{{"SAVE_BUTTON"|translate}}
-                </ion-button>
-                <!--[routerLink]="['/profilo']-->
-            </ion-col>
-        </form>
-    </div>
-    <ng-template #studentBlock>
-        <div *ngIf="(this.student$ | async) as student;">
-            <form [formGroup]="studentFormModel" (ngSubmit)="salvaModifica()"
-                  class="bc-5a96ff pt-15">
-                <ion-list inset="true" class="ion-no-padding">
+                <ion-col class="ion-no-padding" size="8">
                     <ion-item lines="inset">
-                        <ion-icon name="lock"></ion-icon>
-                        <ion-input class="pa16" (change)="setPwdValidator()" [type]="passwordType"
-                                   placeholder="{{'NEW_PASSWORD'|translate}}"
-                                   formControlName="password"></ion-input>
-                        <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
-                                  color="gray"
-                                  class="z-index-1"></ion-icon>
+                        <ion-icon name="pin"></ion-icon>
+                        <ion-input class="pa16" type="text" formControlName="street"
+                                   placeholder="{{'STREET_TEXT'|translate}}" required="true"></ion-input>
                     </ion-item>
-                    <ng-container *ngFor="let validation of validationMessages.password">
-                        <div class="text08 pl-15"
-                             *ngIf="studentFormModel.get('password').hasError(validation.type) && (studentFormModel.get('password').dirty || studentFormModel.get('password').touched)">
-                            <ion-icon color="danger" name="information-circle-outline"
-                                      class="vertical-middle"></ion-icon>
-                            <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                        </div>
-                    </ng-container>
-                    <ion-item lines="inset">
-                        <ion-icon name="key"></ion-icon>
-                        <ion-input class="pa16" [type]="passwordType" placeholder="{{'OLD_PASSWORD'|translate}}"
-                                   formControlName="password2" required="true"></ion-input>
-                        <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
-                                  color="gray"
-                                  class="z-index-1"></ion-icon>
-                    </ion-item>
-                    <ng-container *ngFor="let validation of validationMessages.password">
-                        <div class="text08 pl-15"
-                             *ngIf="studentFormModel.get('password2').hasError(validation.type) && (studentFormModel.get('password2').dirty || studentFormModel.get('password2').touched)">
-                            <ion-icon color="danger" name="information-circle-outline"
-                                      class="vertical-middle"></ion-icon>
-                            <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                        </div>
-                    </ng-container>
-                </ion-list>
-                <ion-list inset="true" class="ion-no-padding">
-                    <ion-row>
-                        <ion-col class="ion-no-padding">
-                            <ion-item lines="inset" class="ion-no-padding">
-                                <ion-icon name="person" class="pl-15 fs-30"></ion-icon>
-                            </ion-item>
-                        </ion-col>
-                        <ion-col size="5" class="ion-no-padding">
-                            <ion-item lines="inset" class="ion-no-padding">
-                                <ion-input type="text" formControlName="name" placeholder="{{'NAME'|translate}}"
-                                           required="true"></ion-input>
-                            </ion-item>
-                            <ng-container *ngFor="let validation of validationMessages.name">
-                                <div class="text08 pl-15"
-                                     *ngIf="studentFormModel.get('name').hasError(validation.type) && (studentFormModel.get('name').dirty || studentFormModel.get('name').touched)">
-                                    <ion-icon color="danger" name="information-circle-outline"
-                                              class="vertical-middle"></ion-icon>
-                                    <ion-text color="danger"
-                                              class="vertical-middle"> {{ validation.message }}</ion-text>
-                                </div>
-                            </ng-container>
-                        </ion-col>
-
-                        <ion-col class="ion-no-padding">
-                            <ion-item lines="inset">
-                                <ion-input type="text" formControlName="surname" placeholder="{{'SURNAME'|translate}}"
-                                           required="true"></ion-input>
-                            </ion-item>
-                            <ng-container *ngFor="let validation of validationMessages.surname">
-                                <div class="text08 pl-15"
-                                     *ngIf="studentFormModel.get('surname').hasError(validation.type) && (studentFormModel.get('surname').dirty || studentFormModel.get('surname').touched)">
-                                    <ion-icon color="danger" name="information-circle-outline"
-                                              class="vertical-middle"></ion-icon>
-                                    <ion-text color="danger"
-                                              class="vertical-middle"> {{ validation.message }}</ion-text>
-                                </div>
-                            </ng-container>
-                        </ion-col>
-                    </ion-row>
-
-                    <ion-item>
-                        <ion-icon name="calendar"></ion-icon>
-                        <ion-datetime class="pa16 m-auto" displayFormat="DD MMMM YYYY"
-                                      placeholder="{{'BIRTHDAY'|translate}}"
-                                      monthNames="{{'MONTHS_DATETIME'|translate}}"
-                                      max="2001" formControlName="birthday" required="true"></ion-datetime>
-                    </ion-item>
-                    <ng-container *ngFor="let validation of validationMessages.birthday">
-                        <div class="text08 pl-15 mb-10"
-                             *ngIf="studentFormModel.get('birthday').hasError(validation.type) && (studentFormModel.get('birthday').dirty || studentFormModel.get('birthday').touched)">
-                            <ion-icon color="danger" name="information-circle-outline"
-                                      class="vertical-middle"></ion-icon>
-                            <ion-text color="danger" class="vertical-middle"> {{ validation.message }}</ion-text>
-                        </div>
-                    </ng-container>
-                    <ion-item class="item-lines-inset">
-                        <ion-icon name="globe"></ion-icon>
-                        <ion-select class="select-full-width" formControlName="languageNumber" okText="{{'SELECT_BUTTON'|translate}}"
-                                    cancelText="{{'CANCEL_BUTTON'|translate}}"
-                                    placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
-                            <ion-select-option value="0">Italiano</ion-select-option>
-                            <ion-select-option value="1">English</ion-select-option>
-                        </ion-select>
-                    </ion-item>
-                    <ion-item lines="inset">
-                        <ion-icon name="bookmarks"></ion-icon>
-                        <ion-input class="pa16" type="text" formControlName="studyGrade"
-                                   placeholder="{{'STUDY_GRADE_INPUT'|translate}}"></ion-input>
-                    </ion-item>
-                </ion-list>
-                <ion-col class="signup-col">
-                    <ion-button class="submit-btn" type="submit"
-                                [disabled]="!studentFormModel.valid">{{"SAVE_BUTTON"|translate}}
-                    </ion-button>
                 </ion-col>
-            </form>
-        </div>
-    </ng-template>
-</ion-content>
+                <ion-col class="ion-no-padding" size="4">
+                    <ion-item lines="inset">
+                        <ion-input class="pa16" type="text" formControlName="streetNumber"
+                                   placeholder="{{'NUMBER_TEXT'|translate}}" required="true"></ion-input>
+                    </ion-item>
+                </ion-col>
+            </ion-row>
+            <ion-item lines="inset">
+                <ion-icon name="at"></ion-icon>
+                <ion-input class="pa16" type="text" pattern="[0-9]*" formControlName="postCode"
+                           placeholder="{{'ZIP_CODE_TEXT'|translate}}" required="true"></ion-input>
+            </ion-item>
+            <ion-item lines="inset" class="biografia-1">
 
+                <ion-row>
+                    <ion-col class="a">
+                        <ion-icon name="briefcase" class="colore-icona"></ion-icon>
+                    </ion-col>
+                    <ion-col>
+                        <ion-label class="label-prova" position="stacked">{{"BIOGRAPHY_LABEL"|translate}}</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-textarea rows="4" class="mt-0 biografia" formControlName="byography"
+                              placeholder="{{'BIOGRAPHY_TEXT'|translate}}"></ion-textarea>
+            </ion-item>
+        </ion-list>
+        <ion-col class="signup-col">
+            <ion-button class="submit-btn-2" type="submit"
+                        [disabled]="!teacherFormModel.valid">{{"SAVE_BUTTON"|translate}}</ion-button>
+            <!--[routerLink]="['/profilo']-->
+        </ion-col>
+    </form>
+
+
+</ion-content>

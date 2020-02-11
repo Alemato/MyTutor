@@ -1,39 +1,32 @@
 import {Component, OnInit} from '@angular/core';
-import {Storage} from '@ionic/storage';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActionSheetController, AlertController, NavController} from '@ionic/angular';
-import {BehaviorSubject} from 'rxjs';
-import {Student} from '../../model/student.model';
-import {Teacher} from '../../model/teacher.model';
 import {UserService} from '../../services/user.service';
-import {Camera, CameraOptions} from '@ionic-native/camera/ngx';
-import {File} from '@ionic-native/file/ngx';
-import {Crop} from '@ionic-native/crop/ngx';
-import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
-import {SuperTabs} from '@ionic-super-tabs/angular';
-import {HttpErrorResponse} from '@angular/common/http';
+import {BehaviorSubject} from 'rxjs';
 import {TranslateService} from '@ngx-translate/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Student} from '../../model/student.model';
+import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
+import {Teacher} from '../../model/teacher.model';
+import {Camera, CameraOptions} from '@ionic-native/camera/ngx';
+import {Crop} from '@ionic-native/crop/ngx';
+import {ActionSheetController, AlertController} from '@ionic/angular';
+import {File} from '@ionic-native/file/ngx';
+import {sha512} from 'js-sha512';
 
 @Component({
-    selector: 'modifica-profilo',
+    selector: 'app-modifica-profilo',
     templateUrl: './modifica-profilo.page.html',
     styleUrls: ['./modifica-profilo.page.scss'],
 })
 export class ModificaProfiloPage implements OnInit {
-    private student$: BehaviorSubject<Student>;
-    // private student: Student = new Student(undefined);
-    private teacher$: BehaviorSubject<Teacher>;
-    // private teacher: Teacher = new Teacher(undefined);
-    private type = 0;
-    private userType: string;
+    private utente$: BehaviorSubject<any>;
     private teacherFormModel: FormGroup;
     private studentFormModel: FormGroup;
     public passwordType = 'password';
     public passwordShow = false;
-    public toogle = false;
     croppedImagepath = '';
     img = false;
     isLoading = false;
+
     private errorTitle: string;
     private errorSubTitle: string;
     private imageSourceHeader: string;
@@ -70,122 +63,143 @@ export class ModificaProfiloPage implements OnInit {
         ]
     };
 
-    constructor(
-        private storage: Storage,
-        public formBuilder: FormBuilder,
-        private userService: UserService,
-        private camera: Camera,
-        private crop: Crop,
-        public actionSheetController: ActionSheetController,
-        private file: File,
-        private navController: NavController,
-        private superTab: SuperTabs,
-        private alertController: AlertController,
-        public translateService: TranslateService,
-    ) {
+    constructor(private userService: UserService,
+                private translateService: TranslateService,
+                private formBuilder: FormBuilder,
+                private camera: Camera,
+                private crop: Crop,
+                public actionSheetController: ActionSheetController,
+                private file: File) {
     }
 
     ngOnInit() {
+        this.utente$ = this.userService.getUser();
         this.initTranslate();
-        this.userType = this.userService.getTypeUser();
-        if (this.userType === 'student') {
-            this.student$ = this.userService.getUser();
-            this.type = 1;
-            this.studentFormModel = this.formBuilder.group({
-                // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
-                name: ['', Validators.required],
-                surname: ['', Validators.required],
-                password2: [''],
-                password: ['', Validators.compose([
-                    Validators.required,
-                    Validators.minLength(5),
-                    Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])
-                ],
-                birthday: ['', Validators.compose([
-                    Validators.required,
-                    RegisterBirthdayValidator.isAdult
-                ])],
-                studyGrade: [''],
-                languageNumber: ['0', Validators.required]
-            });
-            this.setValori();
-        } else if (this.userType === 'teacher') {
-            this.teacher$ = this.userService.getUser();
+        console.log(this.utente$.value.roles);
+        if (this.utente$.value.roles === 1) {
+            this.initFormStudent(this.utente$.value);
+        } else {
+            this.initFormTeacher(this.utente$.value);
+        }
+        this.utente$.subscribe((user) => {
+            if (user.roles === 1) {
+                this.setValuesFormStudent(user);
+            } else {
+                this.setValuesFormTeacher(user);
+            }
+        });
+        this.findInvalidControls();
+    }
 
-            this.type = 2;
-            this.teacherFormModel = this.formBuilder.group({
-                // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
-                name: ['', Validators.required],
-                surname: ['', Validators.required],
-                password2: [''],
-                password: ['', Validators.compose([
-                    Validators.required,
-                    Validators.minLength(5),
-                    Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')
-                ])],
-                birthday: ['', Validators.compose([
-                    Validators.required,
-                    RegisterBirthdayValidator.isAdult
-                ])],
-                region: ['', Validators.required],
-                city: ['', Validators.required],
-                postCode: ['', Validators.required],
-                street: ['', Validators.required],
-                streetNumber: ['', Validators.required],
-                byography: ['', Validators.required],
-                languageNumber: ['0', Validators.required]
-            });
-            this.setValori();
+    public findInvalidControls() {
+        const invalid = [];
+        const controls = this.studentFormModel.controls;
+        for (const name in controls) {
+            if (controls[name].invalid) {
+                invalid.push(name);
+            }
+        }
+        return invalid;
+    }
+
+    initFormStudent(student: Student) {
+        this.studentFormModel = this.formBuilder.group({
+            // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
+            name: [student.name, Validators.required],
+            surname: [student.surname, Validators.required],
+            passwordVecchia: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(5),
+                Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')
+            ])],    // VECCHIA PASSWORD
+            password: [''],            // NUOVA PASSWORD
+            birthday: [new Date(student.birthday).toISOString(), Validators.compose([
+                Validators.required,
+                RegisterBirthdayValidator.isAdult
+            ])],
+            studyGrade: [student.studyGrade],
+            languageNumber: [(+student.language).toString(), Validators.required]
+        });
+    }
+
+    setValuesFormStudent(student: Student) {
+        this.studentFormModel.controls.name.setValue(student.name);
+        this.studentFormModel.controls.surname.setValue(student.surname);
+        this.studentFormModel.controls.passwordVecchia.setValue('');
+        this.studentFormModel.controls.password.setValue('');
+        this.studentFormModel.controls.birthday.setValue(new Date(student.birthday).toISOString());
+        this.studentFormModel.controls.studyGrade.setValue(student.studyGrade);
+        this.studentFormModel.controls.languageNumber.setValue((+student.language).toString());
+    }
+
+    initFormTeacher(teacher: Teacher) {
+        this.teacherFormModel = this.formBuilder.group({
+            // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
+            name: [teacher.name, Validators.required],
+            surname: [teacher.surname, Validators.required],
+            passwordVecchia: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(5),
+                Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')
+            ])],    // VECCHIA PASSWORD
+            password: [''],            // NUOVA PASSWORD
+            birthday: [new Date(teacher.birthday).toISOString(), Validators.compose([
+                Validators.required,
+                RegisterBirthdayValidator.isAdult
+            ])],
+            region: [teacher.region, Validators.required],
+            city: [teacher.city, Validators.required],
+            postCode: [teacher.postCode, Validators.required],
+            street: [teacher.street, Validators.required],
+            streetNumber: [teacher.streetNumber, Validators.required],
+            byography: [teacher.byography, Validators.required],
+            languageNumber: [(+teacher.language).toString(), Validators.required]
+        });
+    }
+
+    setValuesFormTeacher(teacher: Teacher) {
+        this.teacherFormModel.controls.name.setValue(teacher.name);
+        this.teacherFormModel.controls.surname.setValue(teacher.surname);
+        this.teacherFormModel.controls.passwordVecchia.setValue('');
+        this.teacherFormModel.controls.password.setValue('');
+        this.teacherFormModel.controls.birthday.setValue(new Date(teacher.birthday).toISOString());
+        this.teacherFormModel.controls.studyGrade.setValue(teacher.region);
+        this.teacherFormModel.controls.studyGrade.setValue(teacher.region);
+        this.teacherFormModel.controls.studyGrade.setValue(teacher.city);
+        this.teacherFormModel.controls.studyGrade.setValue(teacher.postCode);
+        this.teacherFormModel.controls.studyGrade.setValue(teacher.street);
+        this.teacherFormModel.controls.studyGrade.setValue(teacher.streetNumber);
+        this.teacherFormModel.controls.studyGrade.setValue(teacher.byography);
+        this.teacherFormModel.controls.languageNumber.setValue((+teacher.language).toString());
+    }
+
+    public togglePassword() {
+        if (this.passwordShow) {
+            this.passwordShow = false;
+            this.passwordType = 'password';
+        } else {
+            this.passwordShow = true;
+            this.passwordType = 'text';
         }
     }
 
-    setValori() {/*
-        if (this.type === 1) {
-            this.student$.subscribe(data => {
-                this.student.set(data);
-                const obj = {
-                    name: this.student.name,
-                    surname: this.student.surname,
-                    password: null,
-                    password2: '',
-                    birthday: new Date(this.student.birthday).toISOString(),
-                    studyGrade: this.student.studyGrade,
-                    languageNumber: this.student.numberRules().toString()
-                };
-                this.studentFormModel.setValue(obj);
-                this.studentFormModel.controls.password.clearValidators();
-            });
-        } else if (this.type === 2) {
-            this.teacher$.subscribe(teacher => {
-                this.teacher.set(teacher);
-                const obj = {
-                    name: this.teacher.name,
-                    surname: this.teacher.surname,
-                    password: null,
-                    password2: '',
-                    birthday: new Date(this.teacher.birthday).toISOString(),
-                    region: this.teacher.region,
-                    city: this.teacher.city,
-                    postCode: this.teacher.postCode,
-                    street: this.teacher.street,
-                    streetNumber: this.teacher.streetNumber,
-                    byography: this.teacher.byography,
-                    languageNumber: this.teacher.numberRules().toString()
-                };
-                this.teacherFormModel.setValue(obj);
-                this.teacherFormModel.controls.password.clearValidators();
-            });
-        }*/
+    salvaModifica() {
+        if (this.utente$.value.roles === 1) {
+            let student: Student = new Student();
+            student = this.utente$.getValue();
+            student.password = sha512(this.studentFormModel.controls.passwordVecchia.value).toUpperCase();
+            console.log(student);
+        }
     }
 
     public setPwdValidator() {
-        if (this.type === 1) {
+        if (this.utente$.value.roles === 1) {
             this.studentFormModel.controls.password.setValidators(Validators.compose([
                 Validators.minLength(5),
                 Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])
             );
-        } else if (this.type === 2) {
-            this.teacherFormModel.controls.password.setValidators(Validators.compose([
+        } else {
+            this.studentFormModel.controls.password.setValidators(Validators.compose([
                 Validators.minLength(5),
                 Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])
             );
@@ -266,96 +280,7 @@ export class ModificaProfiloPage implements OnInit {
         });
     }
 
-    async salvaModifica() {
-       /* if (this.type === 1) {
-            this.student.set(this.studentFormModel.value);
-            this.student.birthday = new Date(this.student.birthday).getTime();
-            if (this.img) {
-                this.student.image = this.croppedImagepath;
-            }
-            if (this.studentFormModel.controls.password.value) {
-                this.userService.editProfiloStudent(this.student, this.studentFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.logout();
-                    this.navController.navigateRoot('login');
-                }, (err: HttpErrorResponse) => {
-                    if (err.status === 401) {
-                        this.errorTitle = err.status + ' ' + err.statusText;
-                        this.errorSubTitle = err.error.message;
-                        this.showLoginError();
-                        this.teacherFormModel.controls.password2.reset();
-                    }
-                });
-            } else {
-                this.student.password = this.studentFormModel.controls.password2.value;
-                this.userService.editProfiloStudent(this.student, this.studentFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.getProfilobyID(this.student.idUser).subscribe(() => {
-                        this.superTab.selectTab(0);
-                    });
-                }, (err: HttpErrorResponse) => {
-                    if (err.status === 401) {
-                        this.errorTitle = err.status + ' ' + err.statusText;
-                        this.errorSubTitle = err.error.message;
-                        this.showLoginError();
-                        this.teacherFormModel.controls.password2.reset();
-                    }
-                });
-            }
-        } else if (this.type === 2) {
-            this.teacher.set(this.teacherFormModel.value);
-            this.teacher.birthday = new Date(this.teacher.birthday).getTime();
-            if (this.img) {
-                this.teacher.image = this.croppedImagepath;
-            }
-            if (this.teacherFormModel.controls.password.value) {
-                this.userService.editProfiloTeacher(this.teacher, this.teacherFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.logout();
-                    this.navController.navigateRoot('login');
-                }, (err: HttpErrorResponse) => {
-                    if (err.status === 401) {
-                        this.errorTitle = err.status + ' ' + err.statusText;
-                        this.errorSubTitle = err.error.message;
-                        this.showLoginError();
-                        this.teacherFormModel.controls.password2.reset();
-                    }
-                });
-            } else {
-                this.teacher.password = this.teacherFormModel.controls.password2.value;
-                this.userService.editProfiloTeacher(this.teacher, this.teacherFormModel.controls.password2.value).subscribe(() => {
-                    this.userService.getProfilobyID(this.student.idUser).subscribe(() => {
-                        this.superTab.selectTab(0);
-                    });
-                }, (err: HttpErrorResponse) => {
-                    if (err.status === 401) {
-                        this.errorTitle = err.status + ' ' + err.statusText;
-                        this.errorSubTitle = err.error.message;
-                        this.showLoginError();
-                        this.teacherFormModel.controls.password2.reset();
-                    }
-                });
-            }
-        }*/
-    }
-
-    async showLoginError() {
-        const alert = await this.alertController.create({
-            header: this.errorTitle,
-            message: this.errorSubTitle,
-            buttons: ['OK']
-        });
-
-        await alert.present();
-    }
-
-    public togglePassword() {
-        if (this.passwordShow) {
-            this.passwordShow = false;
-            this.passwordType = 'password';
-        } else {
-            this.passwordShow = true;
-            this.passwordType = 'text';
-        }
-    }
-    private initTranslate() {
+    initTranslate() {
         this.translateService.get('IMAGE_SOURCE_HEADER').subscribe((data) => {
             this.imageSourceHeader = data;
         });
