@@ -1,16 +1,24 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title class="ml--56">Modifica Profilo</ion-title>
+    </ion-toolbar>
+</ion-header>
 <ion-content *ngIf="(this.utente$ | async) as user">
     <div class="m-auto fit-content" (click)="selectImage()">
         <div class="m-auto-imp" *ngIf="isLoading && img">{{"LOADING"|translate}}
             <ion-spinner></ion-spinner>
         </div>
-        <ion-icon *ngIf="!user.image" name="contact" class="fs-150 c-029db4"></ion-icon>
-        <ion-avatar *ngIf="user.image" class="ion-text-center m-auto-imp pb-15 h-150 w-150">
+        <ion-icon *ngIf="!user.image" name="contact" class="fs-150 c-029db4 mt-25"></ion-icon>
+        <ion-avatar *ngIf="user.image" class="ion-text-center mb-10 h-150 w-150 mt-25">
             <!--                    <img [src]="croppedImagepath" alt="img">-->
-            <img [src]="user.image" alt="img">
+            <img [src]="croppedImagepath" alt="img" class="h-150 w-150">
         </ion-avatar>
         <ion-row class="ion-text-center">
             <ion-col class="foto-profilo">
-                <div class="colore">{{"PHOTO_BUTTON"|translate}}</div>
+                <div class="colore mt-10">{{"PHOTO_BUTTON"|translate}}</div>
             </ion-col>
         </ion-row>
     </div>
@@ -117,13 +125,13 @@
             </ion-item>
         </ion-list>
 
+        <ion-row class="ion-text-center">
         <ion-col class="signup-col">
-            <!--                    <ng-container *ngFor="let validation of validationMessages.password">-->
             <ion-button class="submit-btn-2" type="submit"
                         [disabled]="!studentFormModel.valid">{{"SAVE_BUTTON"|translate}}</ion-button>
             <!--[routerLink]="['/profilo']-->
-            <!--                    </ng-container>-->
         </ion-col>
+        </ion-row>
     </form>
 
     <form *ngIf="user.roles === 2" [formGroup]="teacherFormModel" (ngSubmit)="salvaModifica()" class="pt-15">
@@ -291,11 +299,13 @@
                               placeholder="{{'BIOGRAPHY_TEXT'|translate}}"></ion-textarea>
             </ion-item>
         </ion-list>
+        <ion-row class="ion-text-center">
         <ion-col class="signup-col">
             <ion-button class="submit-btn-2" type="submit"
                         [disabled]="!teacherFormModel.valid">{{"SAVE_BUTTON"|translate}}</ion-button>
             <!--[routerLink]="['/profilo']-->
         </ion-col>
+        </ion-row>
     </form>
 
 

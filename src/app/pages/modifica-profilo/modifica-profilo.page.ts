@@ -11,7 +11,7 @@ import {Crop} from '@ionic-native/crop/ngx';
 import {ActionSheetController, AlertController, NavController} from '@ionic/angular';
 import {File} from '@ionic-native/file/ngx';
 import {sha512} from 'js-sha512';
-import {HttpErrorResponse} from "@angular/common/http";
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
     selector: 'app-modifica-profilo',
@@ -71,12 +71,14 @@ export class ModificaProfiloPage implements OnInit {
                 private crop: Crop,
                 public actionSheetController: ActionSheetController,
                 private file: File,
-                private navController: NavController) {
+                private navController: NavController,
+                private alertController: AlertController) {
     }
 
     ngOnInit() {
         this.utente$ = this.userService.getUser();
         this.initTranslate();
+        this.croppedImagepath = this.utente$.value.image;
         console.log(this.utente$.value.roles);
         if (this.utente$.value.roles === 1) {
             this.initFormStudent(this.utente$.value);
@@ -253,7 +255,18 @@ export class ModificaProfiloPage implements OnInit {
                     }).subscribe(() => {});
                 }
 
-            }, error => {});
+            }, (err: HttpErrorResponse) => {
+                console.log(err);
+                if (err.status === 401) {
+                    console.error('login request error: ' + err.status);
+                    this.showPasswordError();
+                    this.studentFormModel.controls.passwordVecchia.reset();
+                }
+                if (err.status === 500) {
+                    console.error('login request error: ' + err.status);
+                    this.showPasswordError();
+                }
+            });
         } else {
             // tslint:disable-next-line:max-line-length
             this.userService.editProfiloTeacher(user as Teacher, this.teacherFormModel.controls.passwordVecchia.value).subscribe(() => {
@@ -266,9 +279,18 @@ export class ModificaProfiloPage implements OnInit {
                         password: this.teacherFormModel.controls.passwordVecchia.value
                     }).subscribe(() => {});
                 }
-            }, (error: HttpErrorResponse) => { if (error.status === 401) {
-                this.teacherFormModel.controls.passwordVecchia.reset();
-            }});
+            }, (err: HttpErrorResponse) => {
+                console.log(err);
+                if (err.status === 401) {
+                    console.error('login request error: ' + err.status);
+                    this.showPasswordError();
+                    this.teacherFormModel.controls.passwordVecchia.reset();
+                }
+                if (err.status === 500) {
+                    console.error('login request error: ' + err.status);
+                    this.showPasswordError();
+                }
+            });
         }
     }
 
@@ -284,6 +306,16 @@ export class ModificaProfiloPage implements OnInit {
                 Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')])
             );
         }
+    }
+
+    async showPasswordError() {
+        // this.Diss();
+        const alert = await this.alertController.create({
+            header: 'Errore Password',
+            message: 'Password Sbagliata',
+            buttons: ['OK']
+        });
+        await alert.present();
     }
 
     // PER IMAGINI DALLA FOTOCAMERA O GALLERIA
