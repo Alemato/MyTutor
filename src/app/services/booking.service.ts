@@ -171,18 +171,18 @@ export class BookingService {
 
     startPeriodicGet() {
         console.log('startPeriodicGet');
-        this.periodicGet = interval(15000).subscribe(() => {
+        /*this.periodicGet = interval(15000).subscribe(() => {
             console.log('startPeriodicGet');
             this.getRestBooking().subscribe(() => {
             });
-        });
+        });*/
     }
 
     stopPeriodicGet() {
         console.log('stopPeriodicGet');
-        if (!this.periodicGet.closed) {
+        /*if (!this.periodicGet.closed) {
             this.periodicGet.unsubscribe();
-        }
+        }*/
     }
 
     logout() {
