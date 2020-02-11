@@ -14,11 +14,10 @@ import {TranslateService} from '@ngx-translate/core';
     styleUrls: ['./storico-lezioni.page.scss'],
 })
 export class StoricoLezioniPage implements OnInit {
-    private bookings$: BehaviorSubject<Booking[]>;
-    public user$: BehaviorSubject<any>;
-    private storico: Booking[];
+    private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
+    public user$: BehaviorSubject<User>;
     private loading;
-    private listUser: User[];
+    private listUser: User[] = [];
     private pleaseWaitMessage: string;
 
     constructor(public popoverController: PopoverController,
@@ -30,26 +29,17 @@ export class StoricoLezioniPage implements OnInit {
 
     ngOnInit() {
         this.initTranslate();
-        this.loadingPresent();
-        this.storico = [];
         this.user$ = this.userService.getUser();
-        this.bookings$ = this.bookingService.getBookings();
-        this.user$.subscribe((io: User) => {
-            this.bookingService.getRestUsersBooking().subscribe((list) => {
-                const users = [];
-                list.forEach((item) => {
-                    if (item.roles !== io.roles) {
-                        users.push(item);
+        this.bookingService.getRestHistoricalBookingFilter('', '', '', '', '', '').subscribe((bookings) => {
+            console.log(bookings);
+            this.bookings$.next(bookings);
+            this.bookingService.getRestUsersBooking().subscribe((users) => {
+                users.forEach((user) => {
+                    if (this.user$.value.roles !== user.roles) {
+                        this.listUser.push(user);
                     }
                 });
-                this.listUser = users;
-                console.log(this.listUser);
-                this.bookingService.getRestBooking().subscribe();
-                this.disLoading();
             });
-        });
-        this.bookings$.subscribe((data) => {
-            this.storico = data;
         });
     }
 
@@ -63,12 +53,10 @@ export class StoricoLezioniPage implements OnInit {
         popover.onDidDismiss().then((data) => {
             console.log(data);
             if (data.data !== undefined) {
-            this.loadingPresent();
-            // tslint:disable-next-line:max-line-length
-            this.bookingService.getRestHistoricalBookingFilter(data.data.selectMateria, data.data.selectSotto, data.data.nomeLezione, data.data.dataLezione, data.data.selectUtente, data.data.statoLezione).subscribe((item) => {
-                console.log(item);
-                this.disLoading();
-            });
+                // tslint:disable-next-line:max-line-length
+                /*this.bookingService.getRestHistoricalBookingFilter(data.data.selectMateria, data.data.selectSotto, data.data.nomeLezione, data.data.dataLezione, data.data.selectUtente, data.data.statoLezione).subscribe((item) => {
+                    console.log(item);
+                });*/
             }
         });
         await popover.present();

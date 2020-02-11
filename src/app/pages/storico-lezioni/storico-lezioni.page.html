@@ -10,184 +10,177 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-list>
-        <ion-list-header *ngIf="storico.length > 0; else notSto">{{"LIST_LESSONS_FREQUENTED_LD"|translate}}</ion-list-header>
-        <ng-template #notSto>
-            <div class="mx-auto fit-content">
-                <h5 class="fit-content font-weight-300 ls-1">{{"NO_LESSONS_BOOKED_ATTENDED_CANCELLED"|translate}}</h5>
-            </div>
-        </ng-template>
-        <div *ngIf="(user$| async) as user">
-            <div *ngIf="user.roles === 1; else teacherBlock">
-                <ion-item class="px-0" *ngFor="let s of storico">
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col size="auto" class="vertical-middle">
-                                <ion-icon
-                                        *ngIf="s.planning.lesson.teacher.image === null || s.planning.lesson.teacher.image === '' || s.planning.lesson.teacher.image ===' '; else imgBlock"
-                                        name="contact" class="fs-62 c-primary"
-                                        [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]" routerDirection="forward"></ion-icon>
-                                <ng-template #imgBlock>
-                                    <ion-avatar class="ion-text-center h-62 w-62 pt-3 vertical-middle"
-                                                [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]"
-                                                routerDirection="forward">
-                                        <img class="vertical-middle w-51 h-51" [src]="s.planning.lesson.teacher.image"
-                                             alt="img">
-                                    </ion-avatar>
-                                </ng-template>
-                            </ion-col>
-                            <ion-col size="6">
-                                <ion-row>
-                                    <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
-                                             [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
-                                </ion-row>
-                                <ion-row>
-                                    <ion-col
-                                            class="ion-no-padding pt-5 ion-no-margin fs-medium font-weight-300 ls-01em c-primary"
-                                            [routerLink]="['/profilo-singolo', s.planning.lesson.teacher.email]"
-                                            routerDirection="forward">{{s.planning.lesson.teacher.name}} {{s.planning.lesson.teacher.surname}}</ion-col>
-                                </ion-row>
-                                <ion-row *ngIf="s.lessonState === 0; else lessonState1">
+<ion-content *ngIf="(user$ | async) as user">
+    <div *ngIf="(bookings$ | async) as bookings">
+        <ion-list>
+            <ion-list-header *ngIf="bookings.length > 0; else notSto">{{"LIST_LESSONS_FREQUENTED_LD"|translate}}</ion-list-header>
+            <ng-template #notSto>
+                <div class="mx-auto fit-content">
+                    <h5 class="fit-content font-weight-300 ls-1">{{"NO_LESSONS_BOOKED_ATTENDED_CANCELLED"|translate}}</h5>
+                </div>
+            </ng-template>
+
+            <ion-item class="px-0" *ngFor="let booking of bookings" detail="true">
+                <ion-grid>
+                    <ion-row>
+                        <ion-col size="auto" class="vertical-middle" *ngIf="user.roles === 1">
+                            <ion-icon
+                                    *ngIf="booking.planning.lesson.teacher.image === null || booking.planning.lesson.teacher.image === '' || booking.planning.lesson.teacher.image ===' '; else imgBlock"
+                                    name="contact" class="fs-62 c-primary"
+                                    [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]" routerDirection="forward"></ion-icon>
+                            <ng-template #imgBlock>
+                                <ion-avatar class="ion-text-center h-62 w-62 pt-3 vertical-middle"
+                                            [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]"
+                                            routerDirection="forward">
+                                    <img class="vertical-middle w-51 h-51" [src]="booking.planning.lesson.teacher.image"
+                                         alt="img">
+                                </ion-avatar>
+                            </ng-template>
+                        </ion-col>
+
+                        <ion-col size="auto" class="vertical-middle" *ngIf="user.roles === 2">
+                            <ion-icon
+                                    *ngIf="booking.student.image === null || booking.student.image === '' || booking.student.image ===' '; else imgBlock"
+                                    name="contact" class="fs-62 c-primary"
+                                    [routerLink]="['/profilo-singolo', booking.student.idUser]"></ion-icon>
+                            <ng-template #imgBlock>
+                                <ion-avatar class="ion-text-center h-62 w-62 pt-3 vertical-middle"
+                                            [routerLink]="['/profilo-singolo', booking.student.email]"
+                                            routerDirection="forward">
+                                    <img class="vertical-middle w-51 h-51" [src]="booking.student.image" alt="img">
+                                </ion-avatar>
+                            </ng-template>
+                        </ion-col>
+
+                        <ion-col size="6" *ngIf="user.roles === 1">
+                            <ion-row>
+                                <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
+                                         [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{booking.planning.lesson.name}}</ion-col>
+                            </ion-row>
+                            <ion-row>
+                                <ion-col
+                                        class="ion-no-padding pt-5 ion-no-margin fs-medium font-weight-300 ls-01em c-primary"
+                                        [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.email]"
+                                        routerDirection="forward">{{booking.planning.lesson.teacher.name}} {{booking.planning.lesson.teacher.surname}}</ion-col>
+                            </ion-row>
+                            <ion-row *ngIf="booking.lessonState === 0; else lessonState1">
+                                <ion-col class="ion-no-padding pt-5">
+                                    <ion-text class="fs-medium fw-normal ls-1" color="warning" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_REQUIRED"|translate}}
+                                    </ion-text>
+                                </ion-col>
+                            </ion-row>
+                            <ng-template #lessonState1>
+                                <ion-row *ngIf="booking.lessonState === 1; else lessonState2">
                                     <ion-col class="ion-no-padding pt-5">
-                                        <ion-text class="fs-medium fw-normal ls-1" color="warning" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_REQUIRED"|translate}}
+                                        <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_ACCEPTED"|translate}}
                                         </ion-text>
                                     </ion-col>
                                 </ion-row>
-                                <ng-template #lessonState1>
-                                    <ion-row *ngIf="s.lessonState === 1; else lessonState2">
-                                        <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_ACCEPTED"|translate}}
-                                            </ion-text>
-                                        </ion-col>
-                                    </ion-row>
-                                </ng-template>
-                                <ng-template #lessonState2>
-                                    <ion-row *ngIf="s.lessonState === 2; else lessonState3">
-                                        <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">
-                                                {{"STATUS_REJECTED"|translate}}
-                                            </ion-text>
-                                        </ion-col>
-                                    </ion-row>
-                                </ng-template>
-                                <ng-template #lessonState3>
-                                    <ion-row *ngIf="s.lessonState === 3; else lessonState4">
-                                        <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
-                                                      color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_CANCELLED"|translate}}
-                                            </ion-text>
-                                        </ion-col>
-                                    </ion-row>
-                                </ng-template>
-                                <ng-template #lessonState4>
-                                    <ion-row>
-                                        <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1" color="success" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_DONE"|translate}}
-                                            </ion-text>
-                                        </ion-col>
-                                    </ion-row>
-                                </ng-template>
-                            </ion-col>
-                            <ion-col size="auto">
-                                <ion-row>
-                                    <ion-col
-                                            class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
+                            </ng-template>
+                            <ng-template #lessonState2>
+                                <ion-row *ngIf="s.lessonState === 2; else lessonState3">
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">
+                                            {{"STATUS_REJECTED"|translate}}
+                                        </ion-text>
+                                    </ion-col>
                                 </ion-row>
-                                <ion-row>
-                                    <ion-col
-                                            class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.startTime}}</ion-col>
+                            </ng-template>
+                            <ng-template #lessonState3>
+                                <ion-row *ngIf="booking.lessonState === 3; else lessonState4">
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
+                                                  color="danger" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_CANCELLED"|translate}}
+                                        </ion-text>
+                                    </ion-col>
                                 </ion-row>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                </ion-item>
-            </div>
-            <ng-template #teacherBlock>
-                <div *ngIf="user.roles === 2">
-                    <ion-item class="px-0" *ngFor="let s of storico">
-                        <ion-grid>
+                            </ng-template>
+                            <ng-template #lessonState4>
+                                <ion-row>
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="fs-medium fw-normal ls-1" color="success" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_DONE"|translate}}
+                                        </ion-text>
+                                    </ion-col>
+                                </ion-row>
+                            </ng-template>
+                        </ion-col>
+                        <ion-col size="auto" *ngIf="user.roles === 1" class="pt-10">
+                            <ion-row class="w-100">
+                                <ion-col
+                                        class="ion-no-padding fs-small font-weight-300 vertical-middle ion-text-right" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{booking.planning.date | date:'dd/MM/yyyy'}}</ion-col>
+                            </ion-row>
                             <ion-row>
-                                <ion-col size="auto" class="vertical-middle">
-                                    <ion-icon
-                                            *ngIf="s.student.image === null || s.student.image === '' || s.student.image ===' '; else imgBlock"
-                                            name="contact" class="fs-62 c-primary"
-                                            [routerLink]="['/profilo-singolo', s.student.email]"></ion-icon>
-                                    <ng-template #imgBlock>
-                                        <ion-avatar class="ion-text-center h-62 w-62 pt-3 vertical-middle"
-                                                    [routerLink]="['/profilo-singolo', s.student.email]"
-                                                    routerDirection="forward">
-                                            <img class="vertical-middle w-51 h-51" [src]="s.student.image" alt="img">
-                                        </ion-avatar>
-                                    </ng-template>
-                                </ion-col>
-                                <ion-col size="6">
-                                    <ion-row>
-                                        <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
-                                                 [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.lesson.name}}</ion-col>
-                                    </ion-row>
-                                    <ion-row>
-                                        <ion-col
-                                                class="ion-no-padding pt-5 ion-no-margin fs-medium font-weight-300 ls-01em c-primary"
-                                                [routerLink]="['/profilo-singolo', s.student.email]"
-                                                routerDirection="forward">{{s.student.name}} {{s.student.surname}}</ion-col>
-                                    </ion-row>
-                                    <ion-row *ngIf="s.lessonState === 0; else lessonState1">
-                                        <ion-col class="ion-no-padding pt-5">
-                                            <ion-text class="fs-medium fw-normal ls-1" color="warning" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_REQUIRED"|translate}}
-                                            </ion-text>
-                                        </ion-col>
-                                    </ion-row>
-                                    <ng-template #lessonState1>
-                                        <ion-row *ngIf="s.lessonState === 1; else lessonState2">
-                                            <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_ACCEPTED"|translate}}
-                                                </ion-text>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ng-template>
-                                    <ng-template #lessonState2>
-                                        <ion-row *ngIf="s.lessonState === 2; else lessonState3">
-                                            <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">
-                                                   {{"STATUS_REJECTED"|translate}}
-                                                </ion-text>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ng-template>
-                                    <ng-template #lessonState3>
-                                        <ion-row *ngIf="s.lessonState === 3; else lessonState4">
-                                            <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
-                                                          color="danger" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_CANCELLED"|translate}}
-                                                </ion-text>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ng-template>
-                                    <ng-template #lessonState4>
-                                        <ion-row>
-                                            <ion-col class="ion-no-padding pt-5">
-                                                <ion-text class="fs-medium fw-normal ls-1" color="success" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{"STATUS_DONE"|translate}}
-                                                </ion-text>
-                                            </ion-col>
-                                        </ion-row>
-                                    </ng-template>
-                                </ion-col>
-                                <ion-col size="auto">
-                                    <ion-row>
-                                        <ion-col
-                                                class="pl-0 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.date | date:'dd/MM/yyyy'}}</ion-col>
-                                    </ion-row>
-                                    <ion-row>
-                                        <ion-col
-                                                class="ion-no-padding pt-3 fs-small font-weight-300 vertical-middle ion-float-right" [routerLink]="['/lezione', 'booking', s.planning.idPlanning]" routerDirection="forward">{{s.planning.startTime}}</ion-col>
-                                    </ion-row>
+                                <ion-col
+                                        class="ion-no-padding pt-5 fs-small font-weight-300 vertical-middle ion-text-right" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{booking.planning.startTime.slice(0,5)}}</ion-col>
+                            </ion-row>
+                        </ion-col>
+
+                        <ion-col size="6" *ngIf="user.roles === 2">
+                            <ion-row>
+                                <ion-col class="ion-no-padding ion-no-margin fs-large fw-normal"
+                                         [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{booking.planning.lesson.name}}</ion-col>
+                            </ion-row>
+                            <ion-row>
+                                <ion-col
+                                        class="ion-no-padding pt-5 ion-no-margin fs-medium font-weight-300 ls-01em c-primary"
+                                        [routerLink]="['/profilo-singolo', booking.student.email]"
+                                        routerDirection="forward">{{booking.student.name}} {{booking.student.surname}}</ion-col>
+                            </ion-row>
+                            <ion-row *ngIf="booking.lessonState === 0; else lessonState1">
+                                <ion-col class="ion-no-padding pt-5">
+                                    <ion-text class="fs-medium fw-normal ls-1" color="warning" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_REQUIRED"|translate}}
+                                    </ion-text>
                                 </ion-col>
                             </ion-row>
-                        </ion-grid>
-                    </ion-item>
-                </div>
-            </ng-template>
-        </div>
-    </ion-list>
+                            <ng-template #lessonState1>
+                                <ion-row *ngIf="booking.lessonState === 1; else lessonState2">
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="pt-5 fs-medium fw-normal ls-1" color="primary" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_ACCEPTED"|translate}}
+                                        </ion-text>
+                                    </ion-col>
+                                </ion-row>
+                            </ng-template>
+                            <ng-template #lessonState2>
+                                <ion-row *ngIf="booking.lessonState === 2; else lessonState3">
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">
+                                            {{"STATUS_REJECTED"|translate}}
+                                        </ion-text>
+                                    </ion-col>
+                                </ion-row>
+                            </ng-template>
+                            <ng-template #lessonState3>
+                                <ion-row *ngIf="booking.lessonState === 3; else lessonState4">
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="ion-no-padding pt-5 fs-medium ls-1 fw-normal"
+                                                  color="danger" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_CANCELLED"|translate}}
+                                        </ion-text>
+                                    </ion-col>
+                                </ion-row>
+                            </ng-template>
+                            <ng-template #lessonState4>
+                                <ion-row>
+                                    <ion-col class="ion-no-padding pt-5">
+                                        <ion-text class="fs-medium fw-normal ls-1" color="success" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{"STATUS_DONE"|translate}}
+                                        </ion-text>
+                                    </ion-col>
+                                </ion-row>
+                            </ng-template>
+                        </ion-col>
+                        <ion-col size="auto" *ngIf="user.roles === 2" class="pt-10">
+                            <ion-row>
+                                <ion-col
+                                        class="ion-no-padding fs-small font-weight-300 vertical-middle ion-text-right" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{booking.planning.date | date:'dd/MM/yyyy'}}</ion-col>
+                            </ion-row>
+                            <ion-row>
+                                <ion-col
+                                        class="ion-no-padding pt-5 fs-small font-weight-300 vertical-middle ion-text-right" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">{{booking.planning.startTime.slice(0,5)}}</ion-col>
+                            </ion-row>
+                        </ion-col>
+
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+        </ion-list>
+    </div>
 </ion-content>
