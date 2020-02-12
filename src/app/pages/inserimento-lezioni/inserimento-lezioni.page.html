@@ -1,134 +1,87 @@
-<ion-header>
+<ion-header *ngIf="modifica">
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title *ngIf="modifica; else titoloinserisci" class="ml--56">{{"MODIFIED_LESSON_TITLE"|translate}}</ion-title>
-        <ng-template #titoloinserisci>
-            <ion-title class="ml--56">{{"INSERTION_LESSON_TITLE"|translate}}</ion-title>
-        </ng-template>
+        <ion-title  class="ml--56">{{"MODIFIED_LESSON_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
 
 <ion-content>
-    <div>
+    <div *ngIf="!modifica; else modificaBlock">
         <form [formGroup]="lezioneFormModel">
-            <ion-item class="ion-no-padding mt-5">
-                <ion-label class="ion-padding-start">{{"SUBJECT"|translate}}:</ion-label>
-                <ion-label color="primary"> {{materia}}</ion-label>
-                <ion-button slot="end" fill="clear" (click)="showPicker()">{{"SELECT_BUTTON"|translate}}</ion-button>
+            <ion-item lines="full">
+                <ion-label position="stacked" class="label-form">{{"NAME_LESSON"|translate}}</ion-label>
+                <ion-input type="text" formControlName="name"
+                           required class="input-form-font pl-18-important" placeholder="Nome"></ion-input>
             </ion-item>
-            <div *ngIf="materia !== 'Creane una'">
-                <ion-item *ngIf="uscitaValue!==null; else selctDisabilitedOrModifica">
-                    <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="sottoMateria" cancelText="{{'CANCEL_BUTTON'|translate}}"
-                                 class="w-65 max-w-65">
-                        <ion-select-option *ngFor="let sot of sottoMaterie[uscitaValue]"
-                                           value="{{sot.value}}">{{sot.text}}</ion-select-option>
-                    </ion-select>
-                </ion-item>
-            </div>
-            <div *ngIf="materia === 'Creane una'">
-                <ion-item class="ion-no-padding">
-                    <ion-label class="pl-18-important">{{"NEW_SUBJECT"|translate}}</ion-label>
-                    <ion-input type="text" formControlName="nuovaMateria"
-                               required class="pl-18-important"></ion-input>
-                </ion-item>
-                <ion-item class="ion-no-padding">
-                    <ion-label class="pl-18-important">{{"NEW_SUB_SUBJECT"|translate}}</ion-label>
-                    <ion-input type="text" formControlName="nuovaSottoMateria"
-                               required class="pl-18-important"></ion-input>
-                </ion-item>
-            </div>
-            <ng-template #selctDisabilitedOrModifica>
-                <div *ngIf="booleanSottomateria; else selctDisabilited">
-                <ion-item>
-                    <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" formControlName="sottoMateria"
-                                class="w-65 max-w-65"
-                                placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
-                        <ion-select-option value="{{this.lesson.subject.microSubject}}">{{this.lesson.subject.microSubject}}</ion-select-option>
-                    </ion-select>
-                </ion-item>
-                </div>
-            </ng-template>
-            <ng-template #selctDisabilited>
-                <ion-item>
-                    <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
-                    <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
-                                class="w-65 max-w-65" disabled
-                                placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
-                        <ion-select-option value="0">{{"ALL"|translate}}</ion-select-option>
-                    </ion-select>
-                </ion-item>
-            </ng-template>
-            <ion-item class="ion-no-padding">
-                <ion-label class="pl-18-important">{{"NAME_LESSON"|translate}}</ion-label>
-                <ion-input type="text" formControlName="nomeLezione"
-                           required class="pl-18-important"></ion-input>
+            <ion-item lines="full">
+                <ion-label position="stacked" class="plr-22 label-form">{{"PRICE_HOUR"|translate}}:</ion-label>
+                <ion-input formControlName="price" type="number"
+                           required class="input-form-font pl-18-important" placeholder="00.00"></ion-input>
             </ion-item>
-            <ion-item class="ion-no-padding">
-                <ion-label class="pl-18-important">{{"PRICE_HOUR"|translate}}:</ion-label>
-                <ion-input formControlName="prezzoOrario" type="number" placeholder="00,00"
-                           required class="pl-18-important"></ion-input>
+            <ion-item lines="full">
+                <ion-label class="label-form" position="stacked">Descrizione Lezione</ion-label>
+                <ion-textarea class="input-form-font plr-22" formControlName="description" required placeholder="Descrizione"></ion-textarea>
             </ion-item>
-            <ion-item class="ion-no-padding">
-                <ion-button class="ml-auto-important mr-auto-important"
-                            (click)="notificaCondizione()">{{"DATE_TIME_BUTTON"|translate}}
-                </ion-button>
+            <ion-item lines="full">
+                <ion-label position="stacked" class="label-form">{{"SUBJECT"|translate}}:</ion-label>
+                <ion-select okText="{{'SELECT_BUTTON'|translate}}" #mySelectMateria (ionChange)="cambioMateria(mySelectMateria.value)" formControlName="macroSubject" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                            class="input-form-font pl-18-important" [selectedText]="materia" [value]="materia">
+                    <ion-select-option *ngFor="let mat of materie" [selected]="materia == mat"
+                                       value="{{mat}}">{{mat}}</ion-select-option>
+                </ion-select>
             </ion-item>
-            <ion-item class="ion-no-padding">
-                <ion-textarea class="pl-18-important" formControlName="descrizione"
-                              placeholder="{{'DESCRIPTION_LESSON_TEXTAREA'|translate}}" required></ion-textarea>
+            <ion-item lines="full">
+                <ion-label position="stacked" class="label-form">{{"SUB_SUBJECT"|translate}}:</ion-label>
+                <ion-select okText="{{'SELECT_BUTTON'|translate}}" #mySelectSottoMateria (ionChange)="cambioSottoMateria(mySelectSottoMateria.value)" formControlName="microSubject" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                            class="input-form-font pl-18-important" [selectedText]="sottoMateria" [value]="sottoMateria">
+                    <ion-select-option *ngFor="let sot of sottoMaterie[materie.indexOf(materia)]" [selected]="sot == sottoMateria"
+                                       value="{{sot}}">{{sot}}</ion-select-option>
+                </ion-select>
             </ion-item>
         </form>
     </div>
-    <div class="mt-15">
-        <ion-list-header class="text-bolder fs-large fw-normal c-primary">{{"PLANNING_LIST_LD"|translate}}</ion-list-header>
-        <div *ngIf="planningVisualizzazione.length > 0; else modificaLessonOrNoPlannings">
-            <ion-list  *ngFor="let planning of planningVisualizzazione; let i = index;">
-                <ion-item>
-                    <ion-col size="auto">
-                        <ion-icon name="remove-circle-outline" (click)="rimuoviPlanning(i)"></ion-icon>
-                    </ion-col>
-                    <ion-col size="4">
-                        {{giornoSettimana[i]}}
-                    </ion-col>
-                    {{"DATETIME_FROM"|translate}}
-                    <ion-col size="auto">
-                        {{planning.startTime}}
-                    </ion-col>
-                    {{"DATETIME_TO"|translate}}
-                    <ion-col size="auto">
-                        {{planning.endTime}}
-                    </ion-col>
+    <ng-template #modificaBlock>
+        <div>
+            <form [formGroup]="lezioneFormModel">
+                <ion-item lines="full">
+                    <ion-label position="stacked" class="label-form">{{"NAME_LESSON"|translate}}</ion-label>
+                    <ion-input type="text" formControlName="name"
+                               required class="input-form-font pl-18-important" placeholder="Nome"></ion-input>
                 </ion-item>
-            </ion-list>
+                <ion-item lines="full">
+                    <ion-label position="stacked" class="plr-22 label-form">{{"PRICE_HOUR"|translate}}:</ion-label>
+                    <ion-text class="padding-fontsize">{{lesson.price}}</ion-text>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label class="label-form" position="stacked">Descrizione Lezione</ion-label>
+                    <ion-textarea class="input-form-font plr-22" formControlName="description" required placeholder="Descrizione"></ion-textarea>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="stacked" class="label-form">{{"SUBJECT"|translate}}:</ion-label>
+                    <ion-text class="padding-fontsize">{{lesson.subject.macroSubject}}</ion-text>
+                </ion-item>
+                <ion-item lines="full">
+                    <ion-label position="stacked" class="label-form">{{"SUB_SUBJECT"|translate}}:</ion-label>
+                    <ion-text class="padding-fontsize">{{lesson.subject.microSubject}}</ion-text>
+                </ion-item>
+            </form>
         </div>
-        <ng-template #modificaLessonOrNoPlannings>
-            <div *ngIf="booleanSottomateria; else noPlannings" class="mx-auto fit-content testo-centrato">
-                <h6>{{"PLANNING_TEXT"|translate}}</h6>
-                <h6>{{"DATE_TIME_BUTTON"|translate}}</h6>
-            </div>
-        </ng-template>
-        <ng-template #noPlannings>
-            <div class="mx-auto fit-content testo-centrato">
-                <h6> {{"ANY_PLANNING_INSERTED"|translate}}</h6>
-                <h6> {{"CLICK_ON_SET_DATE_TIME"|translate}}</h6>
-            </div>
-        </ng-template>
-    </div>
-    <div class="bottone-inserisci" *ngIf="modifica; else bottoneInserisci">
-        <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="modificaLezione()"
-                    [disabled]="!lezioneFormModel.valid">{{"MODIFIED"|translate}}
-        </ion-button>
-    </div>
-    <ng-template #bottoneInserisci>
-        <div class="bottone-inserisci">
-            <ion-button expand="full" class="submit-btn ion-margin-bottom ion-margin-top" (click)="inserisciLezione()"
-                        [disabled]="!lezioneFormModel.valid || !this.ok">{{"INSERT_BUTTON"|translate}}
+    </ng-template>
+    <ion-row class="ion-text-center">
+        <ion-col *ngIf="modifica; else bottoneInserisci">
+            <ion-button class="bottone-inserisci ion-margin-bottom ion-margin-top"
+                        [disabled]="!lezioneFormModel.valid" (click)="modificaLezione()">SALVA
             </ion-button>
-        </div>
+        </ion-col>
+    </ion-row>
+    <ng-template #bottoneInserisci>
+        <ion-col>
+            <ion-button class="bottone-inserisci ion-margin-bottom ion-margin-top"
+                        [disabled]="!lezioneFormModel.valid || !okModal" (click)="inserisciLezione()">INSERISCI
+            </ion-button>
+        </ion-col>
     </ng-template>
 </ion-content>

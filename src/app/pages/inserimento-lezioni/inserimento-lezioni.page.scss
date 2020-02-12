@@ -1,17 +1,57 @@
 .bottone-inserisci {
-  background-color: white;
+  --border-color: #029db4;
+  --background-hover: #5bb526;
+  --color: #ffffff;
+  --background: #029db4;
+  margin-top: 50px;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 100%;
+  width: 40%;
   border-top: 1px solid rgba(102, 102, 102, 0.15);
 }
 ion-list-header{
   display:block;
   text-align: center;
 }
+ion-select
+{
+  max-width: 95%;
+}
+.text-data-e-ora{
+  color: #3f79e0;
+
+}
+
+.plr-22{
+  --padding-start: 18px;
+  --padding-end: 22px;
+}
+
 .text-bolder {
   font-weight: bolder;
+}
+
+.bio{
+  opacity: .5;
+  font-size: 16px !important;
+  transform: translate3d(0,50%,0) !important;
+  -webkit-transform: translate3d(0,50%,0) !important;
+}
+.input-form-font{
+  font-size: 18px;
+}
+
+.label-form{
+  padding-left: 10px !important;
+  font-size: large;
+  font-weight: bold;
+  color: rgba(30,30,30,0.85) !important;
+  padding-bottom: 17px;
+}
+
+.input-prova{
+  font-size: 18px;
 }
 
 .mt-15 {
@@ -21,4 +61,15 @@ ion-list-header{
 .testo-centrato {
   display:block;
   text-align: center;
+}
+
+.insert-col {
+  margin: 0 50px 0 50px;
+}
+
+.padding-fontsize {
+  font-size: 18px!important;
+  padding-left: 22px!important;
+  padding-top: 10px!important;
+  padding-bottom: 10px!important;
 }
