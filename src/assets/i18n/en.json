@@ -14,6 +14,7 @@
 
   "BUTTON_TAB_ACCEPTED": "Accepted",
   "BUTTON_TAB_REQUESTS": "Requests",
+  "BUTTON_TAB_LESSONS": "Lessons",
   "DATE_TIME_BUTTON": "Set date and Time",
   "ADD_RESERVATION_BUTTON": "Add reservation",
   "START_CHAT_BUTTON": "Start Chat",
@@ -140,7 +141,7 @@
   "PRICE": "Price",
   "DATE": "Date",
   "HOUR": "Hour",
-  "SENT TO": "Sent to",
+  "SENT_TO": "Sent to",
   "STATUS_REQUIRED": "Status: Required",
   "STATUS_ACCEPTED": "Status: Accepted",
   "STATUS_REJECTED": "Status: Rejected",
@@ -195,5 +196,7 @@
 
   "HISTORIC_SIDE_MENU": "Historic",
   "SEARCH_LESSONS_SIDE_MENU": "Search Lessons Available",
-  "INSERT_AD_SIDE_MENU": "Insert Ad"
+  "INSERT_AD_SIDE_MENU": "Insert Ad",
+
+  "ARE_YOU_A_TEACHER": "Are you a Teacher?"
 }

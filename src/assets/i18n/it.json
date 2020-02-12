@@ -14,6 +14,7 @@
 
   "BUTTON_TAB_ACCEPTED": "Accettate",
   "BUTTON_TAB_REQUESTS": "Richieste",
+  "BUTTON_TAB_LESSONS": "Lezioni",
   "DATE_TIME_BUTTON": "Imposta data ed ora",
   "ADD_RESERVATION_BUTTON": "Aggiungi prenotazione",
   "START_CHAT_BUTTON": "Avvia Chat",
@@ -195,5 +196,7 @@
 
   "HISTORIC_SIDE_MENU": "Storico",
   "SEARCH_LESSONS_SIDE_MENU": "Cerca Lezioni Disponibili",
-  "INSERT_AD_SIDE_MENU": "Inserisci Annuncio"
+  "INSERT_AD_SIDE_MENU": "Inserisci Annuncio",
+
+  "ARE_YOU_A_TEACHER": "Sei uno docente?"
 }
