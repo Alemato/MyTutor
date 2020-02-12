@@ -7,6 +7,7 @@ import {IonicModule} from '@ionic/angular';
 
 import {TabsPage} from './tabs.page';
 import {AuthGuard} from '../../guards/auth.guard';
+import {TranslateModule} from '@ngx-translate/core';
 
 const routes: Routes = [
     {
@@ -82,7 +83,8 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         IonicModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        TranslateModule
     ],
     declarations: [TabsPage]
 })
