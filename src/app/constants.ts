@@ -29,6 +29,8 @@ export const URL = {
     LESSON: URL_BASE + '/lessons',
     LESSON_MODIFY: URL_BASE + '/lessons/modify',
     LESSON_ALL_FOR_STUDENT: URL_BASE + '/lessons/student',
+    LESSON_CREATE: URL_BASE + '/lessons/create',
+    LESSON_SINGLE: URL_BASE + '/lessons/',
 
     PLANNING_CREATE: URL_BASE + '/lessons/plannings/create',
     PLANNING_MODIFY: URL_BASE + '/lessons/plannings/modify',
