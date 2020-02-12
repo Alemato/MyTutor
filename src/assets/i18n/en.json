@@ -44,6 +44,7 @@
   "ADVERTISEMENTS_PLACED_TITLE": "Advertisements Placed",
   "MODIFIED_LESSON_TITLE": "Modified Lesson",
   "MODIFIED_DATE_TIME_TITLE": "Modifield Date e Hour",
+  "MODIFIED_PROFILE_TITLE": "Modified Profile",
   "INSERTION_DATE_TIME_TITLE": "Insertion Data e hour",
   "CREATE_ONE": "Create one",
 
@@ -189,7 +190,8 @@
   "IMAGE_SHOWING_ERROR": "Error in showing image",
   "ERROR": "Error",
   "LOGIN_ERROR_TITLE": "Login error",
-  "LOGIN_ERROR_SUB_TITLE": "Username and/or password Wrong!",
+  "LOGIN_ERROR_SUB_TITLE": "Wrong Username and/or password!",
+  "ERROR_PASSWORD": "Wrong Password",
 
   "HISTORIC_SIDE_MENU": "Historic",
   "SEARCH_LESSONS_SIDE_MENU": "Search Lessons Available",

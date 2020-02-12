@@ -44,6 +44,7 @@
   "ADVERTISEMENTS_PLACED_TITLE": "Annunci Pubblicati",
   "MODIFIED_LESSON_TITLE": "Modifica Lezione",
   "MODIFIED_DATE_TIME_TITLE": "Modifica Data e Ora",
+  "MODIFIED_PROFILE_TITLE": "Modifica Profilo",
   "INSERTION_DATE_TIME_TITLE": "Inserimento Data e Ora",
   "CREATE_ONE": "Creane una",
 
@@ -190,6 +191,7 @@
   "ERROR": "Errore",
   "LOGIN_ERROR_TITLE": "Errore Login",
   "LOGIN_ERROR_SUB_TITLE": "Username e/o password errate!",
+  "ERROR_PASSWORD": "Password errata",
 
   "HISTORIC_SIDE_MENU": "Storico",
   "SEARCH_LESSONS_SIDE_MENU": "Cerca Lezioni Disponibili",
