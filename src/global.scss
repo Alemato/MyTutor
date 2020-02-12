@@ -415,6 +415,19 @@ ion-toolbar ion-title{
 .ai-center{
   align-items: center;
 }
+.popover-dimension {
+  --max-height: 350px!important;
+}
+.colore-bottone-primario {
+  --background:#029db4
+}
+.colore-check-primario {
+  --color: #029db4
+}
+.mr-30 {
+  --checkbox-ios-icon-size: 61;
+  margin-right: 30px!important;
+}
 
 .alert-checkbox-group::-webkit-scrollbar {
   width: 1em;
