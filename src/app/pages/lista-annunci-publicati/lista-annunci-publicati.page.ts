@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {LessonService} from '../../services/lesson.service';
-import {BehaviorSubject} from 'rxjs';
-import {Lesson} from '../../model/lesson.model';
-import {LoadingController} from '@ionic/angular';
+import {Observable} from 'rxjs';
+import {LoadingController, NavController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
-import {MenuRefresh} from "../../services/menuRefresh";
+import {Planning} from '../../model/planning.model';
+import {PlanningService} from '../../services/planning.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-lista-annunci-publicati',
@@ -12,27 +12,20 @@ import {MenuRefresh} from "../../services/menuRefresh";
     styleUrls: ['./lista-annunci-publicati.page.scss'],
 })
 export class ListaAnnunciPublicatiPage implements OnInit {
-    public lessons$: BehaviorSubject<Lesson[]>;
+    public plannings$: Observable<Planning[]>;
     private loading;
     private pleaseWaitMessage: string;
 
-    constructor(private lessonService: LessonService,
+    constructor(private planningService: PlanningService,
                 public loadingController: LoadingController,
                 private translateService: TranslateService,
-                private menuRefresh: MenuRefresh) {
+                private router: Router,
+                private navController: NavController) {
     }
 
     ngOnInit() {
         this.initTranslate();
-        this.lessons$ = this.lessonService.getLessons();
-        this.menuRefresh.publishMenuRefresh();
-        this.loadingPresent().then(() => {
-            // this.getlezioni();
-            this.lessonService.getRestLessons().subscribe((item) => {
-                this.lessons$.next(item);
-                this.disLoading();
-            });
-        });
+        this.listaPlanning();
     }
     async loadingPresent() {
         this.loading = await this.loadingController.create({
@@ -50,5 +43,15 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
             this.pleaseWaitMessage = data;
         });
+    }
+
+    listaPlanning() {
+        this.plannings$ = this.planningService.getRestPlanningsAsLesson();
+    }
+
+    modificaLezione(planning: Planning) {
+        const root = this.router.config.find(r => r.path === 'inserimento-lezioni');
+        root.data = {isInsert: false, lesson: planning.lesson};
+        this.navController.navigateRoot('inserimento-lezioni');
     }
 }
