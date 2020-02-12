@@ -15,7 +15,7 @@
         </ion-avatar>
         <ion-row class="ion-text-center">
             <ion-col class="foto-profilo">
-                <div>{{"PHOTO_BUTTON"|translate}}</div>
+                <div class="colore">{{"PHOTO_BUTTON"|translate}}</div>
             </ion-col>
         </ion-row>
     </div>
@@ -25,8 +25,8 @@
                 <ion-list lines="none" class="ion-no-padding">
 
                     <ion-item lines="inset">
-                        <ion-label position="floating" class="label-prova">{{'NAME'|translate}}</ion-label>
-                        <ion-input class="input-prova" type="text" formControlName="name" placeholder="aaaaaaaa"
+                        <ion-label position="floating" class="label-struttura">{{'NAME'|translate}}</ion-label>
+                        <ion-input class="input-fs-18" type="text" formControlName="name" placeholder="aaaaaaaa"
                                    required="true">
                         </ion-input>
                     </ion-item>
@@ -41,8 +41,8 @@
                     </ng-container>
 
                     <ion-item lines="inset">
-                        <ion-label position="floating" class="label-prova">{{'SURNAME'|translate}}</ion-label>
-                        <ion-input class="input-prova" type="text" formControlName="surname" placeholder="bbbb"
+                        <ion-label position="floating" class="label-struttura">{{'SURNAME'|translate}}</ion-label>
+                        <ion-input class="input-fs-18" type="text" formControlName="surname" placeholder="bbbb"
                                    required="true"></ion-input>
                     </ion-item>
                     <ng-container *ngFor="let validation of validationMessages.surname">
@@ -56,8 +56,8 @@
                     </ng-container>
 
                     <ion-item lines="inset">
-                        <ion-label position="floating" class="label-prova">Email</ion-label>
-                        <ion-input class="input-prova" type="email" formControlName="email"
+                        <ion-label position="floating" class="label-struttura">Email</ion-label>
+                        <ion-input class="input-fs-18" type="email" formControlName="email"
                                    placeholder="Email"></ion-input>
                     </ion-item>
                     <ng-container *ngFor="let validation of validationMessages.email">
@@ -70,13 +70,13 @@
                     </ng-container>
 
                     <ion-item lines="inset">
-                        <ion-label position="floating" class="label-prova">Password</ion-label>
-                        <ion-row style="align-items: center;" class="w-100">
-                            <ion-input class="input-prova" [type]="passwordType" placeholder="password"
+                        <ion-label position="floating" class="label-struttura">Password</ion-label>
+                        <ion-row class="w-100 ai-center">
+                            <ion-input class="input-fs-18" [type]="passwordType" placeholder="password"
                                        formControlName="password" required="true"></ion-input>
                             <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                                       color="gray"
-                                      class="z-index-1" style="font-size: 24px;"></ion-icon>
+                                      class="z-index-1 fs-24"></ion-icon>
                         </ion-row>
                     </ion-item>
                     <ng-container *ngFor="let validation of validationMessages.password">
@@ -89,7 +89,7 @@
                     </ng-container>
 
                     <ion-item lines="inset">
-                        <ion-label position="floating" class="label-prova">{{'BIRTHDAY'|translate}}</ion-label>
+                        <ion-label position="floating" class="label-struttura">{{'BIRTHDAY'|translate}}</ion-label>
                         <ion-datetime class="m-auto" displayFormat="DD MMMM YYYY"
                                       placeholder="{{'BIRTHDAY'|translate}}"
                                       monthNames="{{'MONTHS_DATETIME'|translate}}"
@@ -105,7 +105,7 @@
                     </ng-container>
 
                     <ion-item lines="inset">
-                        <ion-label position="floating" class="label-prova">{{'LANGUAGE'|translate}}</ion-label>
+                        <ion-label position="floating" class="label-struttura">{{'LANGUAGE'|translate}}</ion-label>
                         <ion-select class="select-full-width-2" formControlName="language"
                                     okText="{{'SELECT_BUTTON'|translate}}"
                                     cancelText="{{'CANCEL_BUTTON'|translate}}"
@@ -118,7 +118,7 @@
                         <ion-grid class="ion-no-padding">
                         <ion-row class="ion-padding-start ion-padding-end">
                             <div class="name-field">
-                                Sei un docencente?
+                                {{"ARE_YOU_A_TEACHER"|translate}}
                             </div>
                         </ion-row>
                         <ion-row>
