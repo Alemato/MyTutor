@@ -28,11 +28,11 @@ const routes: Routes = [
         path: 'registrazione-docente-modal',
         loadChildren: './pages/registrazione-docente-modal/registrazione-docente-modal.module#RegistrazioneDocenteModalPageModule'
     },
-    /*{
-        path: 'inserimento-lezioni/:idLesson',
+    {
+        path: 'inserimento-lezioni',
         loadChildren: './pages/inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule',
         canActivate: [AuthGuard]
-    },*/
+    },
     // tslint:disable-next-line:max-line-length
     {
         path: 'inserimento-lezioni-modal',
@@ -69,19 +69,26 @@ const routes: Routes = [
         loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule',
         canActivate: [AuthGuard]
     },
-    {
-        path: 'lista-annunci-publicati',
-        loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule',
-        canActivate: [AuthGuard]
-    },
-    /*{
-        path: 'inserimento-lezioni',
-        redirectTo: 'inserimento-lezioni/null'
-    },*/
     { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule' },
     {
         path: 'modifica-profilo',
         loadChildren: './pages/modifica-profilo/modifica-profilo.module#ModificaProfiloPageModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'lista-pianificazioni/:idLezione',
+        loadChildren: './pages/lista-pianificazioni/lista-pianificazioni.module#ListaPianificazioniPageModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'dettagli-pianificazione-modal-page',
+        // tslint:disable-next-line:max-line-length
+        loadChildren: './pages/dettagli-pianificazione-modal-page/dettagli-pianificazione-modal-page.module#DettagliPianificazioneModalPageModule',
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'lista-annunci-publicati',
+        loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule',
         canActivate: [AuthGuard]
     },
 ];
