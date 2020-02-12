@@ -29,7 +29,7 @@ export class ModificaProfiloPage implements OnInit {
     isLoading = false;
 
     private errorTitle: string;
-    private errorSubTitle: string;
+    private pwdMessageError: string;
     private imageSourceHeader: string;
     private loadLibraryText: string;
     private useCameraText: string;
@@ -75,6 +75,11 @@ export class ModificaProfiloPage implements OnInit {
                 private alertController: AlertController) {
     }
 
+    /**
+     * prendo in dati dal server attraverso la funzione getUser
+     * alla variabile croppedImagepath (immagine presa dalla galleria) gli assegno l'immagione presa dal server
+     * in base al ruolo vedo quale Form di inizializzazione e settaggio dei valori chiamare
+     */
     ngOnInit() {
         this.utente$ = this.userService.getUser();
         this.initTranslate();
@@ -88,39 +93,22 @@ export class ModificaProfiloPage implements OnInit {
         this.utente$.subscribe((user) => {
             if (user.roles === 1) {
                 this.setValuesFormStudent(user);
-                this.findInvalidControls();
             } else {
                 this.setValuesFormTeacher(user);
-                this.findInvalidControlsTea();
             }
         });
     }
 
-    public findInvalidControlsTea() {
-        const invalid = [];
-        const controls = this.teacherFormModel.controls;
-        for (const name in controls) {
-            if (controls[name].invalid) {
-                invalid.push(name);
-            }
-        }
-        return invalid;
-    }
-
-    public findInvalidControls() {
-        const invalid = [];
-        const controls = this.studentFormModel.controls;
-        for (const name in controls) {
-            if (controls[name].invalid) {
-                invalid.push(name);
-            }
-        }
-        return invalid;
-    }
-
+    /**
+     * inizializzazione della form studente
+     * gli passo un oggetto student di tipo Student perchè tra lo Student ed il Teacher hanno campi diversi
+     * " name:, surname:, passwordvecchia: ..." devono avere lo stesso nome dei campi input del di modifica-profilo.html
+     * le cose che scrivo dentro [] le ritrovo sulla page modifica-profilo.html
+     * birthday lo converto in una data sennò il datetime non lo riconosce perchè non è nello stesso formato
+     * language lo converto in un numero perchè nell'user.model/server è salvato come booleano
+     */
     initFormStudent(student: Student) {
         this.studentFormModel = this.formBuilder.group({
-            // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
             name: [student.name, Validators.required],
             surname: [student.surname, Validators.required],
             passwordVecchia: ['', Validators.compose([
@@ -138,6 +126,9 @@ export class ModificaProfiloPage implements OnInit {
         });
     }
 
+    /**
+     * Settaggio dei valori dello studente nella form
+     */
     setValuesFormStudent(student: Student) {
         this.studentFormModel.controls.name.setValue(student.name);
         this.studentFormModel.controls.surname.setValue(student.surname);
@@ -148,9 +139,16 @@ export class ModificaProfiloPage implements OnInit {
         this.studentFormModel.controls.languageNumber.setValue((+student.language).toString());
     }
 
+    /**
+     * inizializzazione della form docente
+     * gli passo un oggetto teacher di tipo Teacher perchè tra lo Student ed il Teacher hanno campi diversi
+     * " name:, surname:, passwordvecchia: ..." devono avere lo stesso nome dei campi input del di modifica-profilo.html
+     * le cose che scrivo dentro [] le ritrovo sulla page modifica-profilo.html
+     * birthday lo converto in una data sennò il datetime non lo riconosce perchè non è nello stesso formato
+     * language lo converto in un numero perchè nell'user.model/server è salvato come booleano
+     */
     initFormTeacher(teacher: Teacher) {
         this.teacherFormModel = this.formBuilder.group({
-            // le cose che scrivo dentro [] le ritrovo sulla page registrazione.html
             name: [teacher.name, Validators.required],
             surname: [teacher.surname, Validators.required],
             passwordVecchia: ['', Validators.compose([
@@ -173,6 +171,9 @@ export class ModificaProfiloPage implements OnInit {
         });
     }
 
+    /**
+     * Settaggio dei valori del docente nella form
+     */
     setValuesFormTeacher(teacher: Teacher) {
         this.teacherFormModel.controls.name.setValue(teacher.name);
         this.teacherFormModel.controls.surname.setValue(teacher.surname);
@@ -188,6 +189,9 @@ export class ModificaProfiloPage implements OnInit {
         this.teacherFormModel.controls.languageNumber.setValue((+teacher.language).toString());
     }
 
+    /**
+     * Occhio onnivegente
+     */
     public togglePassword() {
         if (this.passwordShow) {
             this.passwordShow = false;
@@ -198,6 +202,15 @@ export class ModificaProfiloPage implements OnInit {
         }
     }
 
+    /**
+     * Questa funzione viene eseguita una volta che clicco sl pulsante SALVA su modifica-profilo
+     * in base al ruolo vedo quale oggetto creare
+     * se viene immessa una Nuova password questa viene criptata e diventerà la mia attuale password e lo assegno al campo password
+     * altrimenti gli assegno la password Vecchia criptata
+     * al nuovo oggetto creato gli assegno i valori dentro i campi della form
+     * se l'immagine esiste, all'oggetto.image gli assegno la foto (sia se è rimasta la stessa oppure se è stata presa dalla Galleria)
+     * chiamo la funzione che mi esegue la Modifica
+     */
     salvaModifica() {
         if (this.utente$.value.roles === 1) {
             let student: Student = new Student();
@@ -241,6 +254,16 @@ export class ModificaProfiloPage implements OnInit {
         }
     }
 
+    /**
+     * gli passo un oggetto user di tipo Student o Teacher in base al ruolo nella funzione salvaModifica
+     * i dati presi precedentemente e salvati nell'oggetto student o teacher li passo al server utilizzando la funzione
+     * editProfiloStudent / editprofiloTeacher
+     * a questa funzione gli passo l'oggetto e la Vecchia Password (che viene utilizzata come controllo per abilitare la modifica)
+     * se il campo della Nuova password è stato riempito allora l'utente viete sloggato e rimandato sulla Login
+     * altrimenti viene chiamata la funzione Login dove gli passo l'email e la Vecchia password per l'autenticazione
+     * (siccome è un observable devo utilizzare il substribe per farmi ritornare qualcosa)
+     * con HttpErrorResponse catturo l'errore e gli faccio apparire un allert sullo schermo dove gli comunico che ha sbagliato password
+     */
     eseguiModifica(user: Student | Teacher) {
         if (user.roles === 1) {
             // tslint:disable-next-line:max-line-length
@@ -294,6 +317,9 @@ export class ModificaProfiloPage implements OnInit {
         }
     }
 
+    /**
+     * Funzione per la validazione della Nuova password
+     */
     public setPwdValidator() {
         if (this.utente$.value.roles === 1) {
             this.studentFormModel.controls.password.setValidators(Validators.compose([
@@ -308,11 +334,13 @@ export class ModificaProfiloPage implements OnInit {
         }
     }
 
+    /**
+     * Allert che viene chiamato quando l'utente immette la password sbagliata
+     */
     async showPasswordError() {
-        // this.Diss();
         const alert = await this.alertController.create({
-            header: 'Errore Password',
-            message: 'Password Sbagliata',
+            header: this.errorTitle,
+            message: this.pwdMessageError,
             buttons: ['OK']
         });
         await alert.present();
@@ -392,6 +420,9 @@ export class ModificaProfiloPage implements OnInit {
         });
     }
 
+    /**
+     * Funione per le traduzioni
+     */
     initTranslate() {
         this.translateService.get('IMAGE_SOURCE_HEADER').subscribe((data) => {
             this.imageSourceHeader = data;
@@ -410,6 +441,12 @@ export class ModificaProfiloPage implements OnInit {
         });
         this.translateService.get('IMAGE_SHOWING_ERROR').subscribe((data) => {
             this.imageShowingError = data;
+        });
+        this.translateService.get('ERROR').subscribe((data) => {
+            this.errorTitle = data;
+        });
+        this.translateService.get('ERROR_PASSWORD').subscribe((data) => {
+            this.pwdMessageError = data;
         });
         //
         this.translateService.get('EMAIL_REQUIRED_MESSAGE').subscribe((data) => {

@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">Modifica Profilo</ion-title>
+        <ion-title class="ml--56">{{"MODIFIED_PROFILE_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content *ngIf="(this.utente$ | async) as user">
@@ -13,7 +13,6 @@
         </div>
         <ion-icon *ngIf="!user.image" name="contact" class="fs-150 c-029db4 mt-25"></ion-icon>
         <ion-avatar *ngIf="user.image" class="ion-text-center mb-10 h-150 w-150 mt-25">
-            <!--                    <img [src]="croppedImagepath" alt="img">-->
             <img [src]="croppedImagepath" alt="img" class="h-150 w-150">
         </ion-avatar>
         <ion-row class="ion-text-center">
@@ -129,7 +128,6 @@
         <ion-col class="signup-col">
             <ion-button class="submit-btn-2" type="submit"
                         [disabled]="!studentFormModel.valid">{{"SAVE_BUTTON"|translate}}</ion-button>
-            <!--[routerLink]="['/profilo']-->
         </ion-col>
         </ion-row>
     </form>
@@ -288,11 +286,11 @@
             <ion-item lines="inset" class="biografia-1">
 
                 <ion-row>
-                    <ion-col class="a">
+                    <ion-col class="colonna-biografia">
                         <ion-icon name="briefcase" class="colore-icona"></ion-icon>
                     </ion-col>
                     <ion-col>
-                        <ion-label class="label-prova" position="stacked">{{"BIOGRAPHY_LABEL"|translate}}</ion-label>
+                        <ion-label class="label-biografia" position="stacked">{{"BIOGRAPHY_LABEL"|translate}}</ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-textarea rows="4" class="mt-0 biografia" formControlName="byography"
@@ -303,7 +301,6 @@
         <ion-col class="signup-col">
             <ion-button class="submit-btn-2" type="submit"
                         [disabled]="!teacherFormModel.valid">{{"SAVE_BUTTON"|translate}}</ion-button>
-            <!--[routerLink]="['/profilo']-->
         </ion-col>
         </ion-row>
     </form>
