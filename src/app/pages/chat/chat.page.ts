@@ -5,10 +5,11 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 import {ChatService} from '../../services/chat.service';
 import {UserService} from '../../services/user.service';
 import {BehaviorSubject} from 'rxjs';
-import {User} from '../../model/user.model';
 import {MessageService} from '../../services/message.service';
 import {IonContent, LoadingController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
+import {Student} from '../../model/student.model';
+import {Teacher} from '../../model/teacher.model';
 
 @Component({
     selector: 'page-chat',
@@ -23,7 +24,7 @@ export class ChatPage implements OnInit {
     private messaggio: Message;
     private idChat: number;
     private loading;
-    private user$: BehaviorSubject<User>;
+    private user$: BehaviorSubject<Student | Teacher>;
     private messages$: BehaviorSubject<Message[]>;
     private pleaseWaitMessage: string;
 

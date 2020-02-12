@@ -9,15 +9,13 @@ import {Booking} from '../../model/booking.model';
 import {DatePipe} from '@angular/common';
 import {BookingService} from '../../services/booking.service';
 import {PlanningService} from '../../services/planning.service';
-import {User} from '../../model/user.model';
 import {ChatService} from '../../services/chat.service';
 import {MessageService} from '../../services/message.service';
-import {Message} from '../../model/message.model';
-import {Chat} from '../../model/chat.model';
 import {AlertController, LoadingController, NavController} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Student} from '../../model/student.model';
 import {TranslateService} from '@ngx-translate/core';
+import {Teacher} from '../../model/teacher.model';
 
 
 @Component({
@@ -29,7 +27,7 @@ export class LezionePage implements OnInit {
     private id: string;
     private provenienza: string;
     private nameLesson = '';
-    private user$: BehaviorSubject<User>;
+    private user$: BehaviorSubject<Student | Teacher>;
     private bookings$: BehaviorSubject<Booking[]>;
     private booking$: Observable<Booking>;
     private lesson$: Observable<Lesson>;
@@ -85,7 +83,7 @@ export class LezionePage implements OnInit {
         this.user$ = this.userService.getUser();
         const tipoU = this.userService.getTypeUser();
         if (tipoU === 'student') {
-            this.student$ = this.userService.getUser();
+            this.student$ = this.userService.getUser() as BehaviorSubject<Student>;
         }
     }
 

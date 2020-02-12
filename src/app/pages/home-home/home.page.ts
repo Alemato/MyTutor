@@ -4,6 +4,8 @@ import {UserService} from '../../services/user.service';
 import {LoadingController} from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import {User} from '../../model/user.model';
+import {Student} from "../../model/student.model";
+import {Teacher} from "../../model/teacher.model";
 
 
 
@@ -14,7 +16,7 @@ import {User} from '../../model/user.model';
 })
 export class HomePage implements OnInit {
     private loading;
-    private user$: BehaviorSubject<User>;
+    private user$: BehaviorSubject<Student | Teacher>;
     private pleaseWaitMessage: string;
 
     constructor(private userService: UserService,

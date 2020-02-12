@@ -40,10 +40,10 @@ export class HomeAccettatePage implements OnInit {
         this.initTranslate();
         this.tipo = this.userService.getTypeUser();
         if (this.tipo === 'student') {
-            this.student$ = this.userService.getUser();
+            this.student$ = this.userService.getUser() as BehaviorSubject<Student>;
             // fa la get con un periodo di 1 minuto
         } else if (this.tipo === 'teacher') {
-            this.teacher$ = this.userService.getUser();
+            this.teacher$ = this.userService.getUser() as BehaviorSubject<Teacher>;
         }
         this.listLez$ = this.bookingService.getListaLezioni();
         this.bookings$ = this.bookingService.getBookings();

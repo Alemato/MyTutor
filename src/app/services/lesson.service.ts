@@ -29,6 +29,14 @@ export class LessonService {
         });
     }
 
+    getRestLessonsForStudent(): Observable<Lesson[]> {
+        return this.http.get<Lesson[]>(URL.LESSON_ALL_FOR_STUDENT, {observe: 'response'}).pipe(
+            map( (resp: HttpResponse<Lesson[]>) => {
+                return resp.body;
+            })
+        );
+    }
+
     getRestLessons(): Observable<Lesson[]> {
         return this.http.get<Lesson[]>(URL.LESSON, {observe: 'response'}).pipe(
             map((resp: HttpResponse<Lesson[]>) => {

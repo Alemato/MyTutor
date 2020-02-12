@@ -8,8 +8,9 @@ import {UserService} from './services/user.service';
 import {BehaviorSubject} from 'rxjs';
 import {MenuRefresh} from './services/menuRefresh';
 import {ChatService} from './services/chat.service';
-import {User} from './model/user.model';
 import {Router} from '@angular/router';
+import {Student} from './model/student.model';
+import {Teacher} from './model/teacher.model';
 
 
 @Component({
@@ -18,7 +19,7 @@ import {Router} from '@angular/router';
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-    private user$: BehaviorSubject<User>;
+    private user$: BehaviorSubject<Student|Teacher>;
 
     constructor(
         private translateService: TranslateService,

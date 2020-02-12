@@ -171,18 +171,31 @@ export class BookingService {
 
     startPeriodicGet() {
         console.log('startPeriodicGet');
-        /*this.periodicGet = interval(15000).subscribe(() => {
-            console.log('startPeriodicGet');
-            this.getRestBooking().subscribe(() => {
+        // controllo se già ho un intervallo inizializzato
+        if (this.periodicGet !== undefined) {
+            // controllo se è chiuso cosi lo apro
+            if (this.periodicGet.closed) {
+                this.periodicGet = interval(15000).subscribe(() => {
+                    console.log('startPeriodicGet');
+                    this.getRestBooking().subscribe(() => {
+                    });
+                });
+            }
+        } else {
+            this.periodicGet = interval(15000).subscribe(() => {
+                console.log('startPeriodicGet');
+                this.getRestBooking().subscribe(() => {
+                });
             });
-        });*/
+        }
+
     }
 
     stopPeriodicGet() {
         console.log('stopPeriodicGet');
-        /*if (!this.periodicGet.closed) {
+        if (!this.periodicGet.closed) {
             this.periodicGet.unsubscribe();
-        }*/
+        }
     }
 
     logout() {

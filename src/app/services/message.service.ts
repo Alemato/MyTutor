@@ -227,11 +227,30 @@ export class MessageService {
      */
     startPeriodicGetMessageForChat(idChat: number) {
         console.log('startPeriodicGetMessageForChat');
+        // controllo se è inizializzato
+        if (this.periodicGet !== undefined) {
+            // controllo se è chiuso
+            if (this.periodicGet.closed) {
+                this.openPeriodicGet(idChat);
+            } else {
+                // chiudo e apro l'intervallo
+                this.periodicGet.unsubscribe();
+                this.openPeriodicGet(idChat);
+            }
+        } else {
+            this.openPeriodicGet(idChat);
+        }
+    }
+
+    /**
+     * Funzione che contiene la logica dell'aggiornamento
+     */
+    openPeriodicGet(idChat: number) {
         this.periodicGet = interval(10000).subscribe(() => {
             if (this.messages$.value.length > 0) {
                 console.log('startPeriodicGet');
                 this.getLastMessageOfChat(idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => {
-            });
+                });
             }
         });
     }

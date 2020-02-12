@@ -78,7 +78,7 @@
                                 </ion-row>
                             </ng-template>
                             <ng-template #lessonState2>
-                                <ion-row *ngIf="s.lessonState === 2; else lessonState3">
+                                <ion-row *ngIf="booking.lessonState === 2; else lessonState3">
                                     <ion-col class="ion-no-padding pt-5">
                                         <ion-text class="fs-medium fw-normal ls-1 ion-color-danger" color="danger" [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]" routerDirection="forward">
                                             {{"STATUS_REJECTED"|translate}}

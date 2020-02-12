@@ -25,7 +25,7 @@ export interface Account {
 export class UserService {
     public authToken: string;
     public loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    public user$: BehaviorSubject<any> = new BehaviorSubject<any>({} as any);
+    public user$: BehaviorSubject<Student | Teacher> = new BehaviorSubject<Student | Teacher>({} as Student | Teacher);
     public userType: string;
     public exist: boolean;
 
@@ -178,7 +178,7 @@ export class UserService {
     /**
      * Funzione che restituisce il BehaviorSubject dell'oggetto dell'utenza (Teacher o Student)
      */
-    getUser(): BehaviorSubject<any> {
+    getUser(): BehaviorSubject<Student | Teacher> {
         return this.user$;
     }
 

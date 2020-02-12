@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject} from 'rxjs';
-import {User} from '../../model/user.model';
 import {UserService} from '../../services/user.service';
 import {BookingService} from '../../services/booking.service';
 import {Booking} from '../../model/booking.model';
 import {AlertController} from '@ionic/angular';
+import {Student} from '../../model/student.model';
+import {Teacher} from '../../model/teacher.model';
 
 @Component({
     selector: 'app-home',
@@ -18,7 +19,7 @@ export class HomePage implements OnInit {
     private cancelLessonMessage: string;
     private cancelButton: string;
     private pleaseWaitMessage: string;
-    private user$: BehaviorSubject<User>;
+    private user$: BehaviorSubject<Student | Teacher>;
     private booking$: BehaviorSubject<Booking[]>;
     private existbookings = false;
 

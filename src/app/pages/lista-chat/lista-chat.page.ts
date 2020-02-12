@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {ChatService} from '../../services/chat.service';
 import {BehaviorSubject} from 'rxjs';
-import {User} from '../../model/user.model';
 import {Message} from '../../model/message.model';
 import {LoadingController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
+import {Student} from '../../model/student.model';
+import {Teacher} from '../../model/teacher.model';
 
 @Component({
     selector: 'app-lista-chat',
@@ -13,7 +14,7 @@ import {TranslateService} from '@ngx-translate/core';
     styleUrls: ['./lista-chat.page.scss'],
 })
 export class ListaChatPage implements OnInit {
-    private user$: BehaviorSubject<User>;
+    private user$: BehaviorSubject<Student | Teacher>;
     private lastMessageFromChats$: BehaviorSubject<Message[]>;
     private chatCount$: BehaviorSubject<number>;
     private loading;

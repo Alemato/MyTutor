@@ -7,6 +7,8 @@ import {Booking} from '../../model/booking.model';
 import {UserService} from '../../services/user.service';
 import {User} from '../../model/user.model';
 import {TranslateService} from '@ngx-translate/core';
+import {Student} from '../../model/student.model';
+import {Teacher} from '../../model/teacher.model';
 
 @Component({
     selector: 'app-storico-lezioni',
@@ -15,7 +17,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class StoricoLezioniPage implements OnInit {
     private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
-    public user$: BehaviorSubject<User>;
+    public user$: BehaviorSubject<Student | Teacher>;
     private loading;
     private listUser: User[] = [];
     private pleaseWaitMessage: string;

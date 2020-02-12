@@ -125,6 +125,21 @@ export class ChatService {
      */
     startPeriodicGetCountChat() {
         console.log('startPeriodicGetCountChat');
+        // controllo se è inizializzato
+        if (this.periodicGet !== undefined) {
+            // controllo se è stato chiuso
+            if (this.periodicGet.closed) {
+                this.openPeriodoGet();
+            }
+        } else {
+            this.openPeriodoGet();
+        }
+    }
+
+    /**
+     * Funzione che contiene la logica dell'aggiornamento
+     */
+    openPeriodoGet() {
         this.periodicGet = interval(60000).subscribe(() => {
             this.storage.get(AUTH_TOKEN).then((tok) => {
                 if (tok) {

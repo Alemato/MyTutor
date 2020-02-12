@@ -123,7 +123,7 @@ export class InserimentoLezioniPage implements OnInit {
                     });
                 }
             });
-            this.teacher$ = this.userService.getUser();
+            this.teacher$ = this.userService.getUser() as BehaviorSubject<Teacher>;
             this.listSubject$ = this.subjectService.getListSubjet();
             this.subjectService.getRestList(false).subscribe(() => {
                 this.listSubject$.subscribe((data: Subject[]) => {

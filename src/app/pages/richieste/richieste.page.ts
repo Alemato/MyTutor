@@ -6,6 +6,8 @@ import {UserService} from '../../services/user.service';
 import {BookingService} from '../../services/booking.service';
 import {Booking} from '../../model/booking.model';
 import {AlertController} from '@ionic/angular';
+import {Teacher} from '../../model/teacher.model';
+import {Student} from '../../model/student.model';
 
 @Component({
     selector: 'app-richieste',
@@ -13,7 +15,7 @@ import {AlertController} from '@ionic/angular';
     styleUrls: ['./richieste.page.scss'],
 })
 export class RichiestePage implements OnInit {
-    private user$: BehaviorSubject<User>;
+    private user$: BehaviorSubject<Student | Teacher>;
     private bookings$: BehaviorSubject<Booking[]>;
     private existBookings = false;
 
