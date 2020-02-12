@@ -1,0 +1,11 @@
+<ion-list>
+    <ion-list-header class="px-0"><span class="ion-text-center w-100"><b>Pianificazioni ripetute di {{plannings[0].date | date:'EEEE': 'GMT+1': 'it-IT'}}</b></span></ion-list-header>
+  <ion-item-divider class="mh-1-important"></ion-item-divider>
+  <ion-item class="px-0" lines="" *ngFor="let planning of plannings">
+      <ion-col size="9" class="ml-6">
+        <ion-text class="ion-text-center w-100">{{plannings[0].date | date:'EEEE': 'GMT+1': 'it-IT'}} {{planning.date | date: "dd/MM/yyyy"}}</ion-text>
+      </ion-col>
+      <ion-icon color="primary" name="create" (click)="modificaPianificazione(planning)"></ion-icon>
+    <ion-icon class="ml-8" color="danger" name="trash" (click)="eliminaPianificazione(planning)"></ion-icon>
+  </ion-item>
+</ion-list>
