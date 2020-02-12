@@ -415,3 +415,22 @@ ion-toolbar ion-title{
 .ai-center{
   align-items: center;
 }
+
+.alert-checkbox-group::-webkit-scrollbar {
+  width: 1em;
+  display: block !important;
+}
+
+.alert-checkbox-group::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+.alert-checkbox-group::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.alert-checkbox-group{
+  --background: rgb(20,255,200);
+}
+

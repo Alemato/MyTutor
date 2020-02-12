@@ -1,0 +1,91 @@
+<form [formGroup]="filtroRicerca">
+  <ion-list>
+    <ion-list-header class="px-0"><span class="ion-text-center w-100">{{"FILTER_LESSONS_LD"|translate}}</span></ion-list-header>
+    <ion-item-divider class="mh-1-important"></ion-item-divider>
+    <ion-item>
+      <ion-label>{{"NAME_LESSON"|translate}}:</ion-label>
+      <ion-input formControlName="nomeLezione" type="text"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Città:</ion-label>
+      <ion-select  okText="{{'SELECT_BUTTON'|translate}}" formControlName="city" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                  class="w-65 max-w-65 pt-14">
+        <ion-select-option *ngFor="let c of cityLesson"
+                           value="{{c.value}}">{{c.text}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>{{"SUBJECT"|translate}}:</ion-label>
+      <ion-select (ionChange)="setSotto()"  okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectMateria" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                  class="w-65 max-w-65 pt-14">
+        <ion-select-option *ngFor="let mat of materie"
+                           value="{{mat.value}}">{{mat.text}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item *ngIf="materia!==null; else selctDisabilited">
+      <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
+      <ion-select okText="{{'SELECT_BUTTON'|translate}}" formControlName="selectSotto" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                  class="w-50 max-w-50 pt-14">
+        <ion-select-option *ngFor="let sot of sottomaterie[materia]"
+                           value="{{sot.value}}">{{sot.text}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ng-template #selctDisabilited>
+      <ion-item>
+        <ion-label>{{"SUB_SUBJECT"|translate}}:</ion-label>
+        <ion-select okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                    class="w-50 max-w-50 pt-14" disabled
+                    placeholder="{{'SUB_SUBJECT_SELECT'|translate}}">
+          <ion-select-option value="0">{{"ALL"|translate}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ng-template>
+
+    <ion-item>
+      <ion-label>Prezzo:</ion-label>
+      <ion-select  okText="{{'SELECT_BUTTON'|translate}}" formControlName="price" cancelText="{{'CANCEL_BUTTON'|translate}}"
+                  class="w-65 max-w-65 pt-14">
+        <ion-select-option *ngFor="let p of prezzi"
+                           value="{{p}}">{{p}}€/h</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Ora inizio:</ion-label>
+      <ion-datetime (ionChange)="settaFinelezione()" displayFormat="HH:mm" placeholder="Ora inizio" formControlName="startHour" minute-values="0"></ion-datetime>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label>Ora fine:</ion-label>
+      <ion-datetime displayFormat="HH:mm" placeholder="Ora fine" formControlName="endHour" [hourValues]="hours" minute-values="0"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Giorni</ion-label>
+      <ion-select multiple="true" ok-text="Okay" cancel-text="Nah" formControlName="days" style="overflow-y:scroll !important">
+        <ion-select-option value="lunedi">Lundedi</ion-select-option>
+        <ion-select-option value="martedi">Martedi</ion-select-option>
+        <ion-select-option value="mercoledi">Mercoledi</ion-select-option>
+        <ion-select-option value="giovedi">Giovedi</ion-select-option>
+        <ion-select-option value="venerdi">Venerdi</ion-select-option>
+        <ion-select-option value="sabbato">Sabato</ion-select-option>
+        <ion-select-option value="domenica">Domenica</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+  <ion-row>
+    <div class="mr-auto ml-auto">
+      <ion-button class="ion-margin-top ion-margin-bottom" color="success" (click)="subFiltro()">{{"FILTER_BUTTON"|translate}}</ion-button>
+    </div>
+
+    <div class="mr-auto ml-auto">
+      <ion-button class="ion-margin-top ion-margin-bottom" color="primary"  (click)="resetFiltro()">{{"RESET_BUTTON"|translate}}</ion-button>
+    </div>
+  </ion-row>
+</form>
