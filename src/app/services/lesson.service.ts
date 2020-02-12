@@ -12,6 +12,7 @@ import {Planning} from '../model/planning.model';
 })
 export class LessonService {
     public lessons$: BehaviorSubject<Lesson[]> = new BehaviorSubject<Lesson[]>([] as Lesson[]);
+    public lesson$: BehaviorSubject<Lesson> = new BehaviorSubject<Lesson>({} as Lesson);
 
     constructor(
         private storage: Storage,
@@ -46,6 +47,20 @@ export class LessonService {
             })
         );
     }
+    getLessonByUrl(url: string): Observable<Lesson> {
+        return this.http.get<Lesson>(url);
+    }
+    getLessonById(idLesson: number): Observable<Lesson> {
+        return this.http.get<Lesson>(URL.LESSON_SINGLE + idLesson.toString());
+    }
+
+    createRestLesson(lesson: Lesson): Observable<string> {
+        return this.http.post<string>(URL.LESSON_CREATE, lesson, {observe: 'response'}).pipe(
+            map((resp: HttpResponse<string>) => {
+                return resp.body;
+            })
+        );
+    }
 
     setStorageLesson(lessons: Lesson[]) {
         this.storage.set(STORAGE.LESSON, lessons);
@@ -53,6 +68,10 @@ export class LessonService {
 
     getLessons(): BehaviorSubject<Lesson[]> {
         return this.lessons$;
+    }
+
+    getLesson(): BehaviorSubject<Lesson> {
+        return this.lesson$;
     }
 
     logout() {
