@@ -31,7 +31,7 @@ const routes: Routes = [
                         [
                             {
                                 path: '',
-                                loadChildren: '../home-richieste/home-richieste.module#HomeRichiestePageModule',
+                                loadChildren: '../inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule',
                                 data: {isInsert: true, idL: 0},
                                 canActivate: [AuthGuard]
                             }
