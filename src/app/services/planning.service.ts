@@ -55,8 +55,16 @@ export class PlanningService {
         );
     }
 
-    createRestPlannings(plannings: Planning[]): Observable<any> {
-        return this.http.post<any>(URL.PLANNING_CREATE, plannings, {observe: 'response'});
+    getRestPlanningsAsLesson(): Observable<Planning[]> {
+        return this.http.get<Planning[]>(URL.PLANNING);
+    }
+
+    deleteRestPlanning(plannings: Planning[]): Observable<any> {
+        return this.http.post<any>(URL.PLANNING_DELETE, plannings, {observe: 'response'});
+    }
+
+    createRestPlannings(planning: Planning): Observable<any> {
+        return this.http.post<any>(URL.PLANNING_CREATE, planning, {observe: 'response'});
     }
 
     modifyRestPlannings(plannings: Planning[], idLesson: number): Observable<any> {
