@@ -1,0 +1,65 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>lista-pianificazioni</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button class="colore-bottone-primario" (click)="creaPianificazione()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
+    <ion-list *ngIf="plannings$ | async">
+        <ion-item-sliding disabled="{{disableSliding}}" *ngFor="let pianificazione of pianificazioni, let i = index"
+                          #sliding>
+            <ion-item lines="full">
+                <ion-label>
+                    <ion-row>
+                        <ion-col size="auto">
+                            <h2><b>Prosima:</b></h2>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <h2>{{pianificazione.date | date:'EEEE d MMMM y': 'GMT+1': 'it-IT'}}</h2>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="auto">
+                            <h2><b>Dalle:</b></h2>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <h2>{{pianificazione.startTime.slice(0, 5)}}</h2>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <h2><b>Alle:</b></h2>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <h2>{{pianificazione.endTime.slice(0, 5)}}</h2>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row (click)="presentPopover($event, pianificazioniRipetute[i])"
+                             *ngIf="pianificazione.repeatPlanning === true">
+                        <ion-col >
+                            <h2  class="ion-text-justify w-100">
+                                <b>Ripetizioni settimanali inserite</b></h2>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <ion-icon name="arrow-dropdown"></ion-icon>
+                        </ion-col>
+                    </ion-row>
+                </ion-label>
+            </ion-item>
+            <ion-item-options side="end">
+                <ion-item-option class="colore-bottone-primario" (click)="modificaPianificazione(pianificazione, sliding)">
+                    <ion-icon slot="icon-only" name="create"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="danger" (click)="eliminaPianificazione(pianificazione, sliding)">
+                    <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>
