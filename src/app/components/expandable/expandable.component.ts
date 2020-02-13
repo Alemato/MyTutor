@@ -10,6 +10,7 @@ export class ExpandableComponent implements AfterViewInit {
   @ViewChild('expandWrapper', {read: ElementRef, static: false}) expandWrapper: ElementRef;
   @Input('expanded') expanded = false;
   @Input('expandHeight') expandHeight = '150px';
+  @Input('items') itemlist = [];
 
   constructor(public renderer: Renderer2) {}
 
