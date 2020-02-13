@@ -10,6 +10,7 @@
   "DONE_BUTTON": "Done",
   "FILTER_BUTTON": "Filter",
   "RESET_BUTTON": "Reset",
+  "DELETE_BUTTON": "Delete",
   "SING_OUT": "Sign Out",
 
   "BUTTON_TAB_ACCEPTED": "Accepted",
@@ -47,6 +48,8 @@
   "MODIFIED_DATE_TIME_TITLE": "Modifield Date e Hour",
   "MODIFIED_PROFILE_TITLE": "Modified Profile",
   "INSERTION_DATE_TIME_TITLE": "Insertion Data e hour",
+  "PLANNING_TITLE": "Planning",
+  "PLANNING_LIST_TITLE": "Planning List ",
   "CREATE_ONE": "Create one",
 
   "DESCRIPTION_CARD_TITLE": "Description",
@@ -88,11 +91,19 @@
   "LESSON_PLAN_HEADER": "Message",
   "LESSON_PLAN_MESSAGE": "A scheduled lesson will be created from the selected date for each week for the selected days and times",
 
+  "DESCRIPTION_LESSON_LABEL": "Description Lesson",
   "BIOGRAPHY_LABEL": "Biography",
   "STUDY_GRADE_INPUT": "Study grade",
   "PLACE_LESSON_TEXT": "Place of the lesson",
   "SUB_SUBJECT_SELECT": "Select sub subject",
 
+  "REPEATED_PLANNING_OF": "Repeated planning of",
+  "WEEKLY_TUTOR_INSERTED": "Weekly tutor inserted",
+  "NEXT": "Next",
+  "DETAILS": "Details",
+  "PLANNING": "Planning",
+  "NEXT_PLANNING": "Next planning",
+  "TUTOR_EVERY": "Ripetizioni every",
   "BOOKING": "Booking",
   "BOOK": "Book",
   "DIV_FOR_THE": "For the",
@@ -153,6 +164,7 @@
   "REJECTED": "Rejected",
   "CARRIED": "Carried",
 
+  "MONTHS_DATETIME_SHORT": "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec",
   "MONTHS_DATETIME": "January, February, March, April, May, June, July, August, September, October, November, December",
   "DAY_DATETIME": "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday",
   "MONDAY": "Monday",
@@ -198,5 +210,18 @@
   "SEARCH_LESSONS_SIDE_MENU": "Search Lessons Available",
   "INSERT_AD_SIDE_MENU": "Insert Ad",
 
-  "ARE_YOU_A_TEACHER": "Are you a Teacher?"
+  "ARE_YOU_A_TEACHER": "Are you a Teacher?",
+
+  "LESSON_CREATED": "Lesson created",
+  "MESSAGE_PLANS_ADD": "The currently Lesson hasn't plans? Do you want to add some?",
+  "YES": "yes",
+  "INSERT_NEW_SUBJECT": "Insert new Subject",
+  "INSERT_NEW_SUB_SUBJECT": "Insert new Sub Subject",
+
+  "MESSAGE_QUEST": "Are you sure you want to cancel the planning",
+  "CANCEL_PLANNING": "Do you want to cancel the planning?",
+
+  "SEE_WEEKLY_REPETITIONS": "You see weekly repetitions",
+
+  "SET_LANGUAGE": "en-EN"
 }
