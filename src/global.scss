@@ -453,4 +453,9 @@ ion-toolbar ion-title{
 .alert-checkbox-group{
   --background: rgb(20,255,200);
 }
-
+.scroll{
+  overflow-y:scroll !important;
+}
+.bb-1-color{
+  border-bottom: 1px rgba(255,255,255,0.35) solid;
+}
