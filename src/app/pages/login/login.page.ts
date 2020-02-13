@@ -70,7 +70,7 @@ export class LoginPage implements OnInit {
     onLogin() {
         const account: Account = this.loginFormModel.value;
         console.log(account);
-        this.Loading().then(()=>{
+        this.Loading().then(() => {
             this.userService.login(account).subscribe(() => {
                     this.Diss();
                     this.loginFormModel.reset();
