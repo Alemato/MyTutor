@@ -9,6 +9,7 @@ import localeItExtra from '@angular/common/locales/extra/it';
 import { IonicModule } from '@ionic/angular';
 
 import { DettagliPianificazioneModalPage } from './dettagli-pianificazione-modal-page.page';
+import {TranslateModule} from '@ngx-translate/core';
 
 registerLocaleData(localeIt, 'it-IT', localeItExtra);
 
@@ -20,12 +21,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        TranslateModule
+    ],
   providers: [DatePipe],
   declarations: [DettagliPianificazioneModalPage]
 })

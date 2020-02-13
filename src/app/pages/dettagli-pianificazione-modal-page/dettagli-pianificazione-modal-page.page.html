@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Pianificazione</ion-title>
+        <ion-title>{{"PLANNING_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -8,25 +8,25 @@
     <form [formGroup]="planningFormModel" (ngSubmit)="salvaPlanning()">
         <ion-list>
             <ion-item class="animated fadeInUp">
-                <ion-label class="label-form" position="floating">Data</ion-label>
+                <ion-label class="label-form" position="floating">{{"DATE"|translate}}</ion-label>
                 <ion-datetime formControlName="date" displayFormat="DDDD DD MMMM YYYY"
-                              monthShortNames="Gen, Feb, Mar, Apr, Mag, Giu, Lug, Ago, Set, Ott, Nov, Dic"
-                              dayNames="Lunedì, Martedì, Mercoledì, Giovedì, Venerdì, Sabato, Domenica"
-                              monthNames="Gennaio, Febbraio, Marzo, Aprile, Maggio, Giugno, Luglio, Agosto, Settembre, Ottobre, Novembre, Dicembre"
+                              monthShortNames="{{'MONTHS_DATETIME_SHORT'|translate}}"
+                              dayNames="{{'DAY_DATETIME'|translate}}"
+                              monthNames="{{'MONTHS_DATETIME'|translate}}"
                               pickerFormat="DD MMMM YYYY" min="{{oggi}}" (ionChange)="alCambioData()"></ion-datetime>
             </ion-item>
             <ion-item class="animated fadeInUp">
-                <ion-label class="label-form" position="floating">Ora inizio</ion-label>
+                <ion-label class="label-form" position="floating">{{"START_TIME"|translate}}</ion-label>
                 <ion-datetime formControlName="startTime" displayFormat="HH:mm" (ionChange)="alCambioOraInizio()"
                               pickerFormat="HH:mm" minute-values="0" [hourValues]="hoursStart"></ion-datetime>
             </ion-item>
             <ion-item class="animated fadeInUp">
-                <ion-label class="label-form" position="floating">Ora fine</ion-label>
+                <ion-label class="label-form" position="floating">{{"END_TIME"|translate}}</ion-label>
                 <ion-datetime formControlName="endTime" displayFormat="HH:mm"
                               pickerFormat="HH:mm" minute-values="0" [hourValues]="hoursEnd"></ion-datetime>
             </ion-item>
             <ion-item class="animated fadeInUp" lines="full">
-                <ion-text slot="start">Ripetizione ogni {{gionoDellaSettimana}}</ion-text>
+                <ion-text slot="start">{{"TUTOR_EVERY"|translate}} {{gionoDellaSettimana}}</ion-text>
                 <ion-toggle slot="end" value="false" class="colore-check-primario mr-30"
                             formControlName="repeatPlanning"></ion-toggle>
             </ion-item>
@@ -35,10 +35,10 @@
             <ion-button size="medium" shape="round" class="colore-bottone-primario" type="submit"
                         [disabled]="!planningFormModel.valid"
                         tappable>
-                Salva
+                {{"SAVE_BUTTON"|translate}}
             </ion-button>
             <ion-button size="medium" shape="round" color="danger" (click)="cancel()" tappable>
-                Chiudi
+                {{"CLOSE_BUTTON"|translate}}
             </ion-button>
         </div>
     </form>
