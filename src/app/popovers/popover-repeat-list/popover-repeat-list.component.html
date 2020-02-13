@@ -1,12 +1,12 @@
 <ion-list>
     <ion-list-header class="px-0"><span
-            class="ion-text-center w-100 c-primary"><b class="fs-18">Pianificazioni ripetute di</b> <br> <b class="fs-18">{{plannings[0].date | date:'EEEE': 'GMT+1': 'it-IT'}} dalle {{plannings[0].startTime.slice(0, 5)}} alle {{plannings[0].endTime.slice(0, 5)}}</b></span>
+            class="ion-text-center w-100 c-primary"><b class="fs-18">{{"REPEATED_PLANNING_OF"|translate}}</b> <br> <b class="fs-18">{{plannings[0].date | date:'EEEE': 'GMT+1': 'SET_LANGUAGE'|translate}} {{"DATETIME_FROM"|translate}} {{plannings[0].startTime.slice(0, 5)}} {{"DATETIME_TO"|translate}} {{plannings[0].endTime.slice(0, 5)}}</b></span>
     </ion-list-header>
     <ion-item-divider class="mh-1-important"></ion-item-divider>
     <ion-item class="px-0" lines="" *ngFor="let planning of plannings">
         <ion-col size="9" class="ml-6">
             <ion-text
-                    class="ion-text-center w-100">{{plannings[0].date | date:'EEEE': 'GMT+1': lingua}} {{planning.date | date: "dd/MM/yyyy"}}</ion-text>
+                    class="ion-text-center w-100">{{plannings[0].date | date:'EEEE': 'GMT+1': 'SET_LANGUAGE'|translate}} {{planning.date | date: "dd/MM/yyyy"}}</ion-text>
         </ion-col>
         <ion-icon class="c-primary" name="create" (click)="modificaPianificazione(planning)"></ion-icon>
         <ion-icon class="ml-8" color="danger" name="trash" (click)="eliminaPianificazione(planning)"></ion-icon>

@@ -4,6 +4,7 @@ import {Planning} from '../../model/planning.model';
 import {PlanningService} from '../../services/planning.service';
 import {DettagliPianificazioneModalPage} from '../../pages/dettagli-pianificazione-modal-page/dettagli-pianificazione-modal-page.page';
 import {Lesson} from '../../model/lesson.model';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-popover-repeat-list',
@@ -18,14 +19,22 @@ export class PopoverRepeatListComponent implements OnInit {
     private lesson: Lesson;
     private lingua = 'it-IT'; // lingua data
 
+    private messageQuest: string;
+    private cancelPlanning: string;
+    private datetimeTo: string;
+    private cancelButton: string;
+    private deleteButton: string;
+
     constructor(private navParams: NavParams,
                 public popoverController: PopoverController,
                 private modalController: ModalController,
                 private alertController: AlertController,
-                private planningService: PlanningService) {
+                private planningService: PlanningService,
+                private translateService: TranslateService) {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.plannings = this.navParams.get('plannings');
         this.lesson = this.plannings[0].lesson;
         this.date = this.navParams.get('date');
@@ -33,21 +42,21 @@ export class PopoverRepeatListComponent implements OnInit {
     }
 
     async eliminaPianificazione(pianificazione: Planning) {
-        const message = 'Sei sicuro di voler cancellare la pianificazione del '
-            + new Date(pianificazione.date).toLocaleDateString() + ' alle '
+        const message = this.messageQuest
+            + new Date(pianificazione.date).toLocaleDateString() + this.datetimeTo
             + pianificazione.startTime.slice(0, 5) + '?';
         const alert = await this.alertController.create({
-            header: 'Cancella la pianificazione?',
+            header: this.cancelPlanning,
             message,
             buttons: [
                 {
-                    text: 'Annulla',
+                    text: this.cancelButton,
                     handler: () => {
                         console.log('Cancellazione Annulata');
                     }
                 },
                 {
-                    text: 'Cancella',
+                    text: this.deleteButton,
                     handler: () => {
                         this.planningService.deleteRestPlanning([pianificazione]).subscribe(() => {
                         });
@@ -84,5 +93,23 @@ export class PopoverRepeatListComponent implements OnInit {
             }
         });
         await modal.present();
+    }
+
+    private initTranslate() {
+        this.translateService.get('MESSAGE_QUEST').subscribe((data) => {
+            this.messageQuest = data;
+        });
+        this.translateService.get('CANCEL_PLANNING').subscribe((data) => {
+            this.cancelPlanning = data;
+        });
+        this.translateService.get('DATETIME_TO').subscribe((data) => {
+            this.datetimeTo = data;
+        });
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
+        this.translateService.get('DELETE_BUTTON').subscribe((data) => {
+            this.deleteButton = data;
+        });
     }
 }
