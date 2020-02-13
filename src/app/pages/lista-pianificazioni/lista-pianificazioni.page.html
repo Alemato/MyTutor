@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title class="ml--56">lista pianificazioni</ion-title>
+        <ion-title>{{"PLANNING_LIST_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -20,7 +20,7 @@
                 <ion-label>
                     <ion-row>
                         <ion-col size="auto">
-                            <h2><b>Prosima: {{pianificazione.date | date:'EEEE d MMMM y': 'GMT+1': 'it-IT'}}</b></h2>
+                            <h2><b>{{"NEXT"|translate}}: {{pianificazione.date | date:'EEEE d MMMM y': 'GMT+1': 'SET_LANGUAGE'|translate}}</b></h2>
                         </ion-col>
                     </ion-row>
                     <ion-row>
@@ -32,7 +32,7 @@
                              *ngIf="pianificazione.repeatPlanning === true">
                         <ion-col >
                             <ion-text class="c-primary text-dimension">
-                                Vedi ripetizioni settimanali</ion-text>
+                                {{"SEE_WEEKLY_REPETITIONS"|translate}}</ion-text>
                         </ion-col>
                         <ion-col size="auto">
                             <ion-icon name="arrow-dropdown" class="c-primary"></ion-icon>

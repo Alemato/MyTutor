@@ -10,6 +10,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ListaPianificazioniPage } from './lista-pianificazioni.page';
 import {PopoverRepeatListComponent} from '../../popovers/popover-repeat-list/popover-repeat-list.component';
+import {TranslateModule} from '@ngx-translate/core';
 
 registerLocaleData(localeIt, 'it-IT', localeItExtra);
 
@@ -21,12 +22,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RouterModule.forChild(routes)
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        RouterModule.forChild(routes),
+        TranslateModule
+    ],
   entryComponents: [PopoverRepeatListComponent],
   declarations: [ListaPianificazioniPage, PopoverRepeatListComponent]
 })

@@ -8,6 +8,7 @@ import {Lesson} from '../../model/lesson.model';
 import {LessonService} from '../../services/lesson.service';
 import {DettagliPianificazioneModalPage} from '../dettagli-pianificazione-modal-page/dettagli-pianificazione-modal-page.page';
 import {PopoverRepeatListComponent} from '../../popovers/popover-repeat-list/popover-repeat-list.component';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-lista-pianificazioni',
@@ -25,15 +26,23 @@ export class ListaPianificazioniPage implements OnInit {
     private pianificazioniRipetute: Planning[][] = [];
     private disableSliding = false;
 
+    private messageQuest: string;
+    private cancelPlanning: string;
+    private datetimeTo: string;
+    private cancelButton: string;
+    private deleteButton: string;
+
     constructor(public popoverController: PopoverController,
                 private route: ActivatedRoute,
                 private modalController: ModalController,
                 private alertController: AlertController,
                 private planningService: PlanningService,
-                private lessonService: LessonService) {
+                private lessonService: LessonService,
+                private translateService: TranslateService) {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.route.paramMap.subscribe((params: ParamMap) => {
             this.lesson$ = this.lessonService.getLessonById(parseInt(params.get('idLezione'), 0));
             this.lesson$.subscribe((lezione) => {
@@ -108,19 +117,19 @@ export class ListaPianificazioniPage implements OnInit {
     async eliminaPianificazione(pianificazione: Planning, sliding: IonItemSliding) {
         await sliding.close();
         // tslint:disable-next-line:max-line-length
-        const message = 'Sei sicuro di voler cancellare la pianificazione del ' + new Date(pianificazione.date).toLocaleDateString() + ' alle ' + pianificazione.startTime.slice(0, 5) + '?';
+        const message = this.messageQuest + new Date(pianificazione.date).toLocaleDateString() + this.datetimeTo + pianificazione.startTime.slice(0, 5) + '?';
         const alert = await this.alertController.create({
-            header: 'Cancella la pianificazione?',
+            header: this.cancelPlanning,
             message,
             buttons: [
                 {
-                    text: 'Annulla',
+                    text: this.cancelButton,
                     handler: () => {
                         console.log('Cancellazione Annulata');
                     }
                 },
                 {
-                    text: 'Cancella',
+                    text: this.deleteButton,
                     handler: () => {
                         const idPianificazione = this.pianificazioni.findIndex(p => p.idPlanning === pianificazione.idPlanning);
                         this.planningService.deleteRestPlanning(this.pianificazioniRipetute[idPianificazione]).subscribe(() => {
@@ -198,6 +207,24 @@ export class ListaPianificazioniPage implements OnInit {
                     this.oreInizioEFine.push(oraInizioEFine);
                 }
             });
+        });
+    }
+
+    private initTranslate() {
+        this.translateService.get('MESSAGE_QUEST').subscribe((data) => {
+            this.messageQuest = data;
+        });
+        this.translateService.get('CANCEL_PLANNING').subscribe((data) => {
+            this.cancelPlanning = data;
+        });
+        this.translateService.get('DATETIME_TO').subscribe((data) => {
+            this.datetimeTo = data;
+        });
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
+        this.translateService.get('DELETE_BUTTON').subscribe((data) => {
+            this.deleteButton = data;
         });
     }
 }
