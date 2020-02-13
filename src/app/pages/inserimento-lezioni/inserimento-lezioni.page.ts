@@ -28,9 +28,17 @@ export class InserimentoLezioniPage implements OnInit {
     private lesson: Lesson;
     private loading;
     private modifica = false;
+
     private cancelButton: string;
     private doneButton: string;
     private pleaseWaitMessage: string;
+    private lessonCreated: string;
+    private messagePlansAdd: string;
+    private yesButton: string;
+    private insertNewSubject: string;
+    private subject: string;
+    private insertNewSubSubject: string;
+    private subSubject;
 
     constructor(
         private pickerCtrl: PickerController,
@@ -116,8 +124,8 @@ export class InserimentoLezioniPage implements OnInit {
 
     async presentaAlert(idLezione: string) {
         const alert = await this.alertController.create({
-            header: 'Lezione creata',
-            message: 'La lezzione al momento non ha pianificazioni. Vuoi aggiungerne?',
+            header: this.lessonCreated,
+            message: this.messagePlansAdd,
             buttons: [
                 {
                     text: this.cancelButton,
@@ -127,7 +135,7 @@ export class InserimentoLezioniPage implements OnInit {
                         this.navController.navigateRoot('lista-annunci-publicati');
                     }
                 }, {
-                    text: 'Si',
+                    text: this.yesButton,
                     handler: () => {
                         this.navController.navigateRoot('lista-pianificazioni/' + idLezione);
                     }
@@ -161,10 +169,10 @@ export class InserimentoLezioniPage implements OnInit {
 
     async inputNuovaMateria() {
         const alert = await this.alertController.create({
-            header: 'Inserisci la nuova MATERIA:',
-            inputs: [{type: 'text', placeholder: 'Materia'}],
+            header: this.insertNewSubject,
+            inputs: [{type: 'text', placeholder: this.subject}],
             buttons: [{
-                text: 'Cancel',
+                text: this.cancelButton,
                 handler: () => {
                     alert.dismiss(false);
                     this.materia = '';
@@ -208,8 +216,8 @@ export class InserimentoLezioniPage implements OnInit {
 
     async inputNuovaSottoMateria() {
         const alert = await this.alertController.create({
-            header: 'Inserisci la nuova SOTTOMATERIA:',
-            inputs: [{type: 'text', placeholder: 'Sotto Materia'}],
+            header: this.insertNewSubSubject,
+            inputs: [{type: 'text', placeholder: this.subSubject}],
             buttons: [{
                 text: 'Cancel',
                 handler: () => {
@@ -263,6 +271,28 @@ export class InserimentoLezioniPage implements OnInit {
         });
         this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
             this.pleaseWaitMessage = data;
+        });
+        //
+        this.translateService.get('LESSON_CREATED').subscribe((data) => {
+            this.lessonCreated = data;
+        });
+        this.translateService.get('MESSAGE_PLANS_ADD').subscribe((data) => {
+            this.messagePlansAdd = data;
+        });
+        this.translateService.get('YES').subscribe((data) => {
+            this.yesButton = data;
+        });
+        this.translateService.get('INSERT_NEW_SUBJECT').subscribe((data) => {
+            this.insertNewSubject = data;
+        });
+        this.translateService.get('SUBJECT').subscribe((data) => {
+            this.subject = data;
+        });
+        this.translateService.get('INSERT_NEW_SUB_SUBJECT').subscribe((data) => {
+            this.insertNewSubSubject = data;
+        });
+        this.translateService.get('SUB_SUBJECT').subscribe((data) => {
+            this.subSubject = data;
         });
     }
 }

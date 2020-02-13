@@ -22,7 +22,7 @@
                            required class="input-form-font pl-18-important" placeholder="00.00"></ion-input>
             </ion-item>
             <ion-item lines="full">
-                <ion-label class="label-form" position="stacked">Descrizione Lezione</ion-label>
+                <ion-label class="label-form" position="stacked">{{"DESCRIPTION_LESSON_LABEL"|translate}}</ion-label>
                 <ion-textarea class="input-form-font plr-22" formControlName="description" required placeholder="Descrizione"></ion-textarea>
             </ion-item>
             <ion-item lines="full">
@@ -56,7 +56,7 @@
                     <ion-text class="padding-fontsize">{{lesson.price}}</ion-text>
                 </ion-item>
                 <ion-item lines="full">
-                    <ion-label class="label-form" position="stacked">Descrizione Lezione</ion-label>
+                    <ion-label class="label-form" position="stacked">{{"DESCRIPTION_LESSON_LABEL"|translate}}</ion-label>
                     <ion-textarea class="input-form-font plr-22" formControlName="description" required placeholder="Descrizione"></ion-textarea>
                 </ion-item>
                 <ion-item lines="full">
@@ -72,15 +72,15 @@
     </ng-template>
     <div class="ion-text-center mt-25">
             <ion-button size="medium" shape="round" class="bottone-inserisci ion-margin-bottom ion-margin-top"
-                        (click)="annulla()" tappable>ANNULLA
+                        (click)="annulla()" tappable>{{"CANCEL_BUTTON"|translate}}
             </ion-button>
             <ion-button size="medium" shape="round" *ngIf="modifica; else bottoneInserisci" class="bottone-inserisci ion-margin-bottom ion-margin-top"
-                        [disabled]="!lezioneFormModel.valid" (click)="modificaLezione()" tappable>SALVA
+                        [disabled]="!lezioneFormModel.valid" (click)="modificaLezione()" tappable>{{"SAVE_BUTTON"|translate}}
             </ion-button>
     </div>
     <ng-template #bottoneInserisci>
             <ion-button size="medium" shape="round" class="bottone-inserisci ion-margin-bottom ion-margin-top"
-                        [disabled]="!lezioneFormModel.valid || !okModal" (click)="inserisciLezione()">INSERISCI
+                        [disabled]="!lezioneFormModel.valid || !okModal" (click)="inserisciLezione()">{{"INSERT_BUTTON"|translate}}
             </ion-button>
     </ng-template>
 </ion-content>
