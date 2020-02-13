@@ -12,14 +12,13 @@
         <ion-list *ngIf="plannings.length > 0; else noPlanning">
             <ion-card *ngFor="let planning of plannings">
                 <ion-card-header>
-                    <ion-card-title>{{planning.lesson.name | uppercase}}</ion-card-title>
+                    <ion-card-title class="">{{planning.lesson.name | uppercase}}</ion-card-title>
                 </ion-card-header>
+                <ion-card-subtitle padding-start class="font-bold">
+                    {{planning.lesson.subject.macroSubject}} - {{planning.lesson.subject.microSubject}}
+                </ion-card-subtitle>
                 <ion-card-content>
-                    <label class="font-bold">Materia:</label>
-                    <h2>{{planning.lesson.subject.macroSubject}}</h2>
-                    <label class="font-bold">Sotto materia:</label>
-                    <h2>{{planning.lesson.subject.microSubject}}</h2>
-                    <label class="font-bold">Prossima pianificazione:</label>
+                    <label>Prossima:</label>
                     <h2>{{planning.date | date:'EEEE d MMMM y': 'GMT+1': 'it-IT'}} alle {{planning.startTime.slice(0, 5)}}</h2>
                 </ion-card-content>
                 <ion-row>
