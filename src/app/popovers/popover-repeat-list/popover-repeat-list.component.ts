@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AlertController, ModalController, NavParams} from '@ionic/angular';
+import {AlertController, ModalController, NavParams, PopoverController} from '@ionic/angular';
 import {Planning} from '../../model/planning.model';
 import {PlanningService} from '../../services/planning.service';
 import {DettagliPianificazioneModalPage} from '../../pages/dettagli-pianificazione-modal-page/dettagli-pianificazione-modal-page.page';
@@ -16,8 +16,10 @@ export class PopoverRepeatListComponent implements OnInit {
     private date: number[] = [];
     private oreInizioEFine: any[] = [];
     private lesson: Lesson;
+    private lingua = 'it-IT'; // lingua data
 
     constructor(private navParams: NavParams,
+                public popoverController: PopoverController,
                 private modalController: ModalController,
                 private alertController: AlertController,
                 private planningService: PlanningService) {
@@ -55,6 +57,11 @@ export class PopoverRepeatListComponent implements OnInit {
         });
 
         await alert.present();
+    }
+
+    ionViewWillLeave() {
+        console.log('mi chiudo');
+        this.popoverController.dismiss(true);
     }
 
     async modificaPianificazione(pianificazione: Planning) {
