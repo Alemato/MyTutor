@@ -70,18 +70,17 @@
             </form>
         </div>
     </ng-template>
-    <ion-row class="ion-text-center">
-        <ion-col *ngIf="modifica; else bottoneInserisci">
-            <ion-button class="bottone-inserisci ion-margin-bottom ion-margin-top"
-                        [disabled]="!lezioneFormModel.valid" (click)="modificaLezione()">SALVA
+    <div class="ion-text-center mt-25">
+            <ion-button size="medium" shape="round" class="bottone-inserisci ion-margin-bottom ion-margin-top"
+                        (click)="annulla()" tappable>ANNULLA
             </ion-button>
-        </ion-col>
-    </ion-row>
+            <ion-button size="medium" shape="round" *ngIf="modifica; else bottoneInserisci" class="bottone-inserisci ion-margin-bottom ion-margin-top"
+                        [disabled]="!lezioneFormModel.valid" (click)="modificaLezione()" tappable>SALVA
+            </ion-button>
+    </div>
     <ng-template #bottoneInserisci>
-        <ion-col>
-            <ion-button class="bottone-inserisci ion-margin-bottom ion-margin-top"
+            <ion-button size="medium" shape="round" class="bottone-inserisci ion-margin-bottom ion-margin-top"
                         [disabled]="!lezioneFormModel.valid || !okModal" (click)="inserisciLezione()">INSERISCI
             </ion-button>
-        </ion-col>
     </ng-template>
 </ion-content>

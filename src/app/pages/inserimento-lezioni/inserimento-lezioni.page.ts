@@ -117,7 +117,7 @@ export class InserimentoLezioniPage implements OnInit {
     async presentaAlert(idLezione: string) {
         const alert = await this.alertController.create({
             header: 'Lezione creata',
-            message: 'La lezzione al momento non ha pianificazioni? Vuoi aggiungerne?',
+            message: 'La lezzione al momento non ha pianificazioni. Vuoi aggiungerne?',
             buttons: [
                 {
                     text: this.cancelButton,
@@ -154,6 +154,9 @@ export class InserimentoLezioniPage implements OnInit {
             this.lezioneFormModel.controls.microSubject.reset();
             this.lezioneFormModel.controls.microSubject.enable();
         }
+    }
+    annulla() {
+        this.navController.back();
     }
 
     async inputNuovaMateria() {
