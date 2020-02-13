@@ -12,26 +12,26 @@
         <ion-list *ngIf="plannings.length > 0; else noPlanning">
             <ion-card *ngFor="let planning of plannings">
                 <ion-card-header>
-                    <ion-card-title class="">{{planning.lesson.name | uppercase}}</ion-card-title>
+                    <ion-card-title>{{planning.lesson.name | uppercase}}</ion-card-title>
                 </ion-card-header>
                 <ion-card-subtitle class="font-bold ion-padding-start">
                     {{planning.lesson.subject.macroSubject}} - {{planning.lesson.subject.microSubject}}
                 </ion-card-subtitle>
                 <ion-card-content>
-                    <label>Prossima:</label>
-                    <h2>{{planning.date | date:'EEEE d MMMM y': 'GMT+1': 'it-IT'}} alle {{planning.startTime.slice(0, 5)}}</h2>
+                    <label>{{"NEXT"|translate}}:</label>
+                    <h2>{{planning.date | date:'EEEE d MMMM y': 'GMT+1': 'SET_LANGUAGE'|translate}} {{"DATETIME_TO"|translate}} {{planning.startTime.slice(0, 5)}}</h2>
                 </ion-card-content>
                 <ion-row>
                     <ion-col class="ion-justify-content-start">
                         <ion-button (click)="modificaLezione(planning)" size="medium" class="colore-bottone-primario">
                             <ion-icon name='create'></ion-icon>
-                            &nbsp;Dettagli
+                            &nbsp;{{"DETAILS"|translate}}
                         </ion-button>
                     </ion-col>
                     <ion-col class="ion-justify-content-end">
                         <ion-button size="medium" [routerLink]="['/lista-pianificazioni', planning.lesson.idLesson]" class="colore-bottone-primario">
                             <ion-icon name='list'></ion-icon>
-                            &nbsp;Pianificazioni
+                            &nbsp;{{"PLANNING"|translate}}
                         </ion-button>
                     </ion-col>
                 </ion-row>
