@@ -1,7 +1,7 @@
 <ion-app>
     <ion-split-pane contentId="menu-content">
         <ion-menu *ngIf="(user$ | async) as user" class="menu" side="start" menuId="first" contentId="menu-content">
-            <ion-header style="border-bottom: 1px rgba(255,255,255,0.35) solid;">
+            <ion-header class="bb-1-color">
                 <ion-row (click)="profilo()">
                     <ion-col class="ion-align-self-center" size="auto" [routerLink]="['/modifica-profilo']" routerDirection="forward">
                         <ion-icon *ngIf="user.image === null || user.image === '' || user.image ===' ' || user.image === undefined; else imgBlock"
