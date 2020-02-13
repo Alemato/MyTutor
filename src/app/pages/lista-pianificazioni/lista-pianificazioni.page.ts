@@ -136,6 +136,7 @@ export class ListaPianificazioniPage implements OnInit {
     async presentPopover(event: any, plannings: Planning[]) {
         await this.contenuto.scrollToPoint(0, 200, 200);
         const popover = await this.popoverController.create({
+            backdropDismiss: true,
             component: PopoverRepeatListComponent,
             event,
             cssClass: 'popover-dimension',
@@ -146,7 +147,8 @@ export class ListaPianificazioniPage implements OnInit {
                 oreInizioEFine: this.oreInizioEFine
             }
         });
-        popover.onDidDismiss().then(() => {
+        popover.onDidDismiss().then((data) => {
+            console.log(data);
             this.listaPianificazioni();
         });
         return await popover.present();
