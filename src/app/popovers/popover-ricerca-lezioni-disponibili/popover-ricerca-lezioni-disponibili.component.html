@@ -8,7 +8,7 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Città:</ion-label>
+      <ion-label>{{"CITY_TEXT"|translate}}:</ion-label>
       <ion-select  okText="{{'SELECT_BUTTON'|translate}}" formControlName="city" cancelText="{{'CANCEL_BUTTON'|translate}}"
                   class="w-65 max-w-65 pt-14">
         <ion-select-option *ngFor="let c of cityLesson"
@@ -46,7 +46,7 @@
     </ng-template>
 
     <ion-item>
-      <ion-label>Prezzo:</ion-label>
+      <ion-label>{{"PRICE"|translate}}:</ion-label>
       <ion-select  okText="{{'SELECT_BUTTON'|translate}}" formControlName="price" cancelText="{{'CANCEL_BUTTON'|translate}}"
                   class="w-65 max-w-65 pt-14">
         <ion-select-option *ngFor="let p of prezzi"
@@ -55,26 +55,26 @@
     </ion-item>
 
     <ion-item>
-      <ion-label>Ora inizio:</ion-label>
-      <ion-datetime (ionChange)="settaFinelezione()" displayFormat="HH:mm" placeholder="Ora inizio" formControlName="startHour" minute-values="0"></ion-datetime>
+      <ion-label>{{"START_TIME"|translate}}:</ion-label>
+      <ion-datetime (ionChange)="settaFinelezione()" displayFormat="HH:mm" placeholder="{{'START_TIME'|translate}}" formControlName="startHour" minute-values="0"></ion-datetime>
     </ion-item>
 
 
     <ion-item>
-      <ion-label>Ora fine:</ion-label>
-      <ion-datetime displayFormat="HH:mm" placeholder="Ora fine" formControlName="endHour" [hourValues]="hours" minute-values="0"></ion-datetime>
+      <ion-label>{{"END_TIME"|translate}}:</ion-label>
+      <ion-datetime displayFormat="HH:mm" placeholder="{{'END_TIME'|translate}}" formControlName="endHour" [hourValues]="hours" minute-values="0"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label>Giorni</ion-label>
-      <ion-select multiple="true" ok-text="Okay" cancel-text="Nah" formControlName="days" style="overflow-y:scroll !important">
-        <ion-select-option value="lunedi">Lundedi</ion-select-option>
-        <ion-select-option value="martedi">Martedi</ion-select-option>
-        <ion-select-option value="mercoledi">Mercoledi</ion-select-option>
-        <ion-select-option value="giovedi">Giovedi</ion-select-option>
-        <ion-select-option value="venerdi">Venerdi</ion-select-option>
-        <ion-select-option value="sabbato">Sabato</ion-select-option>
-        <ion-select-option value="domenica">Domenica</ion-select-option>
+      <ion-select multiple="true" okText="{{'SELECT_BUTTON'|translate}}" cancelText="{{'CANCEL_BUTTON'|translate}}" formControlName="days" class="scroll">
+        <ion-select-option value="lunedi">{{"MONDAY"|translate}}</ion-select-option>
+        <ion-select-option value="martedi">{{"TUESDAY"|translate}}</ion-select-option>
+        <ion-select-option value="mercoledi">{{"WEDNESDAY"|translate}}</ion-select-option>
+        <ion-select-option value="giovedi">{{"THURSDAY"|translate}}</ion-select-option>
+        <ion-select-option value="venerdi">{{"FRIDAY"|translate}}</ion-select-option>
+        <ion-select-option value="sabbato">{{"SATURDAY"|translate}}</ion-select-option>
+        <ion-select-option value="domenica">{{"SUNDAY"|translate}}</ion-select-option>
       </ion-select>
     </ion-item>
 
