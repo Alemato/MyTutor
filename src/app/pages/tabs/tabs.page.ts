@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {BehaviorSubject} from 'rxjs';
-import {User} from '../../model/user.model';
 import {Router} from '@angular/router';
+import {Student} from '../../model/student.model';
+import {Teacher} from '../../model/teacher.model';
 
 @Component({
   selector: 'app-tabs',
@@ -10,7 +11,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./tabs.page.scss'],
 })
 export class TabsPage implements OnInit {
-  private user$: BehaviorSubject<User>;
+  private user$: BehaviorSubject<Student | Teacher>;
   isSearch = false;
 
   constructor(private userService: UserService,
@@ -19,6 +20,10 @@ export class TabsPage implements OnInit {
   ngOnInit() {
     this.user$ = this.userService.getUser();
     console.log(this.route.url);
+  }
+
+  ionViewDidLeave() {
+    console.log('ionViewDidLeave tabs');
   }
 
   isInSearch() {
