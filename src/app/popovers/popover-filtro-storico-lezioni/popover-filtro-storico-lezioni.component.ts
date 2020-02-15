@@ -40,7 +40,7 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
                 this.materie.push(obj1);
             });
             this.sottoMaterie = [];
-            let appogio = [];
+            let appogioSottoMaterie = [];
             this.subject.forEach((item) => {
                 this.subject.forEach((item1) => {
                     if (item.macroSubject === item1.macroSubject) {
@@ -48,11 +48,11 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
                             text: item1.microSubject,
                             value: item1.microSubject
                         };
-                        appogio.push(obj);
+                        appogioSottoMaterie.push(obj);
                     }
                 });
-                this.sottoMaterie.push(appogio);
-                appogio = [];
+                this.sottoMaterie.push(appogioSottoMaterie);
+                appogioSottoMaterie = [];
             });
         });
         this.filtroFormModel = this.formBuilder.group({
