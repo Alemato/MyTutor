@@ -8,13 +8,16 @@ import { Component, AfterViewInit, Input, ViewChild,  ElementRef, Renderer2 } fr
 })
 export class ExpandableComponent implements AfterViewInit {
   @ViewChild('expandWrapper', {read: ElementRef, static: false}) expandWrapper: ElementRef;
-  @Input('expanded') expanded = false;
-  @Input('expandHeight') expandHeight = '150px';
-  @Input('items') itemlist = [];
+  @Input() expanded = false;
+  @Input() expandHeight = '150px';
+  @Input() itemlist = [];
 
   constructor(public renderer: Renderer2) {}
 
   ngAfterViewInit() {
-    this.renderer.setStyle(this.expandWrapper.nativeElement, 'max-height', this.expandHeight);
+    if (this.itemlist !== undefined && this.itemlist.length > 0) {
+      this.renderer.setStyle(this.expandWrapper.nativeElement, 'max-height', this.expandHeight);
+    }
+    console.log(this.itemlist);
   }
 }

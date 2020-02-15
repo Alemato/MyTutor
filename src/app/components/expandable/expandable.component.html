@@ -1,4 +1,4 @@
-<div #expandWrapper class='expand-wrapper' [class.collapsed]="!expanded">
+<div *ngIf="itemlist !== undefined && itemlist.length > 0" #expandWrapper class='expand-wrapper' [class.collapsed]="!expanded">
 <ion-row *ngFor="let i of itemlist">
     <ion-col size="5" class="py-0">{{i.giorno}}</ion-col>
     <ion-col size="7" class="ion-no-padding">
