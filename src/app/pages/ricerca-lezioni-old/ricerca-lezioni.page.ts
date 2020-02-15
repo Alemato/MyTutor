@@ -161,14 +161,14 @@ export class RicercaLezioniPage implements OnInit {
             this.oraFine = '';
         }
         this.loadingPresent().then(() => {
-            this.planningService.getRestPlannings(this.materia, this.ricercaFormModel.controls.nomeLezione.value,
+            /*this.planningService.getRestPlannings(this.materia, this.ricercaFormModel.controls.nomeLezione.value,
                 this.ricercaFormModel.controls.nomeCitta.value, this.ricercaFormModel.controls.sottoMateria.value,
-                this.giorniSettimana[0], this.giorniSettimana[1], this.giorniSettimana[2],
-                this.giorniSettimana[3], this.giorniSettimana[4], this.giorniSettimana[5],
-                this.giorniSettimana[6], this.oraInizio, this.oraFine).subscribe(() => {
+                this.giorniSettimana[0].toString(), this.giorniSettimana[1].toString(), this.giorniSettimana[2].toString(),
+                this.giorniSettimana[3].toString(), this.giorniSettimana[4].toString(), this.giorniSettimana[5].toString(),
+                this.giorniSettimana[6].toString(), this.oraInizio, this.oraFine).subscribe(() => {
                 this.disLoading();
                 this.navController.navigateForward('risultati-ricerca');
-            });
+            });*/
         });
     }
 

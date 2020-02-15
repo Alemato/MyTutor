@@ -28,9 +28,9 @@ export class PlanningService {
 
     getRestPlannings(macroMateria: string, nomeLezione: string,
                      citta: string, microMateria: string,
-                     domenica: number, lunedi: number, martedi: number,
-                     mercoledi: number, giovedi: number, venerdi: number,
-                     sabato: number, oraInizio: string, oraFine: string): Observable<Planning[]> {
+                     domenica: string, lunedi: string, martedi: string,
+                     mercoledi: string, giovedi: string, venerdi: string,
+                     sabato: string, oraInizio: string, oraFine: string, price: string): Observable<Planning[]> {
         return this.http.get<Planning[]>(URL.PLANNING_RESEARCH, {
             observe: 'response', params: {
                 'macro-materia': macroMateria,
@@ -45,7 +45,8 @@ export class PlanningService {
                 ven: venerdi.toString(),
                 sab: sabato.toString(),
                 'ora-inizio': oraInizio,
-                'ora-fine': oraFine
+                'ora-fine': oraFine,
+                prezzo: price
             }
         }).pipe(
             map((resp: HttpResponse<Planning[]>) => {
