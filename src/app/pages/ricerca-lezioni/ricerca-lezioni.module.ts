@@ -9,6 +9,7 @@ import { RicercaLezioniPage } from './ricerca-lezioni.page';
 // tslint:disable-next-line:max-line-length
 import {PopoverRicercaLezioniDisponibiliComponent} from '../../popovers/popover-ricerca-lezioni-disponibili/popover-ricerca-lezioni-disponibili.component';
 import {TranslateModule} from '@ngx-translate/core';
+import {ExpandableComponent} from '../../components/expandable/expandable.component';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
     TranslateModule,
     ReactiveFormsModule
   ],
-  entryComponents: [PopoverRicercaLezioniDisponibiliComponent],
-  declarations: [RicercaLezioniPage, PopoverRicercaLezioniDisponibiliComponent]
+  entryComponents: [PopoverRicercaLezioniDisponibiliComponent, ExpandableComponent],
+  declarations: [RicercaLezioniPage, PopoverRicercaLezioniDisponibiliComponent, ExpandableComponent]
 })
 export class RicercaLezioniPageModule {}

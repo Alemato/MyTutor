@@ -306,6 +306,11 @@ ion-toolbar ion-title{
   color: $apprimary;
 }
 
+.c-primary-button {
+  --color: #029DB4 !important;
+  --border-color: #029DB4 !important;
+}
+
 .select-full-width{
   width: 100%;
   max-width: 100%;

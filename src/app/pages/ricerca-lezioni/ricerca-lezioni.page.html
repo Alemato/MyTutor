@@ -1,15 +1,78 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>ricercaLezioni</ion-title>
-    <ion-button (click)="presentPopover($event)" slot="end" fill="clear" color="light">
-      <ion-icon name="settings"></ion-icon>
-    </ion-button>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>ricercaLezioni</ion-title>
+        <ion-button (click)="presentPopover($event)" slot="end" fill="clear" color="light">
+            <ion-icon name="settings"></ion-icon>
+        </ion-button>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <p>
-    NO
-  </p>
+    <ion-card *ngFor="let lesson of listLessons; let i = index">
+        <ion-card-header>
+            <ion-grid class="ion-no-padding">
+                <ion-row>
+                    <ion-col class="ion-no-padding">
+                        <ion-card-title>{{lesson.name}}</ion-card-title>
+                        <ion-card-subtitle class="mt-8">{{lesson.subject.macroSubject}} - {{lesson.subject.microSubject}}</ion-card-subtitle>
+                    </ion-col>
+                    <ion-col size="auto" class="ion-no-padding">
+                        <h1 class="d-inline c-primary">{{lesson.price}}€/h</h1>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <ion-card-subtitle>
+                <ion-text class="font-weight-400 pr-5">Di:</ion-text>
+                <ion-text class="ls-01em c-primary" [routerLink]="['/profilo-singolo', lesson.teacher.idUser]">{{lesson.teacher.name}} {{lesson.teacher.surname}}</ion-text>
+            </ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+            {{lesson.description}}
+
+            <div *ngIf="listOrari[i]">
+            <ion-row class="mt-8" (click)="expandItem(i)">
+                <ion-col size="auto" class="pl-0 py-0 pt-2">
+                    <ion-icon name="time"></ion-icon>
+                </ion-col>
+                <ion-col size="auto" class="pl-0 py-0">
+                    Slots:
+                </ion-col>
+                <ion-col class="py-0" >
+                    <ion-row>
+                        <ion-col size="5" class="py-0">{{listOrari[i][0].giorno}}</ion-col>
+                        <ion-col size="7" class="ion-no-padding">
+                            <ion-row *ngFor="let o of listOrari[i][0].orari">
+                                <ion-col size="5" class="py-0 ion-text-right">{{o[0]}}</ion-col>
+                                <ion-col size="2" class="py-0 ion-text-center"> -</ion-col>
+                                <ion-col size="5" class="py-0 ion-text-right pl-0 pr-15">{{o[1]}}</ion-col>
+                            </ion-row>
+                        </ion-col>
+                    </ion-row>
+
+                        <div *ngIf="listOrari[i].length > 1">
+                            <app-expandable [expanded]="expanded[i]" [itemlist]="listOrari[i].slice(1)"></app-expandable>
+                        </div>
+
+                </ion-col>
+                <ion-col size="auto" class="pt-2">
+                    <div [hidden]="listOrari[i].length < 1">
+                        <ion-icon name="arrow-dropdown" [hidden]="expanded[i]"></ion-icon>
+                        <ion-icon name="arrow-dropup" [hidden]="!expanded[i]"></ion-icon>
+                    </div>
+                </ion-col>
+            </ion-row>
+            </div>
+
+            <ion-row class="ion-justify-content-between ion-margin-top">
+                <ion-col size="auto" class="ion-no-padding">
+                    <ion-button fill="outline" class="c-primary-button">Informazioni</ion-button>
+                </ion-col>
+                <ion-col size="auto" class="ion-no-padding">
+                    <ion-button fill="outline" class="c-primary-button">Prenotati</ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-card-content>
+    </ion-card>
 
 </ion-content>
