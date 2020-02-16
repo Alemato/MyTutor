@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, ParamMap} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {AlertController, IonContent, IonItemSliding, ModalController, PopoverController} from '@ionic/angular';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Planning} from '../../model/planning.model';
@@ -17,7 +17,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class ListaPianificazioniPage implements OnInit {
     @ViewChild(IonContent, {static: false}) contenuto: IonContent;
-    private plannings$: Observable<Planning[]>;
+    private plannings$: BehaviorSubject<Planning[]>;
     private lesson$: Observable<Lesson>;
     private idLezione: number;
     private date: number[] = [];
@@ -25,6 +25,7 @@ export class ListaPianificazioniPage implements OnInit {
     private pianificazioni: Planning[] = [];
     private pianificazioniRipetute: Planning[][] = [];
     private disableSliding = false;
+    private lezione: Lesson = new Lesson();
 
     private messageQuest: string;
     private cancelPlanning: string;
@@ -43,14 +44,27 @@ export class ListaPianificazioniPage implements OnInit {
 
     ngOnInit() {
         this.initTranslate();
-        this.route.paramMap.subscribe((params: ParamMap) => {
-            this.lesson$ = this.lessonService.getLessonById(parseInt(params.get('idLezione'), 0));
-            this.lesson$.subscribe((lezione) => {
-                this.idLezione = lezione.idLesson;
-                console.log('this.idLezione');
-                console.log(this.idLezione);
-                this.listaPianificazioni();
-            });
+        this.route.data.subscribe((data) => {
+            if (!data.isInsert) {
+                // this.route.paramMap.subscribe((params: ParamMap) => {
+                this.lesson$ = this.lessonService.getLessonById(data.idLezione);
+                this.lesson$.subscribe((lezione) => {
+                    this.lezione = lezione;
+                    this.idLezione = lezione.idLesson;
+                    if (!data.noPlanning) {
+                        this.listaPianificazioni();
+                    } else {
+                        this.creaPianificazione();
+                    }
+                });
+            } else {
+                this.lesson$ = this.lessonService.getLessonByUrl(data.urlLezione);
+                this.lesson$.subscribe((lezione) => {
+                    this.idLezione = lezione.idLesson;
+                    this.lezione = lezione;
+                    this.creaPianificazione();
+                });
+            }
         });
     }
 
@@ -67,11 +81,10 @@ export class ListaPianificazioniPage implements OnInit {
         modal.onDidDismiss().then((detail) => {
             if (detail !== null && detail.data !== undefined) {
                 pianificazione = detail.data;
-                this.lesson$.subscribe((lezione) => {
-                    pianificazione.lesson = lezione;
-                    this.planningService.createRestPlannings(pianificazione).subscribe(() => {
-                        this.listaPianificazioni();
-                    });
+                pianificazione.lesson = this.lezione;
+                pianificazione.available = true;
+                this.planningService.createRestPlannings(pianificazione).subscribe(() => {
+                    this.listaPianificazioni();
                 });
             } else {
                 console.log('creazione annullata');
@@ -85,6 +98,7 @@ export class ListaPianificazioniPage implements OnInit {
         const modal = await this.modalController.create({
             component: DettagliPianificazioneModalPage,
             componentProps: {
+                gruppo: pianificazione.repeatPlanning,
                 planning: pianificazione,
                 date: this.date,
                 ore: this.oreInizioEFine
@@ -92,21 +106,30 @@ export class ListaPianificazioniPage implements OnInit {
         });
         modal.onDidDismiss().then((detail) => {
             if (detail !== null && detail.data !== undefined) {
-                pianificazione = detail.data;
-                this.lesson$.subscribe((lezione) => {
-                    pianificazione.lesson = lezione;
+                if (pianificazione.repeatPlanning) {
+                    pianificazione = detail.data;
+                    pianificazione.lesson = this.lezione;
                     const idPianificazione = this.pianificazioni.findIndex(p => p.idPlanning === pianificazione.idPlanning);
+                    this.pianificazioni = [];
                     const pianificazioniDaModificare: Planning[] = [];
                     this.pianificazioniRipetute[idPianificazione].forEach((pianificazioneDaModificare) => {
-                        pianificazioneDaModificare.date = pianificazione.date;
-                        pianificazioneDaModificare.startTime = pianificazione.startTime;
-                        pianificazioneDaModificare.endTime = pianificazione.endTime;
                         pianificazioniDaModificare.push(pianificazioneDaModificare);
                     });
-                    this.planningService.modifyRestPlannings(pianificazioniDaModificare, lezione.idLesson).subscribe(() => {
+                    pianificazioniDaModificare[0].date = pianificazione.date;
+                    pianificazioniDaModificare[0].startTime = pianificazione.startTime;
+                    pianificazioniDaModificare[0].endTime = pianificazione.endTime;
+                    pianificazioniDaModificare[0].repeatPlanning = pianificazione.repeatPlanning;
+                    this.pianificazioniRipetute = [];
+                    this.planningService.modifyRestPlannings(pianificazioniDaModificare, this.lezione.idLesson).subscribe(() => {
                         this.listaPianificazioni();
                     });
-                });
+                } else {
+                    this.pianificazioni = [];
+                    this.pianificazioniRipetute = [];
+                    this.planningService.modifyRestPlannings([pianificazione], this.lezione.idLesson).subscribe(() => {
+                        this.listaPianificazioni();
+                    });
+                }
             } else {
                 console.log('modifica annullata');
             }
@@ -132,9 +155,19 @@ export class ListaPianificazioniPage implements OnInit {
                     text: this.deleteButton,
                     handler: () => {
                         const idPianificazione = this.pianificazioni.findIndex(p => p.idPlanning === pianificazione.idPlanning);
-                        this.planningService.deleteRestPlanning(this.pianificazioniRipetute[idPianificazione]).subscribe(() => {
-                            this.listaPianificazioni();
-                        });
+                        if (this.pianificazioniRipetute[idPianificazione]) {
+                            this.planningService.deleteRestPlanning(this.pianificazioniRipetute[idPianificazione]).subscribe(() => {
+                                this.pianificazioni = [];
+                                this.pianificazioniRipetute = [];
+                                this.listaPianificazioni();
+                            });
+                        } else {
+                            this.pianificazioni = [];
+                            this.pianificazioniRipetute = [];
+                            this.planningService.deleteRestPlanning([pianificazione]).subscribe(() => {
+                                this.listaPianificazioni();
+                            });
+                        }
                     }
                 }
             ]
@@ -143,6 +176,7 @@ export class ListaPianificazioniPage implements OnInit {
     }
 
     async presentPopover(event: any, plannings: Planning[]) {
+        this.planningService.setModifica(false);
         await this.contenuto.scrollToPoint(0, 200, 200);
         const popover = await this.popoverController.create({
             backdropDismiss: true,
@@ -156,56 +190,59 @@ export class ListaPianificazioniPage implements OnInit {
                 oreInizioEFine: this.oreInizioEFine
             }
         });
-        popover.onDidDismiss().then((data) => {
-            console.log(data);
-            this.listaPianificazioni();
+        popover.onDidDismiss().then(() => {
+            if (this.planningService.getModifica()) {
+                this.listaPianificazioni();
+            }
         });
         return await popover.present();
     }
 
     listaPianificazioni() {
-        this.plannings$ = this.planningService.getRestPlanningByIdLesson(this.idLezione.toString());
-        this.plannings$.subscribe((pianificazioni) => {
-            pianificazioni.forEach((pianificazione) => {
-                const indicePianificazioni = this.pianificazioni.findIndex(
-                    p => new Date(p.date).getDay() === new Date(pianificazione.date).getDay() &&
-                        p.startTime === pianificazione.startTime);
-                if (indicePianificazioni === -1) {
-                    this.pianificazioni.push(pianificazione);
-                }
-            });
-            this.pianificazioni.forEach((pianificazione) => {
-                if (pianificazione.repeatPlanning === true) {
-                    const listaPianificazioniRipetute: any[] = [];
-                    pianificazioni.forEach((pianificazioneRipetuta) => {
-                        if (new Date(pianificazioneRipetuta.date).getDay() === new Date(pianificazione.date).getDay() &&
-                            pianificazioneRipetuta.startTime === pianificazione.startTime) {
-                            listaPianificazioniRipetute.push(pianificazioneRipetuta);
-                        }
-                    });
-                    this.pianificazioniRipetute.push(listaPianificazioniRipetute);
-                }
-            });
-            this.date = [];
-            this.oreInizioEFine = [];
-            pianificazioni.forEach((pianificazione) => {
-                const indiceData = this.date.findIndex(d => d === new Date(pianificazione.date).getTime());
-                if (indiceData === -1) {
-                    this.date.push(new Date(pianificazione.date).getTime());
-                    const oraInizioEFine: any[] = [];
-                    pianificazioni.forEach((pianificazionePerOre) => {
-                        if (pianificazionePerOre.date === pianificazione.date) {
-                            const indiceOre = oraInizioEFine.findIndex(o => o.startTime === pianificazionePerOre.startTime);
-                            if (indiceOre === -1) {
-                                oraInizioEFine.push({
-                                    startTime: pianificazionePerOre.startTime,
-                                    endTime: pianificazionePerOre.endTime
-                                });
+        this.pianificazioni = [];
+        this.pianificazioniRipetute = [];
+        this.plannings$ = this.planningService.getPlannings();
+        this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+            this.plannings$.subscribe((pianificazioni) => {
+                pianificazioni.forEach((pianificazione) => {
+                    // tslint:disable-next-line:max-line-length
+                    const indicePianificazioni = this.pianificazioni.findIndex( p => new Date(p.date).getDay() === new Date(pianificazione.date).getDay() && p.startTime === pianificazione.startTime);
+                    if (indicePianificazioni === -1) {
+                        this.pianificazioni.push(pianificazione);
+                    }
+                });
+                this.pianificazioni.forEach((pianificazione) => {
+                    if (pianificazione.repeatPlanning === true) {
+                        const listaPianificazioniRipetute: any[] = [];
+                        pianificazioni.forEach((pianificazioneRipetuta) => {
+                            // tslint:disable-next-line:max-line-length
+                            if (new Date(pianificazioneRipetuta.date).getDay() === new Date(pianificazione.date).getDay() && pianificazioneRipetuta.startTime === pianificazione.startTime) {listaPianificazioniRipetute.push(pianificazioneRipetuta);
                             }
-                        }
-                    });
-                    this.oreInizioEFine.push(oraInizioEFine);
-                }
+                        });
+                        this.pianificazioniRipetute.push(listaPianificazioniRipetute);
+                    }
+                });
+                this.date = [];
+                this.oreInizioEFine = [];
+                pianificazioni.forEach((pianificazione) => {
+                    const indiceData = this.date.findIndex(d => d === new Date(pianificazione.date).getTime());
+                    if (indiceData === -1) {
+                        this.date.push(new Date(pianificazione.date).getTime());
+                        const oraInizioEFine: any[] = [];
+                        pianificazioni.forEach((pianificazionePerOre) => {
+                            if (pianificazionePerOre.date === pianificazione.date) {
+                                const indiceOre = oraInizioEFine.findIndex(o => o.startTime === pianificazionePerOre.startTime);
+                                if (indiceOre === -1) {
+                                    oraInizioEFine.push({
+                                        startTime: pianificazionePerOre.startTime,
+                                        endTime: pianificazionePerOre.endTime
+                                    });
+                                }
+                            }
+                        });
+                        this.oreInizioEFine.push(oraInizioEFine);
+                    }
+                });
             });
         });
     }
