@@ -76,7 +76,7 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'lista-pianificazioni/:idLezione',
+        path: 'lista-pianificazioni',
         loadChildren: './pages/lista-pianificazioni/lista-pianificazioni.module#ListaPianificazioniPageModule',
         canActivate: [AuthGuard]
     },
