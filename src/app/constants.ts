@@ -1,8 +1,8 @@
 export const USE_PROXY = true;
 
 
-export const URL_BASE = USE_PROXY ? 'api' : 'http://192.168.0.203:8080/api';     // SERVER NOSTRO
-// export const URL_BASE = USE_PROXY ? 'api' : 'http://localhost:8080/api';
+// export const URL_BASE = USE_PROXY ? 'api' : 'http://192.168.0.203:8080/api';     // SERVER NOSTRO
+export const URL_BASE = USE_PROXY ? 'api' : 'http://localhost:8080/api';
 
 export const URL = {
     LOGIN: URL_BASE + '/auth',
@@ -31,6 +31,7 @@ export const URL = {
     LESSON_ALL_FOR_STUDENT: URL_BASE + '/lessons/student',
     LESSON_CREATE: URL_BASE + '/lessons/create',
     LESSON_SINGLE: URL_BASE + '/lessons/',
+    LESSON_NO_PLANNING: URL_BASE + '/lessons/noplanning',
 
     PLANNING_CREATE: URL_BASE + '/lessons/plannings/create',
     PLANNING_MODIFY: URL_BASE + '/lessons/plannings/modify',
