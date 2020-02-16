@@ -1,4 +1,4 @@
-<ion-header *ngIf="modifica">
+<ion-header *ngIf="modifica; else insertFromListaAnnunci">
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
@@ -6,6 +6,16 @@
         <ion-title  class="ml--56">{{"MODIFIED_LESSON_TITLE"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
+<ng-template #insertFromListaAnnunci>
+    <ion-header *ngIf="inserisciDaListaAnnunci">
+        <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+            <ion-title  class="ml--56">{{"INSERTION_DATE_TIME_TITLE"|translate}}</ion-title>
+        </ion-toolbar>
+    </ion-header>
+</ng-template>
 
 
 <ion-content>
@@ -80,7 +90,7 @@
     </div>
     <ng-template #bottoneInserisci>
             <ion-button size="medium" shape="round" class="bottone-inserisci ion-margin-bottom ion-margin-top"
-                        [disabled]="!lezioneFormModel.valid || !okModal" (click)="inserisciLezione()">{{"INSERT_BUTTON"|translate}}
+                        [disabled]="!lezioneFormModel.valid" (click)="inserisciLezione()">{{"INSERT_BUTTON"|translate}}
             </ion-button>
     </ng-template>
 </ion-content>

@@ -7,7 +7,7 @@ import {SubjectService} from '../../services/subject.service';
 import {Lesson} from '../../model/lesson.model';
 import {UserService} from '../../services/user.service';
 import {TranslateService} from '@ngx-translate/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {LessonService} from '../../services/lesson.service';
 import {PlanningService} from '../../services/planning.service';
 
@@ -24,8 +24,8 @@ export class InserimentoLezioniPage implements OnInit {
     private materie = [];
     private sottoMaterie = [];
     private lezioneFormModel: FormGroup;
-    private okModal = false;
-    private lesson: Lesson;
+    private inserisciDaListaAnnunci = false;
+    private lesson: Lesson = new Lesson();
     private loading;
     private modifica = false;
 
@@ -52,6 +52,7 @@ export class InserimentoLezioniPage implements OnInit {
         private route: ActivatedRoute,
         private alertController: AlertController,
         private planningService: PlanningService,
+        private router: Router,
         private navController: NavController) {
     }
 
@@ -59,6 +60,7 @@ export class InserimentoLezioniPage implements OnInit {
         this.initTranslate();
         this.teacher$ = this.userService.getUser();
         this.route.data.subscribe((data) => {
+            this.inserisciDaListaAnnunci = data.listaAnnunci;
             if (!data.isInsert) {
                 this.lesson = data.lesson;
                 this.modifica = true;
@@ -110,19 +112,25 @@ export class InserimentoLezioniPage implements OnInit {
 
     inserisciLezione() {
         this.teacher$.subscribe((teacher) => {
+            console.log(teacher);
+            console.log(this.lezioneFormModel.value);
             this.lesson.name = this.lezioneFormModel.value.name;
             this.lesson.price = this.lezioneFormModel.value.price;
             this.lesson.description = this.lezioneFormModel.value.description;
             this.lesson.teacher = teacher;
-            this.lesson.subject.macroSubject = this.materia;
-            this.lesson.subject.microSubject = this.sottoMateria;
-            this.lessonService.createRestLesson(this.lesson).subscribe((idLezione) => {
-                this.presentaAlert(idLezione);
+            const subject: Subject = new Subject();
+            subject.macroSubject = this.materia;
+            subject.microSubject = this.sottoMateria;
+            this.lesson.subject = subject;
+            this.lessonService.createRestLesson(this.lesson).subscribe((urlLezione) => {
+                console.log('urlLezione');
+                console.log(urlLezione);
+                this.presentaAlert(urlLezione);
             });
         });
     }
 
-    async presentaAlert(idLezione: string) {
+    async presentaAlert(urlLezione: string) {
         const alert = await this.alertController.create({
             header: this.lessonCreated,
             message: this.messagePlansAdd,
@@ -137,7 +145,9 @@ export class InserimentoLezioniPage implements OnInit {
                 }, {
                     text: this.yesButton,
                     handler: () => {
-                        this.navController.navigateRoot('lista-pianificazioni/' + idLezione);
+                        const root = this.router.config.find(r => r.path === 'lista-pianificazioni');
+                        root.data = {isInsert: true, noPlanning: false, urlLezione, idLezione: 0};
+                        this.navController.navigateRoot('lista-pianificazioni');
                     }
                 }]
         });
@@ -163,8 +173,21 @@ export class InserimentoLezioniPage implements OnInit {
             this.lezioneFormModel.controls.microSubject.enable();
         }
     }
+
     annulla() {
+        console.log(this.findInvalidControls());
         this.navController.back();
+    }
+
+    public findInvalidControls() {
+        const invalid = [];
+        const controls = this.lezioneFormModel.controls;
+        for (const name in controls) {
+            if (controls[name].invalid) {
+                invalid.push(name);
+            }
+        }
+        return invalid;
     }
 
     async inputNuovaMateria() {
