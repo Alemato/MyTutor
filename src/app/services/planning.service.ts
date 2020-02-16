@@ -11,6 +11,7 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 
 export class PlanningService {
     public plannings$: BehaviorSubject<Planning[]> = new BehaviorSubject<Planning[]>([] as Planning[]);
+    private modifica = false;
 
     constructor(
         private http: HttpClient
@@ -61,7 +62,7 @@ export class PlanningService {
     }
 
     deleteRestPlanning(plannings: Planning[]): Observable<any> {
-        return this.http.post<any>(URL.PLANNING_DELETE, plannings, {observe: 'response'});
+        return this.http.put<any>(URL.PLANNING_DELETE, plannings, {observe: 'response'});
     }
 
     createRestPlannings(planning: Planning): Observable<any> {
@@ -79,6 +80,12 @@ export class PlanningService {
 
     getPlannings(): BehaviorSubject<Planning[]> {
         return this.plannings$;
+    }
+    setModifica(mod: boolean) {
+        this.modifica = mod;
+    }
+    getModifica(): boolean {
+        return this.modifica;
     }
 
     logout() {
