@@ -9,40 +9,83 @@
 
 <ion-content>
     <div *ngIf="(plannings$|async) as plannings">
-        <ion-list *ngIf="plannings.length > 0; else noPlanning">
-            <ion-card *ngFor="let planning of plannings">
-                <ion-card-header>
-                    <ion-card-title>{{planning.lesson.name | uppercase}}</ion-card-title>
-                </ion-card-header>
-                <ion-card-subtitle class="font-bold ion-padding-start">
-                    {{planning.lesson.subject.macroSubject}} - {{planning.lesson.subject.microSubject}}
-                </ion-card-subtitle>
-                <ion-card-content>
-                    <label>{{"NEXT"|translate}}:</label>
-                    <h2>{{planning.date | date:'EEEE d MMMM y': 'GMT+1': 'SET_LANGUAGE'|translate}} {{"DATETIME_TO"|translate}} {{planning.startTime.slice(0, 5)}}</h2>
-                </ion-card-content>
-                <ion-row>
-                    <ion-col class="ion-justify-content-start">
-                        <ion-button (click)="modificaLezione(planning)" size="medium" class="colore-bottone-primario">
-                            <ion-icon name='create'></ion-icon>
-                            &nbsp;{{"DETAILS"|translate}}
-                        </ion-button>
-                    </ion-col>
-                    <ion-col class="ion-justify-content-end">
-                        <ion-button size="medium" [routerLink]="['/lista-pianificazioni', planning.lesson.idLesson]" class="colore-bottone-primario">
-                            <ion-icon name='list'></ion-icon>
-                            &nbsp;{{"PLANNING"|translate}}
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-            </ion-card>
-        </ion-list>
+        <div *ngIf="(lessons$|async) as lessons">
+            <ion-list *ngIf="plannings.length > 0 && lessons.length > 0; else noPlanning">
+                <ion-card *ngFor="let planning of (plannings$|async)">
+                    <ion-card-header>
+                        <ion-card-title>{{planning.lesson.name | uppercase}}</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-subtitle class="font-bold ion-padding-start">
+                        {{planning.lesson.subject.macroSubject}} - {{planning.lesson.subject.microSubject}}
+                    </ion-card-subtitle>
+                    <ion-card-content *ngIf="planning.available; else noPlanning">
+                        <label>{{"NEXT"|translate}}:</label>
+                        <h2>{{planning.date | date:'EEEE d MMMM y': 'GMT+2': 'it-IT'}} {{"DATETIME_TO"|translate}} {{planning.startTime.slice(0, 5)}}</h2>
+                    </ion-card-content>
+                    <ng-template #noPlanning>
+                        <ion-card-content>
+                            <ion-label>La lezione risulterà disattivata</ion-label>
+                            <h2>Non ci sono pianificazioni inserite attive</h2>
+                        </ion-card-content>
+                    </ng-template>
+                    <ion-row>
+                        <ion-col class="ion-justify-content-start">
+                            <ion-button (click)="modificaLezione(planning)" size="medium" class="colore-bottone-primario">
+                                <ion-icon name='create'></ion-icon>
+                                &nbsp;{{"DETAILS"|translate}}
+                            </ion-button>
+                        </ion-col>
+                        <ion-col class="ion-justify-content-end" *ngIf="planning.available; else noPlanningButton">
+                            <ion-button size="medium" (click)="pianificazioni(planning)" class="colore-bottone-primario">
+                                <ion-icon name='list'></ion-icon>
+                                &nbsp;{{"PLANNING"|translate}}
+                            </ion-button>
+                        </ion-col>
+                        <ng-template #noPlanningButton>
+                            <ion-col class="ion-justify-content-end" >
+                                <ion-button size="medium" (click)="addPianificazioni(planning)" class="colore-bottone-primario">
+                                    <ion-icon name='add'></ion-icon>
+                                    &nbsp;Aggiungi Pian.
+                                </ion-button>
+                            </ion-col>
+                        </ng-template>
+                    </ion-row>
+                </ion-card>
+                <ion-card *ngFor="let lesson of (lessons$ | async)">
+                    <ion-card-header>
+                        <ion-card-title>{{lesson.name | uppercase}}</ion-card-title>
+                    </ion-card-header>
+                    <ion-card-subtitle class="font-bold ion-padding-start">
+                        {{lesson.subject.macroSubject}} - {{lesson.subject.microSubject}}
+                    </ion-card-subtitle>
+                    <ion-card-content>
+                        <ion-label>La lezione risulterà disattivata</ion-label>
+                        <h2>Non ci sono pianificazioni inserite attive</h2>
+                    </ion-card-content>
+                    <ion-row>
+                        <ion-col class="ion-justify-content-start">
+                            <ion-button (click)="modificaLezione(lesson)" size="medium" class="colore-bottone-primario">
+                                <ion-icon name='create'></ion-icon>
+                                &nbsp;{{"DETAILS"|translate}}
+                            </ion-button>
+                        </ion-col>
+                        <ion-col class="ion-justify-content-end" >
+                            <ion-button size="medium" (click)="addPianificazioni(lesson)" class="colore-bottone-primario">
+                                <ion-icon name='add'></ion-icon>
+                                &nbsp;Aggiungi Pian.
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-card>
+            </ion-list>
+        </div>
     </div>
     <ng-template #noPlanning>
         <div class="mx-auto fit-content mb-100">
             <h5 class="fit-content font-weight-300 ls-1">{{"ADVERTISEMENTS_PLACED_TEXT"|translate}}</h5>
         </div>
-        <ion-button size="large" expand="block" color="primary" [routerLink]="['/inserimento-lezioni', 'null']"
-                    routerDirection="forward">{{"INSERT_AD"|translate}}</ion-button>
+        <div class="ion-text-center">
+            <ion-button size="medium" class="colore-bottone-primario" (click)="creaLezione()">{{"INSERT_AD"|translate}}</ion-button>
+        </div>
     </ng-template>
 </ion-content>
