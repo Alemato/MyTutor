@@ -103,7 +103,7 @@
   "DETAILS": "Details",
   "PLANNING": "Planning",
   "NEXT_PLANNING": "Next planning",
-  "TUTOR_EVERY": "Ripetizioni every",
+  "TUTOR_EVERY": "Repeat every",
   "BOOKING": "Booking",
   "BOOK": "Book",
   "DIV_FOR_THE": "For the",
@@ -166,7 +166,7 @@
 
   "MONTHS_DATETIME_SHORT": "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec",
   "MONTHS_DATETIME": "January, February, March, April, May, June, July, August, September, October, November, December",
-  "DAY_DATETIME": "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday",
+  "DAY_DATETIME": "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday",
   "MONDAY": "Monday",
   "TUESDAY": "Tuesday",
   "WEDNESDAY": "Wednesday",
