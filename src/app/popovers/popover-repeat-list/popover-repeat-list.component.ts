@@ -59,6 +59,8 @@ export class PopoverRepeatListComponent implements OnInit {
                     text: this.deleteButton,
                     handler: () => {
                         this.planningService.deleteRestPlanning([pianificazione]).subscribe(() => {
+                            this.planningService.setModifica(true);
+                            this.popoverController.dismiss();
                         });
                     }
                 }
@@ -68,15 +70,12 @@ export class PopoverRepeatListComponent implements OnInit {
         await alert.present();
     }
 
-    ionViewWillLeave() {
-        console.log('mi chiudo');
-        this.popoverController.dismiss(true);
-    }
 
     async modificaPianificazione(pianificazione: Planning) {
         const modal = await this.modalController.create({
             component: DettagliPianificazioneModalPage,
             componentProps: {
+                gruppo: false,
                 planning: pianificazione,
                 date: this.date,
                 ore: this.oreInizioEFine
@@ -87,6 +86,8 @@ export class PopoverRepeatListComponent implements OnInit {
                 pianificazione = detail.data;
                 pianificazione.lesson = this.lesson;
                 this.planningService.modifyRestPlannings([pianificazione], this.lesson.idLesson).subscribe(() => {
+                    this.planningService.setModifica(true);
+                    this.popoverController.dismiss();
                 });
             } else {
                 console.log('modifica annullata');
