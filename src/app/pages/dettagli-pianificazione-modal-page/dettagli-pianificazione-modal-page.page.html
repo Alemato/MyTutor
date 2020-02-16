@@ -27,9 +27,17 @@
             </ion-item>
             <ion-item class="animated fadeInUp" lines="full">
                 <ion-text slot="start">{{"TUTOR_EVERY"|translate}} {{gionoDellaSettimana}}</ion-text>
-                <ion-toggle slot="end" value="false" class="colore-check-primario mr-30"
+                <ion-toggle slot="end" value="false" class="colore-check-primario mr-30" (ionChange)="presentaAlert()"
                             formControlName="repeatPlanning"></ion-toggle>
             </ion-item>
+            <ion-row class="ion-padding-top ion-padding-start ion-padding-end" *ngIf="planning.repeatPlanning && !navParams.data.gruppo">
+                <ion-icon size="large" name="information"> </ion-icon>
+                <ion-col size="10">
+                    <ion-text class="ion-text-justify" style="font-size: small">
+                        La scelta della ripetizione non è permessa perchè la pianificazione fa parte di una ripetizione settimanale.
+                    </ion-text>
+                </ion-col>
+            </ion-row>
         </ion-list>
         <div class="ion-text-center mt-25">
             <ion-button size="medium" shape="round" class="colore-bottone-primario" type="submit"
