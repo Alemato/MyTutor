@@ -7,40 +7,18 @@ import {STORAGE, URL} from '../constants';
 import {map} from 'rxjs/operators';
 import {User} from '../model/user.model';
 
-export interface Lez {
-    idbook: number;
-    idPlanning: number;
-    lessonState: number;
-    nomeLezione: string;
-    price: number;
-    nomeProf: string;
-    emailProf: string;
-    imgProf: string;
-    nomeStudent: string;
-    emailStudent: string;
-    imgStudent: string;
-    date: number;
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-}
-
 @Injectable({
     providedIn: 'root'
 })
 export class BookingService {
     private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
-    private listLez$: BehaviorSubject<Lez[]> = new BehaviorSubject<Lez[]>([] as Lez[]);
     private countDowns: Subscription;
     private periodicGet: Subscription;
-    private listaLezioni: Lez[];
 
     constructor(
         private storage: Storage,
         private http: HttpClient
     ) {
-        this.listaLezioni = [];
         this.storage.get(STORAGE.BOOKING).then((data) => {
             if (data !== null && data !== undefined && data !== {}) {
                 this.bookings$.next(data);
@@ -111,8 +89,8 @@ export class BookingService {
         }));
     }
 
-    createRestBooking(bookings: Booking[]): Observable<any> {
-        return this.http.post<any>(URL.BOOKING, bookings, {observe: 'response'});
+    createRestBooking(booking: Booking): Observable<any> {
+        return this.http.post<any>(URL.BOOKING, booking, {observe: 'response'});
     }
 
     modifyRestLessonState(boking: Booking) {
@@ -125,18 +103,6 @@ export class BookingService {
 
     getBookings(): BehaviorSubject<Booking[]> {
         return this.bookings$;
-    }
-
-    getListaLezioni(): BehaviorSubject<Lez[]> {
-        return this.listLez$;
-    }
-
-    setListaLezioni(listLez: Lez[]) {
-        this.listaLezioni = listLez;
-    }
-
-    setBehaviorSubjectLezioni() {
-        this.listLez$.next(this.listaLezioni);
     }
 
     startCoundown() {
@@ -160,13 +126,11 @@ export class BookingService {
             item.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             item.seconds = Math.floor((distance % (1000 * 60)) / 1000);
             if (item.days < 0 || item.hours < 0 || item.minutes < 0 || item.seconds < 0) {
-                this.listaLezioni.splice(index, 1);
                 const oldbook = this.bookings$.value.find(x => x.idBooking === item.idBooking);
                 oldbook.lessonState = 4;
                 this.modifyRestLessonState(oldbook).subscribe(() => {});
             }
         });
-        this.setBehaviorSubjectLezioni();
     }
 
     startPeriodicGet() {
@@ -201,8 +165,5 @@ export class BookingService {
     logout() {
         this.storage.remove(STORAGE.BOOKING);
         this.bookings$ = new BehaviorSubject<Booking[]>([] as Booking[]);
-        this.listLez$ = new BehaviorSubject<Lez[]>([] as Lez[]);
-        this.listaLezioni = [];
-        // this.listUser = [new User(undefined)];
     }
 }

@@ -3,7 +3,7 @@ import {Planning} from './planning.model';
 
 export class Booking {
     idBooking: number;
-    date: Date;
+    date: number;
     lessonState: number;
     student: Student;
     planning: Planning;
