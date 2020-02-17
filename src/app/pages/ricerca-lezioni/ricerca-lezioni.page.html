@@ -1,8 +1,8 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>ricercaLezioni</ion-title>
+        <ion-title class="mr--56">Ricerca Lezioni Disponibili</ion-title>
         <ion-button (click)="presentPopover($event)" slot="end" fill="clear" color="light">
-            <ion-icon name="settings"></ion-icon>
+            <ion-icon name="options"></ion-icon>
         </ion-button>
     </ion-toolbar>
 </ion-header>
@@ -69,7 +69,7 @@
                     <ion-button fill="outline" class="c-primary-button">Informazioni</ion-button>
                 </ion-col>
                 <ion-col size="auto" class="ion-no-padding">
-                    <ion-button fill="outline" class="c-primary-button">Prenotati</ion-button>
+                    <ion-button fill="outline" class="c-primary-button" [routerLink]="['/lista-per-prenotarsi/', lesson.idLesson]" routerDirection="forward">Prenotati</ion-button>
                 </ion-col>
             </ion-row>
         </ion-card-content>
