@@ -89,7 +89,9 @@ export class DettagliPianificazioneModalPage implements OnInit {
 
     alCambioOraInizio() {
         if (this.cambioOra) {
-            this.planningFormModel.controls.endTime.enable();
+            if (this.planningFormModel.controls.endTime.disable) {
+                this.planningFormModel.controls.endTime.enable();
+            }
             this.planningFormModel.controls.endTime.reset();
             this.hoursEnd = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
             const date: number[] = this.navParams.data.date;
