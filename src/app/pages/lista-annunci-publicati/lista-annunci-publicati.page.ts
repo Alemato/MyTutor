@@ -32,6 +32,7 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         this.initTranslate();
         this.listaLezioni();
     }
+
     async loadingPresent() {
         this.loading = await this.loadingController.create({
             message: this.pleaseWaitMessage,
@@ -60,6 +61,7 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         root.data = {isInsert: false, noPlanning: false, urlLezione: '', idLezione: planning.lesson.idLesson};
         this.navController.navigateRoot('lista-pianificazioni');
     }
+
     addPianificazioni(lezione: any) {
         const root = this.router.config.find(r => r.path === 'lista-pianificazioni');
         if (lezione instanceof Planning) {

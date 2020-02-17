@@ -10,7 +10,7 @@
 <ion-content>
     <div *ngIf="(plannings$|async) as plannings">
         <div *ngIf="(lessons$|async) as lessons">
-            <ion-list *ngIf="plannings.length > 0 && lessons.length > 0; else noPlanning">
+            <ion-list *ngIf="plannings.length > 0 || lessons.length > 0; else noPlanning">
                 <ion-card *ngFor="let planning of (plannings$|async)">
                     <ion-card-header>
                         <ion-card-title>{{planning.lesson.name | uppercase}}</ion-card-title>
