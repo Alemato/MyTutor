@@ -176,8 +176,6 @@ export class ListaPianificazioniPage implements OnInit {
     }
 
     async presentPopover(event: any, plannings: Planning[]) {
-        this.planningService.setModifica(false);
-        await this.contenuto.scrollToPoint(0, 200, 200);
         const popover = await this.popoverController.create({
             backdropDismiss: true,
             component: PopoverRepeatListComponent,
@@ -191,7 +189,7 @@ export class ListaPianificazioniPage implements OnInit {
             }
         });
         popover.onDidDismiss().then(() => {
-            if (this.planningService.getModifica()) {
+            if (this.plannings$.value.find(x => x.available === false)) {
                 this.listaPianificazioni();
             }
         });
@@ -206,7 +204,7 @@ export class ListaPianificazioniPage implements OnInit {
             this.plannings$.subscribe((pianificazioni) => {
                 pianificazioni.forEach((pianificazione) => {
                     // tslint:disable-next-line:max-line-length
-                    const indicePianificazioni = this.pianificazioni.findIndex( p => new Date(p.date).getDay() === new Date(pianificazione.date).getDay() && p.startTime === pianificazione.startTime);
+                    const indicePianificazioni = this.pianificazioni.findIndex(p => new Date(p.date).getDay() === new Date(pianificazione.date).getDay() && p.startTime === pianificazione.startTime);
                     if (indicePianificazioni === -1) {
                         this.pianificazioni.push(pianificazione);
                     }
@@ -216,7 +214,8 @@ export class ListaPianificazioniPage implements OnInit {
                         const listaPianificazioniRipetute: any[] = [];
                         pianificazioni.forEach((pianificazioneRipetuta) => {
                             // tslint:disable-next-line:max-line-length
-                            if (new Date(pianificazioneRipetuta.date).getDay() === new Date(pianificazione.date).getDay() && pianificazioneRipetuta.startTime === pianificazione.startTime) {listaPianificazioniRipetute.push(pianificazioneRipetuta);
+                            if (new Date(pianificazioneRipetuta.date).getDay() === new Date(pianificazione.date).getDay() && pianificazioneRipetuta.startTime === pianificazione.startTime) {
+                                listaPianificazioniRipetute.push(pianificazioneRipetuta);
                             }
                         });
                         this.pianificazioniRipetute.push(listaPianificazioniRipetute);
