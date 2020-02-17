@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <div *ngIf="listItem[0]">
+      <ion-title class="ml--56">{{listItem[0].lesson.name}}</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item *ngFor="let p of listItem; let i = index;" detail="true" lines="full">
+    <ion-label (click)="presentPrenotazione(i)">
+      <h2 class="ion-text-capitalize" style="font-size: 20px !important; line-height: 24px !important; font-weight: 500 !important; color: rgb(38, 38, 38) !important;">{{p.date | date: 'EEEE dd/MM/yyyy': 'GMT+2': 'it-IT'|translate}}</h2>
+      <p class="mt-5" style="font-weight: 500 !important; font-size: 14px !important; color: rgb(115, 115, 115) !important;">{{p.lesson.teacher.city}}, {{p.lesson.teacher.postCode}} {{p.lesson.teacher.street}} {{p.lesson.teacher.streetNumber}}</p>
+      <p> da <span class="c-primary font-weight-400">{{p.startTime.slice(0,5)}}</span> alle <span class="c-primary font-weight-400">{{p.endTime.slice(0,5)}}</span></p>
+    </ion-label>
+  </ion-item>
+
+</ion-content>

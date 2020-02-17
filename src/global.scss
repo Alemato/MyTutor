@@ -124,6 +124,11 @@ ion-toolbar ion-title{
   margin-top: 15px;
 }
 
+.mb-0 {
+  margin-bottom: 0 !important;
+  --margin-bottom: 0 !important;
+}
+
 .mb--1{
   margin-bottom: -1px;
 }
@@ -194,6 +199,11 @@ ion-toolbar ion-title{
 
 .pl-0{
   padding-left: 0;
+}
+
+.pl-5 {
+  padding-left: 5px !important;
+  --padding-end: 5px !important;
 }
 
 .pl-16 {
@@ -309,6 +319,12 @@ ion-toolbar ion-title{
 .c-primary-button {
   --color: #029DB4 !important;
   --border-color: #029DB4 !important;
+}
+
+.c-primary-button-solid {
+  --color: #eaeaea !important;
+  --border-color: #029DB4 !important;
+  --background: #029DB4 !important;
 }
 
 .select-full-width{
@@ -440,7 +456,10 @@ ion-toolbar ion-title{
   --checkbox-ios-icon-size: 61;
   margin-right: 30px!important;
 }
-
+.mr--56 {
+  --margin-end: -56px !important;
+  margin-right: -56px !important;
+}
 .alert-checkbox-group::-webkit-scrollbar {
   width: 1em;
   display: block !important;

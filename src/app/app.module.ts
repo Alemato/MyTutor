@@ -26,6 +26,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {InserimentoLezioniModalPageModule} from './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module';
 import {UserService} from './services/user.service';
 import {DettagliPianificazioneModalPageModule} from './pages/dettagli-pianificazione-modal-page/dettagli-pianificazione-modal-page.module';
+import {CreazionePrenotazioneModalPageModule} from './pages/creazione-prenotazione-modal/creazione-prenotazione-modal.module';
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -54,7 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
         ProfiloPageModule,
         ModificaProfiloPageModule,
         InserimentoLezioniModalPageModule,
-        DettagliPianificazioneModalPageModule
+        DettagliPianificazioneModalPageModule,
+        CreazionePrenotazioneModalPageModule
     ],
     // qui si aggiungonoi componenti e le direttive da usate nel modulo/typescript (nel componente)
     providers: [
