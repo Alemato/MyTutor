@@ -12,6 +12,7 @@ import {User} from '../model/user.model';
 })
 export class BookingService {
     private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
+    private booking$: BehaviorSubject<Booking> = new BehaviorSubject<Booking>({} as Booking);
     private countDowns: Subscription;
     private periodicGet: Subscription;
 
@@ -89,6 +90,14 @@ export class BookingService {
         }));
     }
 
+    getRestBookingPlanning(idPlanning: string): Observable<Booking> {
+        return this.http.get<Booking>(URL.BOOKING_PLANNING + '/' + idPlanning, {observe: 'response'}).pipe(
+            map((resp: HttpResponse<Booking>) => {
+                this.booking$.next(resp.body);
+                return resp.body;
+            }));
+    }
+
     createRestBooking(booking: Booking): Observable<any> {
         return this.http.post<any>(URL.BOOKING, booking, {observe: 'response'});
     }
@@ -103,6 +112,10 @@ export class BookingService {
 
     getBookings(): BehaviorSubject<Booking[]> {
         return this.bookings$;
+    }
+
+    getBooking(): BehaviorSubject<Booking> {
+        return this.booking$;
     }
 
     startCoundown() {
