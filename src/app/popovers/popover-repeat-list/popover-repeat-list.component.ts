@@ -59,17 +59,15 @@ export class PopoverRepeatListComponent implements OnInit {
                     text: this.deleteButton,
                     handler: () => {
                         this.planningService.deleteRestPlanning([pianificazione]).subscribe(() => {
-                            this.planningService.setModifica(true);
-                            this.popoverController.dismiss();
+                            const indicePlanning = this.plannings.findIndex(x => x.idPlanning === pianificazione.idPlanning);
+                            this.plannings[indicePlanning].available = false;
                         });
                     }
                 }
             ]
         });
-
         await alert.present();
     }
-
 
     async modificaPianificazione(pianificazione: Planning) {
         const modal = await this.modalController.create({
@@ -86,8 +84,8 @@ export class PopoverRepeatListComponent implements OnInit {
                 pianificazione = detail.data;
                 pianificazione.lesson = this.lesson;
                 this.planningService.modifyRestPlannings([pianificazione], this.lesson.idLesson).subscribe(() => {
-                    this.planningService.setModifica(true);
-                    this.popoverController.dismiss();
+                    const indicePlanning = this.plannings.findIndex(x => x.idPlanning === pianificazione.idPlanning);
+                    this.plannings[indicePlanning].available = false;
                 });
             } else {
                 console.log('modifica annullata');
