@@ -24,6 +24,7 @@ export class PopoverRepeatListComponent implements OnInit {
     private datetimeTo: string;
     private cancelButton: string;
     private deleteButton: string;
+    private setLanguage = 'it-IT';
 
     constructor(private navParams: NavParams,
                 public popoverController: PopoverController,
@@ -109,6 +110,9 @@ export class PopoverRepeatListComponent implements OnInit {
         });
         this.translateService.get('DELETE_BUTTON').subscribe((data) => {
             this.deleteButton = data;
+        });
+        this.translateService.get('SET_LANGUAGE').subscribe((data) => {
+            this.setLanguage = data;
         });
     }
 }
