@@ -36,12 +36,14 @@ export const URL = {
     PLANNING_CREATE: URL_BASE + '/lessons/plannings/create',
     PLANNING_MODIFY: URL_BASE + '/lessons/plannings/modify',
     PLANNING_ADD: URL_BASE + '/lessons/plannings/add',
+    PLANNING_BY_ID: URL_BASE + '/lessons/plannings/single',
     PLANNING_RESEARCH: URL_BASE + '/lessons/plannings/research',
     PLANNING_DELETE: URL_BASE + '/lessons/plannings/delete',
     PLANNING: URL_BASE + '/lessons/plannings',
 
     BOOKING: URL_BASE + '/lessons/bookings',
     BOOKING_MODIFY_LESSON_STATE: URL_BASE + '/lessons/bookings',
+    BOOKING_PLANNING: URL_BASE + '/planning',
 
     BOOKING_RESEARCH: URL_BASE + '/lessons/bookings/research',
     BOOKING_HOME: URL_BASE + '/lessons/bookings/home',

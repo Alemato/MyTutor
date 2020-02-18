@@ -10,7 +10,8 @@ import {HttpClient, HttpResponse} from '@angular/common/http';
 })
 
 export class PlanningService {
-    public plannings$: BehaviorSubject<Planning[]> = new BehaviorSubject<Planning[]>([] as Planning[]);
+    private plannings$: BehaviorSubject<Planning[]> = new BehaviorSubject<Planning[]>([] as Planning[]);
+    private planning$: BehaviorSubject<Planning> = new BehaviorSubject<Planning>({} as Planning);
     private modifica = false;
 
     constructor(
@@ -78,6 +79,15 @@ export class PlanningService {
         });
     }
 
+    getRestPlanningById(idPlanning: string): Observable<Planning> {
+        return this.http.get<Planning>(URL.PLANNING_BY_ID + '/' + idPlanning, {observe: 'response'}).pipe(
+            map((resp: HttpResponse<Planning>) => {
+                this.planning$.next(resp.body);
+                return resp.body;
+            })
+        );
+    }
+
     getPlannings(): BehaviorSubject<Planning[]> {
         return this.plannings$;
     }
@@ -86,6 +96,9 @@ export class PlanningService {
     }
     getModifica(): boolean {
         return this.modifica;
+    }
+    getPlanning(): BehaviorSubject<Planning> {
+        return this.planning$;
     }
 
     logout() {
