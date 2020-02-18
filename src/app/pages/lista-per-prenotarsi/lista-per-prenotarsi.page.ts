@@ -13,7 +13,7 @@ import {TranslateService} from '@ngx-translate/core';
     styleUrls: ['./lista-per-prenotarsi.page.scss'],
 })
 export class ListaPerPrenotarsiPage implements OnInit {
-    private planning$: BehaviorSubject<Planning[]>;
+    private plannings$: BehaviorSubject<Planning[]>;
     private listIdPlanning = [];
     private listItem: Planning[] = [];
     private idLesson: string;
@@ -31,8 +31,8 @@ export class ListaPerPrenotarsiPage implements OnInit {
             this.idLesson = params.get('idLesson');
         });
         this.initTranslate();
-        this.planning$ = this.planningService.getPlannings();
-        this.planning$.subscribe((plannings) => {
+        this.plannings$ = this.planningService.getPlannings();
+        this.plannings$.subscribe((plannings) => {
             this.listItem = [];
             let listItemAppoggio: Planning[] = [];
             this.listIdPlanning = [];
@@ -82,7 +82,7 @@ export class ListaPerPrenotarsiPage implements OnInit {
         const modal = await this.modalController.create({
             component: CreazionePrenotazioneModalPage,
             componentProps: {
-                listPlanning: this.planning$.getValue(),
+                listPlanning: this.plannings$.getValue(),
                 itemP: this.listItem[index],
                 listIdexP: this.listIdPlanning[index]
             }
@@ -106,4 +106,5 @@ export class ListaPerPrenotarsiPage implements OnInit {
             this.setLanguage = data;
         });
     }
+
 }

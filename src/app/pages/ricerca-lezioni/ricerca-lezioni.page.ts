@@ -28,7 +28,7 @@ export class RicercaLezioniPage implements OnInit {
     weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     expanded = [];
 
-    private planning$: BehaviorSubject<Planning[]>;
+    private plannings$: BehaviorSubject<Planning[]>;
     private listOrari;
     private listLessons: Lesson[] = [];
 
@@ -37,8 +37,8 @@ export class RicercaLezioniPage implements OnInit {
     }
 
     ngOnInit() {
-        this.planning$ = this.planningService.getPlannings();
-        this.planning$.subscribe((plannings) => {
+        this.plannings$ = this.planningService.getPlannings();
+        this.plannings$.subscribe((plannings) => {
             this.listLessons = [];
             this.expanded = [];
             this.listOrari = [];

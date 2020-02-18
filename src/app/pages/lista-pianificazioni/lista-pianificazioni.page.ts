@@ -69,6 +69,11 @@ export class ListaPianificazioniPage implements OnInit {
         });
     }
 
+    ionViewWillEnter() {
+        this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+        });
+    }
+
     async creaPianificazione() {
         let pianificazione = new Planning();
         const modal = await this.modalController.create({
@@ -201,48 +206,46 @@ export class ListaPianificazioniPage implements OnInit {
         this.pianificazioni = [];
         this.pianificazioniRipetute = [];
         this.plannings$ = this.planningService.getPlannings();
-        this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
-            this.plannings$.subscribe((pianificazioni) => {
-                pianificazioni.forEach((pianificazione) => {
-                    // tslint:disable-next-line:max-line-length
-                    const indicePianificazioni = this.pianificazioni.findIndex(p => new Date(p.date).getDay() === new Date(pianificazione.date).getDay() && p.startTime === pianificazione.startTime);
-                    if (indicePianificazioni === -1) {
-                        this.pianificazioni.push(pianificazione);
-                    }
-                });
-                this.pianificazioni.forEach((pianificazione) => {
-                    if (pianificazione.repeatPlanning === true) {
-                        const listaPianificazioniRipetute: any[] = [];
-                        pianificazioni.forEach((pianificazioneRipetuta) => {
-                            // tslint:disable-next-line:max-line-length
-                            if (new Date(pianificazioneRipetuta.date).getDay() === new Date(pianificazione.date).getDay() && pianificazioneRipetuta.startTime === pianificazione.startTime) {
-                                listaPianificazioniRipetute.push(pianificazioneRipetuta);
+        this.plannings$.subscribe((pianificazioni) => {
+            pianificazioni.forEach((pianificazione) => {
+                // tslint:disable-next-line:max-line-length
+                const indicePianificazioni = this.pianificazioni.findIndex(p => new Date(p.date).getDay() === new Date(pianificazione.date).getDay() && p.startTime === pianificazione.startTime);
+                if (indicePianificazioni === -1) {
+                    this.pianificazioni.push(pianificazione);
+                }
+            });
+            this.pianificazioni.forEach((pianificazione) => {
+                if (pianificazione.repeatPlanning === true) {
+                    const listaPianificazioniRipetute: any[] = [];
+                    pianificazioni.forEach((pianificazioneRipetuta) => {
+                        // tslint:disable-next-line:max-line-length
+                        if (new Date(pianificazioneRipetuta.date).getDay() === new Date(pianificazione.date).getDay() && pianificazioneRipetuta.startTime === pianificazione.startTime) {
+                            listaPianificazioniRipetute.push(pianificazioneRipetuta);
+                        }
+                    });
+                    this.pianificazioniRipetute.push(listaPianificazioniRipetute);
+                }
+            });
+            this.date = [];
+            this.oreInizioEFine = [];
+            pianificazioni.forEach((pianificazione) => {
+                const indiceData = this.date.findIndex(d => d === new Date(pianificazione.date).getTime());
+                if (indiceData === -1) {
+                    this.date.push(new Date(pianificazione.date).getTime());
+                    const oraInizioEFine: any[] = [];
+                    pianificazioni.forEach((pianificazionePerOre) => {
+                        if (pianificazionePerOre.date === pianificazione.date) {
+                            const indiceOre = oraInizioEFine.findIndex(o => o.startTime === pianificazionePerOre.startTime);
+                            if (indiceOre === -1) {
+                                oraInizioEFine.push({
+                                    startTime: pianificazionePerOre.startTime,
+                                    endTime: pianificazionePerOre.endTime
+                                });
                             }
-                        });
-                        this.pianificazioniRipetute.push(listaPianificazioniRipetute);
-                    }
-                });
-                this.date = [];
-                this.oreInizioEFine = [];
-                pianificazioni.forEach((pianificazione) => {
-                    const indiceData = this.date.findIndex(d => d === new Date(pianificazione.date).getTime());
-                    if (indiceData === -1) {
-                        this.date.push(new Date(pianificazione.date).getTime());
-                        const oraInizioEFine: any[] = [];
-                        pianificazioni.forEach((pianificazionePerOre) => {
-                            if (pianificazionePerOre.date === pianificazione.date) {
-                                const indiceOre = oraInizioEFine.findIndex(o => o.startTime === pianificazionePerOre.startTime);
-                                if (indiceOre === -1) {
-                                    oraInizioEFine.push({
-                                        startTime: pianificazionePerOre.startTime,
-                                        endTime: pianificazionePerOre.endTime
-                                    });
-                                }
-                            }
-                        });
-                        this.oreInizioEFine.push(oraInizioEFine);
-                    }
-                });
+                        }
+                    });
+                    this.oreInizioEFine.push(oraInizioEFine);
+                }
             });
         });
     }
