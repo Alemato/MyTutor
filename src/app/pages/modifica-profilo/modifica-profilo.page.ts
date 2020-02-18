@@ -12,6 +12,7 @@ import {ActionSheetController, AlertController, NavController} from '@ionic/angu
 import {File} from '@ionic-native/file/ngx';
 import {sha512} from 'js-sha512';
 import {HttpErrorResponse} from '@angular/common/http';
+import {LinguaService} from '../../services/lingua.service';
 
 @Component({
     selector: 'app-modifica-profilo',
@@ -72,8 +73,10 @@ export class ModificaProfiloPage implements OnInit {
                 public actionSheetController: ActionSheetController,
                 private file: File,
                 private navController: NavController,
-                private alertController: AlertController) {
-    }
+                private alertController: AlertController,
+                private linguaService: LinguaService,
+                private translate: TranslateService) {
+}
 
     /**
      * prendo in dati dal server attraverso la funzione getUser
@@ -213,7 +216,7 @@ export class ModificaProfiloPage implements OnInit {
      */
     salvaModifica() {
         if (this.utente$.value.roles === 1) {
-            let student: Student = new Student();
+            let student: Student;
             student = this.utente$.getValue();
             if (this.studentFormModel.controls.password.value) {
                 student.password = sha512(this.studentFormModel.controls.password.value).toUpperCase();
@@ -230,7 +233,7 @@ export class ModificaProfiloPage implements OnInit {
             }
             this.eseguiModifica(student);
         } else {
-            let teacher: Teacher = new Teacher();
+            let teacher: Teacher;
             teacher = this.utente$.getValue();
             if (this.teacherFormModel.controls.password.value) {
                 teacher.password = sha512(this.teacherFormModel.controls.password.value).toUpperCase();
@@ -263,22 +266,15 @@ export class ModificaProfiloPage implements OnInit {
      * altrimenti viene chiamata la funzione Login dove gli passo l'email e la Vecchia password per l'autenticazione
      * (siccome è un observable devo utilizzare il substribe per farmi ritornare qualcosa)
      * con HttpErrorResponse catturo l'errore e gli faccio apparire un allert sullo schermo dove gli comunico che ha sbagliato password
+     * @param user oggetto da inviare
      */
     eseguiModifica(user: Student | Teacher) {
         if (user.roles === 1) {
             // tslint:disable-next-line:max-line-length
             this.userService.editProfiloStudent(user as Student, this.studentFormModel.controls.passwordVecchia.value).subscribe(() => {
-                if (this.studentFormModel.controls.password.value) {
-                    this.userService.logout();
-                    this.navController.navigateRoot('login');
-                } else {
-                    this.userService.login({
-                        username: user.email,
-                        password: this.studentFormModel.controls.passwordVecchia.value
-                    }).subscribe(() => {});
-                }
-
-            }, (err: HttpErrorResponse) => {
+                this.userService.logout();
+                this.navController.navigateRoot('login');
+               }, (err: HttpErrorResponse) => {
                 console.log(err);
                 if (err.status === 401) {
                     console.error('login request error: ' + err.status);
@@ -293,15 +289,8 @@ export class ModificaProfiloPage implements OnInit {
         } else {
             // tslint:disable-next-line:max-line-length
             this.userService.editProfiloTeacher(user as Teacher, this.teacherFormModel.controls.passwordVecchia.value).subscribe(() => {
-                if (this.teacherFormModel.controls.password.value) {
-                    this.userService.logout();
-                    this.navController.navigateRoot('login');
-                } else {
-                    this.userService.login({
-                        username: user.email,
-                        password: this.teacherFormModel.controls.passwordVecchia.value
-                    }).subscribe(() => {});
-                }
+                this.userService.logout();
+                this.navController.navigateRoot('login');
             }, (err: HttpErrorResponse) => {
                 console.log(err);
                 if (err.status === 401) {
@@ -417,6 +406,16 @@ export class ModificaProfiloPage implements OnInit {
         }, error => {
             alert(this.imageShowingError + error);
             this.isLoading = false;
+        });
+    }
+
+    /**
+     * Funzione che re-inizializza la traduzione
+     */
+    changeTranslate() {
+        this.linguaService.getLinguaAttuale().subscribe((lingua: string) => {
+            this.translate.setDefaultLang(lingua);
+            this.navController.navigateRoot('/');
         });
     }
 

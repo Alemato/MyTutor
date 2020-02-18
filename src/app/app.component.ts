@@ -11,7 +11,7 @@ import {ChatService} from './services/chat.service';
 import {Router} from '@angular/router';
 import {Student} from './model/student.model';
 import {Teacher} from './model/teacher.model';
-import {BookingService} from "./services/booking.service";
+import {BookingService} from './services/booking.service';
 
 
 @Component({
@@ -20,7 +20,7 @@ import {BookingService} from "./services/booking.service";
     styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
-    private user$: BehaviorSubject<Student|Teacher>;
+    private user$: BehaviorSubject<Student | Teacher>;
 
     constructor(
         private translateService: TranslateService,
@@ -43,19 +43,27 @@ export class AppComponent implements OnInit {
             this.user$ = this.userService.getUser();
             console.log(this.router.url);
             if (this.user$.value.roles === 1) {
-                this.appPagesStudent.find(x => x.click === true).click = false;
                 if (this.router.url === '/tabs/home') {
+                    this.appPagesStudent.find(x => x.click === true).click = false;
                     this.appPagesStudent.find(x => x.url === '/').click = true;
                 } else {
-                    this.appPagesStudent.find(x => x.url === this.router.url).click = true;
+                    const page = this.appPagesStudent.find(x => x.url === this.router.url);
+                    if (page !== undefined) {
+                        this.appPagesStudent.find(x => x.click === true).click = false;
+                        page.click = true;
+                    }
                 }
             }
             if (this.user$.value.roles === 2) {
-                this.appPagesTeacher.find(x => x.click === true).click = false;
                 if (this.router.url === '/tabs/home') {
+                    this.appPagesTeacher.find(x => x.click === true).click = false;
                     this.appPagesTeacher.find(x => x.url === '/').click = true;
                 } else {
-                    this.appPagesTeacher.find(x => x.url === this.router.url).click = true;
+                    const page = this.appPagesTeacher.find(x => x.url === this.router.url);
+                    if (page !== undefined) {
+                        this.appPagesTeacher.find(x => x.click === true).click = false;
+                        page.click = true;
+                    }
                 }
             }
         });
@@ -125,12 +133,11 @@ export class AppComponent implements OnInit {
     }
 
     openPage(url: string) {
-        this.navController.navigateForward(url);
-    }
-
-    async closeMenu(event: any, url: string) {
-        await this.menu.close();
-        this.openPage(url);
+        this.navController.navigateForward(url).then(() => {
+            this.menu.close().then(() => {
+                this.menuSource.publishMenuRefresh();
+            });
+        });
     }
 
     async logout() {

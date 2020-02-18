@@ -12,7 +12,7 @@
                             </ion-avatar>
                         </ng-template>
                     </ion-col>
-                    <ion-col size="8" class="ion-align-self-center">
+                    <ion-col size="8" class="ion-align-self-center" [routerLink]="['/modifica-profilo']" routerDirection="forward">
                         <h1 class="ion-no-margin font-weight-400">{{user.name}} {{user.surname}}</h1>
                         <h5 *ngIf="user.roles === 2" class="ion-no-margin font-weight-400">{{"TEACHER"|translate}}</h5>
                         <h5 *ngIf="user.roles === 1" class="ion-no-margin font-weight-400">{{"STUDENT"|translate}}</h5>
@@ -21,8 +21,7 @@
                 <ion-row>
                     <ion-row class="ion-justify-content-around w-100">
                         <ion-col size="auto">
-                            <ion-button fill="outline" color="light" [routerLink]="['/profilo-singolo', user.idUser]"
-                                        routerDirection="forward">
+                            <ion-button fill="outline" color="light" (click)="openPage('/modifica-profilo')">
                                 <ion-icon name="contact" class="pr-3 fs-24"></ion-icon>
                                 <ion-text class="ion-no-margin font-weight-400">{{"PROFILE_TITLE"|translate}}</ion-text>
                             </ion-button>
@@ -38,7 +37,7 @@
             </ion-header>
             <ion-col *ngIf="user.roles == 1" class="pl-0 pr-0">
                 <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click"
-                         (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesStudent">
+                         (click)="openPage(p.url)" *ngFor="let p of appPagesStudent">
                     <ion-col size="auto" class="ion-align-self-center">
                         <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                     </ion-col>
@@ -49,7 +48,7 @@
             </ion-col>
             <ion-col *ngIf="user.roles == 2" class="pl-0 pr-0">
                 <ion-row class="menu-item-margin ion-padding-start" [class.menu-item-clicked]="p.click"
-                         (click)="closeMenu($event, p.url)" *ngFor="let p of appPagesTeacher">
+                         (click)="openPage(p.url)" *ngFor="let p of appPagesTeacher">
                     <ion-col size="auto" class="ion-align-self-center">
                         <ion-icon [name]="p.icon" class="menu-icon"></ion-icon>
                     </ion-col>
