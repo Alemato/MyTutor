@@ -2,8 +2,8 @@
     <ion-split-pane contentId="menu-content">
         <ion-menu *ngIf="(user$ | async) as user" class="menu" side="start" menuId="first" contentId="menu-content">
             <ion-header class="bb-1-color">
-                <ion-row (click)="profilo()">
-                    <ion-col class="ion-align-self-center" size="auto" [routerLink]="['/modifica-profilo']" routerDirection="forward">
+                <ion-row>
+                    <ion-col class="ion-align-self-center" size="auto" (click)="openPage('/modifica-profilo')">
                         <ion-icon *ngIf="user.image === null || user.image === '' || user.image ===' ' || user.image === undefined; else imgBlock"
                                   name="contact" class="fs-62"></ion-icon>
                         <ng-template #imgBlock>
@@ -12,7 +12,7 @@
                             </ion-avatar>
                         </ng-template>
                     </ion-col>
-                    <ion-col size="8" class="ion-align-self-center" [routerLink]="['/modifica-profilo']" routerDirection="forward">
+                    <ion-col size="8" class="ion-align-self-center" (click)="openPage('/modifica-profilo')">
                         <h1 class="ion-no-margin font-weight-400">{{user.name}} {{user.surname}}</h1>
                         <h5 *ngIf="user.roles === 2" class="ion-no-margin font-weight-400">{{"TEACHER"|translate}}</h5>
                         <h5 *ngIf="user.roles === 1" class="ion-no-margin font-weight-400">{{"STUDENT"|translate}}</h5>

@@ -22,6 +22,42 @@ import {BookingService} from './services/booking.service';
 export class AppComponent implements OnInit {
     private user$: BehaviorSubject<Student | Teacher>;
 
+    public appPagesStudent = [
+        {
+            title: 'Home',
+            url: '/',
+            icon: 'home',
+            click: true
+        },
+        {
+            title: 'HISTORIC_SIDE_MENU',
+            url: '/storico-lezioni',
+            icon: 'time',
+            click: false
+        }
+    ];
+
+    public appPagesTeacher = [
+        {
+            title: 'Home',
+            url: '/',
+            icon: 'home',
+            click: true
+        },
+        {
+            title: 'HISTORIC_SIDE_MENU',
+            url: '/storico-lezioni',
+            icon: 'time',
+            click: false
+        },
+        {
+            title: 'ADVERTISEMENTS_PLACED_TITLE',
+            url: '/lista-annunci-publicati',
+            icon: 'filing',
+            click: false
+        }
+    ];
+
     constructor(
         private translateService: TranslateService,
         private platform: Platform,
@@ -69,41 +105,11 @@ export class AppComponent implements OnInit {
         });
     }
 
-    public appPagesStudent = [
-        {
-            title: 'Home',
-            url: '/',
-            icon: 'home',
-            click: true
-        },
-        {
-            title: 'HISTORIC_SIDE_MENU',
-            url: '/storico-lezioni',
-            icon: 'time',
-            click: false
-        }
-    ];
-
-    public appPagesTeacher = [
-        {
-            title: 'Home',
-            url: '/',
-            icon: 'home',
-            click: true
-        },
-        {
-            title: 'HISTORIC_SIDE_MENU',
-            url: '/storico-lezioni',
-            icon: 'time',
-            click: false
-        },
-        {
-            title: 'ADVERTISEMENTS_PLACED_TITLE',
-            url: '/lista-annunci-publicati',
-            icon: 'filing',
-            click: false
-        }
-    ];
+    ngOnInit() {
+        console.log('onInit');
+        this.chatService.startPeriodicGetCountChat();
+        this.navController.navigateRoot('/tabs/home');
+    }
 
     initializeApp() {
         this.platform.ready().then(() => {
@@ -117,18 +123,6 @@ export class AppComponent implements OnInit {
             });
             this.statusBar.styleDefault();
             this.splashScreen.hide();
-        });
-    }
-
-    ngOnInit() {
-        console.log('onInit');
-        this.chatService.startPeriodicGetCountChat();
-        this.navController.navigateRoot('/tabs/home');
-    }
-
-    profilo() {
-        this.navController.navigateForward('profilo').finally(() => {
-            this.menu.close();
         });
     }
 
