@@ -4,6 +4,5 @@ import {Teacher} from './teacher.model';
 export class Chat {
     idChat: number;
     userListser: [Student, Teacher];
-    name: string;
 
 }
