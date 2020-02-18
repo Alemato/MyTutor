@@ -234,6 +234,8 @@
   "BOOKING_MADE": "Booking made",
   "BOOK_MORE_DAYS": "Do you want to book for more days?",
   "CANCEL_TUTOR_WEEK_MESSAGE": "Removing the weekly tutor will be deleted all the weekly planning planned except the first available, which will become planning not repeated",
+  "YES_TEACHER": "I'm a TEACHER",
+  "NOT_TEACHER": "I'm NOT a TEACHER",
 
   "SET_LANGUAGE": "en-EN"
 }

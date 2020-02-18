@@ -234,6 +234,8 @@
   "BOOKING_MADE": "Prenotazione effettuata",
   "BOOK_MORE_DAYS": "Vuoi prenotarti per altri giorni?",
   "CANCEL_TUTOR_WEEK_MESSAGE": "Togliendo la ripetizione settimanale verranno eliminate tutte le pianificazioni programmate settimanalmente tranne la prima disponibile, la quale diventerà pianificazione non ripetuta",
+  "YES_TEACHER": "Sono un DOCENTE",
+  "NOT_TEACHER": "NON sono un DOCENTE",
 
   "SET_LANGUAGE": "it-IT"
 }

@@ -26,7 +26,7 @@
 
                     <ion-item lines="inset">
                         <ion-label position="floating" class="label-struttura">{{'NAME'|translate}}</ion-label>
-                        <ion-input class="input-fs-18" type="text" formControlName="name" placeholder="aaaaaaaa"
+                        <ion-input class="input-fs-18" type="text" formControlName="name" placeholder=""
                                    required="true">
                         </ion-input>
                     </ion-item>
@@ -42,7 +42,7 @@
 
                     <ion-item lines="inset">
                         <ion-label position="floating" class="label-struttura">{{'SURNAME'|translate}}</ion-label>
-                        <ion-input class="input-fs-18" type="text" formControlName="surname" placeholder="bbbb"
+                        <ion-input class="input-fs-18" type="text" formControlName="surname" placeholder=""
                                    required="true"></ion-input>
                     </ion-item>
                     <ng-container *ngFor="let validation of validationMessages.surname">
@@ -58,7 +58,7 @@
                     <ion-item lines="inset">
                         <ion-label position="floating" class="label-struttura">Email</ion-label>
                         <ion-input class="input-fs-18" type="email" formControlName="email"
-                                   placeholder="Email"></ion-input>
+                                   placeholder=""></ion-input>
                     </ion-item>
                     <ng-container *ngFor="let validation of validationMessages.email">
                         <div class="text08 pl-15"
@@ -72,7 +72,7 @@
                     <ion-item lines="inset">
                         <ion-label position="floating" class="label-struttura">Password</ion-label>
                         <ion-row class="w-100 ai-center">
-                            <ion-input class="input-fs-18" [type]="passwordType" placeholder="password"
+                            <ion-input class="input-fs-18" [type]="passwordType" placeholder=""
                                        formControlName="password" required="true"></ion-input>
                             <ion-icon (click)="togglePassword()" [name]="passwordShow === true ? 'eye-off' : 'eye'"
                                       color="gray"
@@ -91,7 +91,7 @@
                     <ion-item lines="inset">
                         <ion-label position="floating" class="label-struttura">{{'BIRTHDAY'|translate}}</ion-label>
                         <ion-datetime class="m-auto" displayFormat="DDDD DD MMMM YYYY"
-                                      placeholder="{{'BIRTHDAY'|translate}}"
+                                      placeholder=""
                                       monthNames="{{'MONTHS_DATETIME'|translate}}"
                                       formControlName="birthday" required="true"></ion-datetime>
                     </ion-item>
@@ -124,10 +124,10 @@
                         <ion-row>
                             <ion-item lines="inset" class="w-100">
                                 <div *ngIf="registrazioneFormModel.value.toggle; else falseBlock">
-                                    <ion-label class="ion-no-margin" (click)="openModal()">Si sono un docente</ion-label>
+                                    <ion-label class="ion-no-margin pl-0-imp" (click)="openModal()">{{"YES_TEACHER"|translate}}</ion-label>
                                 </div>
                                 <ng-template #falseBlock>
-                                    <ion-label class="ion-no-margin">No non sono un docente</ion-label>
+                                    <ion-label class="ion-no-margin pl-0-imp">{{"NOT_TEACHER"|translate}}</ion-label>
                                 </ng-template>
                                 <ion-toggle slot="end" (ionChange)="actionToggle()" color="secondary" formControlName="toggle"></ion-toggle>
                             </ion-item>
