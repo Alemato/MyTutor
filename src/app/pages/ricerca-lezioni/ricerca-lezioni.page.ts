@@ -13,40 +13,29 @@ import {Lesson} from '../../model/lesson.model';
     styleUrls: ['./ricerca-lezioni.page.scss'],
 })
 export class RicercaLezioniPage implements OnInit {
-    itemBrutti = [{giorno: 'Lunedi', orari: [['9:00', '12:00'], ['13:00', '17:00']]}, {
-        giorno: 'Martedi',
-        orari: [['9:00', '12:00'], ['13:00', '17:00']]
-    }, {giorno: 'Mercoledi', orari: [['9:00', '12:00'], ['13:00', '17:00']]}, {
-        giorno: 'Giovedi',
-        orari: [['9:00', '12:00'], ['13:00', '17:00']]
-    }, {giorno: 'Venerdi', orari: [['9:00', '12:00'], ['13:00', '17:00']]}, {
-        giorno: 'Sabato',
-        orari: [['9:00', '12:00'], ['13:00', '17:00']]
-    }, {giorno: 'Domenica', orari: [['9:00', '12:00'], ['13:00', '17:00']]}];
-    itemBrutti2 = [];
     // tslint:disable-next-line:max-line-length
     weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     expanded = [];
 
-    private planning$: BehaviorSubject<Planning[]>;
+    private plannings$: BehaviorSubject<Planning[]>;
     private listOrari;
-    private listLessons: Lesson[] = [];
+    private listPlannigs: Planning[] = [];
 
     constructor(public popoverController: PopoverController,
                 private planningService: PlanningService) {
     }
 
     ngOnInit() {
-        this.planning$ = this.planningService.getPlannings();
-        this.planning$.subscribe((plannings) => {
-            this.listLessons = [];
+        this.plannings$ = this.planningService.getPlannings();
+        this.plannings$.subscribe((plannings) => {
+            this.listPlannigs = [];
             this.expanded = [];
             this.listOrari = [];
             let appoggioOrari = [];
             let flag = false;
             plannings.forEach((planning) => {
-                if (this.listLessons.findIndex(l => l.idLesson === planning.lesson.idLesson) === -1) {
-                    this.listLessons.push(planning.lesson);
+                if (this.listPlannigs.findIndex(p => p.lesson.idLesson === planning.lesson.idLesson) === -1) {
+                    this.listPlannigs.push(planning);
                     this.expanded.push(false);
                     if (flag) {
                         this.listOrari.push(appoggioOrari);
@@ -87,7 +76,7 @@ export class RicercaLezioniPage implements OnInit {
                 appoggioOrari = [];
                 flag = false;
             }
-            console.log(this.listLessons);
+            console.log(this.listPlannigs);
             console.log(this.listOrari);
         });
     }

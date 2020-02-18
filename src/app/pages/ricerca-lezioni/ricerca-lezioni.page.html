@@ -8,27 +8,27 @@
 </ion-header>
 
 <ion-content>
-    <ion-card *ngFor="let lesson of listLessons; let i = index">
+    <ion-card *ngFor="let planning of listPlannigs; let i = index">
         <ion-card-header>
             <ion-grid class="ion-no-padding">
                 <ion-row>
                     <ion-col class="ion-no-padding">
-                        <ion-card-title>{{lesson.name}}</ion-card-title>
-                        <ion-card-subtitle class="mt-8">{{lesson.subject.macroSubject}} - {{lesson.subject.microSubject}}</ion-card-subtitle>
+                        <ion-card-title>{{planning.lesson.name}}</ion-card-title>
+                        <ion-card-subtitle class="mt-8">{{planning.lesson.subject.macroSubject}} - {{planning.lesson.subject.microSubject}}</ion-card-subtitle>
                     </ion-col>
                     <ion-col size="auto" class="ion-no-padding">
-                        <h1 class="d-inline c-primary">{{lesson.price}}€/h</h1>
+                        <h1 class="d-inline c-primary">{{planning.lesson.price}}€/h</h1>
                     </ion-col>
                 </ion-row>
             </ion-grid>
             <ion-card-subtitle>
                 <ion-text class="font-weight-400 pr-5">Di:</ion-text>
-                <ion-text class="ls-01em c-primary" [routerLink]="['/profilo-singolo', lesson.teacher.idUser]">{{lesson.teacher.name}} {{lesson.teacher.surname}}</ion-text>
+                <ion-text class="ls-01em c-primary" [routerLink]="['/profilo-singolo', planning.lesson.teacher.idUser]">{{planning.lesson.teacher.name}} {{planning.lesson.teacher.surname}}</ion-text>
             </ion-card-subtitle>
         </ion-card-header>
 
         <ion-card-content>
-            {{lesson.description}}
+            {{planning.lesson.description}}
 
             <div *ngIf="listOrari[i]">
             <ion-row class="mt-8" (click)="expandItem(i)">
@@ -66,10 +66,10 @@
 
             <ion-row class="ion-justify-content-between ion-margin-top">
                 <ion-col size="auto" class="ion-no-padding">
-                    <ion-button fill="outline" class="c-primary-button">{{"INFORMATION"|translate}}</ion-button>
+                    <ion-button fill="outline" class="c-primary-button" [routerLink]="['/lezione/', planning.idPlanning]" routerDirection="forward">{{"INFORMATION"|translate}}</ion-button>
                 </ion-col>
                 <ion-col size="auto" class="ion-no-padding">
-                    <ion-button fill="outline" class="c-primary-button" [routerLink]="['/lista-per-prenotarsi/', lesson.idLesson]" routerDirection="forward">{{"BOOKED_BUTTON"|translate}}</ion-button>
+                    <ion-button fill="outline" class="c-primary-button" [routerLink]="['/lista-per-prenotarsi/', planning.lesson.idLesson]" routerDirection="forward">{{"BOOKED_BUTTON"|translate}}</ion-button>
                 </ion-col>
             </ion-row>
         </ion-card-content>
