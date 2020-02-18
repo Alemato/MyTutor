@@ -57,9 +57,9 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         this.navController.navigateRoot('lista-pianificazioni');
     }
 
-    addPianificazioni(lezione: any) {
+    addPianificazioni(lezione) {
         const root = this.router.config.find(r => r.path === 'lista-pianificazioni');
-        if (lezione instanceof Planning) {
+        if (lezione.idPlanning) {
             root.data = {isInsert: false, noPlanning: true, urlLezione: '', idLezione: lezione.lesson.idLesson};
         } else {
             root.data = {isInsert: false, noPlanning: true, urlLezione: '', idLezione: lezione.idLesson};
@@ -67,7 +67,7 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         this.navController.navigateRoot('lista-pianificazioni');
     }
 
-    modificaLezione(lezione: any) {
+    modificaLezione(lezione: Lesson | Planning) {
         const root = this.router.config.find(r => r.path === 'inserimento-lezioni');
         if (lezione instanceof Planning) {
             root.data = {isInsert: false, lesson: lezione.lesson};
