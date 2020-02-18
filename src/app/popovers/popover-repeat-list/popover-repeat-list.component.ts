@@ -17,7 +17,6 @@ export class PopoverRepeatListComponent implements OnInit {
     private date: number[] = [];
     private oreInizioEFine: any[] = [];
     private lesson: Lesson;
-    private lingua = 'it-IT'; // lingua data
 
     private messageQuest: string;
     private cancelPlanning: string;
@@ -27,7 +26,6 @@ export class PopoverRepeatListComponent implements OnInit {
     private setLanguage = 'it-IT';
 
     constructor(private navParams: NavParams,
-                public popoverController: PopoverController,
                 private modalController: ModalController,
                 private alertController: AlertController,
                 private planningService: PlanningService,
