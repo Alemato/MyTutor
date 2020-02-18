@@ -124,7 +124,7 @@
   "END": "Fine",
   "DATETIME_THE": "il",
   "DATETIME_FROM": "dalle",
-  "DATETIME_FROM": "alle",
+  "DATETIME_TO": "alle",
   "REGION_TEXT": "Regione",
   "CITY_TEXT": "Città",
   "ZIP_CODE_TEXT": "Cap",
