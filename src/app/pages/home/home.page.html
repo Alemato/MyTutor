@@ -35,7 +35,7 @@
                         </ion-col>
                         <ion-col size="10">
                             <div class="ion-no-margin fs-large fw-normal"
-                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 [routerLink]="['/lezione', booking.planning.idPlanning]"
                                  routerDirection="forward">{{booking.planning.lesson.name}}</div>
                             <ion-row>
                                 <ion-col class="ion-no-padding">
@@ -45,17 +45,17 @@
                                 </ion-col>
                                 <ion-col class="ion-no-padding">
                                     <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em"
-                                         [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                         [routerLink]="['/lezione', booking.planning.idPlanning]"
                                          routerDirection="forward">{{booking.planning.lesson.price}}€/h
                                     </div>
                                 </ion-col>
                             </ion-row>
                             <div class="ion-no-margin fs-small font-weight-300 pt-5"
-                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 [routerLink]="['/lezione', booking.planning.idPlanning]"
                                  routerDirection="forward">{{"DIV_FOR_THE"|translate}}
                                 {{booking.planning.date | date:'dd/MM/yyyy'}}</div>
                             <div class="ion-no-margin fs-small font-weight-300 pt-5"
-                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 [routerLink]="['/lezione', booking.planning.idPlanning]"
                                  routerDirection="forward">
                                 {{"DIV_BETWEEN"|translate}} {{booking.days}} {{"DIV_DAYS"|translate}}
                                 , {{booking.hours}} {{"DIV_HOURS"|translate}}, {{booking.minutes}}
@@ -77,7 +77,7 @@
                         </ion-col>
                         <ion-col size="10">
                             <div class="ion-no-margin fs-large fw-normal"
-                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 [routerLink]="['/lezione', booking.planning.idPlanning]"
                                  routerDirection="forward">{{booking.planning.lesson.name}}</div>
                             <ion-row>
                                 <ion-col class="ion-no-padding">
@@ -87,17 +87,17 @@
                                 </ion-col>
                                 <ion-col class="ion-no-padding">
                                     <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em"
-                                         [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                         [routerLink]="['/lezione', booking.planning.idPlanning]"
                                          routerDirection="forward">{{booking.planning.lesson.price}}€/h
                                     </div>
                                 </ion-col>
                             </ion-row>
                             <div class="ion-no-margin fs-small font-weight-300 pt-5"
-                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 [routerLink]="['/lezione', booking.planning.idPlanning]"
                                  routerDirection="forward">{{"DIV_FOR_THE"|translate}}
                                 {{booking.planning.date | date:'dd/MM/yyyy'}}</div>
                             <div class="ion-no-margin fs-small font-weight-300 pt-5"
-                                 [routerLink]="['/lezione', 'booking', booking.planning.idPlanning]"
+                                 [routerLink]="['/lezione', booking.planning.idPlanning]"
                                  routerDirection="forward">
                                 {{"DIV_BETWEEN"|translate}} {{booking.days}} {{"DIV_DAYS"|translate}}
                                 , {{booking.hours}} {{"DIV_HOURS"|translate}}, {{booking.minutes}}
