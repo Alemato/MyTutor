@@ -1,9 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalController, NavParams} from '@ionic/angular';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Teacher} from '../../model/teacher.model';
-import {User} from '../../model/user.model';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
+
 @Component({
     selector: 'app-registrazione-docente-modal',
     templateUrl: './registrazione-docente-modal.page.html',
@@ -33,30 +33,20 @@ export class RegistrazioneDocenteModalPage implements OnInit {
         ]
     };
 
-    @Input() utente1: User;
-
     constructor(
         private modalController: ModalController,
         public formBuilder: FormBuilder,
-        navParams: NavParams,
+        private navParams: NavParams,
         public translateService: TranslateService) {
-        /*this.teacher = new Teacher(undefined);
-        this.teacher.set(navParams.get('utente1'));
-        if (navParams.get('teacher1') == null || typeof navParams.get('teacher1') === 'undefined') {
-            console.log('indefinito');
-        } else {
-            this.teacher.set(navParams.get('teacher1'));
-        }*/
     }
 
     ngOnInit() {
         this.initTranslate();
+        this.teacher = this.navParams.data.teacher;
         this.registrazioneModelDocente = this.formBuilder.group({
-            postCode: [this.teacher.postCode, Validators.compose([
+            postCode: [this.setPostCode(), Validators.compose([
                 Validators.required,
                 Validators.pattern('[0-9]{5}')
-                // Validators.maxLength(5)
-                //
             ])],
             region: [this.teacher.region, Validators.required],
             city: [this.teacher.city, Validators.required],
@@ -66,11 +56,33 @@ export class RegistrazioneDocenteModalPage implements OnInit {
         });
     }
 
+    /**
+     * Funzione per la chiusura del modal e invio dati del modal
+     */
     async closeModal() {
-       // this.teacher.setRegistrazione(this.registrazioneModelDocente.value);
+        this.teacher.postCode = this.registrazioneModelDocente.value.postCode;
+        this.teacher.region = this.registrazioneModelDocente.value.region;
+        this.teacher.city = this.registrazioneModelDocente.value.city;
+        this.teacher.street = this.registrazioneModelDocente.value.street;
+        this.teacher.streetNumber = this.registrazioneModelDocente.value.streetNumber;
+        this.teacher.byography = this.registrazioneModelDocente.value.byography;
         await this.modalController.dismiss([this.teacher, true]);
     }
 
+    /**
+     * Funzione che setta a default il poste code nel form
+     */
+    setPostCode() {
+        if (this.teacher.postCode !== 0) {
+            return this.teacher.postCode;
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Funzione di traduzione
+     */
     private initTranslate() {
         this.translateService.get('POST_CODE_REQUIRED_MESSAGE').subscribe((data) => {
             this.validationMessages.postCode[0].message = data;

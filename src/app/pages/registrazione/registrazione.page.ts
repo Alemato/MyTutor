@@ -17,8 +17,9 @@ import {User} from '../../model/user.model';
 import {RegisterBirthdayValidator} from '../../validators/registerBirthday.validator';
 import {Student} from '../../model/student.model';
 import {RegistrationService} from '../../services/registration.service';
-import {HttpErrorResponse} from '@angular/common/http';
 import {TranslateService} from '@ngx-translate/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {sha512} from 'js-sha512';
 
 @Component({
     selector: 'app-registrazione',
@@ -27,17 +28,17 @@ import {TranslateService} from '@ngx-translate/core';
 })
 export class RegistrazionePage implements OnInit {
     private registrazioneFormModel: FormGroup;
-    registra = true;
-    utente: User = new User();
-    teacher: Teacher;
-    student: Student;
-    passwordType = 'password';
-    passwordShow = false;
-    public toogle = false;
-    croppedImagepath = '';
-    img = false;
-    isLoading = false;
+    private registra = true;
+    private utente: User = new User();
+    private teacher: Teacher = new Teacher();
+    private student: Student = new Student();
+    private passwordType = 'password';
+    private passwordShow = false;
+    private croppedImagepath = '';
+    private img = false;
+    private isLoading = false;
     private loading;
+
     private errorTitle: string;
     private errorSubTitle: string;
     private imageSourceHeader: string;
@@ -114,9 +115,165 @@ export class RegistrazionePage implements OnInit {
                 Validators.required,
                 RegisterBirthdayValidator.isAdult
             ])],
-            language: ['true', Validators.required]
+            language: ['true', Validators.required],
+            toggle: [false, Validators.required]
         });
     }
+
+    /**
+     * Funzione che avvia l'iter dell'invio dei dati al server
+     * triggerata dal bottone registrazione
+     */
+    prendiRegistrazione() {
+        console.log('registro utenza:');
+        // vedo se ho un oggetto teacher riempito
+        if (Object.keys(this.teacher).length > 0) {
+            this.inviaRegistrazioneTeacher(this.teacher);
+        } else {
+            // vedo se ho un oggetto student riempito e se non c'è lo creoo
+            if (Object.keys(this.student).length > 0) {
+                this.inviaRegistrazioneStudent(this.student);
+            } else {
+                this.createNewStudentFromForm();
+                this.inviaRegistrazioneStudent(this.student);
+            }
+        }
+    }
+
+    /**
+     * Funzione che invia i dati al server
+     * @param teacher oggetto da inviare
+     */
+    inviaRegistrazioneTeacher(teacher: Teacher) {
+        teacher.image = this.croppedImagepath;
+        this.registrationService.registrationTeacher(teacher).subscribe(() => {
+            this.navController.navigateRoot('/login');
+        }, (err: HttpErrorResponse) => {
+            if (err.status === 500) {
+                console.error('login request error: ' + err.status + ' message:' + err.message);
+                this.showLoginError(err.status, err.message);
+            }
+        });
+    }
+
+    /**
+     * Funzione che invia i dati al server
+     * @param student oggetto da inviare
+     */
+    inviaRegistrazioneStudent(student: Student) {
+        student.image = this.croppedImagepath;
+        this.registrationService.registrationStudent((student)).subscribe(() => {
+            this.navController.navigateRoot('/login');
+        }, (err: HttpErrorResponse) => {
+            if (err.status === 500) {
+                console.error('login request error: ' + err.status + ' message:' + err.message);
+                this.showLoginError(err.status, err.message);
+            }
+        });
+    }
+
+    /**
+     * Funzione che presenta il modale per registrare i dati del teacher
+     */
+    async openModal() {
+        const modal = await this.modalController.create({
+            component: RegistrazioneDocenteModalPage,
+            componentProps: {teacher: this.teacher}
+        });
+        modal.onDidDismiss().then((data) => {
+            console.log(data);
+            if (data.data !== undefined) {
+                this.teacher = data.data[0];
+                this.registra = data.data[1];
+            }
+        });
+
+        await modal.present();
+    }
+
+    /**
+     * funzione che setta i dati del form nei oggetti giusti
+     * Triggerata dal cambio stato del toogle
+     */
+    actionToggle() {
+        console.log(this.registrazioneFormModel.value.toggle);
+        if (this.registrazioneFormModel.value.toggle) {
+            // ha cliccato ed è passato da "non teacher" a "teacher"
+            // logiaca di creazione di un teacher
+            this.utente = this.registrazioneFormModel.value;
+            this.utente.idUser = 0;
+            this.utente.roles = 2;
+            this.utente.password = sha512(this.registrazioneFormModel.value.password).toUpperCase();
+            this.utente.birthday = new Date(this.utente.birthday).getTime();
+            this.utente.language = (this.registrazioneFormModel.value.language === 'true');
+            this.student = new Student();
+            this.teacher = new Teacher();
+            this.teacher.setTeacherFromUser(this.utente);
+            this.openModal();
+        } else {
+            // ha cambiato idea da "sono teacher" è passato a "non lo sono"
+            // logica di creazione di un user
+            this.createNewStudentFromForm();
+            this.teacher = new Teacher();
+        }
+    }
+
+    /**
+     * Funzione che inizializza e setta un oggetto studente
+     */
+    createNewStudentFromForm() {
+        this.student = new Student();
+        this.utente = this.registrazioneFormModel.value;
+        this.utente.idUser = 0;
+        this.utente.roles = 1;
+        this.utente.password = sha512(this.registrazioneFormModel.value.password).toUpperCase();
+        this.utente.birthday = new Date(this.utente.birthday).getTime();
+        this.utente.language = (this.registrazioneFormModel.value.language === 'true');
+        this.student.setStudentFromUser(this.utente);
+    }
+
+    /**
+     * Funzione che fa visualizzare la password
+     */
+    public togglePassword() {
+        if (this.passwordShow) {
+            this.passwordShow = false;
+            this.passwordType = 'password';
+        } else {
+            this.passwordShow = true;
+            this.passwordType = 'text';
+        }
+    }
+
+    async Loading() {
+        this.loading = await this.loadingController.create({
+            message: this.pleaseWaitMessage,
+            translucent: true
+        });
+        return await this.loading.present();
+    }
+
+    async Diss() {
+        await this.loading.dismiss();
+    }
+
+    /**
+     * Funzione che attiva l'allert controller con i messaggi di errore REST
+     * @param status status del errore
+     * @param message messaggio di errore
+     */
+    async showLoginError(status: number, message: string) {
+        const alert = await this.alertController.create({
+            header: this.errorTitle = this.error + status,
+            message: this.errorSubTitle = message,
+            buttons: ['OK']
+        });
+
+        await alert.present();
+    }
+
+
+
 
     // PER IMAGINI DALLA FOTOCAMERA O GALLERIA
     pickImage(sourceType) {
@@ -194,175 +351,10 @@ export class RegistrazionePage implements OnInit {
         });
     }
 
-    public togglePassword() {
-        if (this.passwordShow) {
-            this.passwordShow = false;
-            this.passwordType = 'password';
-        } else {
-            this.passwordShow = true;
-            this.passwordType = 'text';
-        }
-    }
 
-    async Loading() {
-        this.loading = await this.loadingController.create({
-            message: this.pleaseWaitMessage,
-            translucent: true
-        });
-        return await this.loading.present();
-    }
-
-    async Diss() {
-        await this.loading.dismiss();
-    }
-
-    async showLoginError(status: number, message: string) {
-        this.Diss();
-        const alert = await this.alertController.create({
-            header: this.errorTitle = this.error + status,
-            message: this.errorSubTitle = message,
-            buttons: ['OK']
-        });
-
-        await alert.present();
-    }
-
-    prendiRegistrazione() {
-        console.log('registro utenza:');
-        /* if (this.teacher == null || typeof this.teacher === 'undefined') {
-             console.log('utenza di tipo student');
-             this.utente = this.registrazioneFormModel.value;
-             this.utente.idUser = 0;
-             this.utente.roles = 1;
-             this.utente.birthday = new Date(this.utente.birthday).getTime();
-             this.utente.language = this.registrazioneFormModel.value.languageNumber !== '0';
-             this.utente.image = this.croppedImagepath;
-             //this.student.set(this.utente);
-             this.Loading();
-             this.registrationService.registrationStudent(this.student).subscribe(() => {
-                     this.Diss();
-                     this.registrazioneFormModel.reset();
-                     this.navController.navigateRoot('login');
-                 },
-                 (err: HttpErrorResponse) => {
-                     if (err.status === 500) {
-                         console.error('login request error: ' + err.status);
-                         this.showLoginError(err.status, err.message);
-                     }
-                 });
-             console.log(this.student);
-         } else {
-             console.log('utenza di tipo docente');
-             this.teacher.idUser = 0;
-             this.teacher.roles = 2;
-             this.teacher.birthday = new Date(this.utente.birthday).getTime();
-             this.teacher.language = this.registrazioneFormModel.value.languageNumber !== '0';
-             this.teacher.image = this.croppedImagepath;
-             this.Loading();
-             this.registrationService.registrationTeacher(this.teacher).subscribe(() => {
-                     this.Diss();
-                     this.registrazioneFormModel.reset();
-                     this.navController.navigateRoot('login');
-                 },
-                 (err: HttpErrorResponse) => {
-                     if (err.status === 500) {
-                         console.error('login request error: ' + err.status + ' message:' + err.message);
-                         this.showLoginError(err.status, err.message);
-                     }
-                 });
-             console.log(this.teacher);
-         }*/
-    }
-
-    async openModal() {
-        this.teacher = new Teacher();
-        this.teacher.setTeacherFromUser(this.utente);
-        console.log(this.teacher);
-        this.registra = false;
-        const modal = await this.modalController.create({
-            component: RegistrazioneDocenteModalPage,
-            componentProps: {teacher: this.teacher}
-        });
-        modal.onDidDismiss().then((data) => {
-            console.log(data);
-        });
-
-        await  modal.present();
-        /*this.utente = this.registrazioneFormModel.value;
-        this.registra = false;
-        const teacher1: Teacher = this.teacher;
-        const utente1: User = this.utente;
-        if (this.teacher == null || typeof this.teacher === undefined) {
-            const modal = await this.modalController.create({
-                component: RegistrazioneDocenteModalPage,
-                componentProps: {
-                    utente1
-                }
-            });
-            modal.onDidDismiss().then((dataReturned) => {
-                console.log('teache null o indeficnito i dati sono: ');
-                console.log(dataReturned.data);
-                this.teacher = new Teacher(undefined);
-                this.teacher.set(dataReturned.data[0]);
-                this.registra = dataReturned.data[1];
-            });
-
-            await modal.present();
-
-        } else {
-            this.registra = false;
-            const modal = await this.modalController.create({
-                component: RegistrazioneDocenteModalPage,
-                componentProps: {
-                    utente1,
-                    teacher1
-                }
-            });
-            modal.onDidDismiss().then((dataReturned) => {
-                console.log('i dati sono: ');
-                console.log(dataReturned.data);
-                this.teacher = dataReturned.data[0];
-                this.registra = dataReturned.data[1];
-            });
-
-            await modal.present();
-        }*/
-    }
-
-    notify() {
-        console.log('notify');
-        if (this.toogle) {
-            this.toogle = false;
-            this.teacher = null;
-            this.utente.roles = 1;
-            console.log(this.toogle);
-        } else {
-            this.toogle = true;
-            this.utente = this.registrazioneFormModel.value;
-            this.utente.idUser = 0;
-            this.utente.language = (this.registrazioneFormModel.controls.language.value === 'true');
-            console.log('sto con il true, teacher');
-            console.log(this.utente);
-            this.utente.roles = 2;
-            this.openModal();
-        }
-    }
-
-    onSubmit(bob: any) {
-        console.log('onSubmit');
-        console.log(bob);
-    }
-
-    notifyCondition() {
-        if (this.toogle) {
-            this.openModal();
-        } else {
-            // caso in cui l'utente non ha mai aperto il model e non esiste l'utenza
-            this.utente = this.registrazioneFormModel.value;
-            this.utente.roles = 1;
-        }
-    }
-
+    /**
+     * Funzione per la traduzione
+     */
     private initTranslate() {
         this.translateService.get('IMAGE_SOURCE_HEADER').subscribe((data) => {
             this.imageSourceHeader = data;
@@ -388,7 +380,7 @@ export class RegistrazionePage implements OnInit {
         this.translateService.get('ERROR').subscribe((data) => {
             this.error = data;
         });
-        //
+
         this.translateService.get('EMAIL_REQUIRED_MESSAGE').subscribe((data) => {
             this.validationMessages.email[0].message = data;
         });

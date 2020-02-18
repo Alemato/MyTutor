@@ -90,7 +90,7 @@
 
                     <ion-item lines="inset">
                         <ion-label position="floating" class="label-struttura">{{'BIRTHDAY'|translate}}</ion-label>
-                        <ion-datetime class="m-auto" displayFormat="DD MMMM YYYY"
+                        <ion-datetime class="m-auto" displayFormat="DDDD DD MMMM YYYY"
                                       placeholder="{{'BIRTHDAY'|translate}}"
                                       monthNames="{{'MONTHS_DATETIME'|translate}}"
                                       formControlName="birthday" required="true"></ion-datetime>
@@ -110,12 +110,12 @@
                                     okText="{{'SELECT_BUTTON'|translate}}"
                                     cancelText="{{'CANCEL_BUTTON'|translate}}"
                                     placeholder="{{'LANGUAGE_SELECT'|translate}}" required="true">
-                            <ion-select-option selected value="true">Italiano</ion-select-option>
-                            <ion-select-option value="false">English</ion-select-option>
+                            <ion-select-option selected value="false">Italiano</ion-select-option>
+                            <ion-select-option value="true">English</ion-select-option>
                         </ion-select>
                     </ion-item>
 
-                        <ion-grid class="ion-no-padding">
+                    <ion-grid class="ion-no-padding">
                         <ion-row class="ion-padding-start ion-padding-end">
                             <div class="name-field">
                                 {{"ARE_YOU_A_TEACHER"|translate}}
@@ -123,12 +123,16 @@
                         </ion-row>
                         <ion-row>
                             <ion-item lines="inset" class="w-100">
-                            <ion-label class="ion-no-margin">{{this.toogle}}</ion-label>
-                            <ion-toggle slot="end" (ionChange)="notify()" color="secondary" [checked]="this.toogle"
-                                        [disabled]="!registrazioneFormModel.valid"></ion-toggle>
+                                <div *ngIf="registrazioneFormModel.value.toggle; else falseBlock">
+                                    <ion-label class="ion-no-margin" (click)="openModal()">Si sono un docente</ion-label>
+                                </div>
+                                <ng-template #falseBlock>
+                                    <ion-label class="ion-no-margin">No non sono un docente</ion-label>
+                                </ng-template>
+                                <ion-toggle slot="end" (ionChange)="actionToggle()" color="secondary" formControlName="toggle"></ion-toggle>
                             </ion-item>
                         </ion-row>
-                        </ion-grid>
+                    </ion-grid>
 
                 </ion-list>
 
