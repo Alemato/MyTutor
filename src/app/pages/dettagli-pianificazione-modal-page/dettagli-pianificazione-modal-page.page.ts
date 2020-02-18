@@ -104,12 +104,14 @@ export class DettagliPianificazioneModalPage implements OnInit {
                     this.hoursEnd.splice(0, parseInt(new Date(this.planningFormModel.value.startTime).toLocaleTimeString().slice(0, 2), 0) + 1);
                 }
                 oreInizioEFine[indiceData].forEach((ora) => {
-                    const indiceOra = this.hoursEnd.findIndex(o => o === parseInt(ora.endTime.slice(0, 2), 0));
-                    if (indiceOra !== -1) {
-                        if (indiceOra === 0) {
-                            this.hoursEnd.splice(1, 24);
-                        } else {
-                            this.hoursEnd.splice(indiceOra, 24);
+                    if (ora.startTime !== this.navParams.data.planning.startTime) {
+                        const indiceOra = this.hoursEnd.findIndex(o => o === parseInt(ora.endTime.slice(0, 2), 0));
+                        if (indiceOra !== -1) {
+                            if (indiceOra === 0) {
+                                this.hoursEnd.splice(1, 24);
+                            } else {
+                                this.hoursEnd.splice(indiceOra, 24);
+                            }
                         }
                     }
                 });
