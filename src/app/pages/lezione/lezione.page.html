@@ -79,12 +79,12 @@
         <ion-row class="ion-justify-content-center ion-margin-bottom">
             <ion-col size="auto">
                 <ion-button shape="round" class="avvia-chat ion-margin-top"
-                            (click)="controlloChat()">Apri Chat
+                            (click)="controlloChat()">{{"START_CHAT_BUTTON"|translate}}
                 </ion-button>
             </ion-col>
             <ion-col size="auto">
                 <ion-button *ngIf="(user$ | async).roles === 1 && noPlanningDisp" shape="round" class="avvia-chat ion-margin-top"
-                            [routerLink]="['/lista-per-prenotarsi', planning.lesson.idLesson]" routerDirection="forward">Prenotati
+                            [routerLink]="['/lista-per-prenotarsi', planning.lesson.idLesson]" routerDirection="forward">{{"BOOKED_BUTTON"|translate}}
                 </ion-button>
             </ion-col>
         </ion-row>
