@@ -69,7 +69,7 @@ const routes: Routes = [
         loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule',
         canActivate: [AuthGuard]
     },
-    { path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule' },
+    {path: 'tabs', loadChildren: './pages/tabs/tabs.module#TabsPageModule'},
     {
         path: 'modifica-profilo',
         loadChildren: './pages/modifica-profilo/modifica-profilo.module#ModificaProfiloPageModule',
@@ -91,7 +91,11 @@ const routes: Routes = [
         loadChildren: './pages/lista-annunci-publicati/lista-annunci-publicati.module#ListaAnnunciPublicatiPageModule',
         canActivate: [AuthGuard]
     },
-];
+    {
+        path: 'lista-per-prenotarsi/:idLesson',
+        loadChildren: './pages/lista-per-prenotarsi/lista-per-prenotarsi.module#ListaPerPrenotarsiPageModule',
+        canActivate: [AuthGuard]
+    }];
 
 @NgModule({
     imports: [
