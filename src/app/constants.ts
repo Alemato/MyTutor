@@ -17,7 +17,6 @@ export const URL = {
     CHATLIST: URL_BASE + '/chats',
     CHAT_CREATE: URL_BASE + '/chats/create',
     CHAT_COUNT: URL_BASE + '/chats/count',
-    CHAT_CREATES: URL_BASE + '/chats/creates/',
 
     MESSAGE_OF_CHAT_PT_1: URL_BASE + '/chats/',
     MESSAGE_OF_CHAT_PT_2: '/messages',
@@ -43,7 +42,7 @@ export const URL = {
 
     BOOKING: URL_BASE + '/lessons/bookings',
     BOOKING_MODIFY_LESSON_STATE: URL_BASE + '/lessons/bookings',
-    BOOKING_PLANNING: URL_BASE + '/planning',
+    BOOKING_PLANNING: URL_BASE + '/lessons/bookings/planning',
 
     BOOKING_RESEARCH: URL_BASE + '/lessons/bookings/research',
     BOOKING_HOME: URL_BASE + '/lessons/bookings/home',
