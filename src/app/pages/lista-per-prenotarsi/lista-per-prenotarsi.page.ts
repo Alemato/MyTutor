@@ -27,6 +27,9 @@ export class ListaPerPrenotarsiPage implements OnInit {
     }
 
     ngOnInit() {
+        this.route.paramMap.subscribe((params) => {
+            this.idLesson = params.get('idLesson');
+        });
         this.initTranslate();
         this.planning$ = this.planningService.getPlannings();
         this.planning$.subscribe((plannings) => {
@@ -95,10 +98,7 @@ export class ListaPerPrenotarsiPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.route.paramMap.subscribe((params) => {
-            this.idLesson = params.get('idLesson');
-            this.planningService.getRestPlanningByIdLesson(this.idLesson).subscribe(() => {});
-        });
+        this.planningService.getRestPlanningByIdLesson(this.idLesson).subscribe(() => {});
     }
 
     private initTranslate() {

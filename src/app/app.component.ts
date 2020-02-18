@@ -11,6 +11,7 @@ import {ChatService} from './services/chat.service';
 import {Router} from '@angular/router';
 import {Student} from './model/student.model';
 import {Teacher} from './model/teacher.model';
+import {BookingService} from "./services/booking.service";
 
 
 @Component({
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
         private linguaService: LinguaService,
         private userService: UserService,
         private chatService: ChatService,
+        private bookingService: BookingService,
         private navController: NavController,
         private menuSource: MenuRefresh,
         private menu: MenuController,
@@ -133,6 +135,7 @@ export class AppComponent implements OnInit {
 
     async logout() {
         this.chatService.stopPeriodicGetCountChat();
+        this.bookingService.stopPeriodicGet();
         await this.menu.close();
         await this.userService.logout();
         await this.navController.navigateRoot('login');
