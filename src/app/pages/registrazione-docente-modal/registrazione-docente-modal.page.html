@@ -49,7 +49,7 @@
 
                         <ion-item lines="inset">
                             <ion-label position="floating" class="label-struttura">{{'CITY_TEXT'|translate}}</ion-label>
-                            <ion-input class="input-fs-18" type="text" formControlName="city" placeholder="{{'CITY_TEXT'|translate}}" required="true"></ion-input>
+                            <ion-input class="input-fs-18" type="text" formControlName="city" placeholder="" required="true"></ion-input>
                         </ion-item>
                         <ng-container *ngFor="let validation of validationMessages.city">
                             <div class="text08 pl-15"
@@ -66,14 +66,14 @@
                                 <ion-item lines="inset">
                                     <ion-label position="floating" class="label-struttura">{{'STREET_TEXT'|translate}}</ion-label>
                                     <ion-input  class="input-fs-18" type="text" formControlName="street"
-                                               placeholder="{{'STREET_TEXT'|translate}}" required="true"></ion-input>
+                                               placeholder="" required="true"></ion-input>
                                 </ion-item>
                             </ion-col>
                             <ion-col class="ion-no-padding" size="4">
                                 <ion-item lines="inset">
                                     <ion-label position="floating" class="label-struttura">{{'NUMBER_TEXT'|translate}}</ion-label>
                                     <ion-input class="input-fs-18" type="text" formControlName="streetNumber"
-                                               placeholder="{{'NUMBER_TEXT'|translate}}" required="true"></ion-input>
+                                               placeholder="" required="true"></ion-input>
                                 </ion-item>
                             </ion-col>
                             <ion-row>
@@ -100,7 +100,7 @@
                         <ion-item lines="inset">
                             <ion-label position="floating" class="label-struttura">{{'ZIP_CODE_TEXT'|translate}}</ion-label>
                             <ion-input class="input-fs-18" type="text" pattern="[0-9]*" formControlName="postCode"
-                                       placeholder="{{'ZIP_CODE_TEXT'|translate}}" required="true"></ion-input>
+                                       placeholder="" required="true"></ion-input>
                         </ion-item>
                         <ng-container *ngFor="let validation of validationMessages.postCode">
                             <div class="text08 pl-15"
@@ -115,7 +115,7 @@
                         <ion-item lines="inset">
                             <ion-label position="floating" class="label-struttura">{{'BIOGRAPHY_LABEL'|translate}}</ion-label>
                             <ion-textarea class="input-fs-18 mt-0" formControlName="byography"
-                                          placeholder="{{'BIOGRAPHY_TEXT'|translate}}"></ion-textarea>
+                                          placeholder=""></ion-textarea>
                         </ion-item>
                     </ion-list>
                 </ion-col>
