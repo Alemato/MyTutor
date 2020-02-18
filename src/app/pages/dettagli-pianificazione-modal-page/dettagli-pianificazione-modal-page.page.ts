@@ -14,7 +14,7 @@ export class DettagliPianificazioneModalPage implements OnInit {
 
     private planningFormModel: FormGroup;
     private planning: Planning;
-    private oggi: string;
+    private primaDataDisp: string;
     private hoursStart = [];
     private hoursEnd = [];
     private gionoDellaSettimana = '';
@@ -56,7 +56,7 @@ export class DettagliPianificazioneModalPage implements OnInit {
         }
         const myDate =  new Date();
         myDate.setHours(myDate.getHours() + 25);
-        this.oggi = myDate.toISOString();
+        this.primaDataDisp = myDate.toISOString();
         if (this.planning.repeatPlanning && !this.navParams.data.gruppo) {
             this.planningFormModel.controls.repeatPlanning.disable();
         }
@@ -82,12 +82,6 @@ export class DettagliPianificazioneModalPage implements OnInit {
                     this.hoursStart.splice(indiceOra, 1);
                 }
             });
-        }
-        if (this.datepipe.transform(this.oggi, 'yyyy/MM/dd') === this.datepipe.transform(this.planningFormModel.value.date, 'yyyy/MM/dd')) {
-            const indiceDataOggi = this.hoursStart.findIndex(o => o === parseInt((new Date(this.oggi).getHours() + 1).toString(), 0));
-            if (indiceDataOggi !== -1) {
-                this.hoursStart.splice(0, indiceDataOggi);
-            }
         }
     }
 
