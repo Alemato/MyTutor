@@ -157,7 +157,7 @@
   "PRICE": "prezzo",
   "DATE": "Data",
   "HOUR": "Ora",
-  "SENT TO": "Inviato alle",
+  "SENT_TO": "Inviato alle",
   "STATUS_REQUIRED": "Stato: Richiesta",
   "STATUS_ACCEPTED": "Stato: Accettata",
   "STATUS_REJECTED": "Stato: Rifiutata",
