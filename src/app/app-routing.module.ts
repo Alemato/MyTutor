@@ -33,7 +33,6 @@ const routes: Routes = [
         loadChildren: './pages/inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule',
         canActivate: [AuthGuard]
     },
-    // tslint:disable-next-line:max-line-length
     {
         path: 'inserimento-lezioni-modal',
         loadChildren: './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module#InserimentoLezioniModalPageModule',
@@ -42,16 +41,6 @@ const routes: Routes = [
     {
         path: 'lista-chat',
         loadChildren: './pages/lista-chat/lista-chat.module#ListaChatPageModule',
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'ricerca-lezioni-old',
-        loadChildren: './pages/ricerca-lezioni-old/ricerca-lezioni.module#RicercaLezioniPageModule',
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'risultati-ricerca',
-        loadChildren: './pages/risultati-ricerca/risultati-ricerca.module#RisultatiRicercaPageModule',
         canActivate: [AuthGuard]
     },
     {
@@ -65,7 +54,7 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'profilo-singolo/:id',
+        path: 'profilo/:id',
         loadChildren: './pages/profilo-singolo/profilo-singolo.module#ProfiloSingoloPageModule',
         canActivate: [AuthGuard]
     },

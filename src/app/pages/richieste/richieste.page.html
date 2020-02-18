@@ -43,7 +43,7 @@
                         <ion-row>
                             <ion-col class="ion-no-padding">
                                 <div class="ion-no-margin fs-medium font-weight-400 ls-01em"
-                                     [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]">{{booking.planning.lesson.teacher.name}} {{booking.planning.lesson.teacher.surname}}</div>
+                                     [routerLink]="['/profilo', booking.planning.lesson.teacher.idUser]">{{booking.planning.lesson.teacher.name}} {{booking.planning.lesson.teacher.surname}}</div>
                             </ion-col>
                             <ion-col class="ion-no-padding pr-5">
                                 <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{booking.planning.lesson.price}}
@@ -79,7 +79,7 @@
                     <ion-row>
                         <ion-col class="ion-no-padding">
                             <div class="ion-no-margin fs-medium font-weight-300 ls-01em"
-                                 [routerLink]="['/profilo-singolo', booking.student.email]">{{booking.student.name}} {{booking.student.surname}}</div>
+                                 [routerLink]="['/profilo', booking.student.email]">{{booking.student.name}} {{booking.student.surname}}</div>
                         </ion-col>
                         <ion-col class="ion-no-padding">
                             <div class="ion-float-right c-primary ion-padding-end fs-medium font-weight-300 ls-01em">{{booking.planning.lesson.price}}

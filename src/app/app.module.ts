@@ -13,14 +13,12 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 import {IonicStorageModule} from '@ionic/storage';
-import { File } from '@ionic-native/file/ngx';
-import { Camera } from '@ionic-native/camera/ngx';
-import { Crop } from '@ionic-native/crop/ngx';
+import {File} from '@ionic-native/file/ngx';
+import {Camera} from '@ionic-native/camera/ngx';
+import {Crop} from '@ionic-native/crop/ngx';
 import {ChatService} from './services/chat.service';
 import {httpInterceptorProviders} from './interceptors';
 import {RegistrazioneDocenteModalPageModule} from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
-import {ProfiloPageModule} from './pages/profilo/profilo.module';
-import {ModificaProfiloPageModule} from './pages/modifica-profilo/modifica-profilo.module';
 import {MenuRefresh} from './services/menuRefresh';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {InserimentoLezioniModalPageModule} from './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module';
@@ -52,8 +50,6 @@ export function createTranslateLoader(http: HttpClient) {
         }),
         AppRoutingModule,
         RegistrazioneDocenteModalPageModule,
-        ProfiloPageModule,
-        ModificaProfiloPageModule,
         InserimentoLezioniModalPageModule,
         DettagliPianificazioneModalPageModule,
         CreazionePrenotazioneModalPageModule

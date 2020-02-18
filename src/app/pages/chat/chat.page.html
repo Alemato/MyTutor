@@ -14,13 +14,13 @@
             <div class="message left">
                 <ion-icon
                         *ngIf="message.user.image === null || message.user.image === '' || message.user.image ===' '; else noImgSt"
-                        name="contact" class="fs-62 user-img" color="primary"></ion-icon>
+                        name="contact" class="fs-62 user-img" color="primary" [routerLink]="['/profilo', message.user.idUser]" routerDirection="forward"></ion-icon>
                 <ng-template #noImgSt>
-                    <img class="user-img" [src]="message.user.image" alt="">
+                    <img class="user-img" [src]="message.user.image" alt="" [routerLink]="['/profilo', message.user.idUser]" routerDirection="forward">
                 </ng-template>
                 <div class="msg-detail">
                     <div class="msg-info">
-                        <p>
+                        <p [routerLink]="['/profilo', message.user.idUser]">
                             {{message.user.name}} {{message.user.surname}} {{"SENT_TO"|translate}} {{message.sendDate | date: "HH:mm"}}</p>
                     </div>
                     <div class="msg-content">

@@ -31,27 +31,13 @@ export class ListaChatPage implements OnInit {
 
     ngOnInit() {
         this.initTranslate();
-        this.chatService.getRestChatList().subscribe((data) => {
-            console.log(data);
+        this.chatService.getRestChatList().subscribe(() => {
         });
-        /*this.chatService.getRestCountChat().subscribe((n: number) => {
-            if (n !== 0) {
-                this.chatService.countFromStorage().then((numb: number) => {
-                    if (numb < n) {
-                        this.chatService.getRestChatList().subscribe(() => {});
-                    }
-                });
-            }
-        });
-        this.lastMessageFromChats$.subscribe();*/
     }
 
     ionViewWillEnter() {
-        /*this.loadingPresent().then(() => {
-            this.chatService.getRestChatList().subscribe(() => {
-                this.disLoading();
-            });
-        });*/
+        this.chatService.getRestChatList().subscribe(() => {
+        });
     }
 
     async loadingPresent() {

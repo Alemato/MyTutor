@@ -22,7 +22,7 @@
             <div *ngFor="let booking of bookings let i = index">
                 <ion-item-sliding #itemSliding *ngIf="booking.lessonState === 1">
                     <ion-item *ngIf="user.roles == 1" lines="full">
-                        <ion-col size="auto" [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]"
+                        <ion-col size="auto" [routerLink]="['/profilo', booking.planning.lesson.teacher.idUser]"
                                  routerDirection="forward">
                             <ion-icon
                                     *ngIf="booking.planning.lesson.teacher.image === null || booking.planning.lesson.teacher.image === '' || booking.planning.lesson.teacher.image ===' '; else imgBlockS"
@@ -40,7 +40,7 @@
                             <ion-row>
                                 <ion-col class="ion-no-padding">
                                     <div class="ion-no-margin fs-medium font-weight-300 ls-01em"
-                                         [routerLink]="['/profilo-singolo', booking.planning.lesson.teacher.idUser]"
+                                         [routerLink]="['/profilo', booking.planning.lesson.teacher.idUser]"
                                          routerDirection="forward">{{booking.planning.lesson.teacher.name}} {{booking.planning.lesson.teacher.surname}}</div>
                                 </ion-col>
                                 <ion-col class="ion-no-padding">
@@ -64,7 +64,7 @@
                         </ion-col>
                     </ion-item>
                     <ion-item *ngIf="user.roles == 2" lines="full">
-                        <ion-col size="auto" [routerLink]="['/profilo-singolo', booking.student.idUser]"
+                        <ion-col size="auto" [routerLink]="['/profilo', booking.student.idUser]"
                                  routerDirection="forward">
                             <ion-icon
                                     *ngIf="booking.student.image === null || booking.student.image === '' || booking.student.image ===' '; else imgBlockS"
@@ -82,7 +82,7 @@
                             <ion-row>
                                 <ion-col class="ion-no-padding">
                                     <div class="ion-no-margin fs-medium font-weight-300 ls-01em"
-                                         [routerLink]="['/profilo-singolo', booking.student.idUser]"
+                                         [routerLink]="['/profilo', booking.student.idUser]"
                                          routerDirection="forward">{{booking.student.name}} {{booking.student.surname}}</div>
                                 </ion-col>
                                 <ion-col class="ion-no-padding">
