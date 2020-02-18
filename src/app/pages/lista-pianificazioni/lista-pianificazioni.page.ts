@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {AlertController, IonContent, IonItemSliding, ModalController, PopoverController} from '@ionic/angular';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {AlertController, IonItemSliding, ModalController, PopoverController} from '@ionic/angular';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {Planning} from '../../model/planning.model';
 import {PlanningService} from '../../services/planning.service';
 import {Lesson} from '../../model/lesson.model';
@@ -16,7 +16,6 @@ import {TranslateService} from '@ngx-translate/core';
     styleUrls: ['./lista-pianificazioni.page.scss'],
 })
 export class ListaPianificazioniPage implements OnInit {
-    @ViewChild(IonContent, {static: false}) contenuto: IonContent;
     private plannings$: BehaviorSubject<Planning[]>;
     private lesson$: Observable<Lesson>;
     private idLezione: number;
@@ -26,6 +25,7 @@ export class ListaPianificazioniPage implements OnInit {
     private pianificazioniRipetute: Planning[][] = [];
     private disableSliding = false;
     private lezione: Lesson = new Lesson();
+    private paramsSubscription: Subscription;
 
     private messageQuest: string;
     private cancelPlanning: string;
@@ -47,7 +47,6 @@ export class ListaPianificazioniPage implements OnInit {
         this.initTranslate();
         this.route.data.subscribe((data) => {
             if (!data.isInsert) {
-                // this.route.paramMap.subscribe((params: ParamMap) => {
                 this.lesson$ = this.lessonService.getLessonById(data.idLezione);
                 this.lesson$.subscribe((lezione) => {
                     this.lezione = lezione;
@@ -70,8 +69,17 @@ export class ListaPianificazioniPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+        this.pianificazioni = [];
+        this.pianificazioniRipetute = [];
+        this.paramsSubscription = this.route.data.subscribe((data) => {
+            this.planningService.getRestPlanningByIdLesson(data.idLezione).subscribe(() => {
+                this.listaPianificazioni();
+            });
         });
+    }
+
+    ionViewDidLeave() {
+        this.paramsSubscription.unsubscribe();
     }
 
     async creaPianificazione() {
