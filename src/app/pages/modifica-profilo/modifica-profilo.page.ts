@@ -262,8 +262,7 @@ export class ModificaProfiloPage implements OnInit {
      * i dati presi precedentemente e salvati nell'oggetto student o teacher li passo al server utilizzando la funzione
      * editProfiloStudent / editprofiloTeacher
      * a questa funzione gli passo l'oggetto e la Vecchia Password (che viene utilizzata come controllo per abilitare la modifica)
-     * se il campo della Nuova password è stato riempito allora l'utente viete sloggato e rimandato sulla Login
-     * altrimenti viene chiamata la funzione Login dove gli passo l'email e la Vecchia password per l'autenticazione
+     * indipendentemente da qualsiasi modifica fatta, sloggotto  l'utente per motivi di sicurezza.
      * (siccome è un observable devo utilizzare il substribe per farmi ritornare qualcosa)
      * con HttpErrorResponse catturo l'errore e gli faccio apparire un allert sullo schermo dove gli comunico che ha sbagliato password
      * @param user oggetto da inviare
@@ -324,7 +323,7 @@ export class ModificaProfiloPage implements OnInit {
     }
 
     /**
-     * Allert che viene chiamato quando l'utente immette la password sbagliata
+     * Alert che viene chiamato quando l'utente immette la password sbagliata
      */
     async showPasswordError() {
         const alert = await this.alertController.create({

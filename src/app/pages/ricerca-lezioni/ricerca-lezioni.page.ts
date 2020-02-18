@@ -5,6 +5,7 @@ import {PopoverRicercaLezioniDisponibiliComponent} from '../../popovers/popover-
 import {BehaviorSubject} from 'rxjs';
 import {Planning} from '../../model/planning.model';
 import {PlanningService} from '../../services/planning.service';
+import {TranslateService} from '@ngx-translate/core';
 import {Lesson} from '../../model/lesson.model';
 
 @Component({
@@ -22,10 +23,12 @@ export class RicercaLezioniPage implements OnInit {
     private listPlannigs: Planning[] = [];
 
     constructor(public popoverController: PopoverController,
-                private planningService: PlanningService) {
+                private planningService: PlanningService,
+                public translateService: TranslateService) {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.plannings$ = this.planningService.getPlannings();
         this.plannings$.subscribe((plannings) => {
             this.listPlannigs = [];
@@ -164,5 +167,29 @@ export class RicercaLezioniPage implements OnInit {
             }
         });
         await popover.present();
+    }
+
+    private initTranslate() {
+        this.translateService.get('SUNDAY').subscribe((data) => {
+            this.weekdays[0] = data;
+        });
+        this.translateService.get('MONDAY').subscribe((data) => {
+            this.weekdays[1] = data;
+        });
+        this.translateService.get('TUESDAY').subscribe((data) => {
+            this.weekdays[2] = data;
+        });
+        this.translateService.get('WEDNESDAY').subscribe((data) => {
+            this.weekdays[3] = data;
+        });
+        this.translateService.get('THURSDAY').subscribe((data) => {
+            this.weekdays[4] = data;
+        });
+        this.translateService.get('FRIDAY').subscribe((data) => {
+            this.weekdays[5] = data;
+        });
+        this.translateService.get('SATURDAY').subscribe((data) => {
+            this.weekdays[6] = data;
+        });
     }
 }
