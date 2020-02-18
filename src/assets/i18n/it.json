@@ -18,12 +18,14 @@
   "BUTTON_TAB_LESSONS": "Lezioni",
   "DATE_TIME_BUTTON": "Imposta data ed ora",
   "ADD_RESERVATION_BUTTON": "Aggiungi prenotazione",
+  "ADD_PLANNING_BUTTON": "Aggiungi pianificazione",
+  "PLANNING_BUTTON": "Pianificazione",
   "START_CHAT_BUTTON": "Avvia Chat",
   "BOOKED_BUTTON": "Prenotati",
   "PHOTO_BUTTON": "Scegli foto",
   "SIGN_UP_BUTTON": "Registrati",
   "CLOSE_MODAL_BUTTON": "Chiudi Modal",
-  "SEARCH_LESSONS_BUTTON": "RICERCA LEZIONI DISPONIBILI",
+  "SEARCH_LESSONS_BUTTON": "Ricerca Lezioni Disponibili",
   "LANGUAGE_SELECT": "Seleziona una lingua",
   "REGION_SELECT": "Seleziona una regione",
   "MACRO_MATERIAL_SELECT": "Seleziona macro materia",
@@ -87,7 +89,7 @@
   "LESSON_ACCEPTED_TEXT": "Lezione Prenotata",
   "LESSON_NOT_FOUND": "Nessuna lezione trovata",
   "PLANNING_TEXT": "Per le pianificazioni clicca sul bottone",
-  "BOOKING_MADE_BY_TEXT": "Prenotazione Effetuata da",
+  "BOOKING_MADE_BY_TEXT": "Prenotazione Effettuata da",
   "LESSON_PLAN_HEADER": "Messaggio",
   "LESSON_PLAN_MESSAGE": "Verrà creata una pianificazione della lezione a partire dalla data selezionata per ogni settimana nei giorni e negli orari selezionati",
 
@@ -97,6 +99,9 @@
   "PLACE_LESSON_TEXT": "Luogo svolgimento lezione",
   "SUB_SUBJECT_SELECT": "Seleziona sotto materia",
 
+  "ALERT": "Attenzione",
+  "INFORMATIONS": "Informazioni",
+  "OF": "Di",
   "REPEATED_PLANNING_OF": "Pianificazioni ripetute di",
   "WEEKLY_TUTOR_INSERTED": "Ripetizioni settimanali inserite",
   "NEXT": "Prossima",
@@ -119,7 +124,7 @@
   "END": "Fine",
   "DATETIME_THE": "il",
   "DATETIME_FROM": "dalle",
-  "DATETIME_TO": "alle",
+  "DATETIME_FROM": "alle",
   "REGION_TEXT": "Regione",
   "CITY_TEXT": "Città",
   "ZIP_CODE_TEXT": "Cap",
@@ -222,6 +227,13 @@
   "CANCEL_PLANNING": "Vuoi cancellare la pianificazione?",
 
   "SEE_WEEKLY_REPETITIONS": "Vedi ripetizioni settimanali",
+  "NOT_TUTOR": " La scelta della ripetizione non è permessa perchè la pianificazione fa parte di una ripetizione settimanale",
+  "LESSON_DISABLED": "La lezione risulta disattivata",
+  "NOT_PLANNING_ACTIVE": "Non ci sono pianificazioni inserite attive",
+  "SELECT_LESSON_TIME_SLOT": " Seleziona la fascia oraria della Lezione",
+  "BOOKING_MADE": "Prenotazione effettuata",
+  "BOOK_MORE_DAYS": "Vuoi prenotarti per altri giorni?",
+  "CANCEL_TUTOR_WEEK_MESSAGE": "Togliendo la ripetizione settimanale verranno eliminate tutte le pianificazioni programmate settimanalmente tranne la prima disponibile, la quale diventerà pianificazione non ripetuta",
 
   "SET_LANGUAGE": "it-IT"
 }
