@@ -20,12 +20,12 @@
                     </ion-card-subtitle>
                     <ion-card-content *ngIf="planning.available; else noPlanning">
                         <label>{{"NEXT"|translate}}:</label>
-                        <h2>{{planning.date | date:'EEEE d MMMM y': 'GMT+2': 'it-IT'}} {{"DATETIME_TO"|translate}} {{planning.startTime.slice(0, 5)}}</h2>
+                        <h2>{{planning.date | date:'EEEE d MMMM y': 'GMT+2': setLanguage}} {{"DATETIME_TO"|translate}} {{planning.startTime.slice(0, 5)}}</h2>
                     </ion-card-content>
                     <ng-template #noPlanning>
                         <ion-card-content>
-                            <ion-label>La lezione risulterà disattivata</ion-label>
-                            <h2>Non ci sono pianificazioni inserite attive</h2>
+                            <ion-label>{{"LESSON_DISABLED"|translate}}</ion-label>
+                            <h2>{{"NOT_PLANNING_ACTIVE"|translate}}</h2>
                         </ion-card-content>
                     </ng-template>
                     <ion-row>
@@ -45,7 +45,7 @@
                             <ion-col class="ion-justify-content-end" >
                                 <ion-button size="medium" (click)="addPianificazioni(planning)" class="colore-bottone-primario">
                                     <ion-icon name='add'></ion-icon>
-                                    &nbsp;Aggiungi Pian.
+                                    &nbsp;{{"PLANNING"|translate}}
                                 </ion-button>
                             </ion-col>
                         </ng-template>
@@ -59,8 +59,8 @@
                         {{lesson.subject.macroSubject}} - {{lesson.subject.microSubject}}
                     </ion-card-subtitle>
                     <ion-card-content>
-                        <ion-label>La lezione risulterà disattivata</ion-label>
-                        <h2>Non ci sono pianificazioni inserite attive</h2>
+                        <ion-label>{{"LESSON_DISABLED"|translate}}</ion-label>
+                        <h2>{{"NOT_PLANNING_ACTIVE"|translate}}</h2>
                     </ion-card-content>
                     <ion-row>
                         <ion-col class="ion-justify-content-start">
@@ -72,7 +72,7 @@
                         <ion-col class="ion-justify-content-end" >
                             <ion-button size="medium" (click)="addPianificazioni(lesson)" class="colore-bottone-primario">
                                 <ion-icon name='add'></ion-icon>
-                                &nbsp;Aggiungi Pian.
+                                &nbsp;{{"PLANNING"|translate}}
                             </ion-button>
                         </ion-col>
                     </ion-row>
