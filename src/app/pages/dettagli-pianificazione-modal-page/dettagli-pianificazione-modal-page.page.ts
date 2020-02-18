@@ -18,7 +18,6 @@ export class DettagliPianificazioneModalPage implements OnInit {
     private hoursStart = [];
     private hoursEnd = [];
     private gionoDellaSettimana = '';
-    private cambioOra = true;
     private cambioRepeat = true;
 
     private alert: string;
@@ -64,13 +63,11 @@ export class DettagliPianificazioneModalPage implements OnInit {
     }
 
     alCambioData() {
-        this.cambioOra = false;
         this.planningFormModel.controls.startTime.disable();
         this.planningFormModel.controls.endTime.disable();
         this.planningFormModel.controls.startTime.reset();
         this.planningFormModel.controls.startTime.enable();
         this.planningFormModel.controls.endTime.reset();
-        this.cambioOra = true;
         this.gionoDellaSettimana = this.datepipe.transform(this.planningFormModel.value.date, 'EEEE', 'GMT+1', 'it-IT');
         this.hoursStart = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
         const date: number[] = this.navParams.data.date;
@@ -95,7 +92,7 @@ export class DettagliPianificazioneModalPage implements OnInit {
     }
 
     alCambioOraInizio() {
-        if (this.cambioOra) {
+        if (this.planningFormModel.value.startTime !== null) {
             if (this.planningFormModel.controls.endTime.disable) {
                 this.planningFormModel.controls.endTime.enable();
             }
