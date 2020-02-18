@@ -5,6 +5,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Planning} from '../../model/planning.model';
 import {ModalController} from '@ionic/angular';
 import {CreazionePrenotazioneModalPage} from '../creazione-prenotazione-modal/creazione-prenotazione-modal.page';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-lista-per-prenotarsi',
@@ -17,12 +18,16 @@ export class ListaPerPrenotarsiPage implements OnInit {
     private listItem: Planning[] = [];
     private idLesson: string;
 
+    private setLanguage = 'it-IT';
+
     constructor(private route: ActivatedRoute,
                 private planningService: PlanningService,
-                private modalController: ModalController) {
+                private modalController: ModalController,
+                private translateService: TranslateService) {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.planning$ = this.planningService.getPlannings();
         this.planning$.subscribe((plannings) => {
             this.listItem = [];
@@ -96,4 +101,9 @@ export class ListaPerPrenotarsiPage implements OnInit {
         });
     }
 
+    private initTranslate() {
+        this.translateService.get('SET_LANGUAGE').subscribe((data) => {
+            this.setLanguage = data;
+        });
+    }
 }
