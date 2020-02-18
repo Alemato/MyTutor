@@ -34,6 +34,7 @@ export class DettagliPianificazioneModalPage implements OnInit {
     }
 
     ngOnInit() {
+        this.initTranslate();
         this.planning = this.navParams.data.planning;
         if (this.planning.idPlanning) {
             this.planningFormModel = this.formBuilder.group({
