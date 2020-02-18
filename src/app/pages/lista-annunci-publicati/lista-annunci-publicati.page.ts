@@ -18,6 +18,7 @@ export class ListaAnnunciPublicatiPage implements OnInit {
     public lessons$: Observable<Lesson[]>;
     private loading;
     private pleaseWaitMessage: string;
+    private setLanguage = 'it-IT';
 
     constructor(private planningService: PlanningService,
                 private lessonService: LessonService,
@@ -43,12 +44,6 @@ export class ListaAnnunciPublicatiPage implements OnInit {
 
     async disLoading() {
         await this.loading.dismiss();
-    }
-
-    private initTranslate() {
-        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
-            this.pleaseWaitMessage = data;
-        });
     }
 
     listaLezioni() {
@@ -86,5 +81,14 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         const root = this.router.config.find(r => r.path === 'inserimento-lezioni');
         root.data = {isInsert: true, lesson: {}, listaAnnunci: true};
         this.navController.navigateRoot('inserimento-lezioni');
+    }
+
+    private initTranslate() {
+        this.translateService.get('PLEASE_WAIT_MESSAGE').subscribe((data) => {
+            this.pleaseWaitMessage = data;
+        });
+        this.translateService.get('SET_LANGUAGE').subscribe((data) => {
+            this.setLanguage = data;
+        });
     }
 }

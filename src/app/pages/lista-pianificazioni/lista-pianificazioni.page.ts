@@ -32,6 +32,7 @@ export class ListaPianificazioniPage implements OnInit {
     private datetimeTo: string;
     private cancelButton: string;
     private deleteButton: string;
+    private setLanguage = 'it-IT';
 
     constructor(public popoverController: PopoverController,
                 private route: ActivatedRoute,
@@ -261,6 +262,9 @@ export class ListaPianificazioniPage implements OnInit {
         });
         this.translateService.get('DELETE_BUTTON').subscribe((data) => {
             this.deleteButton = data;
+        });
+        this.translateService.get('SET_LANGUAGE').subscribe((data) => {
+            this.setLanguage = data;
         });
     }
 }

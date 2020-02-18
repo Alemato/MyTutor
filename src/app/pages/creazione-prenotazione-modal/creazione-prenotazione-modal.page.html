@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Effettua Prenotazione</ion-title>
+        <ion-title>{{"MAKE_RESERVATION_TEXT"|translate}}</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -9,42 +9,38 @@
         <ion-row>
             <ion-col>
                 <ion-text>
-                    <h2 class="ion-text-capitalize mb-0"
-                        style="font-size: 20px !important; line-height: 24px !important; font-weight: 500 !important; color: rgb(38, 38, 38) !important;">{{itemP.lesson.name}}</h2>
+                    <h2 class="ion-text-capitalize mb-0 fs-20-imp lh-24-imp fw-500-imp color-rgb-38">{{itemP.lesson.name}}</h2>
                 </ion-text>
             </ion-col>
         </ion-row>
         <ion-row>
             <ion-col class="py-0">
-                <ion-text class="mt-5"
-                          style="font-weight: 500 !important; font-size: 14px !important; color: rgb(115, 115, 115) !important;">
-                    Di:
+                <ion-text class="mt-5 fw-500-imp fs-14-imp color-rgb-115">
+                    {{"OF"|translate}}:
                 </ion-text>
-                <ion-text class="ls-01em c-primary"
-                          style="font-weight: 500 !important; font-size: 14px !important;">{{itemP.lesson.teacher.name}} {{itemP.lesson.teacher.surname}}
+                <ion-text class="ls-01em c-primary fw-500-imp fs-14-imp">{{itemP.lesson.teacher.name}} {{itemP.lesson.teacher.surname}}
                 </ion-text>
             </ion-col>
         </ion-row>
         <ion-row>
             <ion-col class="py-0">
                 <ion-text>
-                    <h2 class="mt-5"
-                        style="font-weight: 500 !important; font-size: 14px !important; color: rgb(115, 115, 115) !important;">{{itemP.lesson.teacher.city}}
+                    <h2 class="mt-5 fw-500-imp fs-14-imp color-rgb-115">{{itemP.lesson.teacher.city}}
                         , {{itemP.lesson.teacher.postCode}} {{itemP.lesson.teacher.street}} {{itemP.lesson.teacher.streetNumber}}</h2>
                 </ion-text>
             </ion-col>
         </ion-row>
         <ion-row>
             <p class="ion-no-margin pr-5 pl-5">Il <span
-                    class="c-primary font-weight-400">{{itemP.date | date: 'EEEE dd/MM/yyyy': 'GMT+1': 'it-IT'|translate}}</span>
-                dalle <span class="c-primary font-weight-400">{{itemP.startTime.slice(0, 5)}}</span> alle <span
+                    class="c-primary font-weight-400">{{itemP.date | date: 'EEEE dd/MM/yyyy': 'GMT+1': setLanguage}}</span>
+                {{"DATETIME_FROM"|translate}} <span class="c-primary font-weight-400">{{itemP.startTime.slice(0, 5)}}</span> {{"DATETIME_TO"|translate}} <span
                         class="c-primary font-weight-400">{{itemP.endTime.slice(0, 5)}}</span></p>
         </ion-row>
         <ion-row>
             <ion-col class="mb-0">
                 <ion-text>
-                    <h2 class="mt-25 mb-0 py-0" style="font-weight: 500 !important; font-size: 16px !important;">
-                        Seleziona la fascia oraria della Lezione</h2>
+                    <h2 class="mt-25 mb-0 py-0 fw-500-imp fs-16-imp">
+                       {{"SELECT_LESSON_TIME_SLOT"|translate}}</h2>
                 </ion-text>
             </ion-col>
         </ion-row>
@@ -53,7 +49,7 @@
             <ion-row>
                 <ion-col class="pr-0">
                     <ion-item lines="inset" class="ion-no-padding">
-                        <ion-label position="floating" class="label-struttura">Ora inizio</ion-label>
+                        <ion-label position="floating" class="label-struttura">{{"START_TIME"|translate}}</ion-label>
                         <ion-datetime class="m-auto" displayFormat="HH:mm"
                                       placeholder="Ora inizio"
                                       [hourValues]="startHourValue"
@@ -66,7 +62,7 @@
                 </ion-col>
                 <ion-col class="pl-0">
                     <ion-item lines="inset" class="ion-no-padding">
-                        <ion-label position="floating" class="label-struttura">Ora fine</ion-label>
+                        <ion-label position="floating" class="label-struttura">{{"END_TIME"|translate}}</ion-label>
                         <ion-datetime class="m-auto" displayFormat="HH:mm"
                                       placeholder="Ora fine"
                                       [hourValues]="endHourValue"
@@ -77,8 +73,8 @@
                 </ion-col>
             </ion-row>
           <ion-row class="ion-justify-content-center mt-15">
-            <ion-button fill="solid" class="c-primary-button-solid" shape="round" (click)="closeModal()"> Annulla</ion-button>
-            <ion-button fill="solid" type="submit" class="c-primary-button-solid" shape="round" (click)="onSubmit()" [disabled]="!bookingFormModel.valid"> Prenotati</ion-button>
+            <ion-button fill="solid" class="c-primary-button-solid" shape="round" (click)="closeModal()"> {{"CANCEL_BUTTON"|translate}}</ion-button>
+            <ion-button fill="solid" type="submit" class="c-primary-button-solid" shape="round" (click)="onSubmit()" [disabled]="!bookingFormModel.valid"> {{"BOOKED_BUTTON"|translate}}</ion-button>
           </ion-row>
         </form>
     </ion-grid>

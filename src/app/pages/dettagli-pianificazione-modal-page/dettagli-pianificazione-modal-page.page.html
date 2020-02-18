@@ -33,8 +33,8 @@
             <ion-row class="ion-padding-top ion-padding-start ion-padding-end" *ngIf="planning.repeatPlanning && !navParams.data.gruppo">
                 <ion-icon size="large" name="information"> </ion-icon>
                 <ion-col size="10">
-                    <ion-text class="ion-text-justify" style="font-size: small">
-                        La scelta della ripetizione non è permessa perchè la pianificazione fa parte di una ripetizione settimanale.
+                    <ion-text class="ion-text-justify fs-small">
+                       {{"NOT_TUTOR"|translate}}
                     </ion-text>
                 </ion-col>
             </ion-row>

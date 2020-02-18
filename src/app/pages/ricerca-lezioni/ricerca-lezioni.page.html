@@ -1,6 +1,6 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title class="mr--56">Ricerca Lezioni Disponibili</ion-title>
+        <ion-title class="mr--56">{{"SEARCH_LESSONS_BUTTON"|translate}}</ion-title>
         <ion-button (click)="presentPopover($event)" slot="end" fill="clear" color="light">
             <ion-icon name="options"></ion-icon>
         </ion-button>
@@ -66,10 +66,10 @@
 
             <ion-row class="ion-justify-content-between ion-margin-top">
                 <ion-col size="auto" class="ion-no-padding">
-                    <ion-button fill="outline" class="c-primary-button">Informazioni</ion-button>
+                    <ion-button fill="outline" class="c-primary-button">{{"INFORMATION"|translate}}</ion-button>
                 </ion-col>
                 <ion-col size="auto" class="ion-no-padding">
-                    <ion-button fill="outline" class="c-primary-button" [routerLink]="['/lista-per-prenotarsi/', lesson.idLesson]" routerDirection="forward">Prenotati</ion-button>
+                    <ion-button fill="outline" class="c-primary-button" [routerLink]="['/lista-per-prenotarsi/', lesson.idLesson]" routerDirection="forward">{{"BOOKED_BUTTON"|translate}}</ion-button>
                 </ion-col>
             </ion-row>
         </ion-card-content>
