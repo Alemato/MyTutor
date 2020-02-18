@@ -15,6 +15,7 @@ import {Chat} from '../model/chat.model';
 
 export class ChatService {
     private lastMessageFromChats$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([] as Message[]);
+    private chat$: BehaviorSubject<Chat> = new BehaviorSubject<Chat>({} as Chat);
     private chatCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private countChat = 0;
     private periodicGet: Subscription;
@@ -67,8 +68,26 @@ export class ChatService {
      * @param idUser id del altro user
      */
     getRestCountChatUser2(idUser: number): Observable<number> {
-        return this.http.get(URL.CHAT_COUNT, {observe: 'response', params: {idUser2: idUser.toString()}}).pipe(
+        return this.http.get(URL.CHAT_COUNT, {observe: 'response', params: {'id-user2': idUser.toString()}}).pipe(
             map((resp: HttpResponse<number>) => {
+                return resp.body;
+            })
+        );
+    }
+
+    createRestChat(chat: Chat): Observable<string> {
+        return this.http.post<string>(URL.CHAT_CREATE, chat, {observe: 'response'}).pipe(
+            map((resp: HttpResponse<string>) => {
+                return resp.headers.get('Location');
+            })
+        );
+
+    }
+
+    getRestChatByUrl(url: string): Observable<Chat> {
+        return this.http.get<Chat>(url, {observe: 'response'}).pipe(
+            map((resp: HttpResponse<Chat>) => {
+                this.chat$.next(resp.body);
                 return resp.body;
             })
         );
@@ -166,6 +185,10 @@ export class ChatService {
         if (!this.periodicGet.closed) {
             this.periodicGet.unsubscribe();
         }
+    }
+
+    getChat(): BehaviorSubject<Chat> {
+        return this.chat$;
     }
 
     /**
