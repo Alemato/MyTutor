@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertController, ModalController, NavParams} from '@ionic/angular';
 import {Planning} from '../../model/planning.model';
 import {DatePipe} from '@angular/common';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
     selector: 'app-dettagli-pianificazione-modal-page',
@@ -20,11 +21,16 @@ export class DettagliPianificazioneModalPage implements OnInit {
     private cambioOra = true;
     private cambioRepeat = true;
 
+    private alert: string;
+    private cancelTutorWeekMessage: string;
+    private cancelButton: string;
+
     constructor(private formBuilder: FormBuilder,
                 private modalController: ModalController,
                 private navParams: NavParams,
                 private alertController: AlertController,
-                public datepipe: DatePipe) {
+                public datepipe: DatePipe,
+                private translateService: TranslateService) {
     }
 
     ngOnInit() {
@@ -187,12 +193,11 @@ export class DettagliPianificazioneModalPage implements OnInit {
     async presentaAlert() {
         if (this.planning.repeatPlanning && !this.planningFormModel.value.repeatPlanning && this.cambioRepeat) {
             const alert = await this.alertController.create({
-                header: 'Attenzione',
-                message: 'Togliendo la ripetizione settimanale verranno eliminate tutte le pianificazioni programmate ' +
-                    'settimanalmente tranne la prima disponibile, la quale diventerà pianificazione non ripetuta',
+                header: this.alert,
+                message: this.cancelTutorWeekMessage,
                 buttons: [
                     {
-                        text: 'Annulla',
+                        text: this.cancelButton,
                         role: 'cancel',
                         cssClass: 'secondary',
                         handler: () => {
@@ -232,5 +237,17 @@ export class DettagliPianificazioneModalPage implements OnInit {
 
     async cancel() {
         await this.modalController.dismiss();
+    }
+
+    private initTranslate() {
+        this.translateService.get('ALERT').subscribe((data) => {
+            this.alert = data;
+        });
+        this.translateService.get('CANCEL_TUTOR_WEEK_MESSAGE').subscribe((data) => {
+            this.cancelTutorWeekMessage = data;
+        });
+        this.translateService.get('CANCEL_BUTTON').subscribe((data) => {
+            this.cancelButton = data;
+        });
     }
 }
