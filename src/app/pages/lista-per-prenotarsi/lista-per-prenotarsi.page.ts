@@ -13,13 +13,14 @@ import {TranslateService} from '@ngx-translate/core';
     styleUrls: ['./lista-per-prenotarsi.page.scss'],
 })
 export class ListaPerPrenotarsiPage implements OnInit {
-    private plannings$: Observable<Planning[]>;
     private listIdPlanning = [];
     private listItem: Planning[] = [];
     private plannings: Planning[] = [];
     private idLesson: string;
 
     private setLanguage = 'it-IT';
+
+    private loading = true;
 
     constructor(private route: ActivatedRoute,
                 private planningService: PlanningService,
@@ -32,8 +33,10 @@ export class ListaPerPrenotarsiPage implements OnInit {
             this.idLesson = params.get('idLesson');
         });
         this.initTranslate();
+        this.loading = true;
         this.planningService.planningsByIdL(parseInt(this.idLesson, 0)).subscribe((plannings) => {
             this.createListIntemPage(plannings);
+            this.loading = false;
         });
     }
 
@@ -69,6 +72,7 @@ export class ListaPerPrenotarsiPage implements OnInit {
         });
         this.listItem = this.listItem.concat(listItemAppoggio);
         this.listIdPlanning.push(listIdAppoggio);
+        this.loading = false;
     }
 
     clonePlanning(planning: Planning): Planning {
@@ -96,8 +100,10 @@ export class ListaPerPrenotarsiPage implements OnInit {
             if (data !== undefined && data.data !== undefined) {
                 if (data.data.isCreate) {
                     // this.planningService.getRestPlanningByIdLesson(this.idLesson).subscribe(() => {});
+                    this.loading = true;
                     this.planningService.planningsByIdL(parseInt(this.idLesson, 0)).subscribe((plannings) => {
                         this.createListIntemPage(plannings);
+                        this.loading = false;
                     });
                 }
             }
@@ -107,8 +113,10 @@ export class ListaPerPrenotarsiPage implements OnInit {
 
     ionViewWillEnter() {
         // this.planningService.getRestPlanningByIdLesson(this.idLesson).subscribe(() => {});
+        this.loading = true;
         this.planningService.planningsByIdL(parseInt(this.idLesson, 0)).subscribe( (plannings) => {
             this.createListIntemPage(plannings);
+            this.loading = false;
         });
     }
 
