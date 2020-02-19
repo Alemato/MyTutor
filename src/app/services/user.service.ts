@@ -26,7 +26,6 @@ export class UserService {
     public authToken: string;
     public loggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public user$: BehaviorSubject<Student | Teacher> = new BehaviorSubject<Student | Teacher>({} as Student | Teacher);
-    public userType: string;
     public exist: boolean;
 
     constructor(private http: HttpClient,
@@ -52,10 +51,8 @@ export class UserService {
             console.log(utente);
             if (utente !== null && utente !== undefined && utente !== '') {
                 if (utente.roles === 1) {
-                    this.userType = 'student';
                     this.user$.next(utente);
                 } else if (utente.roles === 2) {
-                    this.userType = 'teacher';
                     this.user$.next(utente);
                 }
             }
@@ -119,7 +116,6 @@ export class UserService {
                     this.storage.set(LINGUA, 'it');
                 }
                 this.storage.set('typeUser', resp.headers.get('X-User-Type')).then();
-                this.userType = resp.headers.get('X-User-Type');
                 this.loggedIn$.next(true);
                 console.log('setto loggedIn in loggedIn$');
                 console.log(resp);
@@ -156,7 +152,6 @@ export class UserService {
         this.storage.remove(UTENTE_STORAGE);
         this.storage.remove(AUTH_TOKEN);
         this.storage.remove(STORAGE.LESSON);
-        this.userType = null;
         this.authToken = null;
         this.loggedIn$.next(false);
         this.user$ = new BehaviorSubject<any>({} as any);
@@ -166,13 +161,6 @@ export class UserService {
         this.messageService.logout();
         this.planningService.logout();
         this.subjectService.logout();
-    }
-
-    /**
-     * Funzione che restituisce il tipo dell'Utenza (Teacher o Student)
-     */
-    getTypeUser(): string {
-        return this.userType;
     }
 
     /**
