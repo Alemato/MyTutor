@@ -16,6 +16,9 @@ import {LessonService} from '../../services/lesson.service';
 export class ListaAnnunciPublicatiPage implements OnInit {
     public plannings$: Observable<Planning[]>;
     public lessons$: Observable<Lesson[]>;
+
+    private loading = true;
+
     private pleaseWaitMessage: string;
     private setLanguage = 'it-IT';
 
@@ -27,6 +30,7 @@ export class ListaAnnunciPublicatiPage implements OnInit {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.initTranslate();
         this.listaLezioni();
     }
@@ -52,9 +56,9 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         this.navController.navigateRoot('lista-pianificazioni');
     }
 
-    modificaLezione(lezione: Lesson | Planning) {
+    modificaLezione(lezione) {
         const root = this.router.config.find(r => r.path === 'inserimento-lezioni');
-        if (lezione instanceof Planning) {
+        if (lezione.idPlanning) {
             root.data = {isInsert: false, lesson: lezione.lesson};
         } else {
             root.data = {isInsert: false, lesson: lezione};
@@ -64,8 +68,12 @@ export class ListaAnnunciPublicatiPage implements OnInit {
 
     creaLezione() {
         const root = this.router.config.find(r => r.path === 'inserimento-lezioni');
-        root.data = {isInsert: true, lesson: {}, listaAnnunci: true};
+        root.data = {isInsert: true, lesson: {}};
         this.navController.navigateRoot('inserimento-lezioni');
+    }
+
+    endLoading() {
+        this.loading = false;
     }
 
     private initTranslate() {

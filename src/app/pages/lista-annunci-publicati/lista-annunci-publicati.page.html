@@ -1,3 +1,7 @@
+<div [hidden]="!loading" class="loading-container">
+    <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+</div>
+
 <ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
@@ -11,7 +15,7 @@
     <div *ngIf="(plannings$|async) as plannings">
         <div *ngIf="(lessons$|async) as lessons">
             <ion-list *ngIf="plannings.length > 0 || lessons.length > 0; else noPlanning">
-                <ion-card *ngFor="let planning of (plannings$|async)">
+                <ion-card *ngFor="let planning of (plannings$|async); let fine = last">
                     <ion-card-header>
                         <ion-card-title>{{planning.lesson.name | uppercase}}</ion-card-title>
                     </ion-card-header>
@@ -50,6 +54,7 @@
                             </ion-col>
                         </ng-template>
                     </ion-row>
+                    <div [hidden]="fine" *ngIf="fine">{{endLoading()}}</div>
                 </ion-card>
                 <ion-card *ngFor="let lesson of (lessons$ | async)">
                     <ion-card-header>
