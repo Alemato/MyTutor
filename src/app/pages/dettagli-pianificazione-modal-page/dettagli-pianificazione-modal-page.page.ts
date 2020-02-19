@@ -79,7 +79,7 @@ export class DettagliPianificazioneModalPage implements OnInit {
         this.planningFormModel.controls.startTime.reset();
         this.planningFormModel.controls.startTime.enable();
         this.planningFormModel.controls.endTime.reset();
-        this.gionoDellaSettimana = this.datepipe.transform(this.planningFormModel.value.date, 'EEEE', 'GMT+1', 'it-IT');
+        this.gionoDellaSettimana = this.datepipe.transform(this.planningFormModel.value.date, 'EEEE', 'GMT+1', this.setLanguage);
         this.hoursStart = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
         const date: number[] = this.navParams.data.date;
         const oreInizioEFine: any[] = this.navParams.data.ore;
