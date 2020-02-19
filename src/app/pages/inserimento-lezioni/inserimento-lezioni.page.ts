@@ -51,6 +51,10 @@ export class InserimentoLezioniPage implements OnInit {
         private navController: NavController) {
     }
 
+    /**
+     * Questa pagina si occupa sia dell'inserimento che della modifica della lezione.
+     * Prendo dal server tutte le materie e sotto materie
+     */
     ngOnInit() {
         this.loading = true;
         this.initTranslate();
@@ -108,6 +112,9 @@ export class InserimentoLezioniPage implements OnInit {
         this.materia = '';
     }
 
+    /**
+     * prendo i dati dal form e creo la lezione
+     */
     inserisciLezione() {
         this.teacher$.subscribe((teacher) => {
             console.log(teacher);
@@ -128,6 +135,10 @@ export class InserimentoLezioniPage implements OnInit {
         });
     }
 
+    /**
+     * Alert scaturito alla creazione della lezione
+     * per scegliere se creare o no le pianificazione
+     */
     async presentaAlert(urlLezione: string) {
         const alert = await this.alertController.create({
             header: this.lessonCreated,
@@ -161,6 +172,11 @@ export class InserimentoLezioniPage implements OnInit {
         });
     }
 
+    /**
+     * funzione per il cambio della materia
+     * se il valore selezionato è 'Creane una' o 'Create one' chiamo
+     * la funzione per inserire una nuova materia
+     */
     cambioMateria(valoreSelezionato) {
         if (valoreSelezionato === 'Creane una' ||
             valoreSelezionato === 'Create one') {
@@ -173,21 +189,12 @@ export class InserimentoLezioniPage implements OnInit {
     }
 
     annulla() {
-        console.log(this.findInvalidControls());
         this.navController.back();
     }
 
-    public findInvalidControls() {
-        const invalid = [];
-        const controls = this.lezioneFormModel.controls;
-        for (const name in controls) {
-            if (controls[name].invalid) {
-                invalid.push(name);
-            }
-        }
-        return invalid;
-    }
-
+    /**
+     * creazione di una nuova materia
+     */
     async inputNuovaMateria() {
         const alert = await this.alertController.create({
             header: this.insertNewSubject,
@@ -235,6 +242,9 @@ export class InserimentoLezioniPage implements OnInit {
         }
     }
 
+    /**
+     * creazione di una nuova sottomateria
+     */
     async inputNuovaSottoMateria() {
         const alert = await this.alertController.create({
             header: this.insertNewSubSubject,
