@@ -15,9 +15,7 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
     materia = null;
     private users: User[] = [];
     private subject: Subject[] = [];
-
     public materie = [];
-
     public sottoMaterie = [];
 
     constructor(public formBuilder: FormBuilder,
@@ -25,9 +23,11 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
                 public navParams: NavParams,
                 private subjectService: SubjectService) {
         this.users = navParams.get('listU');
-        console.log(this.users);
     }
 
+    /**
+     * creo la lista delle materie, delle sottomaterie ed inizializzo il form
+     */
     ngOnInit() {
         this.subjectService.getRestList(true).subscribe((data: Subject[]) => {
             this.subject = data;
@@ -65,11 +65,17 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
         });
     }
 
+    /**
+     * reset la sottoMateria e prendo Materia
+     */
     setSotto() {
         this.filtroFormModel.controls.selectSotto.reset();
         this.materia = this.filtroFormModel.controls.selectMateria.value;
     }
 
+    /**
+     * prendo sottoMateria
+     */
     getSelectSottoMateria(): string {
         // tslint:disable-next-line:max-line-length
         if (this.filtroFormModel.controls.selectSotto.value !== '' && this.filtroFormModel.controls.selectSotto.value !== null && this.filtroFormModel.controls.selectSotto.value !== ' ') {
@@ -79,6 +85,9 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
         }
     }
 
+    /**
+     * prendo Materia
+     */
     getSelectMateria(): string {
         // tslint:disable-next-line:max-line-length
         if (this.filtroFormModel.controls.selectMateria.value !== '' && this.filtroFormModel.controls.selectMateria.value !== null && this.filtroFormModel.controls.selectMateria.value !== ' ') {
@@ -88,6 +97,9 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
         }
     }
 
+    /**
+     * Prendo Data Lezione
+     */
     getDatalezione(): string {
         // tslint:disable-next-line:max-line-length
         if (this.filtroFormModel.controls.dataLezione.value !== '' && this.filtroFormModel.controls.dataLezione.value !== null && this.filtroFormModel.controls.dataLezione.value !== ' ') {
@@ -97,6 +109,9 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
         }
     }
 
+    /**
+     * Faccio la submit e creo l'oggetto da ritornare
+     */
     subFiltro() {
         console.log(this.filtroFormModel.value);
         const obj = {
@@ -110,6 +125,9 @@ export class PopoverFiltroStoricoLezioniComponent implements OnInit {
         this.popoverController.dismiss(obj, 'esegui query');
     }
 
+    /**
+     * Faccio la submit del reset del filtro
+     */
     resetFiltro() {
         const obj = {
             nomeLezione: '',
