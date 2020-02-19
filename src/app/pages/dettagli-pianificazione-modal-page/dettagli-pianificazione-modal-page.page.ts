@@ -32,6 +32,12 @@ export class DettagliPianificazioneModalPage implements OnInit {
                 private translateService: TranslateService) {
     }
 
+    /**
+     * Prende i dati del planning dal navParams
+     * se il plannig esiste allora si tratta di una modifica
+     * altrimenti si tratta di una creazione
+     * le date selezionabili sono quelle non occupate dai planing precedentemente creati
+     */
     ngOnInit() {
         this.initTranslate();
         this.planning = this.navParams.data.planning;
@@ -62,6 +68,10 @@ export class DettagliPianificazioneModalPage implements OnInit {
         }
     }
 
+    /**
+     * Viene scaturito al cambio della Data
+     * modifica le ore di inizio selezionabili in base alla data inserita
+     */
     alCambioData() {
         this.planningFormModel.controls.startTime.disable();
         this.planningFormModel.controls.endTime.disable();
@@ -85,6 +95,10 @@ export class DettagliPianificazioneModalPage implements OnInit {
         }
     }
 
+    /**
+     * Viene scaturito al cambio dell'ora di inzio
+     * modifica le ore di fine selezionabili in base all'ora di inizio selezionata
+     */
     alCambioOraInizio() {
         if (this.planningFormModel.value.startTime !== null) {
             if (this.planningFormModel.controls.endTime.disable) {
@@ -126,6 +140,10 @@ export class DettagliPianificazioneModalPage implements OnInit {
         }
     }
 
+    /**
+     * In caso di modifica del planning setto le ore selezionabili con quelle
+     * non occupate dai planing precedentemente creati nel giorno selezionato
+     */
     gestioneOre() {
         this.gionoDellaSettimana = this.datepipe.transform(this.planningFormModel.value.date, 'EEEE', 'GMT+2', 'it-IT');
         this.hoursStart = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
@@ -184,6 +202,9 @@ export class DettagliPianificazioneModalPage implements OnInit {
         }
     }
 
+    /**
+     * Alert che scaturico alla cancellazione del planning
+     */
     async presentaAlert() {
         if (this.planning.repeatPlanning && !this.planningFormModel.value.repeatPlanning && this.cambioRepeat) {
             const alert = await this.alertController.create({
