@@ -168,7 +168,7 @@ export class ListaPianificazioniPage implements OnInit {
                     text: this.deleteButton,
                     handler: () => {
                         const idPianificazione = this.pianificazioni.findIndex(p => p.idPlanning === pianificazione.idPlanning);
-                        if (this.pianificazioniRipetute[idPianificazione]) {
+                        if (this.pianificazioniRipetute[idPianificazione] && pianificazione.repeatPlanning) {
                             this.planningService.deleteRestPlanning(this.pianificazioniRipetute[idPianificazione]).subscribe(() => {
                                 this.pianificazioni = [];
                                 this.pianificazioniRipetute = [];
