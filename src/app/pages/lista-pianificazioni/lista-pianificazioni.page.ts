@@ -184,7 +184,7 @@ export class ListaPianificazioniPage implements OnInit {
     async eliminaPianificazione(pianificazione: Planning, sliding: IonItemSliding) {
         await sliding.close();
         // tslint:disable-next-line:max-line-length
-        const message = this.messageQuest + new Date(pianificazione.date).toLocaleDateString() + this.datetimeTo + pianificazione.startTime.slice(0, 5) + '?';
+        const message = this.messageQuest + ' ' + new Date(pianificazione.date).toLocaleDateString() + ' ' +  this.datetimeTo + ' ' +  pianificazione.startTime.slice(0, 5) + '?';
         const alert = await this.alertController.create({
             header: this.cancelPlanning,
             message,
