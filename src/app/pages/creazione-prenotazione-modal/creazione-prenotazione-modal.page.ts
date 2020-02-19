@@ -41,6 +41,11 @@ export class CreazionePrenotazioneModalPage implements OnInit {
                 private translateService: TranslateService) {
     }
 
+    /**
+     * settaggio della lista degli startHour che può scegliere
+     * settaggio della lista degli endHour che può scegliere
+     * inizializzazione del form
+     */
     ngOnInit() {
         this.initTranslate();
         this.user$ = this.userService.getUser();
@@ -58,16 +63,24 @@ export class CreazionePrenotazioneModalPage implements OnInit {
         this.bookingFormModel.controls.endTime.disable();
     }
 
+    /**
+     * Funzione che mi ridà la lista delle pianificazioni correlate con lo startHour e endHour
+     * (vado a prednere i planning VERI dal questo planning che ha accorpato gli slot orari)
+     */
     setListPlanning() {
-      this.listPlanningGiusti = [];
-      for (let i = 0 ; i <= this.listIdexP.length - 1; i++) {
-        this.listPlanningGiusti.push(this.listPlanning.find(p => p.idPlanning === this.listIdexP[i]));
-      }
-      console.log(this.listPlanning);
-      console.log(this.listIdexP);
-      console.log(this.itemP);
+        this.listPlanningGiusti = [];
+        for (let i = 0; i <= this.listIdexP.length - 1; i++) {
+            this.listPlanningGiusti.push(this.listPlanning.find(p => p.idPlanning === this.listIdexP[i]));
+        }
+        console.log(this.listPlanning);
+        console.log(this.listIdexP);
+        console.log(this.itemP);
     }
 
+    /**
+     * funzione che si avvia cliccando il pulsate PRENOTATI
+     * questa funzione genererà n booking su n slot di un ora calcolati dallo startHour al endHour
+     */
     async onSubmit() {
         const startTime = new Date(this.bookingFormModel.controls.startTime.value).getHours();
         const endTime = new Date(this.bookingFormModel.controls.endTime.value).getHours();
@@ -82,39 +95,46 @@ export class CreazionePrenotazioneModalPage implements OnInit {
             booking.planning = this.listPlanningGiusti.find(p => p.startTime.slice(0, 2) === start.toString());
             start = start + 1;
             this.bookingIsCreate = true;
-            this.bookingService.createRestBooking(booking).subscribe(() => {});
+            this.bookingService.createRestBooking(booking).subscribe(() => {
+            });
         }
         if (this.bookingIsCreate) {
-          await this.presentAlertConfirm();
+            await this.presentAlertConfirm();
         }
     }
 
-  async presentAlertConfirm() {
-    const alert = await this.alertController.create({
-      header: this.bookingMade,
-      message: this.bookMoreDays,
-      buttons: [
-        {
-          text: 'No',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            this.closeModal().then(() => {
-              this.navController.navigateRoot('/tabs/richieste');
-            });
-          }
-        }, {
-          text: this.yes,
-          handler: () => {
-           this.closeModal();
-          }
-        }
-      ]
-    });
+    /**
+     * con questo alert scegli se vuoi prenotarti o meno ad altre pianificazioni della stessa lezione
+     */
+    async presentAlertConfirm() {
+        const alert = await this.alertController.create({
+            header: this.bookingMade,
+            message: this.bookMoreDays,
+            buttons: [
+                {
+                    text: 'No',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+                        this.closeModal().then(() => {
+                            this.navController.navigateRoot('/tabs/richieste');
+                        });
+                    }
+                }, {
+                    text: this.yes,
+                    handler: () => {
+                        this.closeModal();
+                    }
+                }
+            ]
+        });
 
-    await alert.present();
-  }
+        await alert.present();
+    }
 
+    /**
+     * cambio dell'ora d'inizio. Questa funzione si avvia al cambio del input
+     */
     changeStartHour() {
         if (this.bookingFormModel.controls.endTime.disabled) {
             this.bookingFormModel.controls.endTime.enable();
@@ -126,6 +146,9 @@ export class CreazionePrenotazioneModalPage implements OnInit {
         this.endHourValue.splice(0, endHourIndex + 1);
     }
 
+    /**
+     * settaggio del valore dell'Ora di Inzio
+     */
     setStartHourValue() {
         const appoggio = [];
         for (let o = parseInt(this.itemP.startTime.slice(0, 2), 0); o < parseInt(this.itemP.endTime.slice(0, 2), 0); o++) {
@@ -134,6 +157,9 @@ export class CreazionePrenotazioneModalPage implements OnInit {
         this.startHourValue = appoggio;
     }
 
+    /**
+     * settaggio del valore dell'Ora di fine
+     */
     setEndHourValue() {
         const appoggio = [];
         for (let o = parseInt(this.itemP.startTime.slice(0, 2), 0); o <= parseInt(this.itemP.endTime.slice(0, 2), 0); o++) {
@@ -142,6 +168,10 @@ export class CreazionePrenotazioneModalPage implements OnInit {
         this.endHourValue = appoggio;
     }
 
+    /**
+     * chiudo il modal passando alla pagina Creazione_prenotazione il valore del bookingisCreate (vero/falso)
+     * se il booking è stato creato mi servirà per richiamare la rest per avere i dati aggiornati
+     */
     async closeModal() {
         await this.modalController.dismiss({isCreate: this.bookingIsCreate});
     }
