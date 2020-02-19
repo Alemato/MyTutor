@@ -39,10 +39,9 @@ export class MessageService {
             if (this.getCountMessageFromStorage(idChat) === this.getRestCountMessage(idChat)) {
                 return this.messages$;
             } else {
-                // fare last message
+                // eseguo last message
                 this.getLastMessageOfChat(idChat, this.messages$.value[this.messages$.value.length - 1].idMessage).subscribe(() => {
                 });
-                // this.getRestMessageOfChat(idChat);
                 return this.messages$;
             }
         }
