@@ -29,6 +29,9 @@ export class ListaChatPage implements OnInit {
         this.chatCount$ = this.chatService.getChatCount();
     }
 
+    /**
+     * esegu la rest per prendere la lista delle chat
+     */
     ngOnInit() {
         this.loading = true;
         this.initTranslate();
@@ -37,6 +40,9 @@ export class ListaChatPage implements OnInit {
         });
     }
 
+    /**
+     * esegu la rest per prendere la lista delle chat
+     */
     ionViewWillEnter() {
         this.loading = true;
         this.chatService.getRestChatList().subscribe(() => {
