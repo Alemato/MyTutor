@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {LoadingController, ModalController, NavController} from '@ionic/angular';
+import {NavController} from '@ionic/angular';
 import {TranslateService} from '@ngx-translate/core';
 import {Planning} from '../../model/planning.model';
 import {PlanningService} from '../../services/planning.service';
@@ -16,34 +16,19 @@ import {LessonService} from '../../services/lesson.service';
 export class ListaAnnunciPublicatiPage implements OnInit {
     public plannings$: Observable<Planning[]>;
     public lessons$: Observable<Lesson[]>;
-    private loading;
     private pleaseWaitMessage: string;
     private setLanguage = 'it-IT';
 
     constructor(private planningService: PlanningService,
                 private lessonService: LessonService,
-                private loadingController: LoadingController,
                 private translateService: TranslateService,
                 private router: Router,
-                private modalController: ModalController,
                 private navController: NavController) {
     }
 
     ngOnInit() {
         this.initTranslate();
         this.listaLezioni();
-    }
-
-    async loadingPresent() {
-        this.loading = await this.loadingController.create({
-            message: this.pleaseWaitMessage,
-            translucent: true
-        });
-        return await this.loading.present();
-    }
-
-    async disLoading() {
-        await this.loading.dismiss();
     }
 
     listaLezioni() {
