@@ -30,12 +30,12 @@ export class ListaPerPrenotarsiPage implements OnInit {
     ngOnInit() {
         this.route.paramMap.subscribe((params) => {
             this.idLesson = params.get('idLesson');
-        });
-        this.initTranslate();
-        this.loading = true;
-        this.planningService.planningsByIdL(parseInt(this.idLesson, 0)).subscribe((plannings) => {
-            this.createListIntemPage(plannings);
-            this.loading = false;
+            this.initTranslate();
+            this.loading = true;
+            this.planningService.planningsByIdL(parseInt(this.idLesson, 0)).subscribe((plannings) => {
+                this.createListIntemPage(plannings);
+                this.loading = false;
+            });
         });
     }
 
