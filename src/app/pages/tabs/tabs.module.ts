@@ -32,7 +32,7 @@ const routes: Routes = [
                             {
                                 path: '',
                                 loadChildren: '../inserimento-lezioni/inserimento-lezioni.module#InserimentoLezioniPageModule',
-                                data: {isInsert: true, lesson: {}, listaAnnunci: false},
+                                data: {isInsert: true, lesson: {}},
                                 canActivate: [AuthGuard]
                             }
                         ]
