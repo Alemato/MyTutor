@@ -44,21 +44,21 @@ export class LezionePage implements OnInit {
         this.user$ = this.userService.getUser();
     }
 
+    /**
+     * Prendo la pianificazione dal server e controllo se ci sono altre pianificazioni
+     * collegate alla lezione in questione per potersi prenotare
+     */
     ionViewWillEnter() {
         this.route.paramMap.subscribe((params: ParamMap) => {
             this.planning$ = this.planningService.getRestPlanningById(params.get('idPlanning'));
             this.planning$.subscribe((planning) => {
-                console.log('planning');
-                console.log(planning);
                 this.planningService.planningsByIdL(planning.lesson.idLesson).subscribe((plannings) => {
-                    console.log('plannings');
-                    console.log(plannings);
                     this.loading = false;
                     if (plannings.length > 0) {
                         this.noPlanningDisp = true;
                     }
                     this.planning = planning;
-                    this.calcolaDataTeacher(planning);
+                    this.calcolaAnniTeacher(planning);
                 });
             });
             this.loading = true;
@@ -66,7 +66,7 @@ export class LezionePage implements OnInit {
         });
     }
 
-    calcolaDataTeacher(planning: Planning) {
+    calcolaAnniTeacher(planning: Planning) {
         const data = new Date(planning.lesson.teacher.birthday);
         const timeDiff = Math.abs(Date.now() - data.getTime());
         this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
