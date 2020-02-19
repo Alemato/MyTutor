@@ -26,6 +26,8 @@ export class LezionePage implements OnInit {
     private noPlanningDisp = false;
     private planning: Planning;
 
+    private loading = true;
+
     constructor(
         private route: ActivatedRoute,
         private navController: NavController,
@@ -38,11 +40,20 @@ export class LezionePage implements OnInit {
     }
 
     ngOnInit() {
+        this.loading = true;
+        this.user$ = this.userService.getUser();
+    }
+
+    ionViewWillEnter() {
         this.route.paramMap.subscribe((params: ParamMap) => {
-            this.user$ = this.userService.getUser();
             this.planning$ = this.planningService.getRestPlanningById(params.get('idPlanning'));
             this.planning$.subscribe((planning) => {
+                console.log('planning');
+                console.log(planning);
                 this.planningService.planningsByIdL(planning.lesson.idLesson).subscribe((plannings) => {
+                    console.log('plannings');
+                    console.log(plannings);
+                    this.loading = false;
                     if (plannings.length > 0) {
                         this.noPlanningDisp = true;
                     }
@@ -50,11 +61,9 @@ export class LezionePage implements OnInit {
                     this.calcolaDataTeacher(planning);
                 });
             });
+            this.loading = true;
+            this.noPlanningDisp = false;
         });
-    }
-
-    ionViewWillEnter() {
-        this.noPlanningDisp = false;
     }
 
     calcolaDataTeacher(planning: Planning) {
@@ -73,6 +82,7 @@ export class LezionePage implements OnInit {
             this.chatService.getRestCountChatUser2(this.planning.lesson.teacher.idUser).subscribe((numberChat) => {
                 if (numberChat === 1) {
                     this.chatService.getRestChatList().subscribe((messages: Message[]) => {
+                        this.loading = false;
                         const chat = messages.find(x => x.chat.userListser[1].idUser === this.planning.lesson.teacher.idUser).chat;
                         this.navController.navigateForward('/chat/' + chat.idChat);
                     });
@@ -83,6 +93,7 @@ export class LezionePage implements OnInit {
         } else {
             this.bookingService.getRestBookingPlanning(this.planning.idPlanning.toString()).subscribe((booking) => {
                 this.chatService.getRestCountChatUser2(booking.student.idUser).subscribe((data) => {
+                    this.loading = false;
                     if (data === 1) {
                         this.chatService.getRestChatList().subscribe((messages: Message[]) => {
                             const chat = messages.find(x => x.chat.userListser[0].idUser === booking.student.idUser).chat;
