@@ -18,14 +18,13 @@ import {Teacher} from '../../model/teacher.model';
 export class StoricoLezioniPage implements OnInit {
     private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
     public user$: BehaviorSubject<Student | Teacher>;
-    private loading;
+    private loading = true;
     private listUser: User[] = [];
     private pleaseWaitMessage: string;
 
     constructor(public popoverController: PopoverController,
                 private bookingService: BookingService,
                 private userService: UserService,
-                private loadingController: LoadingController,
                 private translateService: TranslateService) {
     }
 
@@ -33,17 +32,28 @@ export class StoricoLezioniPage implements OnInit {
         this.initTranslate();
         this.user$ = this.userService.getUser();
         this.bookingService.getRestHistoricalBookingFilter('', '', '', '', '', '').subscribe((bookings) => {
-            console.log(bookings);
-            this.bookings$.next(bookings);
-            this.bookingService.getRestUsersBooking().subscribe((users) => {
-                users.forEach((user) => {
-                    if (this.user$.value.roles !== user.roles) {
-                        this.listUser.push(user);
-                    }
-                });
-            });
+            this.loading = true;
+            this.listaBookingFiltrati(bookings);
         });
     }
+
+    listaBookingFiltrati(bookings: Booking[]) {
+        this.bookings$.next(bookings);
+        // serve per prendere la lista degli user (per il professore saranno di tipo studente e fice versa)
+        this.listUser = [];
+        this.bookingService.getRestUsersBooking().subscribe((users) => {
+            users.forEach((user) => {
+                // aggiungo univocamente gli user che hanno l'altro ruolo
+                if (this.listUser.findIndex(ul => ul.idUser === user.idUser) === -1) {
+                    if (user.roles !== this.user$.value.roles) {
+                        this.listUser.push(user);
+                    }
+                }
+            });
+            this.loading = false;
+        });
+    }
+
 
     async presentPopover(ev: any) {
         const popover = await this.popoverController.create({
@@ -53,27 +63,15 @@ export class StoricoLezioniPage implements OnInit {
             componentProps: {listU: this.listUser}
         });
         popover.onDidDismiss().then((data) => {
-            console.log(data);
             if (data.data !== undefined) {
+                this.loading = true;
                 // tslint:disable-next-line:max-line-length
-                /*this.bookingService.getRestHistoricalBookingFilter(data.data.selectMateria, data.data.selectSotto, data.data.nomeLezione, data.data.dataLezione, data.data.selectUtente, data.data.statoLezione).subscribe((item) => {
-                    console.log(item);
-                });*/
+                this.bookingService.getRestHistoricalBookingFilter(data.data.selectMateria, data.data.selectSotto, data.data.nomeLezione, data.data.dataLezione, data.data.selectUtente, data.data.statoLezione).subscribe((item) => {
+                    this.listaBookingFiltrati(item);
+                });
             }
         });
         await popover.present();
-    }
-
-    async loadingPresent() {
-        this.loading = await this.loadingController.create({
-            message: this.pleaseWaitMessage,
-            translucent: true
-        });
-        return await this.loading.present();
-    }
-
-    async disLoading() {
-        await this.loading.dismiss();
     }
 
     private initTranslate() {
