@@ -79,6 +79,7 @@ export class AppComponent implements OnInit {
             this.user$ = this.userService.getUser();
             console.log(this.router.url);
             if (this.user$.value.roles === 1) {
+                // setto il colore cliccato del menu per lo studente
                 if (this.router.url === '/tabs/home') {
                     this.appPagesStudent.find(x => x.click === true).click = false;
                     this.appPagesStudent.find(x => x.url === '/').click = true;
@@ -91,6 +92,7 @@ export class AppComponent implements OnInit {
                 }
             }
             if (this.user$.value.roles === 2) {
+                // setto il colore cliccato del menu per il teacher
                 if (this.router.url === '/tabs/home') {
                     this.appPagesTeacher.find(x => x.click === true).click = false;
                     this.appPagesTeacher.find(x => x.url === '/').click = true;
@@ -105,12 +107,18 @@ export class AppComponent implements OnInit {
         });
     }
 
+    /**
+     * avvio l'aggiornamento della chat e vado alla home
+     */
     ngOnInit() {
         console.log('onInit');
         this.chatService.startPeriodicGetCountChat();
         this.navController.navigateRoot('/tabs/home');
     }
 
+    /**
+     * Funzione di inizializzazione app
+     */
     initializeApp() {
         this.platform.ready().then(() => {
             this.initTranslate();
@@ -126,6 +134,10 @@ export class AppComponent implements OnInit {
         });
     }
 
+    /**
+     * Funzione di apertura pagina
+     * @param url a cui andare
+     */
     openPage(url: string) {
         this.navController.navigateForward(url).then(() => {
             this.menu.close().then(() => {
@@ -134,6 +146,9 @@ export class AppComponent implements OnInit {
         });
     }
 
+    /**
+     * Funzione di logout
+     */
     async logout() {
         this.chatService.stopPeriodicGetCountChat();
         this.bookingService.stopPeriodicGet();
