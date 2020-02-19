@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
-import {fromPromise} from 'rxjs/internal-compatibility';
 import {URL, STORAGE, AUTH_TOKEN} from '../constants';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../model/message.model';
@@ -15,7 +14,6 @@ import {Chat} from '../model/chat.model';
 
 export class ChatService {
     private lastMessageFromChats$: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([] as Message[]);
-    private chat$: BehaviorSubject<Chat> = new BehaviorSubject<Chat>({} as Chat);
     private chatCount$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     private countChat = 0;
     private periodicGet: Subscription;
@@ -75,6 +73,10 @@ export class ChatService {
         );
     }
 
+    /**
+     * Funzione che esegue invio della chat creata
+     * @param chat creata da inviare
+     */
     createRestChat(chat: Chat): Observable<string> {
         return this.http.post<string>(URL.CHAT_CREATE, chat, {observe: 'response'}).pipe(
             map((resp: HttpResponse<string>) => {
@@ -84,10 +86,14 @@ export class ChatService {
 
     }
 
+    /**
+     * Funzione che esegue la rest che ritorna l'oggetto creato,
+     * tramite l'url di creazione ritornato dalla rest di creazione
+     * @param url di creazione ritornato dalla rest di creazione
+     */
     getRestChatByUrl(url: string): Observable<Chat> {
         return this.http.get<Chat>(url, {observe: 'response'}).pipe(
             map((resp: HttpResponse<Chat>) => {
-                this.chat$.next(resp.body);
                 return resp.body;
             })
         );
@@ -122,20 +128,6 @@ export class ChatService {
                 return 0;
             }
         });
-    }
-
-    /**
-     * funzione che ritona solo l'oggetto chat (da eliminare) da un specifico id
-     * @param id della chat che si vuole
-     */
-    getCurrentChat(id: number): Observable<Chat> {
-        return fromPromise(this.storage.get(STORAGE.CHATLIST).then((item: Message[]) => {
-            console.log(item);
-            if (item) {
-                const mes = item.find(x => x.chat.idChat === id);
-                return mes.chat;
-            }
-        }));
     }
 
     /**
@@ -187,12 +179,8 @@ export class ChatService {
         }
     }
 
-    getChat(): BehaviorSubject<Chat> {
-        return this.chat$;
-    }
-
     /**
-     * Funzione di reset per il logout
+     * Funzione di reset per il logout, resetta le variabili e rimuove i dati storati
      */
     logout() {
         this.storage.remove(STORAGE.CREATES);
