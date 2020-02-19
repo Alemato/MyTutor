@@ -1,3 +1,17 @@
+<div [hidden]="!loading" class="loading-container">
+    <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+</div>
+
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title class="ml--56">myTutor</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
 <ion-content *ngIf="(user$ | async) as user">
     <div *ngIf="(booking$ | async) as bookings">
         <ion-list class="mb-100" >

@@ -22,6 +22,7 @@ export class HomePage implements OnInit {
     private user$: BehaviorSubject<Student | Teacher>;
     private booking$: BehaviorSubject<Booking[]>;
     private existbookings = false;
+    private loading = true;
 
     constructor(public translateService: TranslateService,
                 private userService: UserService,
@@ -32,6 +33,7 @@ export class HomePage implements OnInit {
     ngOnInit() {
         this.initTranslate();
         this.user$ = this.userService.getUser();
+        this.loading = true;
         this.bookingService.getRestBooking().subscribe(() => {
         });
         this.booking$ = this.bookingService.getBookings();
@@ -43,6 +45,7 @@ export class HomePage implements OnInit {
                     break;
                 }
             }
+            this.loading = false;
         });
     }
 
@@ -77,9 +80,11 @@ export class HomePage implements OnInit {
                         console.log('Conferma annullamento lezione');
                         const booking = this.booking$.value[id];
                         booking.lessonState = 3;
+                        this.loading = true;
                         this.bookingService.modifyRestLessonState(booking).subscribe(() => {
                             this.bookingService.getRestBooking().subscribe(() => {
                                 item.close();
+                                this.loading = false;
                             });
                         });
                     }
