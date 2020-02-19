@@ -45,6 +45,7 @@ export class ListaPianificazioniPage implements OnInit {
     ngOnInit() {
         this.initTranslate();
         this.route.data.subscribe((data) => {
+            this.plannings$ = this.planningService.getPlannings();
             this.idLezione = data.idLezione;
             if (!data.isInsert) {
                 this.lesson$ = this.lessonService.getLessonById(data.idLezione);
@@ -53,14 +54,14 @@ export class ListaPianificazioniPage implements OnInit {
                     if (!data.noPlanning) {
                         this.listaPianificazioni();
                     } else {
-                        this.creaPianificazione();
+                        this.creaPianificazione(0);
                     }
                 });
             } else {
                 this.lesson$ = this.lessonService.getLessonByUrl(data.urlLezione);
                 this.lesson$.subscribe((lezione) => {
                     this.lezione = lezione;
-                    this.creaPianificazione();
+                    this.creaPianificazione(0);
                 });
             }
         });
@@ -70,11 +71,10 @@ export class ListaPianificazioniPage implements OnInit {
         this.pianificazioni = [];
         this.pianificazioniRipetute = [];
         this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
-            this.listaPianificazioni();
         });
     }
 
-    async creaPianificazione() {
+    async creaPianificazione(i: number) {
         let pianificazione = new Planning();
         const modal = await this.modalController.create({
             component: DettagliPianificazioneModalPage,
@@ -90,7 +90,12 @@ export class ListaPianificazioniPage implements OnInit {
                 pianificazione.lesson = this.lezione;
                 pianificazione.available = true;
                 this.planningService.createRestPlannings(pianificazione).subscribe(() => {
-                    this.listaPianificazioni();
+                    this.planningService.getRestPlanningByIdLesson(pianificazione.lesson.idLesson.toString()).subscribe(() => {
+                        if (i === 0) {
+                            this.listaPianificazioni();
+                            i++;
+                        }
+                    });
                 });
             } else {
                 console.log('creazione annullata');
@@ -127,13 +132,15 @@ export class ListaPianificazioniPage implements OnInit {
                     pianificazioniDaModificare[0].repeatPlanning = pianificazione.repeatPlanning;
                     this.pianificazioniRipetute = [];
                     this.planningService.modifyRestPlannings(pianificazioniDaModificare, this.lezione.idLesson).subscribe(() => {
-                        this.listaPianificazioni();
+                        this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                        });
                     });
                 } else {
                     this.pianificazioni = [];
                     this.pianificazioniRipetute = [];
                     this.planningService.modifyRestPlannings([pianificazione], this.lezione.idLesson).subscribe(() => {
-                        this.listaPianificazioni();
+                        this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                        });
                     });
                 }
             } else {
@@ -165,13 +172,15 @@ export class ListaPianificazioniPage implements OnInit {
                             this.planningService.deleteRestPlanning(this.pianificazioniRipetute[idPianificazione]).subscribe(() => {
                                 this.pianificazioni = [];
                                 this.pianificazioniRipetute = [];
-                                this.listaPianificazioni();
+                                this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                                });
                             });
                         } else {
                             this.pianificazioni = [];
                             this.pianificazioniRipetute = [];
                             this.planningService.deleteRestPlanning([pianificazione]).subscribe(() => {
-                                this.listaPianificazioni();
+                                this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                                });
                             });
                         }
                     }
@@ -196,17 +205,17 @@ export class ListaPianificazioniPage implements OnInit {
         });
         popover.onDidDismiss().then(() => {
             if (this.plannings$.value.find(x => x.available === false)) {
-                this.listaPianificazioni();
+                this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                });
             }
         });
         return await popover.present();
     }
 
     listaPianificazioni() {
-        this.pianificazioni = [];
-        this.pianificazioniRipetute = [];
-        this.plannings$ = this.planningService.getPlannings();
         this.plannings$.subscribe((pianificazioni) => {
+            this.pianificazioni = [];
+            this.pianificazioniRipetute = [];
             pianificazioni.forEach((pianificazione) => {
                 // tslint:disable-next-line:max-line-length
                 const indicePianificazioni = this.pianificazioni.findIndex(p => new Date(p.date).getDay() === new Date(pianificazione.date).getDay() && p.startTime === pianificazione.startTime);
