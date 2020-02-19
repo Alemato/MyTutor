@@ -19,14 +19,9 @@ export class TabsPage implements OnInit {
 
   ngOnInit() {
     this.user$ = this.userService.getUser();
-    console.log(this.route.url);
   }
 
   ionViewDidLeave() {
     console.log('ionViewDidLeave tabs');
-  }
-
-  isInSearch() {
-    this.isSearch = ('/tabs/ricerca-lezioni' === this.route.url);
   }
 }

@@ -1,7 +1,6 @@
 
-
 <ion-content>
-  <ion-tabs (ionTabsWillChange)="isInSearch()" *ngIf="(user$ | async) as user">
+  <ion-tabs *ngIf="(user$ | async) as user">
     <ion-tab-bar slot="bottom">
       <ion-tab-button tab="home">
         <ion-icon name="home"></ion-icon>
