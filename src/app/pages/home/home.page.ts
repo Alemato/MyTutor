@@ -60,6 +60,12 @@ export class HomePage implements OnInit {
         this.bookingService.stopCoundown();
     }
 
+    /**
+     * alert che avviene quando voglio annullare una lezione
+     * effetuo la rest di annulamento se deo annullare la lezione
+     * @param item è l'item che ho cliccato
+     * @param id è l'id della prenotazione del booking
+     */
     async presentAlert(item, id) {
         const alert = await this.alertController.create({
             header: this.cancelLessonHeader,
