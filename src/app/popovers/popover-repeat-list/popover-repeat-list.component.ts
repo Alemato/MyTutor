@@ -40,6 +40,10 @@ export class PopoverRepeatListComponent implements OnInit {
         this.oreInizioEFine = this.navParams.get('oreInizioEFine');
     }
 
+    /**
+     * Eliminazione della pianificazioni
+     * @param pianificazione pianificazione da cancellare
+     */
     async eliminaPianificazione(pianificazione: Planning) {
         const message = this.messageQuest
             + new Date(pianificazione.date).toLocaleDateString() + this.datetimeTo
@@ -68,6 +72,10 @@ export class PopoverRepeatListComponent implements OnInit {
         await alert.present();
     }
 
+    /**
+     * Modifica della pianificazione
+     * @param pianificazione pianificazione da modificare
+     */
     async modificaPianificazione(pianificazione: Planning) {
         const modal = await this.modalController.create({
             component: DettagliPianificazioneModalPage,
