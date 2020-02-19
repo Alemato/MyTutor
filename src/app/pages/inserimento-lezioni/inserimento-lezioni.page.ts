@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AlertController, LoadingController, ModalController, NavController, PickerController} from '@ionic/angular';
+import {AlertController, NavController} from '@ionic/angular';
 import {Subject} from '../../model/subject.model';
 import {SubjectService} from '../../services/subject.service';
 import {Lesson} from '../../model/lesson.model';
@@ -9,7 +9,6 @@ import {UserService} from '../../services/user.service';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LessonService} from '../../services/lesson.service';
-import {PlanningService} from '../../services/planning.service';
 
 @Component({
     selector: 'app-inserimento-lezioni',
@@ -26,7 +25,6 @@ export class InserimentoLezioniPage implements OnInit {
     private lezioneFormModel: FormGroup;
     private inserisciDaListaAnnunci = false;
     private lesson: Lesson = new Lesson();
-    private loading;
     private modifica = false;
 
     private cancelButton: string;
@@ -41,17 +39,13 @@ export class InserimentoLezioniPage implements OnInit {
     private subSubject;
 
     constructor(
-        private pickerCtrl: PickerController,
         private userService: UserService,
         private formBuilder: FormBuilder,
         private subjectService: SubjectService,
         private lessonService: LessonService,
-        private modalController: ModalController,
-        private loadingController: LoadingController,
         private translateService: TranslateService,
         private route: ActivatedRoute,
         private alertController: AlertController,
-        private planningService: PlanningService,
         private router: Router,
         private navController: NavController) {
     }
@@ -270,19 +264,6 @@ export class InserimentoLezioniPage implements OnInit {
             }
         });
         await alert.present();
-    }
-
-
-    async loadingPresent() {
-        this.loading = await this.loadingController.create({
-            message: this.pleaseWaitMessage,
-            translucent: true
-        });
-        return await this.loading.present();
-    }
-
-    async disLoading() {
-        await this.loading.dismiss();
     }
 
     private initTranslate() {
