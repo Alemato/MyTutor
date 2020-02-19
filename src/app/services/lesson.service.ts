@@ -16,18 +16,21 @@ export class LessonService {
         private storage: Storage,
         private http: HttpClient
     ) {
-        this.getRestLessons();
-        this.storage.get(STORAGE.LESSON).then((item: Lesson[]) => {
-            this.lessons$.next(item);
-        });
     }
 
+    /**
+     * Rest di modifica de della lezione
+     * @param lesson lezione da modificare
+     */
     modifyRestLesson(lesson: Lesson): Observable<any> {
         return this.http.put<any>(URL.LESSON_MODIFY, lesson, {
             observe: 'response'
         });
     }
 
+    /**
+     * Rest per la lista delle lezioni visibili dallo studente
+     */
     getRestLessonsForStudent(): Observable<Lesson[]> {
         return this.http.get<Lesson[]>(URL.LESSON_ALL_FOR_STUDENT, {observe: 'response'}).pipe(
             map( (resp: HttpResponse<Lesson[]>) => {
@@ -36,22 +39,27 @@ export class LessonService {
         );
     }
 
-    getRestLessons(): Observable<Lesson[]> {
-        return this.http.get<Lesson[]>(URL.LESSON, {observe: 'response'}).pipe(
-            map((resp: HttpResponse<Lesson[]>) => {
-                this.lessons$.next(resp.body);
-                this.setStorageLesson(resp.body);
-                return resp.body;
-            })
-        );
-    }
+    /**
+     * Rest per prendere la singola lezione tramite l'url della risorsa
+     * usata dopo la rest di creazione della lezione che torna l'url della risorsa creata
+     * @param url url della risorsa creata
+     */
     getLessonByUrl(url: string): Observable<Lesson> {
         return this.http.get<Lesson>(url);
     }
+
+    /**
+     * Rest per prendere la singola lezione tramite l'id della lezione
+     * @param idLesson id della lezione
+     */
     getLessonById(idLesson: number): Observable<Lesson> {
         return this.http.get<Lesson>(URL.LESSON_SINGLE + idLesson);
     }
 
+    /**
+     * Rest di creazione della lezione che torna l'url contenuta nell'header nel campo Location
+     * @param lesson lezione da creare
+     */
     createRestLesson(lesson: Lesson): Observable<string> {
         return this.http.post<string>(URL.LESSON_CREATE, lesson, {observe: 'response'}).pipe(
             map((resp: HttpResponse<string>) => {
@@ -60,12 +68,11 @@ export class LessonService {
         );
     }
 
+    /**
+     * Rest per le lezioni che non hanno nessuna pianificazione usata nella pagina della lista degli annunci pubblicati
+     */
     getRestLessonsWithoutPlanning(): Observable<Lesson[]> {
         return this.http.get<Lesson[]>(URL.LESSON_NO_PLANNING);
-    }
-
-    setStorageLesson(lessons: Lesson[]) {
-        this.storage.set(STORAGE.LESSON, lessons);
     }
 
     logout() {
