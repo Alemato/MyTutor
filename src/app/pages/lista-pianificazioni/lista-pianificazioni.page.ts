@@ -44,6 +44,10 @@ export class ListaPianificazioniPage implements OnInit {
                 private translateService: TranslateService) {
     }
 
+    /**
+     * Se la lezione non ha pianificazioni inserite apre direttamente il modale di
+     * inserimento pianificazione altrimenti mostra la lista di pianificazioni
+     */
     ngOnInit() {
         this.loading = true;
         this.initTranslate();
@@ -70,6 +74,10 @@ export class ListaPianificazioniPage implements OnInit {
         });
     }
 
+    /**
+     * all'entrata nella pagina esegue la rest per prendere la lista
+     * dei planning collegati alla lezione selezionata
+     */
     ionViewWillEnter() {
         this.loading = true;
         this.pianificazioni = [];
@@ -79,6 +87,9 @@ export class ListaPianificazioniPage implements OnInit {
         });
     }
 
+    /**
+     * Apre il modal della creazione della pianificazione
+     */
     async creaPianificazione(i: number) {
         let pianificazione = new Planning();
         const modal = await this.modalController.create({
@@ -111,6 +122,11 @@ export class ListaPianificazioniPage implements OnInit {
         await modal.present();
     }
 
+    /**
+     * Apre il modal per la modifica della pianificazione
+     * @param pianificazione oggetto plannig selezionato
+     * @param sliding item
+     */
     async modificaPianificazione(pianificazione: Planning, sliding: IonItemSliding) {
         await sliding.close();
         const modal = await this.modalController.create({
@@ -160,6 +176,11 @@ export class ListaPianificazioniPage implements OnInit {
         await modal.present();
     }
 
+    /**
+     * elimino la pianificazione selezionata
+     * @param pianificazione oggetto selezionato
+     * @param sliding item
+     */
     async eliminaPianificazione(pianificazione: Planning, sliding: IonItemSliding) {
         await sliding.close();
         // tslint:disable-next-line:max-line-length
@@ -203,6 +224,11 @@ export class ListaPianificazioniPage implements OnInit {
         await alert.present();
     }
 
+    /**
+     * apre il popover per vedere la lista delle pianificazioni ripetute
+     * @param event evento
+     * @param plannings è la lista delle pianificazioni ripetute
+     */
     async presentPopover(event: any, plannings: Planning[]) {
         const popover = await this.popoverController.create({
             backdropDismiss: true,
@@ -227,6 +253,9 @@ export class ListaPianificazioniPage implements OnInit {
         return await popover.present();
     }
 
+    /**
+     * aggiorna la lista delle pianificazioni
+     */
     listaPianificazioni() {
         this.plannings$.subscribe((pianificazioni) => {
             this.pianificazioni = [];
