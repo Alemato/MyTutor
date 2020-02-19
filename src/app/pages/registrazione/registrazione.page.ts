@@ -74,7 +74,9 @@ export class RegistrazionePage implements OnInit {
             {type: 'validEmail', message: 'Your email has already been taken.'}
         ],
         password: [
-            {type: 'required', message: 'Password is required'}
+            {type: 'required', message: 'Password is required'},
+            {type: 'minlength', message: 'Passowrd must be at least 5 characters long.'},
+            {type: 'pattern', message: 'Your Passoword is invalid'}
         ],
         name: [
             {type: 'required', message: 'Name is required'}
@@ -96,14 +98,17 @@ export class RegistrazionePage implements OnInit {
     ngOnInit() {
         this.initTranslate();
         this.registrazioneFormModel = this.formBuilder.group({
-            email: ['', Validators.compose(
-                [Validators.required
+            email: ['', Validators.compose([
+                    Validators.required,
+                    Validators.minLength(5),
+                    // tslint:disable-next-line:max-line-length
+                    Validators.pattern('(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$')
                 ])
             ],
             password: ['', Validators.compose([
                 Validators.required,
                 Validators.minLength(5),
-                Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$')
+                Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{5,40}$')
             ])],
             name: ['', Validators.compose([
                 Validators.required
