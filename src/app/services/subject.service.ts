@@ -14,6 +14,11 @@ export class SubjectService {
     constructor(private http: HttpClient) {
     }
 
+    /**
+     * Funzione che esegue la rest che ritorna la lista dei subject,
+     * può essere filtrata per le lezioni seguite settatndo hy a true oppure non filtrata con flase
+     * @param hy history boleano per filtrare
+     */
     getRestList(hy: boolean): Observable<any> {
         if (hy) {
             return this.http.get<any>(URL.SUBJECT, {
@@ -31,10 +36,16 @@ export class SubjectService {
         }
     }
 
+    /**
+     * ritorna il BehaviorSubject di subjects
+     */
     getListSubjet(): BehaviorSubject<Subject[]> {
         return this.listSubject$;
     }
 
+    /**
+     * Funzione che resetta le variabili
+     */
     logout() {
         this.listSubject$ = new BehaviorSubject<Subject[]>([] as any);
     }
