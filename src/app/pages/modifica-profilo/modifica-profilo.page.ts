@@ -76,7 +76,7 @@ export class ModificaProfiloPage implements OnInit {
                 private alertController: AlertController,
                 private linguaService: LinguaService,
                 private translate: TranslateService) {
-}
+    }
 
     /**
      * prendo in dati dal server attraverso la funzione getUser
@@ -273,7 +273,7 @@ export class ModificaProfiloPage implements OnInit {
             this.userService.editProfiloStudent(user as Student, this.studentFormModel.controls.passwordVecchia.value).subscribe(() => {
                 this.userService.logout();
                 this.navController.navigateRoot('login');
-               }, (err: HttpErrorResponse) => {
+            }, (err: HttpErrorResponse) => {
                 console.log(err);
                 if (err.status === 401) {
                     console.error('login request error: ' + err.status);
