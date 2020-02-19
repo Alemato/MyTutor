@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {BehaviorSubject} from 'rxjs';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {User} from '../../model/user.model';
 import {Teacher} from '../../model/teacher.model';
 import {Student} from '../../model/student.model';
 
@@ -16,6 +15,7 @@ export class ProfiloSingoloPage implements OnInit {
     private timeDiff: number;
     private age: number;
     private data;
+    private loading = true;
 
     constructor(private route: ActivatedRoute,
                 private userService: UserService) {
@@ -23,6 +23,7 @@ export class ProfiloSingoloPage implements OnInit {
 
     ngOnInit() {
         this.route.paramMap.subscribe((params: ParamMap) => {
+            this.loading = true;
             this.userService.getProfilobyID(parseInt(params.get('id'), 0)).subscribe((user) => {
                 this.user$.next(user);
                 if (user.roles === 2) {
@@ -30,6 +31,7 @@ export class ProfiloSingoloPage implements OnInit {
                     this.timeDiff = Math.abs(Date.now() - this.data.getTime());
                     this.age = Math.floor((this.timeDiff / (1000 * 3600 * 24)) / 365.25);
                 }
+                this.loading = false;
             });
         });
     }
