@@ -86,6 +86,13 @@ export class ListaPerPrenotarsiPage implements OnInit {
         return p;
     }
 
+    /**
+     * apre il modal della prenotazione inviando:
+     *  1) La lista dei planning ListPlanning
+     *  2) Il planning che ha gli slot orari compressi ItemP
+     *  3) la lista degli indici per ricavare i singoli plannnig dalla lista dei planning ListPlanning
+     * @param index l'indice del item cliccato
+     */
     async presentPrenotazione(index: number) {
         const modal = await this.modalController.create({
             component: CreazionePrenotazioneModalPage,
