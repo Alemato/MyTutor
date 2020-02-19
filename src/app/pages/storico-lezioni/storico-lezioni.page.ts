@@ -28,6 +28,9 @@ export class StoricoLezioniPage implements OnInit {
                 private translateService: TranslateService) {
     }
 
+    /**
+     * inizialmente eseguo un filtro a vuoto
+     */
     ngOnInit() {
         this.initTranslate();
         this.user$ = this.userService.getUser();
@@ -37,6 +40,12 @@ export class StoricoLezioniPage implements OnInit {
         });
     }
 
+    /**
+     * funzione di elaborazione dei booking
+     * all'interno ho la rest per avere tutti gli user che hanno una storia con l'utente,
+     * li filtro per avere solo l'altra tipologia di utente e non la stessa del utente loggato
+     * @param bookings lista di booking risultanti dal filtro
+     */
     listaBookingFiltrati(bookings: Booking[]) {
         this.bookings$.next(bookings);
         // serve per prendere la lista degli user (per il professore saranno di tipo studente e fice versa)
@@ -55,6 +64,9 @@ export class StoricoLezioniPage implements OnInit {
     }
 
 
+    /**
+     * presento il filtro
+     */
     async presentPopover(ev: any) {
         const popover = await this.popoverController.create({
             component: PopoverFiltroStoricoLezioniComponent,
