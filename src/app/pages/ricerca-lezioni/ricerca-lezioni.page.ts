@@ -27,6 +27,15 @@ export class RicercaLezioniPage implements OnInit {
                 public translateService: TranslateService) {
     }
 
+    /**
+     * Creo 3 liste:
+     *  1) listPlanning che conterrà un planning che compatta gli start ed end time e i gioni
+     *     (sarà grande tanto quanto la somma delle lezioni filtrate)
+     *  2) expanded che è un array grande quanto lisPlanning che ha il compito di attivare o disattivare
+     *     l'animazione di espanzione dei giorni/ore disponibili per la lezione
+     *  3) listOrari che è formtato dal nome del giorno della settimana in cui ci sarà la lezione
+     *     e un array di ora inizio/fine
+     */
     ngOnInit() {
         this.initTranslate();
         this.plannings$ = this.planningService.getPlannings();
@@ -90,10 +99,17 @@ export class RicercaLezioniPage implements OnInit {
         });
     }
 
+    /**
+     * funzione che vienechiamata quando clicco sopra l'elemento da espandere
+     * @param i indice del elemnto da espandere
+     */
     expandItem(i: number) {
         this.expanded[i] = !this.expanded[i];
     }
 
+    /**
+     * Funzione che presenta il filtro delle lezioni
+     */
     async presentPopover(ev: any) {
         const popover = await this.popoverController.create({
             component: PopoverRicercaLezioniDisponibiliComponent,
