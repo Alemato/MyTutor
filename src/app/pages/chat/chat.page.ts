@@ -23,7 +23,7 @@ export class ChatPage implements OnInit {
     private scritturaMessaggio: FormGroup;
     private messaggio: Message;
     private idChat: number;
-    private loading;
+    private loading = true;
     private user$: BehaviorSubject<Student | Teacher>;
     private messages$: BehaviorSubject<Message[]>;
     private pleaseWaitMessage: string;
@@ -38,6 +38,7 @@ export class ChatPage implements OnInit {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.initTranslate();
         this.scritturaMessaggio = this.formBuilder.group({
             text: ['', Validators.required]
@@ -71,21 +72,17 @@ export class ChatPage implements OnInit {
         this.content.scrollToBottom();
     }
 
+    endLoading() {
+        this.loading = false;
+    }
+
+    ionViewWillEnter() {
+        this.loading = true;
+    }
+
     ionViewDidLeave() {
         console.log('ionViewDidLeave chat');
         this.messageService.stopPeriodicGetMessageForChat();
-    }
-
-    async loadingPresent() {
-        this.loading = await this.loadingController.create({
-            message: this.pleaseWaitMessage,
-            translucent: true
-        });
-        return await this.loading.present();
-    }
-
-    async disLoading() {
-        await this.loading.dismiss();
     }
 
     private initTranslate() {
