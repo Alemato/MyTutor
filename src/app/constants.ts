@@ -34,6 +34,7 @@ export const URL = {
 
     PLANNING_CREATE: URL_BASE + '/lessons/plannings/create',
     PLANNING_MODIFY: URL_BASE + '/lessons/plannings/modify',
+    PLANNING_BY_ID_LESSON: URL_BASE + '/lessons/plannings',
     PLANNING_ADD: URL_BASE + '/lessons/plannings/add',
     PLANNING_BY_ID: URL_BASE + '/lessons/plannings/single',
     PLANNING_RESEARCH: URL_BASE + '/lessons/plannings/research',
