@@ -11,7 +11,6 @@ import {Lesson} from '../model/lesson.model';
 })
 export class LessonService {
     public lessons$: BehaviorSubject<Lesson[]> = new BehaviorSubject<Lesson[]>([] as Lesson[]);
-    public lesson$: BehaviorSubject<Lesson> = new BehaviorSubject<Lesson>({} as Lesson);
 
     constructor(
         private storage: Storage,
@@ -67,14 +66,6 @@ export class LessonService {
 
     setStorageLesson(lessons: Lesson[]) {
         this.storage.set(STORAGE.LESSON, lessons);
-    }
-
-    getLessons(): BehaviorSubject<Lesson[]> {
-        return this.lessons$;
-    }
-
-    getLesson(): BehaviorSubject<Lesson> {
-        return this.lesson$;
     }
 
     logout() {
