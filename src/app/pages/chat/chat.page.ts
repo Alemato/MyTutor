@@ -37,6 +37,10 @@ export class ChatPage implements OnInit {
                 public translateService: TranslateService) {
     }
 
+    /**
+     * inizializza la form
+     * avvia l'aggiornamento periodico dei messaggi
+     */
     ngOnInit() {
         this.loading = true;
         this.initTranslate();
@@ -51,6 +55,9 @@ export class ChatPage implements OnInit {
         });
     }
 
+    /**
+     * Funzione che si occupa del iter nel invio del messaggio
+     */
     inviaMessagio() {
         this.sendStatus = 'pending';
         this.messaggio = new Message();
