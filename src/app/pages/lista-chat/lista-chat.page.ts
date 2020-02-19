@@ -17,7 +17,7 @@ export class ListaChatPage implements OnInit {
     private user$: BehaviorSubject<Student | Teacher>;
     private lastMessageFromChats$: BehaviorSubject<Message[]>;
     private chatCount$: BehaviorSubject<number>;
-    private loading;
+    private loading = true;
     private pleaseWaitMessage: string;
 
     constructor(private userService: UserService,
@@ -30,26 +30,18 @@ export class ListaChatPage implements OnInit {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.initTranslate();
         this.chatService.getRestChatList().subscribe(() => {
+            this.loading = false;
         });
     }
 
     ionViewWillEnter() {
+        this.loading = true;
         this.chatService.getRestChatList().subscribe(() => {
+            this.loading = false;
         });
-    }
-
-    async loadingPresent() {
-        this.loading = await this.loadingController.create({
-            message: this.pleaseWaitMessage,
-            translucent: true
-        });
-        return await this.loading.present();
-    }
-
-    async disLoading() {
-        await this.loading.dismiss();
     }
 
     private initTranslate() {

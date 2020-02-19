@@ -1,3 +1,7 @@
+<div [hidden]="!loading" class="loading-container">
+    <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+</div>
+
 <ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
@@ -50,7 +54,7 @@
                 </div>
             </div>
         </ng-template>
-        <div [hidden]="bo" *ngIf="bo;">{{content.scrollToBottom(0)}}</div>
+        <div [hidden]="bo" *ngIf="bo;">{{content.scrollToBottom(0)}} {{endLoading()}}</div>
     </div>
         <div *ngIf="sendStatus === 'pending'" class="ion-float-right ion-padding-end">
             <ion-spinner name="dots"></ion-spinner>
