@@ -49,7 +49,7 @@ export class ListaPerPrenotarsiPage implements OnInit {
             // controllo se è presente un planning con la stessa data
             if (listItemAppoggio.findIndex(p => p.date === planning.date) === -1) {
                 this.listItem = this.listItem.concat(listItemAppoggio);
-                if (listIdAppoggio !== undefined) {
+                if (listIdAppoggio[0] !== undefined) {
                     this.listIdPlanning.push(listIdAppoggio);
                 }
                 listItemAppoggio = [];
