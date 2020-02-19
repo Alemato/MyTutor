@@ -50,7 +50,7 @@ export class LezionePage implements OnInit {
             this.user$ = this.userService.getUser();
             this.planning$ = this.planningService.getRestPlanningById(params.get('idPlanning'));
             this.planning$.subscribe((planning) => {
-                this.planningService.getRestPlanningByIdLesson(planning.lesson.idLesson.toString()).subscribe((plannings) => {
+                this.planningService.planningsByIdL(planning.lesson.idLesson).subscribe((plannings) => {
                     if (plannings.length > 0) {
                         this.noPlanningDisp = true;
                     }
@@ -71,6 +71,11 @@ export class LezionePage implements OnInit {
         this.age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
     }
 
+    /**
+     * Controllo dell'esistenza scaturito alla pressione del bottone della chat.
+     * Se la chat tra i due utenti (Professore e Studente e viceversa) si viene reindirizzati alla chat
+     * altrimenti si passa al metodo creaChat()
+     */
     controlloChat() {
         if (this.user$.value.roles === 1) {
             this.chatService.getRestCountChatUser2(this.planning.lesson.teacher.idUser).subscribe((numberChat) => {
@@ -100,7 +105,7 @@ export class LezionePage implements OnInit {
     }
 
     /**
-     * Per chreare una nuova chat
+     * Per chreare una nuova chat, una volta creata la chat si viene reindirizzati in quella chat
      * @param utente può essere sia di tipo Student che di tipo Teacher
      */
     creaChat(utente: Student | Teacher) {
