@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PlanningService} from '../../services/planning.service';
-import {BehaviorSubject, Observable} from 'rxjs';
 import {Planning} from '../../model/planning.model';
 import {ModalController} from '@ionic/angular';
 import {CreazionePrenotazioneModalPage} from '../creazione-prenotazione-modal/creazione-prenotazione-modal.page';
@@ -45,7 +44,7 @@ export class ListaPerPrenotarsiPage implements OnInit {
         this.listItem = [];
         let listItemAppoggio: Planning[] = [];
         this.listIdPlanning = [];
-        let listIdAppoggio: number[];
+        let listIdAppoggio: number[] = [];
         plannings.forEach((planning) => {
             // controllo se è presente un planning con la stessa data
             if (listItemAppoggio.findIndex(p => p.date === planning.date) === -1) {
@@ -99,7 +98,6 @@ export class ListaPerPrenotarsiPage implements OnInit {
         modal.onDidDismiss().then((data) => {
             if (data !== undefined && data.data !== undefined) {
                 if (data.data.isCreate) {
-                    // this.planningService.getRestPlanningByIdLesson(this.idLesson).subscribe(() => {});
                     this.loading = true;
                     this.planningService.planningsByIdL(parseInt(this.idLesson, 0)).subscribe((plannings) => {
                         this.createListIntemPage(plannings);
@@ -112,7 +110,6 @@ export class ListaPerPrenotarsiPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        // this.planningService.getRestPlanningByIdLesson(this.idLesson).subscribe(() => {});
         this.loading = true;
         this.planningService.planningsByIdL(parseInt(this.idLesson, 0)).subscribe( (plannings) => {
             this.createListIntemPage(plannings);
