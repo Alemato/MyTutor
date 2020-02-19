@@ -36,6 +36,9 @@ export class RichiestePage implements OnInit {
                 private translateService: TranslateService) {
     }
 
+    /**
+     * Eseguo la rest che mi ritorna la lista di booking
+     */
     ngOnInit() {
         this.initTranslate();
         this.user$ = this.userService.getUser();
@@ -53,17 +56,27 @@ export class RichiestePage implements OnInit {
         });
     }
 
+    /**
+     * Avvio periodo di aggiornamento dei booking
+     */
     ionViewWillEnter() {
         this.bookingService.startPeriodicGet();
         this.bookingService.getRestBooking().subscribe();
         this.bookingService.startCoundown();
     }
 
+    /**
+     * Fermo il periodo di aggiornamento dei booking
+     */
     ionViewWillLeave() {
         this.bookingService.stopPeriodicGet();
         this.bookingService.stopCoundown();
     }
 
+    /**
+     * presento l'alert controller per vedere se devo accettarre o meno quel booking
+     * @param idbook id del booking
+     */
     async presentAlertAccettaLezione(idbook) {
         const alert = await this.alertController.create({
             header: this.confirmLessonHeader,
@@ -88,6 +101,10 @@ export class RichiestePage implements OnInit {
         await alert.present();
     }
 
+    /**
+     * Funzione di accettazione dei booking
+     * @param idBok id del booking da accettare
+     */
     accettaLezione(idBok: number) {
         const booking = this.bookings$.value.find(x => x.idBooking === idBok);
         booking.lessonState = 1;
@@ -103,6 +120,10 @@ export class RichiestePage implements OnInit {
         }));
     }
 
+    /**
+     * Funzione di presentazione dell'alert controller per rifiutare il booking
+     * @param idbook id del booking da rifiutare
+     */
     async presentAlertRifiutaLezione(idbook) {
         const alert = await this.alertController.create({
             header: this.declineLessonHeader,
@@ -127,6 +148,10 @@ export class RichiestePage implements OnInit {
         await alert.present();
     }
 
+    /**
+     * funzione per iter di rifiuto del booking
+     * @param idBok id booking
+     */
     rifiutaLezione(idBok: number) {
         const booking = this.bookings$.value.find(x => x.idBooking === idBok);
         booking.lessonState = 2;
@@ -142,6 +167,11 @@ export class RichiestePage implements OnInit {
         }));
     }
 
+    /**
+     * funzione di presentazione dell' allert controlle per l'annllamento della lezione
+     * @param item item
+     * @param id del booking
+     */
     async presentAlert(item, id) {
         const alert = await this.alertController.create({
             header: this.cancelLessonHeader,
