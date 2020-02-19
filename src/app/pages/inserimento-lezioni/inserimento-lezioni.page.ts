@@ -23,9 +23,10 @@ export class InserimentoLezioniPage implements OnInit {
     private materie = [];
     private sottoMaterie = [];
     private lezioneFormModel: FormGroup;
-    private inserisciDaListaAnnunci = false;
     private lesson: Lesson = new Lesson();
     private modifica = false;
+
+    private loading = true;
 
     private cancelButton: string;
     private doneButton: string;
@@ -51,12 +52,14 @@ export class InserimentoLezioniPage implements OnInit {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.initTranslate();
         this.teacher$ = this.userService.getUser();
         this.route.data.subscribe((data) => {
-            this.inserisciDaListaAnnunci = data.listaAnnunci;
             if (!data.isInsert) {
                 this.lesson = data.lesson;
+                console.log('data.lesson');
+                console.log(data.lesson);
                 this.modifica = true;
                 this.lezioneFormModel = this.formBuilder.group({
                     name: [this.lesson.name, Validators.required],
@@ -75,6 +78,7 @@ export class InserimentoLezioniPage implements OnInit {
             this.listSubject$ = this.subjectService.getListSubjet();
             this.subjectService.getRestList(false).subscribe(() => {
                 this.listSubject$.subscribe((subjects: Subject[]) => {
+                    this.loading = false;
                     this.materie = [];
                     subjects.forEach((item) => {
                         const indiceMateria = this.materie.findIndex(m => m === item.macroSubject);
