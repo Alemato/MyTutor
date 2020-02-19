@@ -6,7 +6,6 @@ import {BehaviorSubject} from 'rxjs';
 import {Planning} from '../../model/planning.model';
 import {PlanningService} from '../../services/planning.service';
 import {TranslateService} from '@ngx-translate/core';
-import {Lesson} from '../../model/lesson.model';
 
 @Component({
     selector: 'app-ricerca-lezioni',
@@ -21,6 +20,7 @@ export class RicercaLezioniPage implements OnInit {
     private plannings$: BehaviorSubject<Planning[]>;
     private listOrari;
     private listPlannigs: Planning[] = [];
+    private loading = true;
 
     constructor(public popoverController: PopoverController,
                 private planningService: PlanningService,
@@ -31,6 +31,7 @@ export class RicercaLezioniPage implements OnInit {
         this.initTranslate();
         this.plannings$ = this.planningService.getPlannings();
         this.plannings$.subscribe((plannings) => {
+            this.loading = true;
             this.listPlannigs = [];
             this.expanded = [];
             this.listOrari = [];
@@ -79,8 +80,7 @@ export class RicercaLezioniPage implements OnInit {
                 appoggioOrari = [];
                 flag = false;
             }
-            console.log(this.listPlannigs);
-            console.log(this.listOrari);
+            this.loading = false;
         });
     }
 
@@ -103,8 +103,8 @@ export class RicercaLezioniPage implements OnInit {
         popover.onDidDismiss().then((data) => {
             console.log(data);
             if (data.data === undefined) {
-                this.planningService.getRestPlannings('', '', '', '', '', '', '', '', '', '', '', '', '', '').subscribe((plannings) => {
-                    console.log(plannings);
+                this.loading = true;
+                this.planningService.getRestPlannings('', '', '', '', '', '', '', '', '', '', '', '', '', '').subscribe(() => {
                 });
             } else {
                 let lun = 0;
@@ -160,9 +160,9 @@ export class RicercaLezioniPage implements OnInit {
                     sab = 1;
                     dom = 1;
                 }
+                this.loading = true;
                 // tslint:disable-next-line:max-line-length
                 this.planningService.getRestPlannings(data.data.selectMateria, data.data.nomeLezione, data.data.city, data.data.selectSotto, dom.toString(), lun.toString(), mar.toString(), mer.toString(), gio.toString(), ver.toString(), sab.toString(), data.data.startHour, data.data.endHour, data.data.price).subscribe((plannings) => {
-                    console.log(plannings);
                 });
             }
         });
