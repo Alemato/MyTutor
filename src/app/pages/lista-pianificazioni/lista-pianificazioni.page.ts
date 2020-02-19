@@ -26,6 +26,8 @@ export class ListaPianificazioniPage implements OnInit {
     private disableSliding = false;
     private lezione: Lesson = new Lesson();
 
+    private loading = true;
+
     private messageQuest: string;
     private cancelPlanning: string;
     private datetimeTo: string;
@@ -43,6 +45,7 @@ export class ListaPianificazioniPage implements OnInit {
     }
 
     ngOnInit() {
+        this.loading = true;
         this.initTranslate();
         this.route.data.subscribe((data) => {
             this.plannings$ = this.planningService.getPlannings();
@@ -68,9 +71,11 @@ export class ListaPianificazioniPage implements OnInit {
     }
 
     ionViewWillEnter() {
+        this.loading = true;
         this.pianificazioni = [];
         this.pianificazioniRipetute = [];
         this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+            this.loading = false;
         });
     }
 
@@ -85,12 +90,14 @@ export class ListaPianificazioniPage implements OnInit {
             }
         });
         modal.onDidDismiss().then((detail) => {
+            this.loading = true;
             if (detail !== null && detail.data !== undefined) {
                 pianificazione = detail.data;
                 pianificazione.lesson = this.lezione;
                 pianificazione.available = true;
                 this.planningService.createRestPlannings(pianificazione).subscribe(() => {
                     this.planningService.getRestPlanningByIdLesson(pianificazione.lesson.idLesson.toString()).subscribe(() => {
+                        this.loading = false;
                         if (i === 0) {
                             this.listaPianificazioni();
                             i++;
@@ -116,6 +123,7 @@ export class ListaPianificazioniPage implements OnInit {
             }
         });
         modal.onDidDismiss().then((detail) => {
+            this.loading = true;
             if (detail !== null && detail.data !== undefined) {
                 if (pianificazione.repeatPlanning) {
                     pianificazione = detail.data;
@@ -133,6 +141,7 @@ export class ListaPianificazioniPage implements OnInit {
                     this.pianificazioniRipetute = [];
                     this.planningService.modifyRestPlannings(pianificazioniDaModificare, this.lezione.idLesson).subscribe(() => {
                         this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                            this.loading = false;
                         });
                     });
                 } else {
@@ -140,6 +149,7 @@ export class ListaPianificazioniPage implements OnInit {
                     this.pianificazioniRipetute = [];
                     this.planningService.modifyRestPlannings([pianificazione], this.lezione.idLesson).subscribe(() => {
                         this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                            this.loading = false;
                         });
                     });
                 }
@@ -167,12 +177,14 @@ export class ListaPianificazioniPage implements OnInit {
                 {
                     text: this.deleteButton,
                     handler: () => {
+                        this.loading = true;
                         const idPianificazione = this.pianificazioni.findIndex(p => p.idPlanning === pianificazione.idPlanning);
                         if (this.pianificazioniRipetute[idPianificazione] && pianificazione.repeatPlanning) {
                             this.planningService.deleteRestPlanning(this.pianificazioniRipetute[idPianificazione]).subscribe(() => {
                                 this.pianificazioni = [];
                                 this.pianificazioniRipetute = [];
                                 this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                                    this.loading = false;
                                 });
                             });
                         } else {
@@ -180,6 +192,7 @@ export class ListaPianificazioniPage implements OnInit {
                             this.pianificazioniRipetute = [];
                             this.planningService.deleteRestPlanning([pianificazione]).subscribe(() => {
                                 this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                                    this.loading = false;
                                 });
                             });
                         }
@@ -205,7 +218,9 @@ export class ListaPianificazioniPage implements OnInit {
         });
         popover.onDidDismiss().then(() => {
             if (this.plannings$.value.find(x => x.available === false)) {
+                this.loading = true;
                 this.planningService.getRestPlanningByIdLesson(this.idLezione.toString()).subscribe(() => {
+                    this.loading = false;
                 });
             }
         });
