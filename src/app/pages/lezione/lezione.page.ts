@@ -2,15 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {UserService} from '../../services/user.service';
 import {Planning} from '../../model/planning.model';
-import {LessonService} from '../../services/lesson.service';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {DatePipe} from '@angular/common';
 import {BookingService} from '../../services/booking.service';
 import {PlanningService} from '../../services/planning.service';
 import {ChatService} from '../../services/chat.service';
 import {MessageService} from '../../services/message.service';
-import {AlertController, NavController} from '@ionic/angular';
-import {FormBuilder} from '@angular/forms';
+import {NavController} from '@ionic/angular';
 import {Student} from '../../model/student.model';
 import {Teacher} from '../../model/teacher.model';
 import {Message} from '../../model/message.model';
@@ -30,16 +27,11 @@ export class LezionePage implements OnInit {
     private planning: Planning;
 
     constructor(
-        private alertController: AlertController,
-        private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private navController: NavController,
         private userService: UserService,
-        private lessonService: LessonService,
         private bookingService: BookingService,
         private planningService: PlanningService,
-        private datePipe: DatePipe,
-        private activatedRoute: ActivatedRoute,
         private chatService: ChatService,
         private messageService: MessageService
     ) {
@@ -73,7 +65,7 @@ export class LezionePage implements OnInit {
 
     /**
      * Controllo dell'esistenza scaturito alla pressione del bottone della chat.
-     * Se la chat tra i due utenti (Professore e Studente e viceversa) si viene reindirizzati alla chat
+     * Se la chat tra i due utenti (Professore e Studente o viceversa) si viene reindirizzati alla chat
      * altrimenti si passa al metodo creaChat()
      */
     controlloChat() {
