@@ -3,14 +3,13 @@ import {Storage} from '@ionic/storage';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {STORAGE, URL} from '../constants';
 import {map} from 'rxjs/operators';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Lesson} from '../model/lesson.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LessonService {
-    public lessons$: BehaviorSubject<Lesson[]> = new BehaviorSubject<Lesson[]>([] as Lesson[]);
 
     constructor(
         private storage: Storage,
@@ -75,8 +74,10 @@ export class LessonService {
         return this.http.get<Lesson[]>(URL.LESSON_NO_PLANNING);
     }
 
+    /**
+     * Funzione di reset per il logout
+     */
     logout() {
         this.storage.remove(STORAGE.LESSON);
-        this.lessons$ = new BehaviorSubject<Lesson[]>([] as Lesson[]);
     }
 }
