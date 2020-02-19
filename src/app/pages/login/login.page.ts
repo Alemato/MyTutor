@@ -32,6 +32,9 @@ export class LoginPage implements OnInit {
                 private menuSource: MenuRefresh) {
     }
 
+    /**
+     * funzione che attiva la visulizzazione della password
+     */
     public togglePassword() {
         if (this.passwordShow) {
             this.passwordShow = false;
@@ -76,6 +79,9 @@ export class LoginPage implements OnInit {
         await this.loading.dismiss();
     }
 
+    /**
+     * Prendo i dati dalla form, eseguo la rest di login che ritorna un token JWT e l'oggetto user che si è loggato
+     */
     onLogin() {
         const account: Account = this.loginFormModel.value;
         console.log(account);
@@ -100,6 +106,9 @@ export class LoginPage implements OnInit {
         });
     }
 
+    /**
+     * funzione che fa verde un possibile errore nella rest di login
+     */
     async showLoginError() {
         this.Diss();
         const alert = await this.alertController.create({
