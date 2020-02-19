@@ -72,6 +72,10 @@ ion-toolbar ion-title{
   text-transform: capitalize;
   text-align: center;
 }
+ion-toolbar ion-title.text-none {
+  text-transform: none !important;
+  text-align: center;
+}
 
 .submit-btn {
   --border-width: 1px;
@@ -87,7 +91,7 @@ ion-toolbar ion-title{
 
 .registrati-box {
   background: #029db4;
-  padding: 20px 20px 0px 20px;
+  padding: 20px 20px 0 20px;
   margin-top: 20px;
 }
 
