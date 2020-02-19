@@ -21,6 +21,9 @@ export class ProfiloSingoloPage implements OnInit {
                 private userService: UserService) {
     }
 
+    /**
+     * mostro il profilo dello studente o del professore selezionato effettuando la rest con id del User
+     */
     ngOnInit() {
         this.route.paramMap.subscribe((params: ParamMap) => {
             this.loading = true;
