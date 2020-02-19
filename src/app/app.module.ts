@@ -21,7 +21,6 @@ import {httpInterceptorProviders} from './interceptors';
 import {RegistrazioneDocenteModalPageModule} from './pages/registrazione-docente-modal/registrazione-docente-modal.module';
 import {MenuRefresh} from './services/menuRefresh';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {InserimentoLezioniModalPageModule} from './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module';
 import {UserService} from './services/user.service';
 import {DettagliPianificazioneModalPageModule} from './pages/dettagli-pianificazione-modal-page/dettagli-pianificazione-modal-page.module';
 import {CreazionePrenotazioneModalPageModule} from './pages/creazione-prenotazione-modal/creazione-prenotazione-modal.module';
@@ -50,7 +49,6 @@ export function createTranslateLoader(http: HttpClient) {
         }),
         AppRoutingModule,
         RegistrazioneDocenteModalPageModule,
-        InserimentoLezioniModalPageModule,
         DettagliPianificazioneModalPageModule,
         CreazionePrenotazioneModalPageModule
     ],

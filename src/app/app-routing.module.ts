@@ -34,11 +34,6 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'inserimento-lezioni-modal',
-        loadChildren: './pages/inserimento-lezioni-modal/inserimento-lezioni-modal.module#InserimentoLezioniModalPageModule',
-        canActivate: [AuthGuard]
-    },
-    {
         path: 'lista-chat',
         loadChildren: './pages/lista-chat/lista-chat.module#ListaChatPageModule',
         canActivate: [AuthGuard]
