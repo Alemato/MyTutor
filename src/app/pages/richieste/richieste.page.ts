@@ -18,6 +18,7 @@ export class RichiestePage implements OnInit {
     private user$: BehaviorSubject<Student | Teacher>;
     private bookings$: BehaviorSubject<Booking[]>;
     private existBookings = false;
+    private loading = true;
 
     private confirmLessonHeader: string;
     private confirmSubHeader: string;
@@ -40,13 +41,15 @@ export class RichiestePage implements OnInit {
         this.user$ = this.userService.getUser();
         this.bookings$ = this.bookingService.getBookings();
         this.bookings$.subscribe((bookings) => {
-          this.existBookings = false;
-          for (const booking of bookings) {
+            this.loading = true;
+            this.existBookings = false;
+            for (const booking of bookings) {
                 if (booking.lessonState === 0) {
                     this.existBookings = true;
                     break;
                 }
             }
+            this.loading = false;
         });
     }
 
@@ -88,12 +91,15 @@ export class RichiestePage implements OnInit {
     accettaLezione(idBok: number) {
         const booking = this.bookings$.value.find(x => x.idBooking === idBok);
         booking.lessonState = 1;
+        this.loading = true;
         this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
             console.log(data);
             this.bookingService.getRestBooking().subscribe(() => {
             });
+            this.loading = false;
         }, (error => {
             console.log(error);
+            this.loading = false;
         }));
     }
 
@@ -125,11 +131,14 @@ export class RichiestePage implements OnInit {
         const booking = this.bookings$.value.find(x => x.idBooking === idBok);
         booking.lessonState = 2;
         this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
+            this.loading = true;
             console.log(data);
             this.bookingService.getRestBooking().subscribe(() => {
+                this.loading = false;
             });
         }, (error => {
             console.log(error);
+            this.loading = false;
         }));
     }
 
@@ -153,12 +162,15 @@ export class RichiestePage implements OnInit {
                         console.log('Conferma annullamento lezione');
                         const booking = this.bookings$.value.find(x => x.idBooking === id);
                         booking.lessonState = 3;
+                        this.loading = true;
                         this.bookingService.modifyRestLessonState(booking).subscribe((data) => {
                             console.log(data);
                             this.bookingService.getRestBooking().subscribe(() => {
+                                this.loading = false;
                             });
                         }, (error => {
                             console.log(error);
+                            this.loading = false;
                         }));
                         item.close();
                     }
