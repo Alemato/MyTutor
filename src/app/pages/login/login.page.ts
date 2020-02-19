@@ -45,8 +45,17 @@ export class LoginPage implements OnInit {
     ngOnInit() {
         this.initTranslate();
         this.loginFormModel = this.formBuilder.group({
-            username: ['', Validators.compose([Validators.required])],
-            password: ['', Validators.compose([Validators.required])]
+            username: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(5),
+                // tslint:disable-next-line:max-line-length
+                Validators.pattern('(([^<>()\\[\\]\\\\.,;:\\s@"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@"]+)*)|(".+"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$')
+            ])],
+            password: ['', Validators.compose([
+                Validators.required,
+                Validators.minLength(5),
+                Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{5,40}$')
+            ])]
         });
     }
 
