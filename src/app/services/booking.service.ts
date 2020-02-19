@@ -12,7 +12,6 @@ import {User} from '../model/user.model';
 })
 export class BookingService {
     private bookings$: BehaviorSubject<Booking[]> = new BehaviorSubject<Booking[]>([] as Booking[]);
-    private booking$: BehaviorSubject<Booking> = new BehaviorSubject<Booking>({} as Booking);
     private countDowns: Subscription;
     private periodicGet: Subscription;
 
@@ -90,48 +89,72 @@ export class BookingService {
         }));
     }
 
+    /**
+     * Funzione che effettua la rest che ritorna un booking passandogli id del planning
+     * @param idPlanning id del planning
+     */
     getRestBookingPlanning(idPlanning: string): Observable<Booking> {
         return this.http.get<Booking>(URL.BOOKING_PLANNING + '/' + idPlanning, {observe: 'response'}).pipe(
             map((resp: HttpResponse<Booking>) => {
-                this.booking$.next(resp.body);
                 return resp.body;
             }));
     }
 
+    /**
+     * funzione che esegue la creazione del booking
+     * @param booking booking da salvare
+     */
     createRestBooking(booking: Booking): Observable<any> {
         return this.http.post<any>(URL.BOOKING, booking, {observe: 'response'});
     }
 
+    /**
+     * funzione che esegue la moifica del booking
+     * @param boking booking modificato da caricare
+     */
     modifyRestLessonState(boking: Booking) {
         return this.http.put(URL.BOOKING_MODIFY_LESSON_STATE, boking);
     }
 
+    /**
+     * funzione di salvataggio dei booking nello storage
+     * @param key chiave del booking
+     * @param bookings lista di booking da salvare
+     */
     setStoreBookings(key: string, bookings: Booking[]) {
         this.storage.set(key, bookings);
     }
 
+    /**
+     * Funzione che ritorna il BehaviorSubject dei booking
+     */
     getBookings(): BehaviorSubject<Booking[]> {
         return this.bookings$;
     }
 
-    getBooking(): BehaviorSubject<Booking> {
-        return this.booking$;
-    }
-
+    /**
+     * Funzione che avvia il periodo di aggiornamento del countDown
+     */
     startCoundown() {
         this.countDowns = interval(1000).subscribe(() => {
             this.runCountDown();
         });
     }
 
+    /**
+     * Funzione che ferma il periodo di aggiornamento del countDown
+     */
     stopCoundown() {
         if (!this.countDowns.closed) {
             this.countDowns.unsubscribe();
         }
     }
 
+    /**
+     * Funzione che esegue il countDown
+     */
     runCountDown() {
-        this.bookings$.value.forEach((item, index) => {
+        this.bookings$.value.forEach((item) => {
             const nowDate = new Date().getTime();
             const distance = new Date(item.planning.date).getTime() - nowDate;
             item.days = Math.floor(distance / (1000 * 60 * 60 * 24));
@@ -146,6 +169,9 @@ export class BookingService {
         });
     }
 
+    /**
+     * Funzione che avvia il periodo di aggiornamento dei ogetti booking
+     */
     startPeriodicGet() {
         console.log('startPeriodicGet');
         // controllo se già ho un intervallo inizializzato
@@ -168,6 +194,9 @@ export class BookingService {
 
     }
 
+    /**
+     * Funzione che ferma il periodo di aggiornamento del countDown
+     */
     stopPeriodicGet() {
         console.log('stopPeriodicGet');
         if (!this.periodicGet.closed) {
@@ -175,6 +204,9 @@ export class BookingService {
         }
     }
 
+    /**
+     * Funzione che resetta le variabili e rimuove gli oggetti inseriti nello storage
+     */
     logout() {
         this.storage.remove(STORAGE.BOOKING);
         this.bookings$ = new BehaviorSubject<Booking[]>([] as Booking[]);
