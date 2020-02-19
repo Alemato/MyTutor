@@ -25,6 +25,10 @@ export class PopoverRicercaLezioniDisponibiliComponent implements OnInit {
                 private lessonService: LessonService) {
     }
 
+    /**
+     * inizializzo la form e setto le liste per le select dalla rest che torna
+     * la lista delle lezioni disponibili sul server
+     */
     ngOnInit() {
         this.filtroRicerca = this.formBuilder.group({
             nomeLezione: [''],
@@ -44,6 +48,10 @@ export class PopoverRicercaLezioniDisponibiliComponent implements OnInit {
         });
     }
 
+    /**
+     * Funzine che setta la lista delle citta (contiene valori unici)
+     * @param lessons lista di lezioni disponibili
+     */
     settaCitta(lessons: Lesson[]) {
         this.cityLesson = [];
         lessons.forEach((lesson) => {
@@ -54,6 +62,10 @@ export class PopoverRicercaLezioniDisponibiliComponent implements OnInit {
         console.log(this.cityLesson);
     }
 
+    /**
+     * Funzine che setta la lista delle Materie (contiene valori unici)
+     * @param lessons lista di lezioni disponibili
+     */
     settaMaterie(lessons: Lesson[]) {
         this.materie = [];
         // n serve per il value
@@ -66,6 +78,10 @@ export class PopoverRicercaLezioniDisponibiliComponent implements OnInit {
         });
     }
 
+    /**
+     * Funzine che setta la lista delle sottoMaterie (contiene valori unici)
+     * @param lessons lista di lezioni disponibili
+     */
     settaSottoMaterie(lessons: Lesson[]) {
 
         const subjects: Subject[] = [];
@@ -91,6 +107,10 @@ export class PopoverRicercaLezioniDisponibiliComponent implements OnInit {
         });
     }
 
+    /**
+     * Funzine che setta la lista dei prezzi (contiene valori unici)
+     * @param lessons lista di lezioni disponibili
+     */
     settaPrezzo(lessons: Lesson[]) {
         this.prezzi = [];
         lessons.forEach((lesson) => {
@@ -164,15 +184,18 @@ export class PopoverRicercaLezioniDisponibiliComponent implements OnInit {
         }
     }
 
-  getEndTime(): string {
-    // tslint:disable-next-line:max-line-length
-    if (this.filtroRicerca.controls.endHour.value !== '' && this.filtroRicerca.controls.endHour.value !== null && this.filtroRicerca.controls.endHour.value !== ' ') {
-      return new Date(this.filtroRicerca.controls.endHour.value).getHours().toString() + ':00:00';
-    } else {
-      return '';
+    getEndTime(): string {
+        // tslint:disable-next-line:max-line-length
+        if (this.filtroRicerca.controls.endHour.value !== '' && this.filtroRicerca.controls.endHour.value !== null && this.filtroRicerca.controls.endHour.value !== ' ') {
+            return new Date(this.filtroRicerca.controls.endHour.value).getHours().toString() + ':00:00';
+        } else {
+            return '';
+        }
     }
-  }
 
+    /**
+     * Funzione che esegue la submit della form
+     */
     subFiltro() {
         console.log(this.filtroRicerca.value);
         const obj = {
@@ -188,6 +211,9 @@ export class PopoverRicercaLezioniDisponibiliComponent implements OnInit {
         this.popoverController.dismiss(obj, 'esegui query');
     }
 
+    /**
+     * Funzione che esegue un submit con valori a default per il reset del filtro
+     */
     resetFiltro() {
         const obj = {
             nomeLezione: '',
