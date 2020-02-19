@@ -35,17 +35,28 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         this.listaLezioni();
     }
 
+    /**
+     * Prende il plannig e le lezioni dal server
+     */
     listaLezioni() {
         this.plannings$ = this.planningService.getRestPlanningsAsLesson();
         this.lessons$ = this.lessonService.getRestLessonsWithoutPlanning();
     }
 
+    /**
+     * Pavigazione verso la lista delle pianificazioni
+     */
     pianificazioni(planning: Planning) {
         const root = this.router.config.find(r => r.path === 'lista-pianificazioni');
         root.data = {isInsert: false, noPlanning: false, urlLezione: '', idLezione: planning.lesson.idLesson};
         this.navController.navigateRoot('lista-pianificazioni');
     }
 
+    /**
+     * Per aggiungere le pianificazioni ad una lezione che non ne ha
+     * reindirizzandoti sulla pagina della Lista delle pianificazioni
+     * e successivamente ne modal di inserimento
+     */
     addPianificazioni(lezione) {
         const root = this.router.config.find(r => r.path === 'lista-pianificazioni');
         if (lezione.idPlanning) {
@@ -56,6 +67,9 @@ export class ListaAnnunciPublicatiPage implements OnInit {
         this.navController.navigateRoot('lista-pianificazioni');
     }
 
+    /**
+     * Navigazione verso la pagina della modifica della lezione
+     */
     modificaLezione(lezione) {
         const root = this.router.config.find(r => r.path === 'inserimento-lezioni');
         if (lezione.idPlanning) {
