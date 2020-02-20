@@ -90,6 +90,7 @@ export class PopoverRepeatListComponent implements OnInit {
             if (detail !== null && detail.data !== undefined) {
                 pianificazione = detail.data;
                 pianificazione.lesson = this.lesson;
+                pianificazione.repeatPlanning = false;
                 this.planningService.modifyRestPlannings([pianificazione], this.lesson.idLesson).subscribe(() => {
                     const indicePlanning = this.plannings.findIndex(x => x.idPlanning === pianificazione.idPlanning);
                     this.plannings[indicePlanning].available = false;
