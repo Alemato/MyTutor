@@ -116,6 +116,7 @@ export class ListaPianificazioniPage implements OnInit {
                     });
                 });
             } else {
+                this.loading = false;
                 console.log('creazione annullata');
             }
         });
@@ -170,6 +171,7 @@ export class ListaPianificazioniPage implements OnInit {
                     });
                 }
             } else {
+                this.loading = false;
                 console.log('modifica annullata');
             }
         });
@@ -192,6 +194,7 @@ export class ListaPianificazioniPage implements OnInit {
                 {
                     text: this.cancelButton,
                     handler: () => {
+                        this.loading = false;
                         console.log('Cancellazione Annulata');
                     }
                 },
