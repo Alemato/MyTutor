@@ -410,16 +410,6 @@ export class ModificaProfiloPage implements OnInit {
     }
 
     /**
-     * Funzione che re-inizializza la traduzione
-     */
-    changeTranslate() {
-        this.linguaService.getLinguaAttuale().subscribe((lingua: string) => {
-            this.translateService.setDefaultLang(lingua);
-            this.navController.navigateRoot('/');
-        });
-    }
-
-    /**
      * Funione per le traduzioni
      */
     initTranslate() {
