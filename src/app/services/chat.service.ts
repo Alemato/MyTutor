@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {BehaviorSubject, interval, Observable, Subscription} from 'rxjs';
-import {URL, STORAGE, AUTH_TOKEN} from '../constants';
+import {URL, STORAGE, AUTH_TOKEN, URL_BASE} from '../constants';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../model/message.model';
 import {map} from 'rxjs/operators';
@@ -92,7 +92,9 @@ export class ChatService {
      * @param url di creazione ritornato dalla rest di creazione
      */
     getRestChatByUrl(url: string): Observable<Chat> {
-        return this.http.get<Chat>(url, {observe: 'response'}).pipe(
+        const urlR = URL_BASE + url.slice(25);
+        console.log(urlR);
+        return this.http.get<Chat>(urlR, {observe: 'response'}).pipe(
             map((resp: HttpResponse<Chat>) => {
                 return resp.body;
             })

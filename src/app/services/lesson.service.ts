@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {HttpClient, HttpResponse} from '@angular/common/http';
-import {STORAGE, URL} from '../constants';
+import {STORAGE, URL, URL_BASE} from '../constants';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {Lesson} from '../model/lesson.model';
@@ -44,7 +44,9 @@ export class LessonService {
      * @param url url della risorsa creata
      */
     getLessonByUrl(url: string): Observable<Lesson> {
-        return this.http.get<Lesson>(url);
+        const urlR = URL_BASE + url.slice(25);
+        console.log(urlR);
+        return this.http.get<Lesson>(urlR);
     }
 
     /**
