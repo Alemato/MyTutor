@@ -75,8 +75,8 @@ export class RegistrazionePage implements OnInit {
         ],
         password: [
             {type: 'required', message: 'Password is required'},
-            {type: 'minlength', message: 'Passowrd must be at least 5 characters long.'},
-            {type: 'pattern', message: 'Your Passoword is invalid'}
+            {type: 'minlength', message: 'Password must be at least 5 characters long.'},
+            {type: 'pattern', message: 'Your Password is invalid'}
         ],
         name: [
             {type: 'required', message: 'Name is required'}
@@ -400,6 +400,12 @@ export class RegistrazionePage implements OnInit {
         });
         this.translateService.get('PASSWORD_REQUIRED_MESSAGE').subscribe((data) => {
             this.validationMessages.password[0].message = data;
+        });
+        this.translateService.get('PASSWORD_MIN_LENGTH_MESSAGE').subscribe((data) => {
+            this.validationMessages.password[1].message = data;
+        });
+        this.translateService.get('PASSWORD_INVALID_MESSAGE').subscribe((data) => {
+            this.validationMessages.password[2].message = data;
         });
         this.translateService.get('NAME_REQUIRED_MESSAGE').subscribe((data) => {
             this.validationMessages.name[0].message = data;

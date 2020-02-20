@@ -51,7 +51,9 @@ export class ModificaProfiloPage implements OnInit {
             {type: 'validEmail', message: 'Your email has already been taken.'}
         ],
         password: [
-            {type: 'required', message: 'Password is required'}
+            {type: 'required', message: 'Password is required'},
+            {type: 'minlength', message: 'Password must be at least 5 characters long.'},
+            {type: 'pattern', message: 'Your Password is invalid'}
         ],
         name: [
             {type: 'required', message: 'Name is required'}
@@ -74,13 +76,12 @@ export class ModificaProfiloPage implements OnInit {
                 private file: File,
                 private navController: NavController,
                 private alertController: AlertController,
-                private linguaService: LinguaService,
-                private translate: TranslateService) {
+                private linguaService: LinguaService) {
     }
 
     /**
-     * prendo in dati dal server attraverso la funzione getUser
-     * alla variabile croppedImagepath (immagine presa dalla galleria) gli assegno l'immagione presa dal server
+     * prendo in dati dall'Utente attraverso la funzione getUser
+     * alla variabile croppedImagepath (immagine presa dalla galleria) gli assegno l'immagione presa dalla funzione
      * in base al ruolo vedo quale Form di inizializzazione e settaggio dei valori chiamare
      */
     ngOnInit() {
@@ -413,7 +414,7 @@ export class ModificaProfiloPage implements OnInit {
      */
     changeTranslate() {
         this.linguaService.getLinguaAttuale().subscribe((lingua: string) => {
-            this.translate.setDefaultLang(lingua);
+            this.translateService.setDefaultLang(lingua);
             this.navController.navigateRoot('/');
         });
     }
@@ -461,6 +462,12 @@ export class ModificaProfiloPage implements OnInit {
         });
         this.translateService.get('PASSWORD_REQUIRED_MESSAGE').subscribe((data) => {
             this.validationMessages.password[0].message = data;
+        });
+        this.translateService.get('PASSWORD_MIN_LENGTH_MESSAGE').subscribe((data) => {
+            this.validationMessages.password[1].message = data;
+        });
+        this.translateService.get('PASSWORD_INVALID_MESSAGE').subscribe((data) => {
+            this.validationMessages.password[2].message = data;
         });
         this.translateService.get('NAME_REQUIRED_MESSAGE').subscribe((data) => {
             this.validationMessages.name[0].message = data;

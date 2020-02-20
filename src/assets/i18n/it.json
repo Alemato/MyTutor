@@ -190,6 +190,8 @@
   "EMAIL_PATTERN_MESSAGE": "La tua email deve contenere solo numeri e lettere",
   "EMAIL_VALID_EMAIL_MESSAGE": "L'email è già presente",
   "PASSWORD_REQUIRED_MESSAGE": "Password obbligatoria",
+  "PASSWORD_MIN_LENGTH_MESSAGE": "La Password deve contenere almeno 5 caratteri",
+  "PASSWORD_INVALID_MESSAGE": "La Password è invalida",
   "NAME_REQUIRED_MESSAGE": "Nome obbligatorio",
   "SURNAME_REQUIRED_MESSAGE": "Cognome obbligatorio",
   "BIRTHDAY_REQUIRED_MESSAGE": "Data di nascita obbligatoria",
