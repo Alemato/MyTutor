@@ -203,9 +203,6 @@ export class DettagliPianificazioneModalPage implements OnInit {
         }
     }
 
-    /**
-     * Alert che scaturico alla cancellazione del planning
-     */
     async presentaAlert() {
         if (this.planning.repeatPlanning && !this.planningFormModel.value.repeatPlanning && this.cambioRepeat) {
             const alert = await this.alertController.create({
